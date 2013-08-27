@@ -1,0 +1,38 @@
+<wicket:panel>
+    <form wicket:id="form" class="form-container">
+        <table>
+            <tr>
+                <td class="td-label"><label wicket:id="type">[]</label></td>
+                <td><select wicket:id="choice" name="choice"/></td>
+            </tr>
+            <tr>
+                <td class="td-label"><label wicket:id="startLabel">[]</label></td>
+                <td><select wicket:id="startChoice" name="startChoice"/></td>
+            </tr>
+            <tr>
+                <td class="td-label"><label wicket:id="endLabel">[]</label></td>
+                <td><select wicket:id="endChoice" name="endChoice"/></td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td colspan="2" class="td-label">
+                    <div class="paletteContainer">
+                        <div wicket:id="palette"></div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td>
+                    <ul class="form-btns">
+                        <li><a wicket:id="cancel" class="secondary"><wicket:message key="back">Back</wicket:message></a></li>
+                        <li><input wicket:id="set" type="submit" wicket:message="value:set" class="secondary"/></li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <span wicket:id="feedback" class="feedbackPanelERROR"/>
+</wicket:panel>

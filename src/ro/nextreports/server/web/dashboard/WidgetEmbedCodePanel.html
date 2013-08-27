@@ -1,0 +1,37 @@
+<wicket:panel>
+    <p class="embed-label">
+    	<wicket:message key="WidgetEmbedCode.definition">[]</wicket:message> 
+    	<br>
+    	<wicket:message key="WidgetEmbedCode.copy">[]</wicket:message>
+    </p>
+	<div class="form-container form-container-dialog">
+	  <form wicket:id="form">
+		<table>
+           <tr>
+           	 <td class="td-label">
+                <label class="small"><wicket:message key="width">Width</wicket:message><em>*</em></label>
+             </td>
+             <td style="padding-bottom: 0px;">
+				<input wicket:id="width" size="6"/>
+			 </td>
+		   </tr>
+		   <tr>	  	
+		     <td class="td-label">
+                <label class="small"><wicket:message key="height">Height</wicket:message><em>*</em></label>
+             </td>
+		     <td style="padding-bottom: 0px;">
+				<input wicket:id="height" size="6"/>
+			 </td>
+		   </tr>
+		   <tr>
+		   	 <td></td>
+		   	 <td>
+		   	 	<input wicket:id="link" type="submit" wicket:message="value:generate" class="secondary"/>				
+			 </td>
+		   </tr>
+		 </table>  
+	   </form>
+	   <span wicket:id="feedback" class="feedbackPanelERROR"/>
+	</div>
+    <div wicket:id="code" class="embed-code"></div>
+</wicket:panel>

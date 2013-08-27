@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="autoStartup" value="true"/>
+        <property name="waitForJobsToCompleteOnShutdown" value="true"/>
+        <property name="taskExecutor">
+            <ref local="schedulingTaskExecutor"/>
+        </property>
+        <property name="quartzProperties">
+            <props>
+                <prop key="org.quartz.scheduler.instanceName">Scheduler</prop>
+                <prop key="org.quartz.scheduler.instanceId">AUTO</prop>
+                <prop key="org.quartz.plugin.shutdownhook.class">org.quartz.plugins.management.ShutdownHookPlugin</prop>
+                <prop key="org.quartz.plugin.shutdownhook.cleanShutdown">true</prop>
+                <prop key="org.quartz.plugin.triggHistory.class">org.quartz.plugins.history.LoggingTriggerHistoryPlugin</prop>
+                <prop key="org.quartz.plugin.triggHistory.triggerFiredMessage">Trigger {1}.{0} fired job {6}.{5} at {4, date, HH:mm:ss dd/MM/yyyy}</prop>
+                <prop key="org.quartz.plugin.triggHistory.triggerCompleteMessage">Trigger {1}.{0} completed firing job {6}.{5} at {4, date, HH:mm:ss dd/MM/yyyy} with resulting trigger instruction code {9}</prop>
+            </props>
+        </property>
+        <property name="triggers">
+            <list>
+                <ref local="userSynchronizerTrigger"/>
+            </list>
+        </property>
+        <!--
+        <property name="globalTriggerListeners">
+            <list>
+                <bean class="ro.nextreports.server.schedule.ActivationTriggerListener"/>
+            </list>
+        </property>
+        -->
+    </bean>
+
+    <bean id="schedulingTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="threadNamePrefix" value="Scheduler-"/>
+        <property name="corePoolSize" value="#{settings.getSchedulerCorePoolSize()}"/>
+        <property name="maxPoolSize" value="#{settings.getSchedulerMaxPoolSize()}"/>
+        <property name="queueCapacity" value="#{settings.getSchedulerQueueCapacity()}"/>
+    </bean>
+
+    <bean id="quartzJobHandler" class="ro.nextreports.server.schedule.QuartzJobHandler">
+        <property name="scheduler">
+            <ref local="scheduler"/>
+        </property>
+        <property name="mailSender">
+            <ref local="mailSender"/>
+        </property>        
+        <property name="reportService" ref="reportService"/>
+        <property name="storageService" ref="storageService"/>
+        <property name="securityService" ref="securityService"/>
+        <property name="auditor" ref="auditor"/>        
+    </bean>
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="#{settings.getMailServerIp()}"/>
+        <property name="port" value="#{settings.getMailServerPort()}"/>
+        <property name="javaMailProperties">
+        	<props>
+        	    <!-- if more recipients are present and some have invalid addresses, mail must be sent to those who are valid -->
+				<prop key="mail.smtp.sendpartial">true</prop>
+			</props>
+		</property>
+        <!-- FOR TEST ONLY
+        <property name="host" value="192.168.12.5"/>
+        <property name="port" value="25"/>
+        -->
+    </bean>
+
+    <bean id="schedulerJobAdvice" abstract="true">
+        <property name="quartzJobHandler">
+            <ref local="quartzJobHandler"/>
+        </property>
+    </bean>
+
+    <bean class="ro.nextreports.server.aop.SchedulerJobAddedAdvice" parent="schedulerJobAdvice"/>
+
+    <bean class="ro.nextreports.server.aop.SchedulerJobRemovedAdvice" parent="schedulerJobAdvice">
+        <property name="storageService" ref="storageService"/>
+    </bean>
+
+    <bean class="ro.nextreports.server.aop.SchedulerJobModifiedAdvice" parent="schedulerJobAdvice"/>
+
+    <bean class="ro.nextreports.server.aop.SchedulerJobRenamedAdvice" parent="schedulerJobAdvice">
+        <property name="storageService" ref="storageService"/>
+    </bean>
+
+    <bean class="ro.nextreports.server.aop.SchedulerJobReadAdvice">
+        <property name="scheduler">
+            <ref local="scheduler"/>
+        </property>
+    </bean>
+
+    <bean name="userSynchronizerJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="name" value="userSynchronizerJob"/>
+        <property name="jobClass" value="ro.nextreports.server.schedule.UserSynchronizerJob"/>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="authenticationManager" value-ref="authenticationManager"/>
+                <entry key="storageService" value-ref="storageService"/>                
+            </map>
+        </property>    
+    </bean>
+    
+    <bean id="userSynchronizerTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="userSynchronizerJob"/>
+        <property name="cronExpression" value="#{settings.getSynchronizerCronExpression()}"/>
+    </bean>
+    
+</beans>

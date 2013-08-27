@@ -1,0 +1,29 @@
+<wicket:panel>
+    <tr>
+        <td class="td-label"><label><wicket:message key="PermissionPanel.title">Permissions</wicket:message></label></td>
+        <td class="padding">
+        	<input wicket:id="all" type="checkbox" style="margin-top: 3px;"/>
+			<label style="vertical-align: top; padding-left: 5px;"><wicket:message key="PermissionPanel.all">All</wicket:message></label>
+		</td>        
+    </tr>
+    <tr>
+        <td class="td-label"><label><wicket:message key="PermissionPanel.read">[R] Read</wicket:message></label></td>
+        <td class="padding"><input wicket:id="read" type="checkbox"/></td>
+    </tr>
+    <tr>
+        <td class="td-label"><label><wicket:message key="PermissionPanel.execute">[X] Execute</wicket:message></label></td>
+        <td class="padding"><input wicket:id="execute" type="checkbox"/></td>
+    </tr>
+    <tr>
+        <td class="td-label"><label><wicket:message key="PermissionPanel.write">[W] Write</wicket:message></label></td>
+        <td class="padding"><input wicket:id="write" type="checkbox"/></td>
+    </tr>
+    <tr>
+        <td class="td-label"><label><wicket:message key="PermissionPanel.delete">[D] Delete</wicket:message></label></td>
+        <td class="padding"><input wicket:id="delete" type="checkbox"/></td>
+    </tr>
+    <tr>
+        <td class="td-label"><label><wicket:message key="PermissionPanel.security">[S] Security</wicket:message></label></td>
+        <td class="padding"><input wicket:id="security" type="checkbox"/></td>
+    </tr>
+</wicket:panel>

@@ -1,0 +1,103 @@
+<wicket:panel>
+    <div class="form-container form-container-dialog">
+        <form wicket:id="form">
+            <table class="form">                
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.general.baseUrl">Base Url</wicket:message> *</strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="baseUrl" name="baseUrl" type="text" style="width: 200px; !important"/>
+                    </td>
+                    <td><img wicket:id="urlImage"/></td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.general.reportsHome">Reports Home</wicket:message> *</strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="reportsHome" name="reportsHome" type="text" style="width: 200px; !important"/>
+                    </td>
+                    <td><img wicket:id="homeImage"/></td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.general.reportsUrl">Reports Url</wicket:message> *</strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="reportsUrl" name="reportsUrl" type="text" style="width: 200px; !important"/>
+                    </td>
+                    <td><img wicket:id="repImage"/></td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.general.mailIp">Mail Server Ip</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="mailServer.ip" name="mailServer.ip" type="text" style="width: 200px; !important"/>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.general.mailPort">Mail Server Port</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="mailServer.port" name="mailServer.port" type="text" style="width: 50px; !important"/>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.general.mailFrom">Mail Server From</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="mailServer.from" name="mailServer.from" type="text" style="width: 200px; !important"/>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.general.connectTimeout">Connect Timeout (s)</wicket:message>*</strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="connectionTimeout" name="connectionTimeout" type="text" style="width: 50px; !important; margin-top: 5px;"/>
+                        <img wicket:id="conImage" style="margin-bottom: 5px; margin-left: -3px;"/>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.general.queryTimeout">Query Timeout (s)</wicket:message>*</strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="queryTimeout" name="queryTimeout" type="text" style="width: 50px; !important; margin-top: 5px;"/>
+                        <img wicket:id="timeoutImage" style="margin-bottom: 5px; margin-left: -3px;"/>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.general.updateInterval">Update Interval (s)</wicket:message>*</strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="updateInterval" name="updateInterval" type="text" style="width: 50px; !important; margin-top: 5px;"/>
+                        <img wicket:id="updateImage" style="margin-bottom: 5px; margin-left: -3px;"/>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>                    
+                    <td>
+                        <ul class="form-btns">                            
+                            <li><input wicket:id="change" type="submit" name="change" wicket:message="value:change" class="secondary"/>
+                            </li>
+                        </ul>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>            
+        </form>
+        <span wicket:id="feedback" class="feedbackPanelERROR"/>
+    </div>    
+</wicket:panel>

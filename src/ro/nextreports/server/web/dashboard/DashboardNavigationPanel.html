@@ -1,0 +1,29 @@
+<wicket:panel>
+
+	<div class="dashboardLeft">
+    	<div class="toolbar_nav"> 
+    		<img wicket:id="dashboardImage" style="float: left; margin-top: 7px; margin-right:5px; margin-left: 7px; cursor: pointer;"/>
+    		<a wicket:id="addDashboard" class="button"><wicket:message key="DashboardNavigationPanel.add">Add dashboard</wicket:message></a>
+    	</div>
+    	<div wicket:id="navigation" class="dashboardNavigation left">
+      		<table class="actions-grid">
+        		<tr wicket:id="dashboardList">             
+            		<td class="actions-col">
+            			<div wicket:id="actions"></div>
+            		</td>   
+            		<td>
+            			<div wicket:id="dashboard"></div>
+            		</td>        
+        		</tr>
+       		</table> 
+    	</div>
+    </div>
+    
+    <wicket:fragment wicket:id="tab">
+		<a href="#" wicket:id="titleLink" class="left">
+			<img wicket:id="titleImage" class="left-image"></img>
+			<span wicket:id="title"></span>
+		</a>				 		                         
+    </wicket:fragment>
+</wicket:panel>
+    

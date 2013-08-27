@@ -1,0 +1,24 @@
+<wicket:extend>
+	<p align="left">Creates a number of folders under a folder path</p><br>
+	<form wicket:id="form">
+		<table>
+			<tr>
+				<td class="td-label">Name</td>
+				<td><input type="text" wicket:id="parentPath"/></td>
+			</tr>
+			<tr>
+				<td class="td-label">Instances</td>
+				<td><input type="text" wicket:id="instances"/></td>
+			</tr>
+            <tr>
+            	<td class="td-label"></td>
+            	<td>
+                	<ul class="form-btns">
+                    	<li><input type="submit" class="primary" value="Run"/></li>
+                    </ul>
+               </td>
+            </tr>
+		</table>
+	</form>
+	<span wicket:id="feedback" class="feedbackPanelERROR"/>
+</wicket:extend>

@@ -1,0 +1,190 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:security="http://www.springframework.org/schema/security"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security-3.0.3.xsd">
+
+    <bean id="READ_PERMISSION" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+        <property name="staticField" value="ro.nextreports.server.security.NextServerPermission.READ"/>
+    </bean>
+
+    <bean id="EXECUTE_PERMISSION" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+        <property name="staticField" value="ro.nextreports.server.security.NextServerPermission.EXECUTE"/>
+    </bean>
+
+    <bean id="WRITE_PERMISSION" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+        <property name="staticField" value="ro.nextreports.server.security.NextServerPermission.WRITE"/>
+    </bean>
+
+    <bean id="DELETE_PERMISSION" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+        <property name="staticField" value="ro.nextreports.server.security.NextServerPermission.DELETE"/>
+    </bean>
+
+    <bean id="SECURITY_PERMISSION" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+        <property name="staticField" value="ro.nextreports.server.security.NextServerPermission.SECURITY"/>
+    </bean>
+
+    <bean id="simpleIdentityRetrievalStrategy" class="ro.nextreports.server.security.SimpleObjectIdentityRetrievalStrategy"/>
+
+    <!-- An access decision voter that reads ACL_READ configuration settings -->
+    <bean id="aclReadVoter" class="org.springframework.security.acls.AclEntryVoter">
+        <constructor-arg ref="aclService"/>
+        <constructor-arg value="ACL_READ"/>
+        <constructor-arg>
+            <list>
+                <ref local="READ_PERMISSION"/>
+            </list>
+        </constructor-arg>
+        <!--
+        <property name="processDomainObjectClass" value="ro.nextreports.server.domain.Entity"/>
+        -->
+        <!--
+        <property name="processDomainObjectClass" value="java.lang.String"/>
+        <property name="internalMethod" value="trim"/>
+        -->
+        <property name="processDomainObjectClass" value="java.lang.String"/>
+        <property name="objectIdentityRetrievalStrategy">
+            <ref local="simpleIdentityRetrievalStrategy"/>
+        </property>
+    </bean>
+
+    <!-- An access decision voter that reads ACL_EXECUTE configuration settings -->
+    <bean id="aclExecuterVoter" class="org.springframework.security.acls.AclEntryVoter">
+        <constructor-arg ref="aclService"/>
+        <constructor-arg value="ACL_EXECUTE"/>
+        <constructor-arg>
+            <list>
+                <ref local="EXECUTE_PERMISSION"/>
+            </list>
+        </constructor-arg>
+        <!--
+        <property name="processDomainObjectClass" value="ro.nextreports.server.domain.Entity"/>
+        -->
+        <!--
+        <property name="processDomainObjectClass" value="java.lang.String"/>
+        <property name="internalMethod" value="trim"/>
+        -->
+        <property name="processDomainObjectClass" value="java.lang.String"/>
+        <property name="objectIdentityRetrievalStrategy">
+            <ref local="simpleIdentityRetrievalStrategy"/>
+        </property>
+    </bean>
+
+    <!-- An access decision voter that reads ACL_WRITE configuration settings -->
+    <bean id="aclWriteVoter" class="org.springframework.security.acls.AclEntryVoter">
+        <constructor-arg ref="aclService"/>
+        <constructor-arg value="ACL_WRITE"/>
+        <constructor-arg>
+            <list>
+                <ref local="WRITE_PERMISSION"/>
+            </list>
+        </constructor-arg>
+        <!--
+        <property name="processDomainObjectClass" value="ro.nextreports.server.domain.Entity"/>
+        -->
+        <!--
+        <property name="processDomainObjectClass" value="java.lang.String"/>
+        <property name="internalMethod" value="trim"/>
+        -->
+        <property name="processDomainObjectClass" value="java.lang.String"/>
+        <property name="objectIdentityRetrievalStrategy">
+            <ref local="simpleIdentityRetrievalStrategy"/>
+        </property>
+    </bean>
+
+    <!-- An access decision voter that reads ACL_DELETE configuration settings -->
+    <bean id="aclDeleteVoter" class="org.springframework.security.acls.AclEntryVoter">
+        <constructor-arg ref="aclService"/>
+        <constructor-arg value="ACL_DELETE"/>
+        <constructor-arg>
+            <list>
+                <ref local="DELETE_PERMISSION"/>
+            </list>
+        </constructor-arg>
+        <property name="processDomainObjectClass" value="ro.nextreports.server.domain.Entity"/>
+    </bean>
+
+    <!-- An access decision voter that reads ACL_SECURITY configuration settings -->
+    <bean id="aclSecurityVoter" class="org.springframework.security.acls.AclEntryVoter">
+        <constructor-arg ref="aclService"/>
+        <constructor-arg value="ACL_SECURITY"/>
+        <constructor-arg>
+            <list>
+                <ref local="SECURITY_PERMISSION"/>
+            </list>
+        </constructor-arg>
+        <property name="processDomainObjectClass" value="ro.nextreports.server.domain.Entity"/>
+    </bean>
+
+    <!-- An access decision manager used by the business objects -->
+    <bean id="aclAccessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
+        <!--
+        <property name="allowIfAllAbstainDecisions" value="false"/>
+        -->
+        <property name="allowIfAllAbstainDecisions" value="true"/>
+        <property name="decisionVoters">
+            <list>
+                <ref local="aclReadVoter"/>
+                <ref local="aclExecuterVoter"/>
+                <ref local="aclWriteVoter"/>
+                <ref local="aclDeleteVoter"/>
+                <ref local="aclSecurityVoter"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="aclService" class="ro.nextreports.server.security.NextServerAclService">
+        <property name="aclDao">
+            <ref bean="aclDao"/>
+        </property>
+        <property name="securityDao">
+            <ref bean="securityDao"/>
+        </property>
+        <property name="storageDao">
+            <ref bean="storageDao"/>
+        </property>
+    </bean>
+
+    <bean id="afterInvocationManager" class="org.springframework.security.access.intercept.AfterInvocationProviderManager">
+        <property name="providers">
+            <list>
+                <ref local="afterAclRead"/>
+                <ref local="afterAclCollectionRead"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="entityIdentityRetrievalStrategy" class="ro.nextreports.server.security.EntityIdentityRetrievalStrategy"/>
+
+    <!-- Processes AFTER_ACL_READ configuration settings -->
+    <bean id="afterAclRead" class="org.springframework.security.acls.afterinvocation.AclEntryAfterInvocationProvider">
+        <constructor-arg>
+            <ref local="aclService"/>
+        </constructor-arg>
+        <constructor-arg>
+            <list>
+                <ref local="READ_PERMISSION"/>
+            </list>
+        </constructor-arg>
+        <property name="processDomainObjectClass" value="ro.nextreports.server.domain.Entity"/>
+        <property name="objectIdentityRetrievalStrategy" ref="entityIdentityRetrievalStrategy"/>
+    </bean>
+
+    <!-- Processes AFTER_ACL_COLLECTION_READ configuration settings -->
+    <bean id="afterAclCollectionRead"
+          class="org.springframework.security.acls.afterinvocation.AclEntryAfterInvocationCollectionFilteringProvider">
+        <constructor-arg>
+            <ref local="aclService"/>
+        </constructor-arg>
+        <constructor-arg>
+            <list>
+                <ref local="READ_PERMISSION"/>
+            </list>
+        </constructor-arg>
+        <property name="processDomainObjectClass" value="ro.nextreports.server.domain.Entity"/>
+        <property name="objectIdentityRetrievalStrategy" ref="entityIdentityRetrievalStrategy"/>
+    </bean>
+    
+</beans>

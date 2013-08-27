@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <!-- Resolves ${...} placeholders from properties file -->
+    <bean id="propertyConfigurer" class="ro.nextreports.server.util.ExposablePropertyPaceholderConfigurer">
+        <property name="location">
+            <value>classpath:nextserver.properties</value>
+        </property>
+        <property name="systemPropertiesModeName">
+            <value>SYSTEM_PROPERTIES_MODE_OVERRIDE</value>
+        </property>
+    </bean>    
+
+</beans>

@@ -1,0 +1,26 @@
+<wicket:panel>
+    <form wicket:id="form" class="form-container form-container-dialog">
+		<table>
+			<tr>
+				<td class="td-label"><label><strong><wicket:message key="AclEntryPanel.group">Group</wicket:message></strong></label></td>
+				<td class="padding"><select wicket:id="name"/></td>
+			</tr>
+			<div wicket:id="permissionPanel"></div>
+            <tr>
+                <td class="td-label"><label><wicket:message key="AclEntryPanel.recursively">Apply recursively</wicket:message></label></td>
+                <td class="padding"><input wicket:id="recursively" type="checkbox"/></td>
+            </tr>                                   
+		</table>
+        <table>
+            <tr>
+                <td>
+                    <ul class="form-btns">
+                        <li><a wicket:id="cancel" class="secondary"><wicket:message key="cancel">Cancel</wicket:message></a></li>
+                        <li><input wicket:id="add" type="submit" wicket:message="value:save" class="secondary"/></li>
+                    </ul>
+                </td>
+            </tr>
+        </table>            
+	</form>
+    <span wicket:id="feedback" class="feedbackPanelERROR"/>
+</wicket:panel>

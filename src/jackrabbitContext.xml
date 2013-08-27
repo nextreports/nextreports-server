@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <!-- Configuring the default repository -->
+    <bean id="repository" class="org.springframework.extensions.jcr.jackrabbit.RepositoryFactoryBean">
+        <!--
+        <property name="configuration" value="classpath:${repository.config}"/>
+        -->
+        <property name="configuration" value="classpath:repository.xml"/>
+        <!-- In ApplicationLoaderListener we do --> 
+        <!-- System.setProperty("nextserver.home", nextServerHome); -->
+        <property name="homeDir" value="file:${repository.home}"/>
+    </bean>
+
+</beans>

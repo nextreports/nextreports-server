@@ -1,0 +1,18 @@
+<wicket:panel>
+    <div class="form-container form-container-dialog">
+        <form wicket:id="form">
+        	<div wicket:id="table" style="width: 300px; overflow: auto; margin-top: 8px; margin-bottom: 5px; border: 1px solid #cacaca; min-height: 132px;"></div>
+            <table style="margin-bottom: 5px; ">
+                <tr>
+                    <td colspan="2">
+                        <ul class="form-btns">
+                            <li><a wicket:id="cancel" href="#"><input type="button" wicket:message="value:cancel" class="secondary"/></a></li>
+                            <li><input wicket:id="delete" type="submit" name="delete" wicket:message="value:remove" class="secondary"/></li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <span wicket:id="feedback" class="feedbackPanelERROR"/>
+    </div>
+</wicket:panel>

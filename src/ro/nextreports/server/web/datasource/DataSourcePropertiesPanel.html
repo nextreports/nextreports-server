@@ -1,0 +1,57 @@
+<wicket:panel>
+    <form wicket:id="form" class="form-container ">        
+            <table>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.DataSource.properties.separator">Separator</wicket:message><em>*</em></label>
+                    </td>
+                    <td>
+                        <input wicket:id="separator" name="separator" type="text" size="5"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.DataSource.properties.fileExtension">File extension</wicket:message><em>*</em></label>
+                    </td>
+                    <td>
+                         <input wicket:id="fileExtension" name="fileExtension" type="text" size="5"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.DataSource.properties.suppressHeaders">Suppress headers</wicket:message></label>
+                    </td>
+                    <td>
+                         <input wicket:id="suppressHeaders" name="suppressHeaders" type="checkbox"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.DataSource.properties.headerline">Header columns</wicket:message></label>
+                    </td>
+                    <td>
+                         <input wicket:id="headerline" name="headerline" type="text" size="45"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.DataSource.properties.columnTypes">Column types</wicket:message></label>
+                    </td>
+                    <td>
+                         <input wicket:id="columnTypes" name="columnTypes" type="text" size="45"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                    </td>
+                    <td>
+                        <ul class="form-btns">
+                            <li><a wicket:id="cancel" class="secondary"><wicket:message key="cancel">Cancel</wicket:message></a></li>                            
+                            <li><a wicket:id="ok" class="secondary"><wicket:message key="ok">Ok</wicket:message></a></li>                            
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+            <span wicket:id="feedback" class="feedbackPanelERROR"/>                
+    </form>    
+</wicket:panel>

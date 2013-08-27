@@ -1,0 +1,49 @@
+<wicket:panel>
+    <form wicket:id="form">
+        <fieldset class="fieldset-panel-right">
+            <legend><wicket:message key="ActionContributor.EditParameters.change">Change Jasper Parameter</wicket:message></legend>
+            <table>
+                <tr>
+                    <td class="td-label"><label><wicket:message key="ActionContributor.EditParameters.parameter">Parameter</wicket:message></label></td>
+                    <td class="td-name"><label wicket:id="name">[]</label></td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.EditParameters.parameterType">Type</wicket:message></label>
+                    </td>
+                    <td>
+                        <select wicket:id="type" name="type"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.EditParameters.mandatory">Mandatory</wicket:message></label>
+                    </td>
+                    <td class="checkbox">
+                        <input wicket:id="mandatory" name="mandatory" type="checkbox"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>Select</label>
+                    </td>
+                    <td>
+                        <textarea wicket:id="select" cols=80 rows=15></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                    </td>
+                    <td>
+                        <ul class="form-btns">
+                            <li><a wicket:id="cancel" class="secondary"><wicket:message key="back">Back</wicket:message></a></li>
+                            <li><a wicket:id="submit" class="secondary"><wicket:message key="change">Change</wicket:message></a></li>
+                            <!--<li><input type="submit" value="Change" class="primary"/></li>-->
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+            <span wicket:id="feedback" class="feedbackPanelERROR"/>
+        </fieldset>
+    </form>    
+</wicket:panel>

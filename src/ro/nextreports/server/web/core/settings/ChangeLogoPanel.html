@@ -1,0 +1,43 @@
+<wicket:panel>
+  <div class="form-container form-container-dialog">
+	<form wicket:id="logoForm">
+            <table>                
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.personalize.logo">Logo File</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="fileInput" type="file" size="14"/>
+                    </td>                    
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.personalize.theme">Color theme</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <select wicket:id="theme" style="margin-top:2px;"></select>                        
+                    </td>                    
+                </tr>    
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.personalize.language">Language</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <select wicket:id="language" style="margin-top:2px;"></select>                        
+                    </td>                    
+                </tr>                              
+                <tr>                   
+                    <td>
+                        <ul class="form-btns">                           
+                            <li><input wicket:id="change" type="submit" name="change" wicket:message="value:change" class="secondary"/>
+                            </li>
+                        </ul>
+                    </td>
+                    <td></td>                    
+                </tr>
+            </table>
+            <span wicket:id="progress"></span>
+        </form>
+    <span wicket:id="feedback" class="feedbackPanelERROR"/>
+  </div>
+</wicket:panel>

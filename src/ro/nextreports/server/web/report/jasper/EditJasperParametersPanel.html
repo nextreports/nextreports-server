@@ -1,0 +1,23 @@
+<wicket:panel>
+    <fieldset class="fieldset-panel-right">
+        <legend><wicket:message key="ActionContributor.EditParameters.name">Edit Jasper Parameters</wicket:message></legend>
+        <table>
+            <tr>
+                <td class="td-label"><label><wicket:message key="Report">Report</wicket:message></label></td>
+                <td class="td-name"><label wicket:id="reportName">[]</label></td>
+            </tr>
+        </table>
+        <div class="table-container">
+            <table wicket:id="table" class="grid actions-grid"></table>
+        </div>
+        <table class="table-padding">
+            <tr>
+                <td>
+                    <ul class="form-btns">
+                        <li><a wicket:id="cancel" class="secondary"><wicket:message key="back">Back</wicket:message></a></li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</wicket:panel>

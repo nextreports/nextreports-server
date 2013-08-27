@@ -1,0 +1,28 @@
+<wicket:panel>
+    <form wicket:id="form">
+        <fieldset class="fieldset-panel-right">
+            <legend><wicket:message key="ActionContributor.AddFolder.name">Add folder</wicket:message></legend>
+            <table class="form">
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.AddFolder.folderName">Name</wicket:message><em>*</em></label>
+                    </td>
+                    <td>
+                        <input wicket:id="name" name="name" type="text" size="20"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                    </td>
+                    <td>
+                        <ul class="form-btns">
+                            <li><a wicket:id="cancel" href="#" class="secondary"><wicket:message key="cancel">Cancel</wicket:message></a></li>
+                            <li><input wicket:id="create" type="submit" name="create" wicket:message="value:create" class="secondary"/></li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+            <span wicket:id="feedback" class="feedbackPanelERROR"/>
+        </fieldset>       
+    </form>
+</wicket:panel>

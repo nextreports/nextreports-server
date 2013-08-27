@@ -1,0 +1,32 @@
+<wicket:panel>
+    <form wicket:id="form">
+        <fieldset class="fieldset-panel-right">
+            <legend><wicket:message key="ActionContributor.ChangeDataSource.name">Change Data Source</wicket:message></legend>
+            <table>
+                <tr>
+                    <td class="td-label"><label wicket:id="entityName">[]</label></td>
+                    <td class="td-name"><label wicket:id="reportName">[]</label></td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.ChangeDataSource.datasource">Data Source</wicket:message><em>*</em></label>
+                    </td>
+                    <td>
+                        <select wicket:id="dataSource" name="dataSource"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <ul class="form-btns">
+                            <li><a wicket:id="cancel" class="secondary"><wicket:message key="back">Back</wicket:message></a></li>
+                            <li><a wicket:id="submit" class="secondary"><wicket:message key="change">Change</wicket:message></a></li>
+                            <!--<li><input type="submit" value="Change" class="primary"/></li>-->
+                        </ul>
+                    </td>
+                </tr>
+             </table>
+        </fieldset>
+    </form>
+    <span wicket:id="feedback" class="feedbackPanelERROR"/>
+</wicket:panel>

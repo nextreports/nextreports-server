@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <!-- Create the session factory -->
+    <bean id="sessionFactory" class="org.springframework.extensions.jcr.jackrabbit.JackrabbitSessionFactory">
+        <property name="repository">
+            <ref bean="repository"/>
+        </property>
+        <property name="credentials">
+            <bean class="javax.jcr.SimpleCredentials">
+                <constructor-arg index="0" value="decebal"/>
+                <!-- Create the credentials using a bean factory -->
+                <constructor-arg index="1">
+                    <bean factory-bean="password" factory-method="toCharArray"/>
+                </constructor-arg>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- Create the password to return it as a char[] -->
+    <bean id="password" class="java.lang.String">
+        <constructor-arg index="0" value="123456"/>
+    </bean>
+
+    <!--Create a local transaction manager used my services' methods -->
+    <bean id="transactionManager" class="org.springframework.extensions.jcr.jackrabbit.LocalTransactionManager">
+        <property name="sessionFactory">
+            <ref local="sessionFactory"/>
+        </property>
+    </bean>
+
+    <!-- See 'http://www.jcrom.org' for more details about jcrom library -->
+    <bean id="jcrom" class="ro.nextreports.server.util.JcromFactoryBean">
+        <property name="entityPackages">
+            <set>
+                <value>ro.nextreports.server.domain</value>
+            </set>
+        </property>
+        <!--
+        <property name="entityClasses">
+            <set>
+                <value>ro.nextreports.server.domain.SchedulerJob</value>
+            </set>
+        </property>
+        -->
+    </bean>
+
+	<!-- Dao -->
+    <bean id="abstractDao" abstract="true">
+        <property name="sessionFactory">
+            <ref local="sessionFactory"/>
+        </property>
+        <property name="jcrom">
+             <ref local="jcrom"/>
+        </property>
+    </bean>
+
+	<bean id="storageDao" class="ro.nextreports.server.dao.JcrStorageDao" parent="abstractDao">
+	   <property name="cache" ref="entitiesCache"/>	   
+	</bean>
+
+    <bean id="aclDao" class="ro.nextreports.server.dao.JcrAclDao" parent="abstractDao"/>
+
+	<bean id="securityDao" class="ro.nextreports.server.dao.JcrSecurityDao" parent="abstractDao">
+        <property name="storageDao">
+            <ref local="storageDao"/>
+        </property>
+        <property name="aclDao">
+            <ref local="aclDao"/>
+        </property>
+	</bean>
+
+</beans>

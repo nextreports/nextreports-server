@@ -1,0 +1,57 @@
+<wicket:panel>
+    <div class="form-container form-container-dialog">
+        <form wicket:id="form">
+            <table class="form">    
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.synchronizer.cron">Cron expression</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="synchronizer.cronExpression" type="text" size="16" name="synchronizer.cronExpression" style="margin-top: 5px !important; width: 80px !important"/>
+                    </td>
+                    <td>    
+                        <img wicket:id="cronImage" style="margin-top: 5px;"/>
+                    </td>
+                </tr>            
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.synchronizer.startup">Run on startup</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="synchronizer.runOnStartup" type="checkbox" name="synchronizer.runOnStartup"/>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.synchronizer.createUsers">Create users</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="synchronizer.createUsers" type="checkbox" name="synchronizer.createUsers"/>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.synchronizer.deleteUsers">Delete users</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="synchronizer.deleteUsers" type="checkbox" name="synchronizer.deleteUsers"/>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>                    
+                    <td>
+                        <ul class="form-btns">                            
+                            <li><input wicket:id="change" type="submit" name="change" wicket:message="value:change" class="secondary"/>
+                            </li>
+                        </ul>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>            
+        </form>
+        <span wicket:id="feedback" class="feedbackPanelERROR"/>
+    </div>    
+</wicket:panel>

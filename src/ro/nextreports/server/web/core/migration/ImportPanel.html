@@ -1,0 +1,34 @@
+<wicket:panel>	
+  <div class="form-container form-container-dialog">		
+        <form wicket:id="importForm">
+            <table>                
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.migration.import.file">File</wicket:message><em>*</em></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="file" type="file" name="file"/>
+                    </td>
+                </tr>    
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.migration.import.backup.path">Path</wicket:message><em>*</em></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="backup" type="text" name="backup" style="height: 20px; width: 380px;"/>
+                    </td>
+                </tr>                               
+                <tr>                   
+                    <td>
+                        <ul class="form-btns">                           
+                            <li><input wicket:id="import" type="submit" name="import" wicket:message="value:import" class="secondary"/>
+                            </li>
+                        </ul>
+                    </td>
+                    <td></td>                    
+                </tr>
+            </table>            
+        </form>
+    	<span wicket:id="feedback" class="feedbackPanelERROR"/>
+  </div>
+</wicket:panel>	

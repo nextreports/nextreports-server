@@ -1,0 +1,42 @@
+<wicket:panel>
+    <div class="form-container form-container-dialog">
+        <form wicket:id="form">
+            <table class="form">    
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.thread.core">Core pool size</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="scheduler.corePoolSize" type="text" name="scheduler.corePoolSize" style="width: 80px !important"/>
+                    </td>
+                </tr>            
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.thread.max">Maximum pool size</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="scheduler.maxPoolSize" type="text" name="scheduler.maxPoolSize" style="width: 80px !important"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.thread.queue">Queue capacity</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="scheduler.queueCapacity" type="text" name="scheduler.queueCapacity" style="width: 80px !important"/>
+                    </td>
+                </tr>                
+                <tr>                    
+                    <td>
+                        <ul class="form-btns">                            
+                            <li><input wicket:id="change" type="submit" name="change" wicket:message="value:change" class="secondary"/>
+                            </li>
+                        </ul>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>            
+        </form>
+        <span wicket:id="feedback" class="feedbackPanelERROR"/>
+    </div>    
+</wicket:panel>

@@ -1,0 +1,38 @@
+<wicket:panel>
+	<div class="breadcrumbs" wicket:id="locationPanel"></div>
+	
+    <div id="splitter">
+        <div class="left-column">
+            <!--<ul class="expand-colapse">-->
+                <!--<li class="expand-all">-->
+                    <!--<a href="#" wicket:id="expandAll">Expand all</a>-->
+                <!--</li>-->
+                <!--<li class="colapse-all">-->
+                    <!--<a href="#" wicket:id="collapseAll">Colapse all</a>-->
+                <!--</li>-->
+            <!--</ul>-->
+            <div class="actions-bar">
+                <span class="actions-bar-left"></span>
+                <div wicket:id="treeMenuPanel"></div>
+                <span class="actions-bar-right"></span>
+            </div>
+            <div class="accordion-group" wicket:id="tree"></div>
+        </div>
+        
+        <div class="right-column">
+            <div class="actions-bar">
+                <span class="actions-bar-left"></span>
+                <div wicket:id="bulkMenuPanel" class="actions-grid"></div>
+                <div wicket:id="menuPanel"></div>
+                <span class="actions-bar-right"></span>
+            </div>
+            <div wicket:id="workContainer" class="form-container">
+                <div wicket:id="work" class="table-right-container">                    
+                </div>                       
+            </div>    
+        </div>
+        <div  class="statusBar" wicket:id="statusBarPanel"></div>
+    </div>
+
+</wicket:panel>
+  

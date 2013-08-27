@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://wicket.sourceforge.net/" xml:lang="en" lang="en">
+      
+    <!-- 
+    We use DOCTYPE for this html to be able to see HTML5 components full screen in IE
+    (without DOCTYPE they fallback to a simple image drawn with Java2D)
+    
+    Because of this DOCTYPE flash components cannot be shown if we do not set height=100%
+    for divs that contain the swf object ( we use a class zoom for this )
+    Class zoom is also used inside ChartWidgetView.html and DrillDownWidgetView.html
+    -->  
+    <style media="screen" type="text/css">
+		div.zoom {
+ 			height: 100%; 			
+		}
+	</style>  
+
+    <head>
+        <title wicket:id="title"></title>
+        <link rel="stylesheet" type="text/css" media="screen" href="css/style.css"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="css/table.css"/>
+        <link rel="SHORTCUT ICON" href="images/favicon.ico" />
+        <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="js/jquery.json-2.2.min.js"></script>
+    </head>
+    
+    <body style="background: none;">    	
+        <div wicket:id="widgetView" class="zoom"></div>
+    </body>
+    
+</html>

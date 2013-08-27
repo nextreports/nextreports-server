@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://wicket.apache.org/" 
+      xml:lang="en" 
+      lang="en">
+
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+        
+        <link rel="stylesheet" type="text/css" media="screen" href="css/style.css"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="css/table.css"/>
+        <style type="text/css">           
+                                
+            table.grid {
+                border: 1px solid #D4D4D4;
+            }
+            
+            table.grid tbody td { 
+               line-height: 18px !important;
+               text-align: left;               
+            }          
+            
+            table {
+                font-size: 12px !important;
+            }  
+            
+            html {
+                height: auto;
+            }
+            
+            body {
+                background: #fff !important;
+                text-align: left;
+                font-size: 12px !important;                
+                margin: 30px;      
+                height: auto;       
+            }                               
+            
+            h4 {
+                width: 100%;
+            }
+        </style>           
+    </head>
+
+    <body>
+        <div style="margin-bottom: 20px; overflow: auto; max-height: 400px;">
+            <h4>System properties:</h4>
+	        <table class="grid">
+	            <thead>
+	                <tr>
+	                    <th>Name</th>
+	                    <th>Value</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+		            <tr wicket:id="property">
+		                <td><span wicket:id="name"/></td>
+		                <td><span wicket:id="value"/></td>
+		            </tr>
+	            </tbody>
+	        </table>
+        </div>
+        
+        <div style="padding-bottom: 20px;">
+            <h4>JVM arguments:</h4>
+            <div wicket:id="argument">
+                <div wicket:id="item" style="padding-left: 20px; color: #2A2A2A;  line-height: 20px;"></div>
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <h4>General JVM info:</h4>
+            <table class="grid">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr wicket:id="info">
+                        <td><span wicket:id="displayName"/></td>
+                        <td><span wicket:id="value"/></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,11 @@
+<!-- 
+For drill down we want to have the "Up" link outside the scroll area 
+So we make the panel without overflow and we put the overflow on the renderer
+
+drillHeader is used inside WidgetWebPage.html to customize it when it is found inside an iframe
+-->
+<wicket:panel style="overflow: none !important;">	
+    <div wicket:id="drillDown" class="align-left drillHeader"></div>
+    <div wicket:id="renderer" class="drill-dragbox-content zoom"></div>    
+</wicket:panel>
+    

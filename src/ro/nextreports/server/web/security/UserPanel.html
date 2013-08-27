@@ -1,0 +1,86 @@
+<wicket:panel>
+    <form wicket:id="form">
+        <fieldset  class="fieldset-panel-right">
+            <legend wicket:id="title"></legend>
+            <table class="form">
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="name">Name</wicket:message><em>*</em></label>
+                    </td>
+                    <td>
+                        <input wicket:id="name" name="name" type="text" size="45"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.CreateUser.realName">Real name</wicket:message></label>
+                    </td>
+                    <td>
+                        <input wicket:id="realName" name="realName" type="text" size="45"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="LoginPage.password">Password</wicket:message><em>*</em></label>
+                    </td>
+                    <td>
+                        <input wicket:id="password" name="password" type="password" size="45"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ChangePassword.confirmPassword">Confirm Password</wicket:message><em>*</em></label>
+                    </td>
+                    <td>
+                        <input wicket:id="confirmPassword" name="confirmPassword" type="password" size="45"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="email">Email</wicket:message></label>
+                    </td>
+                    <td>
+                        <input wicket:id="email" name="email" type="email" size="45"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="admin">Admin</wicket:message></label>
+                    </td>
+                    <td>
+                        <input wicket:id="admin" name="admin" type="checkbox" class="checkbox"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label wicket:id="profileLabel"/>
+                    </td>
+                    <td>
+                        <select wicket:id="profile" name="profile"/>
+                    </td>
+                </tr>
+                <tr><td colspan="2"><div class="dashboard-widget-container"></div></td></tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.CreateUser.addToGroups">Add to Groups</wicket:message></label>
+                    </td>
+                    <td>
+                        <div class="paletteContainer">
+                            <div wicket:id="palette" name="palette"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <ul class="form-btns">
+                            <li><a wicket:id="cancel" class="secondary"><wicket:message key="back">Back</wicket:message></a></li>
+                            <li><input wicket:id="create" type="submit" wicket:message="value:save" class="secondary"/></li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+            <span wicket:id="feedback" class="feedbackPanelERROR"/>
+        </fieldset>        
+    </form>    
+</wicket:panel>

@@ -1,0 +1,56 @@
+<wicket:panel>
+    <table>
+        <tr>
+            <td class="td-label">
+                <label class="small"><wicket:message key="Runtime.chartType">Chart Type</wicket:message></label>
+            </td>
+            <td>
+                <select wicket:id="chartType"></select>                
+            </td>
+        </tr>
+        <tr>
+		    <td class="td-label">
+                 <label class="small"><wicket:message key="Runtime.refreshTime">Refresh Time (sec)</wicket:message></label>
+            </td>
+			<td>
+                <input type="text" wicket:id="refreshTime" style="width:80px;"/>
+            </td>
+		</tr>
+		<tr>
+		    <td class="td-label">
+                 <label class="small"><wicket:message key="Runtime.timeout">Timeout (sec)</wicket:message></label>
+            </td>
+			<td>
+                <input type="text" wicket:id="timeout" style="width:80px;"/>
+            </td>
+		</tr>
+        <tr wicket:id="params">
+            <td class="td-label">
+                <label class="small" wicket:id="name">[]</label>
+            </td>
+            <td>
+                <ul class="form-btns">
+                    <li><input type="text" wicket:id="txtValue"/></li>
+                    <li><div wicket:id="txtTime" class="left"/></li>
+                    <li><div wicket:id="txtDate" class="left"/></li>
+                    <li><input type="checkbox" wicket:id="chkBox"/></li>
+                    <li><select wicket:id="cmbValue"></select></li>
+
+                    <li>
+                        <div class="paletteContainer">
+                            <div wicket:id="paletteContainer">
+                                <div wicket:id="palette"></div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </td>
+            <td class="top">
+               <input type="checkbox" wicket:id="dynamicChkBox" style="margin-right: 5px; margin-top: 2px;"/>
+            </td>
+            <td class="top">
+                <label wicket:id="dynamicLabel" style="margin-right: 5px;">[]</label>
+            </td>        
+        </tr>        
+    </table>
+</wicket:panel>

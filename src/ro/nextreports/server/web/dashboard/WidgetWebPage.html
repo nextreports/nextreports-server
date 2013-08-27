@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://wicket.apache.org/" 
+      xml:lang="en" 
+      lang="en">
+
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+		<!-- The viewport is the area in which the web page is drawn 
+			 Specify that the viewport width should exactly match the device screen width 
+		-->
+		<meta name="viewport" content="width=device-width" />
+		
+		<link rel="stylesheet" type="text/css" media="screen" href="css/style.css"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="css/table.css"/>
+        <style type="text/css">           
+                      			
+			table.grid tbody td { 
+ 			   line-height: 18px !important;
+ 			   text-align: left; 			   
+			}          
+			
+			table {
+ 				font-size: 12px !important;
+			}  
+			
+			body {
+				background: #fff !important;
+				overflow: hidden !important;							 
+			}   						    
+			
+			.dragbox-content {
+				background: #fff;
+				min-height: 60px;		
+				margin: 5px;
+				line-height: 1.5em;
+				overflow: auto;
+			} 
+			
+			.drill-dragbox-content {
+			   background: #fff;
+				min-height: 60px;						
+				line-height: 1.5em;
+				overflow: auto;
+			}		
+												        
+        </style>             
+        <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="js/jquery.json-2.2.min.js"></script>
+		<script type="text/javascript" src="js/nextserver.js"></script>
+           
+	</head>
+
+	<body>
+	   <div wicket:id="widget"></div>
+	</body>
+</html>

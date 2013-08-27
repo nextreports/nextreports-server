@@ -1,0 +1,38 @@
+<wicket:panel>
+    <fieldset class="fieldset-panel-right">
+        <legend><label wicket:id="legend">[]</label></legend>
+        <table>
+             <tr>
+                <td class="td-label"><label wicket:id="entityId">[]</label></td>
+                <td class="td-name"><label wicket:id="reportId">[]</label></td>
+            </tr>
+            <tr>
+                <td class="td-label"><label wicket:id="entityName">[]</label></td>
+                <td class="td-name"><label wicket:id="reportName">[]</label></td>
+            </tr>
+            <tr>
+                <td class="td-label">
+                    <label wicket:id="descLabel">[]</label>
+                </td>
+                <td>
+                    <textarea wicket:id="description" cols=40 rows=3 readonly></textarea>
+                </td>
+            </tr>
+        </table>
+        <label style="display: block; font-weight: bold; margin-top: 10px;"><wicket:message key="ActionContributor.Info.parameters">Parameters</wicket:message></label>
+        <div class="table-container">
+            <table wicket:id="table" class="grid actions-grid"></table>
+        </div>
+        <label style="display: block; font-weight: bold; margin-top: 10px;"><wicket:message key="ActionContributor.Info.query">Query</wicket:message></label>
+        <div wicket:id="sql" class="sql"></div>
+        <table class="table-padding">
+            <tr>
+                <td>
+                    <ul class="form-btns">
+                        <li><a wicket:id="cancel" class="secondary"><wicket:message key="back">Back</wicket:message></a></li>
+                    </ul>
+                </td>
+            </tr>
+        </table>           
+    </fieldset>
+</wicket:panel>

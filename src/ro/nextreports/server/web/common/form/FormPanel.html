@@ -1,0 +1,20 @@
+<wicket:panel>
+    <div wicket:id="form-parent" class="form-container">
+        <form wicket:id="form">
+            <table class="form">
+                <div wicket:id="contentPanel"></div>
+                <tr>
+                    <td></td>
+                    <td>
+                        <ul class="form-btns">
+                            <li><input wicket:id="cancel" type="button" name="cancel" wicket:message="value:cancel" class="secondary"/></li>
+                            <li><input wicket:id="apply" type="submit" name="reset"  wicket:message="value:apply" class="secondary"/></li>
+                            <li><input wicket:id="ok" type="submit" name="change" wicket:message="value:ok" class="primary"/></li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <span wicket:id="feedback" class="feedbackPanelERROR"/>
+    </div>
+</wicket:panel>

@@ -1,0 +1,34 @@
+<wicket:panel>
+    <div class="form-container form-container-dialog">
+        <form wicket:id="form">
+            <table class="form">
+            	<tr>
+        			<td class="td-label">
+            			<label><wicket:message key="SelectDashboardPanel.action">Action</wicket:message></label>
+        			</td>
+        			<td>
+            			<select wicket:id="action" name="action"></select>
+        			</td>
+    			</tr>	
+    			<tr>
+        			<td class="td-label">
+            			<label><wicket:message key="SelectDashboardPanel.dashboard">Dashboard</wicket:message></label>
+        			</td>
+        			<td>
+            			<select wicket:id="dashboards" name="dashboards"></select>
+        			</td>
+    			</tr>	
+    			<tr>
+                    <td colspan="2">
+                        <ul class="form-btns">
+                            <li><a wicket:id="cancel" href="#" class="secondary"><wicket:message key="cancel">Cancel</wicket:message></a></li>
+                            <li><input wicket:id="move" type="submit" name="move" wicket:message="value:ok" class="secondary"/></li>                            
+                        </ul>
+                    </td>
+                </tr>
+    		</table>
+        </form>
+        <span wicket:id="feedback" class="feedbackPanelERROR"/>
+    </div>	
+</wicket:panel>
+    

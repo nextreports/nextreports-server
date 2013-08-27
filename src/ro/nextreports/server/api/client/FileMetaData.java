@@ -1,0 +1,69 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package ro.nextreports.server.api.client;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.FileInputStream;
+
+/**
+ * User: mihai.panaitescu
+ * Date: 13-Jan-2010
+ * Time: 15:47:07
+ */
+public class FileMetaData {
+
+    private String fileName;
+    private byte[] fileContent;
+
+    public FileMetaData() {
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public byte[] getFileContent() {
+        return fileContent;
+    }
+
+    public void setFileContent(byte[] fileContent) {
+        this.fileContent = fileContent;
+    }
+
+    public void setFile(File file) throws IOException {
+        fileName = file.getName();
+        fileContent = getBytes(file);
+    }
+
+    private byte[] getBytes(File file) throws IOException {
+        FileInputStream input = new FileInputStream(file);
+        byte fileContent[] = new byte[(int) file.length()];
+        try {
+            input.read(fileContent);
+        } finally {
+            input.close();
+        }
+
+        return fileContent;
+    }
+
+}

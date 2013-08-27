@@ -1,0 +1,53 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://wicket.sourceforge.net/" xml:lang="en" lang="en">
+     
+	<wicket:head>
+	</wicket:head>
+
+    <body>
+        <wicket:panel>
+            <ul class="topnav">
+                <li wicket:id="topMenuItems">
+                    <span wicket:id="menuItemFragment">link</span>
+              </li>
+            </ul>
+        </wicket:panel>
+    </body>
+  
+    <wicket:fragment wicket:id="MENU_ITEM_FRAGMENT">
+        <span wicket:id="linkFragment">link</span>
+        <ul class="subnav" wicket:id="menuItemList">
+	        <li wicket:id="menuItemLinks">
+	            <span wicket:id="menuItemFragment">link</span>
+	        </li>
+        </ul>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="LINK_FRAGMENT">
+        <a href="#" wicket:id="linkId">
+        	<span wicket:id="linkText">Link Text</span>
+        </a>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="LINK_IMAGE_TEXT_FRAGMENT">
+		<a href="#" wicket:id="linkId">
+			<img wicket:id="linkImage" class="left-image"/>
+			<span wicket:id="linkText">Link Text</span>
+		</a>
+	</wicket:fragment>
+
+    <wicket:fragment wicket:id="LINK_FRAGMENT2">
+		<a href="#" wicket:id="linkId">
+			<img wicket:id="linkImage"/> 
+		</a>
+	</wicket:fragment>
+
+    <wicket:fragment wicket:id="IMAGE_FRAGMENT">
+    	<img wicket:id="linkImage"/>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="TEXT_FRAGMENT">
+        <div wicket:id="linkText">Link Text</div>
+    </wicket:fragment>
+  
+</html>

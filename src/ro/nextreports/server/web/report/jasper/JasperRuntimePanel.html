@@ -1,0 +1,37 @@
+<wicket:panel>
+    <table>
+        <tr wicket:id="params"  class="parameters">
+            <td class="td-label">
+                <label class="small" wicket:id="name">[]</label>
+            </td>
+            <td>
+                <ul class="form-btns">
+                    <li><input type="text" wicket:id="txtValue"/></li>
+                    <li><input type="text" wicket:id="txtDate" size="9" class="left"/></li>
+                    <li><input type="checkbox" wicket:id="chkBox"/></li>
+                    <li><select wicket:id="cmbValue"></select></li>
+
+                    <li>
+                        <div class="paletteContainer">
+                            <div wicket:id="paletteContainer">
+                                <div wicket:id="palette"></div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td class="td-label">
+                <label class="small">Export Type</label>
+            </td>
+            <td>
+                <ul class="form-btns">
+                    <li>
+                        <select wicket:id="exportType"></select>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+</wicket:panel>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:wicket="http://wicket.apache.org/">
+<wicket:panel>
+	<div wicket:id="areas" class="areas">
+	   <div wicket:id="area" class="area"></div>
+	</div>
+	<div style="clear: both;"></div>
+	<div>
+		<form>
+		   <span style="margin-left: 5px; float:left;">
+		       <label class="checkbox">
+		           <input wicket:id="showGrandTotalForColumn" type="checkbox"/> Show grand total for column
+		       </label>
+		       &nbsp;&nbsp;&nbsp;
+		       <label class="checkbox">
+		           <input wicket:id="showGrandTotalForRow" type="checkbox"/> Show grand total for row
+		       </label>
+		   </span>
+		</form>
+    </div>
+	<a wicket:id="compute" href="#" class="button" style="margin-left: 5px; clear: both;">Compute</a>      
+	<div style="overflow-x: auto; clear:both;">    
+	   <table wicket:id="pivotTable" class="pivot grid"></table>
+	</div>
+</wicket:panel>
+</html>

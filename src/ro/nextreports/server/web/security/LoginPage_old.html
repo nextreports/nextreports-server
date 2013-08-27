@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://wicket.apache.org/" 
+      xml:lang="en" 
+      lang="en">
+
+	<head>
+	    <title>NextServer Login</title>
+	    <link rel="stylesheet" type="text/css" media="screen" href="css/style.css"/>
+	    <link rel="SHORTCUT ICON" href="images/favicon.ico" />
+	</head>
+	
+	<body id="body-login" style="background-image:url(../images/background.jpg) !important;background-repeat: no-repeat !important;background-position: 50% 0% !important; background-color: #ffffff;">		 
+		<div class="login-container">
+			<div class="login-logo">
+		    	<img wicket:id="logoImage"/>
+		    </div>
+		    <div class="form-container">
+    	         <form wicket:id="loginForm">
+	                <table>
+	                    <tr>
+	                        <td class="td-label-login">
+	                            <label>Name<em>*</em></label>
+	                        </td>
+	                        <td>
+	                            <input type="text" wicket:id="username" class="inputField" name="name" value=""/>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td class="td-label-login">
+	                            <label>Password<em>*</em></label>
+	                        </td>
+	                        <td>
+	                           <input type="password" wicket:id="password" class="inputField" name="password" value=""/>
+	                        </td>
+	                    </tr>
+                        <tr>
+                            <td class="td-label-login">
+                                <label wicket:id="realmLabel"/>
+                            </td>
+                            <td>
+                                <select wicket:id="realm"/>
+                            </td>
+                        </tr>	                    
+	                    <tr>
+	                        <td class="td-label-login">
+	                        </td>
+	                        <td>
+	                            <ul class="form-btns">
+                                    <li>
+                                        <input class="secondary" wicket:id="login" value="Login" type="submit"/>
+	                                </li>
+	                            </ul>
+	                         </td>                    
+	                    </tr>
+				    </table>
+				    <span wicket:id="feedback" class="feedbackPanelERROR"/>
+                </form>
+            </div>
+        </div>
+        <div class="login-info-container">
+            <a href="http://www.next-reports.com/index.php/documentation/nextreports-server-documentation.html"
+               target="_blank" class="login-info-link">Manual</a>
+            <a href="http://www.next-reports.com/index.php/documentation/nextreports-server-documentation/video-tutorials.html"
+               target="_blank" class="login-info-link">Tutorials</a>
+            <a href="http://www.next-reports.com/index.php/forum.html"
+               target="_blank" class="login-info-link">Forum</a>
+            <a href="http://www.next-reports.com/index.php/products/nextresports-licensing.html"
+               target="_blank" class="login-info-link">Licensing</a>
+            <a href="http://www.next-reports.com/index.php/products/nextreports-server/193-request-nextreports-server-evaluation-licence.html"
+               target="_blank" class="login-info-link">Evaluate</a>
+        </div>
+    </body>
+	
+</html>

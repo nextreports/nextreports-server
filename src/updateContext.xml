@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <!-- Import other contexts -->
+    <import resource="classpath:configContext.xml"/>
+    <import resource="classpath:jackrabbitContext.xml"/>
+    <import resource="classpath:persistenceContext.xml"/>
+    <import resource="classpath:cacheContext.xml"/>
+
+    <bean id="updater" class="ro.nextreports.server.update.StorageUpdater">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
+
+</beans>

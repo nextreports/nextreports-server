@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:security="http://www.springframework.org/schema/security"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/security
+            http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+    <bean id="syncUserDetailsService" class="ro.nextreports.server.security.DatabaseExternalUsersService">
+        <property name="dataSource" ref="syncDataSource"/>
+        <property name="userNamesQuery">
+            <value>SELECT USER_NAME FROM SYS_USERS_NEXTSERVER</value>
+        </property>        
+        <property name="userQuery">
+            <value>SELECT * FROM SYS_USERS_NEXTSERVER WHERE USER_NAME = ?</value>
+        </property>
+        <!--
+        <property name="groupNamesQuery">
+            <value>SELECT ROLE_NAME FROM SYS_USERS_ROLES_NEXTSERVER WHERE USER_NAME = ?</value>
+        </property>
+        -->
+        <property name="mapping">
+            <map>
+                <!--  required -->
+                <entry key="user.username" value="USER_NAME"/>
+                <!--
+                <entry key="user.password" value="PASSWORD"/>
+                -->
+                <!-- optional -->
+                <entry key="user.admin" value="IS_ADMIN"/>
+                <entry key="user.email" value="EMAIL"/>
+                <entry key="user.realName" value="NAME"/>
+		<entry key="user.profile" value="PROFILE"/>
+            </map>
+        </property>
+    </bean>
+    
+        <!--  throws "ORA-12519, TNS:no appropriate service handler found"; http://forum.springsource.org/archive/index.php/t-25273.html -->
+    <!--        
+    <bean id="syncDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@vs201.intranet.asf.ro:1521:XE"/>
+        <property name="username" value="username"/>
+        <property name="password" value="password"/>
+    </bean>
+    -->
+    
+    <bean id="syncDataSource" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
+        <!-- jdbc properties -->
+        <property name="URL" value="jdbc:oracle:thin:@vs401.intranet.asf.ro:1521:VDFRTL"/>
+        <property name="user" value="css"/>
+        <property name="password" value="css"/>
+        <!-- cache properties -->   
+        <property name="connectionCachingEnabled" value="true"/>
+        <property name="connectionCacheProperties">
+            <props>
+                <prop key="minLimit">2</prop>
+                <prop key="maxLimit">2</prop>
+            </props>
+        </property>
+    </bean>
+            
+</beans>

@@ -1,0 +1,42 @@
+<wicket:panel>
+    <div class="form-container form-container-dialog">
+        <form wicket:id="form">
+            <table class="form">   
+            	<tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.iframe.enable">Enable iframes</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="iframe.enable" type="checkbox" name="iframe.enable"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.iframe.authentication">Use authentication</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="iframe.useAuthentication" type="checkbox" name="iframe.useAuthentication"/>
+                    </td>
+                </tr> 
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.iframe.key">Encryption key</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="iframe.encryptionKey" type="text" size="16" name="iframe.encryptionKey" style="margin-top: 5px; !important"/>                        
+                    </td>
+                </tr>                                           
+                <tr>                    
+                    <td>
+                        <ul class="form-btns">                            
+                            <li><input wicket:id="change" type="submit" name="change" wicket:message="value:change" class="secondary"/>
+                            </li>
+                        </ul>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>            
+        </form>
+        <span wicket:id="feedback" class="feedbackPanelERROR"/>
+    </div>    
+</wicket:panel>

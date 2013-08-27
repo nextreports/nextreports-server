@@ -1,0 +1,31 @@
+<wicket:panel>
+	<div class="header">
+	    <div wicket:id="imageContainer">
+		    <a class="logo" href="#">
+			    <img alt="logo" wicket:id="logoImage"/>
+		    </a>
+		</div>		
+		<div class="header-right">
+			<ul>               
+                <li>
+					<a wicket:id="changePassord" wicket:message="title:HeaderPanel.editPassword">
+						<wicket:message key="HeaderPanel.changePassword">Change Password</wicket:message>
+					</a>
+				</li>
+				<li class="no-border">
+					<a wicket:id="logout" wicket:message="title:HeaderPanel.logout">
+						<wicket:message key="HeaderPanel.logout">Logout</wicket:message>
+					</a>
+				</li>
+			</ul>	
+	
+			<span class="welcome">
+				<wicket:message key="HeaderPanel.welcome">Welcome</wicket:message> <b>
+				<span wicket:id="realName"></span>
+				</b>. <wicket:message key="HeaderPanel.loggedAs">You are logged in as</wicket:message> <b>
+				<span wicket:id="currentUser"></span></b>
+			</span>
+		</div>
+	</div>
+    <div wicket:id="modal"></div>
+</wicket:panel>

@@ -1,0 +1,28 @@
+<wicket:panel>
+    <div class="form-container">
+        <form wicket:id="form">
+            <table class="form">
+                <tr>
+                    <td>
+                        <ul class="form-btns">
+                            <li><input type="text" wicket:id="txtValue"/></li>
+                            <li><div wicket:id="txtTime" class="left"/></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul class="form-btns">
+                            <li><input wicket:id="addElement" type="submit" value="+" class="manualListButton"/></li>
+                            <li><input wicket:id="removeElement" type="submit" value="-" class="manualListButton"/></li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">                        
+                        <select wicket:id="listChoice" class="manualList"/>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <span wicket:id="feedback" class="feedbackPanelERROR"/>
+    </div>
+</wicket:panel>

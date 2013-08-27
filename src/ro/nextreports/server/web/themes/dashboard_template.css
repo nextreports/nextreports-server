@@ -1,0 +1,250 @@
+/** height is dynamically updated in nextserver.js in function onResize()  */
+.dashboard {
+    overflow: auto;
+    min-height: 353px;
+    border:1px solid #CACACA;
+    padding-left:5px;
+    padding-right:5px;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+		
+.column {
+	/*width: 49.5%;*/
+	margin-right: .5%;
+	min-height: 320px;
+	float: left;
+}
+
+.column .dragbox {
+	margin: 5px 2px 20px;
+	background: #fff;
+	position: relative;
+	border: 1px solid #ddd;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
+.dragbox-header {
+	margin: 0;
+	padding: 5px;
+	background: #f0f0f0;
+	color: #000;
+	border-bottom: 1px solid #eee;
+    height: 1.2em;
+    cursor: move;
+}
+
+.dragbox-header img {
+    margin: 0 0 0 3px;
+    padding: 0 3px 0 0px !important;
+}
+
+.dragbox-toggle {
+	float: left;	
+	margin-right: 3px;
+	cursor: pointer;
+}
+
+.dragbox-title {
+	float: left;
+    font-weight: bold;
+}
+
+.dragbox-actions {
+	float: right;
+	margin: 0px;
+	padding: 0px;
+	display: none;
+}
+
+.dragbox-actions ul {
+    padding: 0px;
+    margin: 0px;
+}
+
+.dragbox-actions ul li {
+    display: inline; 
+    margin: 0 1px 0 1px;
+ }
+
+.dragbox-actions ul li a img {
+	border: 0px;
+	margin: 0px;
+ }
+
+.dragbox-content {
+	background: #fff;
+	min-height: 60px;	
+	margin: 5px 5px 3px 5px;
+	line-height: 1.5em;
+	overflow: auto;
+	/* padding-bottom is needed for IE otherwise the vertical 
+	   scrollbar is allways present for overflow=auto
+	   because we have a margin we put only 3 (5-2) to bottom margin */
+	padding-bottom: 2px;
+}
+
+.drill-dragbox-content {
+	background: #fff;
+	min-height: 60px;		
+	line-height: 1.5em;
+	overflow: auto;
+	/* padding-bottom is needed for IE otherwise the vertical 
+	   scrollbar is allways present for overflow=auto */
+	padding-bottom: 2px;
+}
+
+.dragbox-content-alarm {
+	min-height: 60px !important;
+	/*overflow-y: hidden !important;*/
+}
+
+.dragbox-content-indicator {
+	min-height: 122px !important;
+	/*overflow-y: hidden !important;*/
+}
+
+.dragbox-content-chart {
+	min-height: 300px !important;
+	/*overflow-y: hidden !important;*/
+}
+
+.placeholder {
+	background: #f0f0f0;
+	border: 1px dashed #ddd;
+}
+
+ul.column {
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+.toolbar {
+	width: 100%;
+	float: left;
+    font-weight: bold;		
+    border-bottom: 1px solid #CACACA;
+}
+
+.toolbar_nav {          		
+	height: 32px;	    
+	border-bottom: 1px solid #CACACA;
+}
+
+.widgetDescriptor {
+	border-bottom: 1px solid LightGray;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	margin: 5px 0px 5px 0px;
+	clear: both;
+}
+
+.widgetDescriptor .name {
+	color: blue;
+    font-weight: bold;
+    font-size: 13;      
+}
+
+.widgetDescriptor .provider {
+    color: green;
+ }
+
+.widgetDescriptor .description {
+    margin-top: 5px;
+    margin-bottom: 5px;
+ }
+
+.widgetDescriptor .message {
+	font-style: italic;
+	background: Khaki;
+	padding: 3px;
+ }
+ 
+ .dashboardLeft {
+ 	border-top: 1px solid #CACACA; 
+ 	border-left: 1px solid #CACACA;
+ 	border-bottom: 1px solid #CACACA;
+ 	padding-left: 5px; 
+ 	padding-right: 5px;
+ 	min-height: 320px;	
+ 	overflow-x: hidden;	
+ }
+ 
+.dashboardNavigation  {	
+	min-height: 320px;	
+	overflow-x: hidden;	
+	overflow-y: auto;	
+}
+
+.dashboardNavigation table.actions-grid {
+	margin-top: 5px;
+}	
+
+.dashboardNavigation table.actions-grid ul.subnav {
+    left: 38px !important;
+    top: 20px;    
+}
+
+.dashboardNavigation table tr {		
+	border-bottom: 5px solid #fafafa;
+}
+
+.dashboardNavigation tr.selected {
+    background-color: ${dash-selected-color};
+}
+
+.dashboardNavigation tr.selected a{
+	color: ${dash-selected-text};
+    font-weight: bold;
+	text-transform: uppercase;
+}
+.dashboardNavigation table.actions-grid tr td.actions-col {
+	width: 38px;
+	min-width: 38px;
+}	
+
+.dashboardNavigation table.actions-grid tr td.actions-col ul.subnav {
+	width: 140px;		
+}	
+
+.dashboardNavigation tr ul.subnav li a {
+    font-weight: normal;
+}
+
+.dashboardNavigation table.actions-grid tr a {
+	width: 175px; /* chrome requires the most space */
+}	
+
+.dashboardNavigation table tr.tr-hover {
+	background-color: ${table-row-hover};	  
+}
+
+.dashboardNavigation table.actions-grid tr td.actions-col-hover {
+	border-left: none;
+	border-bottom: none;
+}	
+
+.dashboard-toggle {
+	float: left;
+	margin-right: 3px;
+    margin-top: 7px;
+    cursor: pointer;
+}
+
+.tableWidgetView {
+	border: 1px solid rgb(202, 202, 202); 
+	max-height: 300px;
+}
+
+.drillHeader {
+	padding-top: 5px;
+	padding-bottom: 5px;		
+}	

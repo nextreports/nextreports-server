@@ -1,0 +1,27 @@
+<wicket:panel>
+    <fieldset class="fieldset-panel-right">
+        <legend><wicket:message key="SecurityPanel.title">Security</wicket:message></legend>
+        <table>
+            <tr>
+                <td class="td-label"><label><wicket:message key="SecurityPanel.path">Path</wicket:message></label></td>
+                <td class="td-name"><label wicket:id="path">[]</label></td>
+            </tr>
+        </table>
+        <div class="table-container">
+            <table wicket:id="table" class="grid actions-grid"></table>
+        </div>
+        <table class="table-padding">
+            <tr>
+                <td>
+                    <ul class="form-btns">
+                        <li><a wicket:id="cancel" class="secondary"><wicket:message key="back">Back</wicket:message></a></li>
+                        <li><a wicket:id="addUser" class="secondary"><wicket:message key="SecurityPanel.addUser">Add User</wicket:message></a></li>
+                        <li><a wicket:id="addGroup" class="secondary"><wicket:message key="SecurityPanel.addGroup">Add Group</wicket:message></a></li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+        <div wicket:id="dialog"></div>
+        <span wicket:id="feedback" class="feedbackPanelERROR"/>
+    </fieldset>    
+</wicket:panel>

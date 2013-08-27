@@ -1,0 +1,30 @@
+<wicket:panel>
+    <div class="form-container form-container-dialog">
+        <form wicket:id="form">
+            <table style="padding-bottom: 5px;">
+                <tr>
+        			<td class="td-label">
+            			<label><wicket:message key="type">Type</wicket:message></label>
+        			</td>
+        			<td class="padding">
+            			<select wicket:id="type" name="type"></select>
+        			</td>
+    			</tr>				
+            </table>            
+            <div wicket:id="defineContainer" style="border-top: 1px solid #D4D4D4; padding-top: 5px; margin-right: 5px;">
+            	<div wicket:id="definePanel"></div>
+            </div>
+            <table>
+                <tr>
+                    <td>
+                        <ul class="form-btns">
+                            <li><a wicket:id="cancel" class="secondary"><wicket:message key="cancel">Cancel</wicket:message></a></li>
+                            <li><input wicket:id="add" type="submit" wicket:message="value:save" class="secondary"/></li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <span wicket:id="feedback" class="feedbackPanelERROR"/>
+    </div>
+</wicket:panel>

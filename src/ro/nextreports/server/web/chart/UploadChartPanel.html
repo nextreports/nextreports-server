@@ -1,0 +1,53 @@
+<wicket:panel>
+    <form wicket:id="form">
+        <fieldset  class="fieldset-panel-right">
+            <legend><label wicket:id="title">[]</label></legend>
+            <table>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.UploadChart.chartName">Name</wicket:message><em>*</em></label>
+                    </td>
+                    <td>
+                        <input wicket:id="name" name="name" type="text" size="20"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.UploadChart.datasource">Data Source</wicket:message><em>*</em></label>
+                    </td>
+                    <td>
+                        <select wicket:id="dataSource" name="dataSource"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.UploadChart.file">File</wicket:message><em>*</em></label>
+                    </td>
+                    <td>
+                        <input wicket:id="file" type="file" name="file"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.UploadChart.description">Description</wicket:message></label>
+                    </td>
+                    <td>
+                        <textarea wicket:id="description" name="description" rows="8" cols="30"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                    </td>
+                    <td>
+                        <ul class="form-btns">
+                            <li><a wicket:id="cancel" class="secondary"><wicket:message key="back">Back</wicket:message></a></li>
+                            <li><a wicket:id="submit" class="secondary"><wicket:message key="upload">Upload</wicket:message></a></li>
+                            <!--<li><input type="submit" value="Upload" class="primary"/></li>-->
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+            <span wicket:id="feedback" class="feedbackPanelERROR"/>
+        </fieldset>        
+    </form>    
+</wicket:panel>

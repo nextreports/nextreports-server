@@ -1,0 +1,77 @@
+<wicket:panel>
+    <form wicket:id="form">
+        <fieldset class="fieldset-panel-right">
+            <legend><label wicket:id="title">[]</label></legend>
+            <table>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.UploadJasper.reportName">Name</wicket:message><em>*</em></label>
+                    </td>
+                    <td>
+                        <input wicket:id="name" name="name" type="text" size="20"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.UploadJasper.datasource">Data Source</wicket:message><em>*</em></label>
+                    </td>
+                    <td>
+                        <select wicket:id="dataSource" name="dataSource"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.UploadJasper.file">Master File</wicket:message><em>*</em></label>
+                    </td>
+                    <td>
+                        <input wicket:id="masterFile" type="file"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.UploadJasper.subreports">Subreports</wicket:message></label>
+                    </td>
+                    <td>
+                        <div wicket:id="subreportFile" class="mfu"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.UploadJasper.parameters">Parameters File</wicket:message></label>
+                    </td>
+                    <td>
+                        <input wicket:id="parameterFile" type="file"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.UploadJasper.images">Images</wicket:message></label>
+                    </td>
+                    <td>
+                        <div wicket:id="imageFile" class="mfu"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="ActionContributor.UploadJasper.description">Description</wicket:message></label>
+                    </td>
+                    <td>
+                        <textarea wicket:id="description" name="description" rows="8" cols="30"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                    </td>
+                    <td>
+                        <ul class="form-btns">
+                            <li><a wicket:id="cancel" class="secondary"><wicket:message key="back">Back</wicket:message></a></li>
+                            <li><a wicket:id="submit" class="secondary"><wicket:message key="upload">Upload</wicket:message></a></li>
+                            <!--<li><input type="submit" value="Upload" class="primary"/></li>-->
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+            <span wicket:id="feedback" class="feedbackPanelERROR"/>
+        </fieldset>
+    </form>    
+</wicket:panel>

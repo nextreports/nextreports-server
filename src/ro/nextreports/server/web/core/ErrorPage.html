@@ -1,0 +1,17 @@
+<wicket:extend>	
+	<table>
+		<tr>
+			<td rowspan="2"><img wicket:id="errorImage"/></td>
+			<td class="errorMaintenance">				
+				<wicket:message key="error.code"></wicket:message> 
+				<span wicket:id="errorCode"/>, 
+				<wicket:message key="error.try"></wicket:message> 			
+			</td>
+		</tr>
+		<tr>
+			<td class="errorMaintenanceLink">
+				<a wicket:id="home"><b><wicket:message key="home"></wicket:message></b></a>
+			</td>	
+		</tr>
+	</table>
+</wicket:extend>

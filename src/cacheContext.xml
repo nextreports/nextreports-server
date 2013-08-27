@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
+    
+    <bean id="cacheFactory" class="ro.nextreports.server.cache.ehcache.EhCacheFactory">
+        <property name="cacheManager" ref="cacheManager"/>
+    </bean>
+    
+    <bean id="entitiesCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheName" value="entitiesCache"/>
+        <property name="eternal" value="true"/>
+        <property name="memoryStoreEvictionPolicy" value="LFU"/>
+    </bean>  
+        
+</beans>

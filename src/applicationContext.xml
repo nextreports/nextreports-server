@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <context:annotation-config/>
+    
+	<!-- Import other contexts -->
+	<import resource="classpath:configContext.xml"/>
+	<import resource="classpath:jackrabbitContext.xml"/>
+	<import resource="classpath:persistenceContext.xml"/>
+	<import resource="classpath:serviceContext.xml"/>
+	<import resource="classpath:securityContext.xml"/>
+	<import resource="classpath:scheduleContext.xml"/>
+	<import resource="classpath:reportContext.xml"/>
+	<import resource="classpath:uiContext.xml"/>
+	<import resource="classpath:dashboardContext.xml"/>
+    <import resource="classpath:cacheContext.xml"/>
+
+    <bean class="org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator"/>
+    
+    <bean class="ro.nextreports.server.aop.MethodProfilerAdvice"/>
+    
+    <bean id="settings" class="ro.nextreports.server.settings.SettingsBean">
+    	<property name="storageService" ref="storageService"/>       
+    </bean>
+                
+</beans>

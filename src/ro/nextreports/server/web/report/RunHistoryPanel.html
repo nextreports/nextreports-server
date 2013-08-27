@@ -1,0 +1,24 @@
+<wicket:panel>    
+    <form wicket:id="form">
+        <div wicket:id="feedback"/>
+    	<div style="margin-top: 5px;">			
+			<select wicket:id="type" name="type"></select>
+			<span wicket:id="time" style="margin-left: 5px;"/>
+			<span wicket:id="tillTime" style="margin-left: 5px;"/>
+			<div style="float: right; margin-right: 5px;">
+				<label wicket:id="rowsLabel" style="margin-right: 2px;"/>
+				<input type="text" size=4 wicket:id="rows" style="margin-right: 2px;"/>
+				<input wicket:id="rowsLink" wicket:message="value:set" type="submit" class="button2" style="height: 19px; margin-top: 0px; margin-bottom: 0px; line-height: 15px;"/>
+			</div>	
+		</div>    	    	
+        <span wicket:id="group">
+        	<div class="table-container">
+        		<table wicket:id="runHistoryTable" class="grid"></table>
+        	</div>
+        </span>        
+        <input wicket:id="deleteLink" wicket:message="value:deleteSelected" class="secondary" type="submit"/>
+        <div wicket:id="buttonsPanel" style="float: left; width: 100%; margin-top: 5px;">
+            <a wicket:id="cancel" class="secondary"><wicket:message key="back">Back</wicket:message></a>
+        </div>
+    </form>
+</wicket:panel>

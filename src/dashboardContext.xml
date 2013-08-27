@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <bean id="widgetRegistry" class="ro.nextreports.server.web.dashboard.DefaultWidgetRegistry">
+        <property name="widgetDescriptors">
+            <list>
+                <bean class="ro.nextreports.server.web.dashboard.drilldown.DrillDownWidgetDescriptor"/>
+                <bean class="ro.nextreports.server.web.dashboard.chart.ChartWidgetDescriptor"/>
+                <bean class="ro.nextreports.server.web.dashboard.table.TableWidgetDescriptor"/>
+				<bean class="ro.nextreports.server.web.dashboard.alarm.AlarmWidgetDescriptor"/>
+				<bean class="ro.nextreports.server.web.dashboard.indicator.IndicatorWidgetDescriptor"/>
+		        <bean class="ro.nextreports.server.web.dashboard.pivot.PivotWidgetDescriptor"/>
+            </list>
+        </property>
+    </bean>
+    
+    <bean id="widgetFactory" class="ro.nextreports.server.web.dashboard.DefaultWidgetFactory"/>
+            
+</beans>

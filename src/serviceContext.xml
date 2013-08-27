@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <!-- =================================== -->
+    <!-- S E R V I C E S                     -->
+    <!-- =================================== -->
+
+    <bean id="storageService" class="ro.nextreports.server.service.DefaultStorageService">
+        <property name="storageDao">
+            <ref bean="storageDao"/>
+        </property>
+        <property name="securityDao">
+            <ref bean="securityDao"/>
+        </property>
+        <property name="auditor">
+            <ref bean="auditor"/>
+        </property>
+    </bean>
+
+    <bean id="securityService" class="ro.nextreports.server.service.DefaultSecurityService">
+        <property name="securityDao">
+            <ref bean="securityDao"/>
+        </property>
+        <property name="storageDao">
+            <ref bean="storageDao"/>
+        </property>
+        <property name="profiles">
+            <list>
+                <ref bean="analystProfile"/>
+                <ref bean="businessUserProfile"/>
+                <ref bean="reportsProfile"/>
+                <ref bean="dashboardsProfile"/>                                
+            </list>
+        </property>
+        <property name="auditor">
+            <ref bean="auditor"/>
+        </property>        
+        <property name="tokenEncryptor">
+            <ref bean="tokenEncryptor"/>
+        </property>
+        <property name="simpleDigester">
+            <ref bean="simpleDigester"/>
+        </property>
+    </bean>
+
+    <bean id="dataSourceService" class="ro.nextreports.server.service.DefaultDataSourceService">
+        <property name="storageService">
+            <ref bean="storageService"/>
+        </property>
+    </bean>
+
+    <bean id="reportService" class="ro.nextreports.server.service.DefaultReportService">
+        <property name="storageDao">
+            <ref bean="storageDao"/>
+        </property>
+        <property name="reportEngines">
+            <map>
+                <entry key="Next" value-ref="nextReportsEngine"/>
+                <entry key="Jasper" value-ref="jasperReportsEngine"/>
+            </map>
+        </property>
+        <property name="quartzJobHandler">
+            <ref bean="quartzJobHandler"/>
+        </property>                   
+        <property name="auditor">
+            <ref bean="auditor"/>
+        </property>
+    </bean>
+
+    <bean id="chartService" class="ro.nextreports.server.service.DefaultChartService">
+        <property name="cacheFactory">
+            <ref bean="cacheFactory"/>
+        </property>
+        <property name="storageService">
+            <ref bean="storageService"/>
+        </property>
+        <property name="dashboardService">
+            <ref bean="dashboardService"/>
+        </property>
+    </bean>
+    
+    <bean id="schedulerService" class="ro.nextreports.server.service.DefaultSchedulerService">
+        <property name="storageService">
+            <ref bean="storageService"/>
+        </property>
+        <property name="scheduler" ref="scheduler"/>
+    </bean>
+
+    <bean id="dashboardService" class="ro.nextreports.server.service.DefaultDashboardService">
+        <property name="storageService">
+            <ref bean="storageService"/>
+        </property>
+        <property name="securityService">
+            <ref bean="securityService"/>
+        </property>
+        <property name="widgetFactory">
+            <ref bean="widgetFactory"/>
+        </property>
+        <property name="widgetRegistry">
+            <ref bean="widgetRegistry"/>
+        </property>
+        <property name="cacheFactory">
+            <ref bean="cacheFactory"/>
+        </property>
+        <property name="cacheManager">
+            <ref bean="cacheManager"/>
+        </property>
+    </bean>
+    
+    <!-- =================================== -->
+    <!-- A D V I S O R S                     -->
+    <!-- =================================== -->
+
+    <bean class="org.springframework.transaction.interceptor.TransactionAttributeSourceAdvisor">
+        <property name="transactionInterceptor">
+            <ref local="transactionInterceptor"/>
+        </property>
+    </bean>
+
+    <bean class="org.springframework.security.access.intercept.aopalliance.MethodSecurityMetadataSourceAdvisor">
+        <constructor-arg index="0">
+            <ref local="securityInterceptor"/>
+        </constructor-arg>
+    </bean>
+
+    <!--
+    <bean class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+        <property name="advice">
+            <bean class="ro.nextreports.server.server.LoggingAdvice"/>
+        </property>
+        <property name="pattern" value=".*"/>
+   </bean>
+   -->
+
+    <bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="transactionAttributeSource">
+            <bean class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource"/>
+        </property>
+    </bean>
+
+    <bean id="securityInterceptor" class="org.springframework.security.access.intercept.aopalliance.MethodSecurityInterceptor">
+        <property name="validateConfigAttributes">
+            <value>false</value>
+        </property>
+        <property name="authenticationManager">
+            <ref bean="authenticationManager"/>
+        </property>
+        <property name="accessDecisionManager">
+            <ref bean="aclAccessDecisionManager"/>
+        </property>
+        <property name="afterInvocationManager">
+            <ref bean="afterInvocationManager"/>
+        </property>
+        <property name="securityMetadataSource">
+            <bean class="org.springframework.security.access.annotation.SecuredAnnotationSecurityMetadataSource"/>
+        </property>
+    </bean>
+
+</beans>

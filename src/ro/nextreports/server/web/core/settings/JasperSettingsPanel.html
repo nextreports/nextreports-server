@@ -1,0 +1,50 @@
+<wicket:panel>
+    <div class="form-container form-container-dialog">
+        <form wicket:id="form">
+            <table class="form">    
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.jasper.home">Home for compiled reports</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="jasper.home" type="text" size="16" name="jasper.home"/>
+                    </td>
+                </tr>            
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.jasper.detect">Detect cell type (xls)</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="jasper.detectCellType" type="checkbox" name="jasper.detectCellType"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.jasper.white">White page background (xls)</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="jasper.whitePageBackground" type="checkbox" name="jasper.whitePageBackground"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.jasper.space">No empty space between rows (xls)</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="jasper.removeEmptySpaceBetweenRows" type="checkbox" name="jasper.removeEmptySpaceBetweenRows"/>
+                    </td>
+                </tr>
+                <tr>                    
+                    <td>
+                        <ul class="form-btns">                            
+                            <li><input wicket:id="change" type="submit" name="change" wicket:message="value:change" class="secondary"/>
+                            </li>
+                        </ul>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>            
+        </form>
+        <span wicket:id="feedback" class="feedbackPanelERROR"/>
+    </div>    
+</wicket:panel>

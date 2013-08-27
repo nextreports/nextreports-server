@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <bean id="dashboardsProfile" class="ro.nextreports.server.security.Profile">
+        <property name="name" value="dashboards"/>
+        <property name="displayName" value="Dashboards"/>
+        <property name="sectionIds">
+            <list>
+                 <value>ro.nextreports.server.web.dashboard.DashboardSection</value>
+            </list>
+        </property>		
+    </bean>
+
+    <bean id="reportsProfile" class="ro.nextreports.server.security.Profile">
+        <property name="name" value="reports"/>
+        <property name="displayName" value="Reports"/>
+        <property name="sectionIds">
+            <list>
+                <value>ro.nextreports.server.web.report.ReportSection</value>
+                <value>ro.nextreports.server.web.monitor.MonitorSection</value>
+            </list>
+        </property>
+		<!--
+		<property name="hiddenActionContributorIds">
+            <list>
+            	<value>ro.nextreports.server.web.action.report.VersionsActionContributor</value>
+            	<value>ro.nextreports.server.web.action.report.DownloadActionContributor</value>
+				<value>ro.nextreports.server.web.action.CopyActionContributor</value>
+            </list>
+		</property>
+		-->		
+    </bean>
+
+    <bean id="businessUserProfile" class="ro.nextreports.server.security.Profile">
+        <property name="name" value="business"/>
+        <property name="displayName" value="Business User (Dashboards &amp; Reports)"/>
+        <property name="sectionIds">
+            <list>
+	            <value>ro.nextreports.server.web.dashboard.DashboardSection</value>
+     			<value>ro.nextreports.server.web.report.ReportSection</value>
+        		<value>ro.nextreports.server.web.monitor.MonitorSection</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="analystProfile" class="ro.nextreports.server.security.Profile">
+        <property name="name" value="analyst"/>
+        <property name="displayName" value="Analyst (All Sections)"/>
+        <property name="sectionIds">
+            <list>
+                <value>ro.nextreports.server.web.dashboard.DashboardSection</value>
+                <value>ro.nextreports.server.web.report.ReportSection</value>
+                <value>ro.nextreports.server.web.monitor.MonitorSection</value>
+                <value>ro.nextreports.server.web.chart.ChartSection</value>
+                <value>ro.nextreports.server.web.schedule.SchedulerSection</value>
+                <value>ro.nextreports.server.web.datasource.DataSourceSection</value>
+            </list>
+        </property>
+    </bean>
+    
+</beans>

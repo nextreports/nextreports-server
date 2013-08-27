@@ -1,0 +1,37 @@
+<wicket:panel>
+    <form wicket:id="form">
+        <fieldset class="fieldset-panel-right">
+            <legend wicket:id="title"></legend>
+            <table class="form">
+                <tr>
+                    <td class="td-label">
+                        <label><wicket:message key="name">Name</wicket:message><em>*</em></label>
+                    </td>
+                    <td>
+                        <input wicket:id="name" name="name" type="text" size="45"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label for="name"><wicket:message key="ActionContributor.CreateGroup.users">Users</wicket:message><em>*</em></label>
+                    </td>
+                    <td>
+                        <div class="paletteContainer">
+                            <div wicket:id="palette"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <ul class="form-btns">
+                            <li><a wicket:id="cancel" class="secondary"><wicket:message key="back">Back</wicket:message></a></li>
+                            <li><input wicket:id="create" type="submit" wicket:message="value:save" class="secondary"/></li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+            <span wicket:id="feedback" class="feedbackPanelERROR"/>
+        </fieldset>        
+    </form>
+</wicket:panel>

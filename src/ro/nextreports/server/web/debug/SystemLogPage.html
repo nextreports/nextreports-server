@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://wicket.apache.org/" 
+      xml:lang="en" 
+      lang="en">
+
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+        
+        <link rel="stylesheet" type="text/css" media="screen" href="css/style.css"/>
+        <style type="text/css">           
+                                
+            html {
+                height: auto;
+            }
+            
+            body {
+                background: #fff !important;
+                text-align: left;
+                font-size: 12px !important;          
+                height: auto;   
+                margin: 20px;
+            }                               
+            
+        </style> 
+        
+        <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>    
+    </head>
+
+    <body>
+        <div>
+	        <div><strong>Size: </strong><span wicket:id="size"></span></div>
+	        <div><strong>Last modified: </strong><span wicket:id="lastModified"></span></div>
+	        <hr style="margin-bottom: 10px;"/>
+	        <div wicket:id="log" id="log" style="margin-bottom: 20px; overflow-y: auto; max-height: 600px;"></div>
+	    </div>
+    </body>
+</html>

@@ -1,0 +1,27 @@
+<wicket:panel>
+    <form wicket:id="form">
+        <fieldset  class="fieldset-panel-right">
+            <legend wicket:id="title"></legend>
+            <table class="form">                               
+                <tr>
+                    <td class="td-label">
+                        <label wicket:id="profileLabel"/>
+                    </td>
+                    <td>
+                        <select wicket:id="profile" name="profile"/>
+                    </td>
+                </tr>               
+                <tr>
+                    <td></td>
+                    <td>
+                        <ul class="form-btns">
+                            <li><a wicket:id="cancel" class="secondary"><wicket:message key="back">Back</wicket:message></a></li>
+                            <li><input wicket:id="modify" type="submit" wicket:message="value:modify" class="secondary"/></li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+            <span wicket:id="feedback" class="feedbackPanelERROR"/>
+        </fieldset>        
+    </form>    
+</wicket:panel>

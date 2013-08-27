@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <!-- ==================================================== -->
+    <!-- S E C T I O N S                                      -->
+    <!-- ==================================================== -->
+
+    <bean id="sectionManager" class="ro.nextreports.server.web.core.section.DefaultSectionManager"/>
+
+    <bean id="dashboardSection" class="ro.nextreports.server.web.dashboard.DashboardSection"/>        
+            
+    <bean id="reportSection" class="ro.nextreports.server.web.report.ReportSection">
+        <property name="menuContributors">
+            <list>
+                <bean class="ro.nextreports.server.web.action.CreateFolderActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.report.UploadNextReportActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.report.jasper.UploadJasperReportActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.RenameActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.DeleteActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.SearchEntityActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.PasteActionContributor"/>
+            </list>
+        </property>    
+        <property name="popupContributors">
+            <list>
+                <bean class="ro.nextreports.server.web.action.report.RunActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.report.ScheduleActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.report.jasper.EditParametersActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.ChangeDataSourceActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.report.UpdateActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.report.EditActionContributor"/>
+				<bean class="ro.nextreports.server.web.action.report.DrillDownActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.report.VersionsActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.report.InfoActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.report.RunHistoryActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.report.DownloadActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.RenameActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.CopyActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.CutActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.DeleteActionContributor"/>
+				<bean class="ro.nextreports.server.web.action.CacheActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.security.SecurityActionContributor"/>
+            </list>
+        </property>
+        <property name="bulkMenuContributors">
+            <list>
+                <bean class="ro.nextreports.server.web.action.report.DownloadActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.CopyActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.CutActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.DeleteActionContributor"/>
+				<bean class="ro.nextreports.server.web.action.CacheActionContributor"/>
+				<bean class="ro.nextreports.server.web.action.ChangeDataSourceActionContributor"/>
+            </list>
+        </property>
+    </bean>
+    
+    <bean id="chartSection" class="ro.nextreports.server.web.chart.ChartSection">
+        <property name="menuContributors">
+            <list>
+                <bean class="ro.nextreports.server.web.action.CreateFolderActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.chart.UploadChartActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.RenameActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.DeleteActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.SearchEntityActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.PasteActionContributor"/>
+            </list>
+        </property>        
+        <property name="popupContributors">
+            <list>
+                <bean class="ro.nextreports.server.web.action.chart.RunActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.ChangeDataSourceActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.chart.UpdateActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.chart.EditActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.chart.DrillDownActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.chart.VersionsActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.chart.InfoActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.chart.DownloadActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.RenameActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.CopyActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.CutActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.DeleteActionContributor"/>
+				<bean class="ro.nextreports.server.web.action.CacheActionContributor"/>				
+                <bean class="ro.nextreports.server.web.action.security.SecurityActionContributor"/>
+            </list>
+        </property>
+        <property name="bulkMenuContributors">
+            <list>
+                <bean class="ro.nextreports.server.web.action.chart.DownloadActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.CopyActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.CutActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.DeleteActionContributor"/>
+				<bean class="ro.nextreports.server.web.action.CacheActionContributor"/>
+				<bean class="ro.nextreports.server.web.action.ChangeDataSourceActionContributor"/>
+            </list>
+        </property>
+    </bean>           
+    
+    <bean id="dataSourceSection" class="ro.nextreports.server.web.datasource.DataSourceSection">
+        <property name="menuContributors">
+            <list>
+                <bean class="ro.nextreports.server.web.action.CreateFolderActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.datasource.CreateDataSourceActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.RenameActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.DeleteActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.SearchEntityActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.PasteActionContributor"/>
+            </list>
+        </property>    
+        <property name="popupContributors">
+            <list>
+                <bean class="ro.nextreports.server.web.action.datasource.ModifyActionContributor"/>               
+                <bean class="ro.nextreports.server.web.action.RenameActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.CopyActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.CutActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.DeleteActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.security.SecurityActionContributor"/>
+            </list>
+        </property>
+        <property name="bulkMenuContributors">
+            <list>
+                <bean class="ro.nextreports.server.web.action.CopyActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.CutActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.DeleteActionContributor"/>
+            </list>
+        </property>
+    </bean>
+    
+    <bean id="schedulerSection" class="ro.nextreports.server.web.schedule.SchedulerSection">
+        <property name="menuContributors">
+            <list>
+                <bean class="ro.nextreports.server.web.action.SearchEntityActionContributor"/>
+            </list>
+        </property>        
+    	<property name="popupContributors">
+	       <list>
+	           <bean class="ro.nextreports.server.web.action.schedule.ModifyActionContributor"/>
+	           <bean class="ro.nextreports.server.web.action.schedule.HistoryActionContributor"/>
+	           <bean class="ro.nextreports.server.web.action.schedule.GoToReportActionContributor"/>
+               <bean class="ro.nextreports.server.web.action.RenameActionContributor"/>
+               <bean class="ro.nextreports.server.web.action.DeleteActionContributor"/>
+               <bean class="ro.nextreports.server.web.action.security.SecurityActionContributor"/>
+            </list>
+        </property>
+        <property name="bulkMenuContributors">
+            <list>                
+                <bean class="ro.nextreports.server.web.action.DeleteActionContributor"/>
+            </list>
+        </property>
+    </bean>    
+    
+    <bean id="monitorSection" class="ro.nextreports.server.web.monitor.MonitorSection"/>
+    
+    <bean id="securitySection" class="ro.nextreports.server.web.security.SecuritySection">
+        <property name="menuContributors">
+            <list>
+                <bean class="ro.nextreports.server.web.action.security.CreateUserActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.security.CreateGroupActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.SearchEntityActionContributor"/>                
+            </list>
+        </property>        
+        <property name="popupContributors">
+            <list>
+                <bean class="ro.nextreports.server.web.action.security.ModifyUserActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.security.ModifyGroupActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.DeleteActionContributor"/>
+            </list>
+        </property>
+        <property name="bulkMenuContributors">
+            <list>                
+			    <bean class="ro.nextreports.server.web.action.security.ModifyProfileActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.DeleteActionContributor"/>
+            </list>
+        </property>
+    </bean>    
+    
+    <bean id="settingsSection" class="ro.nextreports.server.web.core.section.SettingsSection"/>    
+    
+    <bean id="migrationSection" class="ro.nextreports.server.web.core.section.MigrationSection"/>
+
+</beans>

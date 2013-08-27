@@ -1,0 +1,34 @@
+<wicket:panel>
+    <div class="form-container form-container-dialog">
+        <form wicket:id="form">
+            <table>
+                <tr>
+                    <td class="td-label">
+                        <label class="small"><wicket:message key="AddDashboardPanel.title">Title</wicket:message><em>*</em></label>
+                    </td>
+                    <td>
+                        <input wicket:id="title" class="small"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label class="small"><wicket:message key="AddDashboardPanel.columns">Columns</wicket:message></label>
+                    </td>
+                    <td>
+                        <select wicket:id="columnCount"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <ul class="form-btns">
+                            <li><a wicket:id="cancel" href="#" class="secondary"><wicket:message key="cancel">Cancel</wicket:message></a>
+                            </li>
+                            <li><input wicket:id="add" type="submit" name="add" wicket:message="value:add" class="secondary"/></li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <span wicket:id="feedback" class="feedbackPanelERROR"/>
+    </div>
+</wicket:panel>

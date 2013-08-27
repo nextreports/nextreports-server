@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:security="http://www.springframework.org/schema/security"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:encryption="http://www.jasypt.org/schema/encryption"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security-3.0.xsd
+        http://www.jasypt.org/schema/encryption
+        http://www.jasypt.org/schema/encryption/jasypt-spring3-encryption-1.xsd">
+
+    <import resource="classpath:aclContext.xml"/>
+    <import resource="classpath:securityProfiles.xml"/>
+    
+    <!-- Import other files with external authentication providers -->
+    <!--
+    <import resource="classpath:authenticationDatabase.xml"/>
+    -->
+    <!--
+    <import resource="classpath:authenticationCas.xml"/>
+    <import resource="classpath:securitySynchronizer.xml"/>
+    -->   
+    
+    <bean id="auditor" class="ro.nextreports.server.audit.LogAuditor"/>
+    <!--
+    <bean id="auditor" class="ro.nextreports.server.audit.OracleAuditor">
+        <property name="dataSource" ref="cssDataSource"/>
+    </bean>
+    -->
+    
+    <!-- ======================== FILTER CHAIN ======================= -->
+    <bean id="filterChainProxy" class="org.springframework.security.web.FilterChainProxy">
+         <security:filter-chain-map path-type="ant">
+            <!--
+            <security:filter-chain pattern="/**" filters="securityContextPersistenceFilter, casProcessingFilter"/>
+            -->
+            <security:filter-chain pattern="/**" filters="securityContextPersistenceFilter, authenticationFilter, integrationAuthenticationFilter"/>
+        </security:filter-chain-map>
+    </bean>
+            
+    <bean id="securityContextPersistenceFilter" class="org.springframework.security.web.context.SecurityContextPersistenceFilter"/>
+                
+    <!-- ======================== AUTHENTICATION ======================= -->        
+    <bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
+    	<property name="providers">
+            <list>
+                <ref bean="nextserverAuthenticationProvider"/>
+                <!--  HERE ADD EXTERNAL AUTHENTICATION PROVIDERS  -->
+                <!--
+                <ref bean="databaseAuthenticationProvider"/>
+                -->
+                <!--
+                <ref bean="casAuthenticationProvider"/>
+                -->
+            </list>
+	    </property>
+    </bean>
+           
+    <bean id="authenticationFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="filterProcessesUrl" value="/app/j_spring_security_check"/>
+        <property name="usernameParameter" value="username"/>
+        <property name="passwordParameter" value="password"/>
+        <!--
+        <property name="authenticationFailureUrl" value="/app/login"/>
+        <property name="defaultTargetUrl" value="/app"/>
+        -->
+        <property name="authenticationFailureHandler" ref="failureHandler"/>
+        <property name="authenticationSuccessHandler" ref="successHandler"/>
+        <property name="postOnly" value="false"/>
+    </bean>
+    
+    <bean id="integrationAuthenticationFilter" class="ro.nextreports.server.web.integration.IntegrationAuthenticationFilter">
+        <property name="filterProcessesUrl" value="/app/j_integration_security_check"/>
+        <property name="usernameParameter" value="username"/>
+        <property name="secretParameter" value="secret"/>
+        <!--
+        <property name="authenticationFailureHandler" ref="failureHandler"/>
+        <property name="authenticationSuccessHandler" ref="successHandler"/>
+        -->
+        <property name="postOnly" value="false"/>
+        <property name="userDetailsService" ref="nextserverUserDetailsService"/>
+    </bean>
+        
+    <bean id="failureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+        <property name="defaultFailureUrl" value="/app/login"/>
+    </bean>
+    
+    <bean id="successHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+        <property name="defaultTargetUrl" value="/"/> <!-- which is the default value -->
+        <!--
+        <property name="targetUrlParameter" value="redirectUrl"/>
+        -->
+    </bean>
+        
+    <bean id="basicAuthenticationFilter" class="org.springframework.security.web.authentication.www.BasicAuthenticationFilter">
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="authenticationEntryPoint" ref="authenticationEntryPoint"/>
+    </bean>
+        
+    <bean id="authenticationEntryPoint" class="org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint">
+        <property name="realmName" value="nextserver"/>
+    </bean>
+        
+    <bean id="nextserverAuthenticationProvider" class="ro.nextreports.server.security.NextServerAuthenticationProvider">
+        <property name="userDetailsService" ref="nextserverUserDetailsService"/>
+    </bean>
+    
+    <bean id="nextserverUserDetailsService" class="ro.nextreports.server.security.NextServerUserDetailsService">
+        <property name="securityDao" ref="securityDao"/>
+        <property name="transactionManager" ref="transactionManager"/>
+    </bean>
+    
+    <bean id="basicExceptionTranslationFilter" class="org.springframework.security.web.access.ExceptionTranslationFilter">
+        <property name="authenticationEntryPoint" ref="authenticationEntryPoint"/>
+    </bean>
+    
+    <!-- Used for creation of the system user (admin) -->
+    <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.Md5PasswordEncoder"/>
+
+    <!-- Automatically receives AuthenticationEvent messages -->
+    <bean id="loggerListener" class="org.springframework.security.access.event.LoggerListener"/>
+    
+    <bean class="ro.nextreports.server.aop.UserRemovedAdvice">
+        <property name="storageService" ref="storageService"/>
+        <property name="securityService" ref="securityService"/>
+        <property name="dashboardService" ref="dashboardService"/>
+    </bean>
+    
+    <encryption:string-digester id="simpleDigester" algorithm="SHA1" salt-size-bytes="8" iterations="5"/>
+    <encryption:string-encryptor id="tokenEncryptor" password="jasypt"/>
+    
+</beans>
