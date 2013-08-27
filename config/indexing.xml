@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE configuration SYSTEM "http://jackrabbit.apache.org/dtd/indexing-configuration-1.2.dtd">
+
+<!--
+   http://wiki.apache.org/jackrabbit/IndexingConfiguration
+
+   For nt:resource node types we should not let the jcr:data property to be indexed
+   because if it is an xml with a DOCTYPE, jcr will try to resolve the resource
+   and that can take alot of time (like 40000 ms per file)
+-->
+
+<configuration xmlns:jcr="http://www.jcp.org/jcr/1.0"
+               xmlns:nt="http://www.jcp.org/jcr/nt/1.0">
+    <index-rule nodeType="nt:resource">
+        <property>jcr:lastModified</property>
+        <property>jcr:mimeType</property>
+    </index-rule>
+</configuration>
