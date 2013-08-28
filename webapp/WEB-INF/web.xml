@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+
+    <display-name>NextServer</display-name>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:applicationContext.xml</param-value>
+    </context-param>
+    
+    <filter>
+        <filter-name>spring.securityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <param-name>targetBeanName</param-name>
+            <param-value>filterChainProxy</param-value>
+        </init-param>        
+    </filter>
+    
+	<filter>
+	    <filter-name>wicket.filter</filter-name>
+		<filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
+    	<init-param>
+    	    <param-name>configuration</param-name>
+            <param-value>deployment</param-value>
+        </init-param>
+        <init-param>
+      		<param-name>applicationClassName</param-name>
+      		<param-value>ro.nextreports.server.web.NextServerApplication</param-value>
+    	</init-param>
+	</filter>
+
+    <filter>
+        <filter-name>spring.securityBasicAuthorizationFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <param-name>targetBeanName</param-name>
+            <param-value>basicAuthenticationFilter</param-value>
+        </init-param>
+     </filter>
+         
+    <servlet>
+        <servlet-name>jersey.springServlet</servlet-name>
+        <servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
+        <init-param>
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-value>ro.nextreports.server.api</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <!--
+    <servlet>
+        <servlet-name>cometd</servlet-name>
+        <servlet-class>org.cometd.server.CometdServlet</servlet-class>
+        <init-param>
+            <param-name>timeout</param-name>
+            <param-value>15000</param-value>
+        </init-param>
+        <init-param>
+            <param-name>multi-timeout</param-name>
+            <param-value>1500</param-value>
+        </init-param>
+        <init-param>
+            <param-name>verbose</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <init-param>
+            <param-name>transports</param-name>
+            <param-value>org.cometd.websocket.server.WebSocketTransport</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    -->
+    
+	<filter-mapping>
+		<filter-name>spring.securityFilterChain</filter-name>
+		<url-pattern>/app/*</url-pattern>
+	</filter-mapping>
+
+    <filter-mapping>
+        <filter-name>wicket.filter</filter-name>
+        <url-pattern>/app/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>spring.securityBasicAuthorizationFilter</filter-name>
+        <url-pattern>/api/*</url-pattern>
+    </filter-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>jersey.springServlet</servlet-name>
+        <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>    
+
+	<!--
+    <servlet-mapping>
+        <servlet-name>cometd</servlet-name>
+        <url-pattern>/cometd/*</url-pattern>
+    </servlet-mapping>
+    -->
+    
+    <listener>
+        <listener-class>ro.nextreports.server.web.ApplicationLoaderListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+    </listener>
+
+</web-app>

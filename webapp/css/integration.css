@@ -1,0 +1,20 @@
+body {
+	background: none;
+}
+
+.big-container {
+	padding: 0px;
+	margin: 0px;
+}
+
+.container {
+	width: 100%;
+	border: none;
+	background: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+.integration-dashboards .form-container {
+	margin-top: 0px;
+}

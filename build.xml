@@ -1,0 +1,380 @@
+<?xml version="1.0"?>
+
+<!-- ===================================================================
+Build file for 'nextreports-server' application
+
+Most useful targets:
+
+  - compile -> compile all java sources
+  - jar       -> creates the application's jar file
+  - clean   -> removes all the generated files and directories
+  - war     -> create war
+  - dist     -> creates the distribution
+  - release -> creates the artifacts    
+
+Authors:
+  Decebal Suiu <decebal.suiu@asf.ro>
+client
+Copyright:
+  Copyright (c) 2009-2013, The NextReports team. All rights reserved.
+==================================================================== -->
+
+<project name="nextreports-server" default="release" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+    <property file="local.properties"/>
+    <property file="build.properties"/>
+
+    <property name="ivy.lib.dir" value="${app.lib}"/>
+        
+    <import file="ivy-build.xml"/>
+    
+	<!-- Classpath -->
+    <path id="classpath">
+    	<fileset dir="${app.jetty.lib}" includes="*.jar"/>
+        <fileset dir="${app.lib}" includes="*.jar"/>
+        <fileset dir="${ant.tasks.dir}" includes="*.jar"/>
+    </path>
+
+    <!-- ================================================================== -->
+    <!-- I V Y . I N I T                                                    -->
+    <!-- ================================================================== -->
+
+    <target name="ivy.init" depends="ivy.download">
+        <!-- Download the ivy jar and defines ivy tasks -->
+        <path id="ivy.lib.path">
+              <pathelement location="${ivy.jar.file}"/>
+        </path>
+        <!-- The ivy tasks are dependent by ivy.lib.path declared above -->
+        <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- I V Y . R E S O L V E                                                      -->
+    <!-- ================================================================== -->
+
+    <!-- resolve dependent libraries -->
+    <target name="ivy.resolve" depends="ivy.init">      
+        <ivy:configure file="ivysettings.xml"/>
+        <ivy:resolve conf="*(public)" file="ivy.xml"/>
+        <!--
+        <ivy:retrieve pattern="${ivy.lib.dir}/[artifact].[ext]" conf="runtime"/>
+        -->
+    	<ivy:retrieve sync="true" changing="true" overwriteMode="newer"/>
+    	
+        <mkdir dir="ivy-report"/>
+        <ivy:report todir="ivy-report"/>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- C O M P I L E                                                      -->
+    <!-- ================================================================== -->
+
+    <target name="compile" depends="ivy.resolve,version">
+        <!-- Create the ${app.classes} directory -->
+    	<mkdir dir="${app.classes}"/>
+
+        <!-- Compile the java code from ${app.src} into ${app.classes} -->
+        <javac       
+        	srcdir="${app.src}"
+        	excludes="**/JettyLauncher.java"
+            destdir="${app.classes}"
+            debug="${javac.debug}"
+            verbose="${javac.verbose}"
+            deprecation="${javac.deprecation}"
+            classpathref="classpath"
+            executable="${javac.executable}"
+        	memoryInitialSize="${javac.memory.initial}"
+        	memoryMaximumSize="${javac.memory.maximum}"        	
+            fork="${javac.fork}">
+                <!--
+                <compilerarg value="-Xlint:unchecked"/>
+                -->
+        </javac>    
+    	<!-- move logo to classpath so an installed next-server can found it for pushing to JCR storage -->
+    	<copy file="${app.home}/webapp/images/logo.png" todir="${app.classes}"/>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- J A R                                                              -->
+    <!-- ================================================================== -->
+
+	<target name="jar" depends="compile">
+		<!-- Create jar file -->
+		<jar jarfile="${app.target}/${app.jar}" compress="true">
+			<fileset dir="${app.classes}" excludes="ro/nextreports/server/JettyLauncher.class"/>
+			<fileset dir="${app.home}" includes="public.key"/>
+            <fileset dir="${app.src}">
+                <include name="**/*.gif"/>
+                <include name="**/*.png"/>
+                <include name="**/*.jpg"/>
+                <include name="**/*.properties"/>
+                <include name="**/*.xml"/>
+                <include name="**/*zip"/>
+            </fileset>
+            <manifest>
+                <attribute name="Built-By" value="${user.name}"/>
+            	<!--
+                <attribute name="Main-Class" value="${app.mainclass}"/>
+                -->
+                <attribute name="Implementation-Version" value="${app.version}"/>
+            </manifest>
+            <!-- Include license jar --> 
+            <zipgroupfileset dir="${app.lib}" includes="license-*.jar"/>
+		</jar>
+	</target>
+
+    <!-- ================================================================== -->
+    <!-- W A R                                                              -->
+    <!-- ================================================================== -->
+
+    <target name="war" depends="compile">
+        <!-- Delete old WAR file -->
+        <delete file="${app.name}.war"/>
+
+        <!-- Create WAR file -->
+        <war destfile="${app.target}/${app.war}" webxml="${app.home}/webapp/WEB-INF/web.xml">
+            <classes dir="${app.classes}"/>
+            <classes dir="${app.src}">
+                <exclude name="**/*.java"/>
+            </classes>
+            <classes dir="${app.config}"/>
+        	<classes dir="${app.home}">
+        		<include name="public.key"/>
+        	</classes>
+            <fileset dir="${app.home}/webapp">
+                <exclude name="WEB-INF/web.xml"/>
+            	<exclude name="reports/**"/>
+            	<exclude name="**/CVS/**"/>
+            </fileset>
+            <lib dir="${app.lib}">
+            	<exclude name="jersey-client-*.jar"/>
+            </lib>
+        </war>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- C L I E N T . J A R                                                    -->
+    <!-- ================================================================== -->
+    
+    <target name="client.jar" depends="compile">
+        <jar destfile="${app.target}/${app.client.jar}" compress="true">
+            <fileset dir="${app.classes}">
+            	<include name="ro/nextreports/server/api/client/**/*.class"/>
+            	<include name="ro/nextreports/server/exception/DuplicationException.class"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- C L I E N T                                                          -->
+    <!-- ================================================================== -->
+	
+	<target name="client" depends="client.jar">
+		<property name="client.zip.dir" location="${app.target}/${app.name}-client-${app.version}"/>
+
+        <!-- Create a temporary dir -->
+        <mkdir dir="${client.zip.dir}"/>
+
+		<!-- Copy client jar file in the temporary dir -->
+		<copy file="${app.target}/${app.client.jar}" todir="${client.zip.dir}"/>
+		
+        <!-- Copy some files in the temporary dir -->
+        <copy todir="${client.zip.dir}">
+            <fileset dir="${app.lib}">
+                <include name="jersey-client-*.jar"/>
+            	<include name="jersey-core-*.jar"/>
+            	<include name="jsr311-api-*.jar"/>
+            	<include name="commons-logging-*.jar"/>
+            	<include name="commons-codec-*.jar"/>
+            	<include name="xstream-*.jar"/>
+        	</fileset>
+        	<fileset dir="${app.src}">
+        		<include name="ro/nextreports/server/api/client/test/*.java"/>
+        	</fileset>
+        </copy>
+		
+        <!-- Create the zip with dist -->
+        <zip destfile="${app.target}/${app.name}-client-${app.version}.zip" basedir="${client.zip.dir}"/>
+
+        <!-- Delete the temporary dir -->
+        <delete dir="${client.zip.dir}"/>
+	</target>
+
+    <!-- ================================================================== -->
+    <!-- V E R S I O N                                                      -->
+    <!-- ================================================================== -->
+
+    <target name="version">
+        <!-- Add ant task -->
+        <taskdef
+            name="jreleaseinfo"
+            classname="ch.oscg.jreleaseinfo.anttask.JReleaseInfoAntTask"
+            classpath="${ant.tasks.dir}/jreleaseinfo-1.3.0.jar"
+        />
+
+        <property name="app.src.dir" location="${app.src}"/>
+
+        <property environment="env"/>
+        <!-- 'BUILD_NUMBER' variable is created by HUDSON CI SERVER before each build run -->
+        <property name="env.BUILD_NUMBER" value="0"/>
+        <property name="build.number" value="${env.BUILD_NUMBER}"/>
+
+        <!-- Create release info -->
+        <jreleaseinfo
+            classname="ReleaseInfo"         
+            packagename="ro.nextreports.server"
+            targetdir="${app.src.dir}"
+            project="NextReports Server"
+            version="${app.version}">
+                <parameter name="company" value="NextReports"/>
+                <parameter name="home" value="http://www.next-reports.com"/>        	
+                <parameter name="buildNumber" value="${build.number}" type="int"/>
+				<parameter name="copyright" value="${app.copyright}"/>
+        </jreleaseinfo>
+    </target>
+    
+    <!-- ================================================================== -->
+	<!-- D A T A . Z I P                                                    -->
+	<!-- ================================================================== -->
+
+	<target name="data.zip">
+	    <property name="data.zip.dir" location="${app.target}/${app.version}"/>
+
+		<!-- Create a temporary dir -->
+	    <mkdir dir="${data.zip.dir}"/>					
+
+	    <!-- Copy demo database in temporary dir -->
+	    <copy todir="${data.zip.dir}">	    		    	    		    		    	
+	    	<!-- Copy demo -->
+	    	<fileset dir="${app.home}">	    		
+	    		<include name="demo/**"/>	    		
+	    	</fileset>
+	    </copy>		
+	    
+	    <!-- Copy demo jcr data in temporary dir -->
+	    <copy todir="${data.zip.dir}/data">	    		    	    		    		    	
+	    	<!-- Copy demo -->
+	    	<fileset dir="${app.home}/data_demo">	    		
+	    		<include name="**"/>	    		
+	    	</fileset>
+	    </copy>							    			    			    			    
+
+	    <!-- Create the zip with data dist -->
+	    <zip destfile="${app.target}/${app.name}-data-${app.version}.zip" basedir="${app.target}/${app.version}"/>
+		
+		<copy file="${app.target}/${app.name}-data-${app.version}.zip" todir="${app.src}"/>		
+		
+		<!-- Delete the temporary dir -->
+		<delete dir="${app.target}/${app.version}"/>		    
+	</target>
+	
+    <!-- ================================================================== -->
+    <!-- D I S T                                                            -->
+    <!-- ================================================================== -->
+
+    <target name="dist" depends="war">
+    	<!-- Copy the minimum jetty distributuion -->
+    	<copy todir="${app.dist}">
+    		<fileset dir="jetty"/>
+    	</copy>
+    	
+    	<property name="jetty.webapps" value="${app.dist}/webapps"/>    	
+    	<copy file="${app.target}/${app.war}" todir="${jetty.webapps}"/>
+    	
+    	<mkdir dir="${jetty.webapps}/${app.name}"/>
+    	<unzip src="${jetty.webapps}/${app.war}" dest="${jetty.webapps}/${app.name}"/>
+    	<delete file="${jetty.webapps}/${app.war}"/>
+    </target>
+    	
+    <!-- ================================================================== -->
+    <!-- D I S T . Z I P                                                    -->
+    <!-- ================================================================== -->
+
+    <target name="dist.zip" depends="dist">
+        <property name="app.zip.dir" location="${app.target}/${app.version}/${app.name}-${app.version}"/>
+
+        <!-- Create a temporary dir -->
+        <mkdir dir="${app.zip.dir}"/>
+
+        <!-- Copy dist in temporary dir -->
+        <copy todir="${app.zip.dir}">
+            <fileset dir="${app.dist}"/>        	
+        </copy>
+    	
+    	<!-- Replace some variables -->
+    	<replace file="${app.zip.dir}/etc/jetty.xml">
+    		<replacetoken>@httpPort@</replacetoken>
+    		<replacevalue>8081</replacevalue>
+    	</replace>
+        <replace file="${app.zip.dir}/contexts/reports.xml">
+            <replacetoken>@reportsHome@</replacetoken>
+            <replacevalue>reports</replacevalue>
+        </replace>
+
+        <!-- Create the zip with dist -->
+        <zip destfile="${app.target}/${app.name}-${app.version}.zip"
+            basedir="${app.target}/${app.version}"
+        />
+
+        <!-- Delete the temporary dir -->
+        <delete dir="${app.target}/${app.version}"/>
+    </target>
+	
+    <!-- ================================================================== -->
+    <!-- S E T U P                                                          -->
+    <!-- ================================================================== -->
+    
+    <target name="setup" depends="data.zip,client,dist">
+        <!-- Add ant task -->
+        <taskdef name="install4j" classname="com.install4j.Install4JTask" classpath="${install4j.ant.jar}"/>
+
+        <!-- Copy some files -->
+        <copy file="${app.home}/setup/nextserver.install4j" todir="${app.target}"/>
+    
+        <!-- Call Install4j -->
+        <property name="absolute.app.home" location="${app.home}"/>
+        <install4j projectfile="${app.target}/nextserver.install4j">
+            <variable name="app.home" value="${absolute.app.home}"/>
+            <variable name="app.version" value="${app.version}"/>
+            <!-- Windows -->
+            <variable name="app.setup" value="${app.setup}" mediafileid="95"/>
+            <!-- Linux -->
+            <variable name="app.setup" value="${app.setup}" mediafileid="98"/>
+            <!-- Windows with JRE -->
+            <variable name="app.setup" value="${app.setup}-jre" mediafileid="39"/>
+            <!-- Linux with JRE -->
+            <variable name="app.setup" value="${app.setup}-jre" mediafileid="81"/>
+        </install4j>
+        
+        <!-- Delete some files -->
+        <delete file="${app.target}/nextserver.install4j"/>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- R E L E A S E                                                      -->
+    <!-- ================================================================== -->
+	
+	<target name="release" depends="setup,dist.zip">		
+	    <copy todir="${app.artifacts}">
+            <fileset dir="${app.target}">
+                <include name="${app.name}*"/>
+            </fileset>
+        </copy>
+	</target>
+
+    <!-- ================================================================== -->
+    <!-- C L E A N                                                          -->
+    <!-- ================================================================== -->
+
+	<target name="clean">
+        <delete dir="${app.target}"/>
+        <delete dir="${app.dist}"/>
+        <delete dir="${app.artifacts}"/>
+        <delete dir="${ivy.lib.dir}"/>
+	</target>
+
+   <target name="ivy.cleancache">
+        <ivy:cleancache/>
+    </target>
+
+</project>

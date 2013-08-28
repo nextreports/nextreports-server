@@ -1,0 +1,20 @@
+<?xml version="1.0"  encoding="ISO-8859-1"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+
+<!--
+Configure a custom context for the reports.
+
+This context contains only a ServletHandler with a default servlet
+to serve static html,pdf files.
+-->
+
+<Configure class="org.mortbay.jetty.handler.ContextHandler">
+    <Call class="org.mortbay.log.Log" name="debug"><Arg>Configure reports.xml</Arg></Call>
+    <Set name="contextPath">/reports</Set>
+    <Set name="resourceBase">@reportsHome@/</Set>
+    <Call name="addHandler">
+	<Arg>
+	    <New class="org.mortbay.jetty.handler.ResourceHandler"/>
+	</Arg>
+    </Call>
+</Configure>

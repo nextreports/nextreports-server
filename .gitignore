@@ -1,4 +1,6 @@
 target/
+.classpath
+.project
 
 # CVS legacy #
 CVS/

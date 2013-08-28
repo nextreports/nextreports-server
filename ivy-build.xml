@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<project name="ivy" default="ivy.download">
+	
+    <property name="ivy.install.version" value="2.2.0"/>
+    <property name="ivy.jar.name" value="ivy-${ivy.install.version}.jar"/>
+    <property name="ivy.jar.dir" value="ivy-lib"/>
+    <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy-${ivy.install.version}.jar"/>
+    <property name="central.repo" value="http://repo1.maven.org/maven2"/>
+
+	<available property="ivy.installed" value="true" file="${ivy.jar.file}" type="file"/>
+	
+    <target name="proxy">
+        <!--
+        <property name="proxy.host" value="192.168.16.1"/>  
+        <property name="proxy.port" value="128"/>
+        <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"/>
+        -->
+    </target>
+
+    <target name="ivy.download" unless="ivy.installed">
+        <antcall target="proxy"/>
+        <mkdir dir="${ivy.jar.dir}"/>
+        <echo message="Installing Ivy..."/>
+        <get src="${central.repo}/org/apache/ivy/ivy/${ivy.install.version}/${ivy.jar.name}" dest="${ivy.jar.file}"/>
+    </target>
+	
+</project>	

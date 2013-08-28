@@ -1,0 +1,59 @@
+/* License Page */
+.license h1 {
+    color: #000000;
+    padding: 20px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+
+.license .licenseFooter {
+    border-bottom: 1px solid #CCCCCC;
+    border-top: 1px solid #CCCCCC;
+    color: #000000;
+    padding: 10px 40px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.license form, .license .info {
+    margin-left: 40px;
+    margin-right: 100%;
+    text-align: left;
+    background: none;
+}
+.license td {
+    padding-bottom: 10px;
+    white-space: nowrap;
+}
+
+.license td label {
+    text-align: left;
+    margin-right: 10px;
+}
+
+.license .licenseError {
+    margin-left: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #ff0000;
+    white-space: nowrap;
+    margin-right:100%;
+}
+
+.license .licenseHeader {
+    font-size: 14px;
+    font-weight: bold;
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+
+.license .licenseTable {
+    margin-top : 20px;
+}
+
+.license hr {
+	margin: 0 20px;
+}
+
+/* End License Page */
