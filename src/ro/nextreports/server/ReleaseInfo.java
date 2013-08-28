@@ -1,27 +1,22 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+/* Created by JReleaseInfo AntTask from Open Source Competence Group */
+/* Creation date Wed Aug 28 17:22:11 EEST 2013 */
+package ro.nextreports.server;
+
+import java.util.Date;
+
+/**
+ * This class provides information gathered from the build environment.
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * @author JReleaseInfo AntTask
  */
 public class ReleaseInfo {
 
 
-   /** buildDate (set during build process to 1375191439461L). */
-   private static Date buildDate = new Date(1375191439461L);
+   /** buildDate (set during build process to 1377699731243L). */
+   private static Date buildDate = new Date(1377699731243L);
 
    /**
-    * Get buildDate (set during build process to Tue Jul 30 16:37:19 EEST 2013).
+    * Get buildDate (set during build process to Wed Aug 28 17:22:11 EEST 2013).
     * @return Date buildDate
     */
    public static final Date getBuildDate() { return buildDate; }
@@ -74,11 +69,11 @@ public class ReleaseInfo {
    public static final String getCopyright() { return copyright; }
 
 
-   /** version (set during build process to "6.2"). */
-   private static String version = "6.2";
+   /** version (set during build process to "6.2-SNAPSHOT"). */
+   private static String version = "6.2-SNAPSHOT";
 
    /**
-    * Get version (set during build process to "6.2").
+    * Get version (set during build process to "6.2-SNAPSHOT").
     * @return String version
     */
    public static final String getVersion() { return version; }

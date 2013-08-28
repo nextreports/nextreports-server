@@ -26,8 +26,10 @@ import org.apache.wicket.markup.ComponentTag;
 import ro.nextreports.server.ReleaseInfo;
 import ro.nextreports.server.web.common.behavior.SimpleTooltipBehavior;
 
+/*
 import com.asf.license.License;
 import com.asf.license.LicenseManager;
+*/
 
 /**
  * @author Decebal Suiu
@@ -54,7 +56,7 @@ public class FooterPanel extends Panel {
 	private String getVersion() {
 		StringBuffer sb = new StringBuffer();
 		
-		sb.append(getLicenseEdition());
+//		sb.append(getLicenseEdition());
 		sb.append(getString("FooterPanel.version"));
 		sb.append(" ");		
 		sb.append(ReleaseInfo.getVersion());
@@ -79,6 +81,7 @@ public class FooterPanel extends Panel {
 		return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(ReleaseInfo.getBuildDate());
 	}
 	
+	/*
     private String getLicenseEdition() {
         String result = "";
         try {
@@ -94,5 +97,6 @@ public class FooterPanel extends Panel {
 		
         return result;
     }
+    */
 
 }

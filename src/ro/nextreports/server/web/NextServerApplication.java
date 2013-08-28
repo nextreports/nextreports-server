@@ -84,10 +84,12 @@ import ro.nextreports.server.web.security.recover.ForgotPasswordPage;
 import ro.nextreports.server.web.security.recover.ResetPasswordPage;
 import ro.nextreports.server.web.themes.ThemesManager;
 
+/*
 import com.asf.license.License;
 import com.asf.license.LicenseException;
 import com.asf.license.LicenseManager;
 import com.asf.license.LicenseNotFoundException;
+*/
 
 /**
  * @author Decebal Suiu
@@ -251,9 +253,11 @@ public class NextServerApplication extends WebApplication  {
 					}
 				}
 				
+				/*
 				if (b) {
 					checkLicense();
 				}
+				*/
 				 
 				return b;
 			}
@@ -320,6 +324,7 @@ public class NextServerApplication extends WebApplication  {
 		return schedulerJobs;
 	}
 	
+	/*
 	private void checkLicense() {
 		try {
 			License license = LicenseManager.getInstance().getLicense();
@@ -331,6 +336,7 @@ public class NextServerApplication extends WebApplication  {
 			throw new RuntimeException(e);
 		}
 	}
+	*/
 	
 	private void runUserSynchronizerJob() {
 		if (LOG.isDebugEnabled()) {
@@ -361,11 +367,13 @@ public class NextServerApplication extends WebApplication  {
 			}
 			
 			Throwable t = ExceptionUtils.getRootCause(e);
+			/*
 			if ((t instanceof LicenseNotFoundException) || (t instanceof LicenseException)) {
 				PageParameters parameters = new PageParameters();
 				parameters.add("errorMessage", t.getMessage());
 				return new RenderPageRequestHandler(new PageProvider(LicenseErrorPage.class, parameters));
 			}
+			*/
 			
 			if (e instanceof MaintenanceException) {				
 				return new RenderPageRequestHandler(new PageProvider(MaintenancePage.class));				
