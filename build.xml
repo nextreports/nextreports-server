@@ -321,40 +321,10 @@ Copyright:
     </target>
 	
     <!-- ================================================================== -->
-    <!-- S E T U P                                                          -->
-    <!-- ================================================================== -->
-    
-    <target name="setup" depends="data.zip,client,dist">
-        <!-- Add ant task -->
-        <taskdef name="install4j" classname="com.install4j.Install4JTask" classpath="${install4j.ant.jar}"/>
-
-        <!-- Copy some files -->
-        <copy file="${app.home}/setup/nextserver.install4j" todir="${app.target}"/>
-    
-        <!-- Call Install4j -->
-        <property name="absolute.app.home" location="${app.home}"/>
-        <install4j projectfile="${app.target}/nextserver.install4j">
-            <variable name="app.home" value="${absolute.app.home}"/>
-            <variable name="app.version" value="${app.version}"/>
-            <!-- Windows -->
-            <variable name="app.setup" value="${app.setup}" mediafileid="95"/>
-            <!-- Linux -->
-            <variable name="app.setup" value="${app.setup}" mediafileid="98"/>
-            <!-- Windows with JRE -->
-            <variable name="app.setup" value="${app.setup}-jre" mediafileid="39"/>
-            <!-- Linux with JRE -->
-            <variable name="app.setup" value="${app.setup}-jre" mediafileid="81"/>
-        </install4j>
-        
-        <!-- Delete some files -->
-        <delete file="${app.target}/nextserver.install4j"/>
-    </target>
-
-    <!-- ================================================================== -->
     <!-- R E L E A S E                                                      -->
     <!-- ================================================================== -->
 	
-	<target name="release" depends="setup,dist.zip">		
+	<target name="release" depends="dist.zip">		
 	    <copy todir="${app.artifacts}">
             <fileset dir="${app.target}">
                 <include name="${app.name}*"/>
