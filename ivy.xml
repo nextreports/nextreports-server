@@ -9,17 +9,6 @@
     </configurations>
     
     <dependencies>
-        <!-- Jdbc drivers -->
-        <dependency org="com.oracle" name="ojdbc5" rev="11.2.0.3.0"/>
-        <dependency org="org.apache.derby" name="derby" rev="10.10.1.1"/>
-        <dependency org="org.firebirdsql.jdbc" name="jaybird-jdk16" rev="2.2.3"/>
-        <dependency org="net.sourceforge.jtds" name="jtds" rev="1.2.8"/>
-        <dependency org="mysql" name="mysql-connector-java" rev="5.1.25"/>
-        <dependency org="postgresql" name="postgresql" rev="9.1-901.jdbc4"/>
-        <dependency org="org.xerial" name="sqlite-jdbc" rev="3.7.2"/>
-        <dependency org="net.sourceforge.csvjdbc" name="csvjdbc" rev="1.0.13"/> 
-        <dependency org="com.vertica" name="vertica-jdk5" rev="6.1.2"/>                                  
-        
         <!-- Jdbc connection pool -->
         <!--
         <dependency org="c3p0" name="c3p0" rev="0.9.1.2"/>

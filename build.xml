@@ -149,6 +149,7 @@ Copyright:
             <lib dir="${app.lib}">
             	<exclude name="jersey-client-*.jar"/>
             </lib>
+            <lib dir="jdbc-drivers"/>
         </war>
     </target>
 
