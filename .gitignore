@@ -2,7 +2,7 @@ target/
 .classpath
 .project
 
-src/ro/nextreports/server/ReleaseInfo.java
+/src/ro/nextreports/server/ReleaseInfo.java
 ivy-lib/
 ivy-report/
 
