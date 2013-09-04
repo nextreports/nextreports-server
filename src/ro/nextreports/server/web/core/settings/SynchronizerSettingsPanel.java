@@ -22,19 +22,22 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.quartz.CronTrigger;
+import org.quartz.TriggerKey;
 import org.quartz.impl.StdScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.quartz.CronTriggerBean;
+import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 
 import ro.nextreports.server.domain.Settings;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.web.NextServerApplication;
 import ro.nextreports.server.web.common.behavior.SimpleTooltipBehavior;
 
-
 public class SynchronizerSettingsPanel extends AbstractSettingsPanel {
 	
+	private static final long serialVersionUID = 1L;
+
 	@SpringBean
 	private StorageService storageService;
 	
@@ -68,15 +71,17 @@ public class SynchronizerSettingsPanel extends AbstractSettingsPanel {
 		oldCronExpression = String.valueOf(storageService.getSettings().getSynchronizer().getCronExpression()); 
 	}
 	
-	 protected void afterChange(Form form, AjaxRequestTarget target) {	
+	 protected void afterChange(Form<?> form, AjaxRequestTarget target) {	
 	    	Settings settings = (Settings)form.getModelObject();	    	    
 	    	if (!oldCronExpression.equals(settings.getSynchronizer().getCronExpression())) {	    		
 	    		// reschedule user synchronizer
 	    		StdScheduler scheduler = (StdScheduler) NextServerApplication.get().getSpringBean("scheduler");
-	    		CronTriggerBean cronTriggerBean = (CronTriggerBean) NextServerApplication.get().getSpringBean("userSynchronizerTrigger");
+	    		CronTriggerFactoryBean cronTriggerFactory = (CronTriggerFactoryBean) NextServerApplication.get().getSpringBean("userSynchronizerTrigger");
 	    		try {
-					cronTriggerBean.setCronExpression(settings.getSynchronizer().getCronExpression());
-					scheduler.rescheduleJob(cronTriggerBean.getName(), cronTriggerBean.getGroup(), cronTriggerBean);					
+					cronTriggerFactory.setCronExpression(settings.getSynchronizer().getCronExpression());
+					CronTrigger cronTrigger = cronTriggerFactory.getObject();
+					TriggerKey triggerKey = cronTrigger.getKey();
+					scheduler.rescheduleJob(triggerKey, cronTrigger);					
 				} catch (Exception e) {					
 					e.printStackTrace();
 					LOG.error(e.getMessage(), e);

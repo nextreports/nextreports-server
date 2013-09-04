@@ -48,7 +48,6 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
-import org.jcrom.JcrDataProvider.TYPE;
 import org.jcrom.JcrDataProviderImpl;
 import org.jcrom.JcrFile;
 import org.slf4j.Logger;
@@ -140,7 +139,7 @@ public class UploadJasperReportPanel extends Panel {
             masterFile.setPath(StorageUtil.createPath(reportContent.getPath(), masterFile.getName()));
             masterFile.setMimeType("text/xml");
             masterFile.setLastModified(Calendar.getInstance());
-            masterFile.setDataProvider(new JcrDataProviderImpl(TYPE.BYTES, upload.getBytes()));
+            masterFile.setDataProvider(new JcrDataProviderImpl(upload.getBytes()));
 
             JasperReportSaxParser parser = new JasperReportSaxParser();
             parser.process(upload.getBytes());
@@ -156,7 +155,7 @@ public class UploadJasperReportPanel extends Panel {
                 subreportFile.setPath(StorageUtil.createPath(reportContent.getPath(), subreportFile.getName()));
                 subreportFile.setMimeType("text/xml");
                 subreportFile.setLastModified(Calendar.getInstance());
-                subreportFile.setDataProvider(new JcrDataProviderImpl(TYPE.BYTES, subUpload.getBytes()));
+                subreportFile.setDataProvider(new JcrDataProviderImpl(subUpload.getBytes()));
 
                 parser.process(subUpload.getBytes());
                 language = parser.getLanguage();
@@ -174,7 +173,7 @@ public class UploadJasperReportPanel extends Panel {
                 parametersFile.setPath(StorageUtil.createPath(reportContent.getPath(), parametersFile.getName()));
                 parametersFile.setMimeType("text/xml");
                 parametersFile.setLastModified(Calendar.getInstance());
-                parametersFile.setDataProvider(new JcrDataProviderImpl(TYPE.BYTES, paramUpload.getBytes()));
+                parametersFile.setDataProvider(new JcrDataProviderImpl(paramUpload.getBytes()));
                 reportContent.setParametersFile(parametersFile);
             }
 
@@ -185,7 +184,7 @@ public class UploadJasperReportPanel extends Panel {
                 imageFile.setPath(StorageUtil.createPath(reportContent.getPath(), imageFile.getName()));
                 imageFile.setMimeType(iu.getContentType());
                 imageFile.setLastModified(Calendar.getInstance());
-                imageFile.setDataProvider(new JcrDataProviderImpl(TYPE.BYTES, iu.getBytes()));
+                imageFile.setDataProvider(new JcrDataProviderImpl(iu.getBytes()));
                 imageFiles.add(imageFile);
             }
             reportContent.setImageFiles(imageFiles);

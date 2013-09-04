@@ -24,6 +24,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
+import org.quartz.TriggerKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -177,7 +178,8 @@ public class SchedulerJobReadAdvice {
 			}
 			SchedulerJob job = (SchedulerJob) entity;
 //			System.out.println("triggers = " + QuartzUtil.getAllTriggers(scheduler));
-			Trigger trigger = scheduler.getTrigger(job.getPath(), Scheduler.DEFAULT_GROUP);
+			TriggerKey triggerKey = new TriggerKey(job.getPath(), Scheduler.DEFAULT_GROUP);
+			Trigger trigger = scheduler.getTrigger(triggerKey);
 //			System.out.println("triggerName = " + job.getPath());
 //			System.out.println("trigger = " + trigger);
 			if (trigger == null) {

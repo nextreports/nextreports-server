@@ -44,12 +44,15 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
-import org.jcrom.JcrDataProvider.TYPE;
 import org.jcrom.JcrDataProviderImpl;
 import org.jcrom.JcrFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ro.nextreports.engine.ReleaseInfoAdapter;
+import ro.nextreports.engine.util.ReportUtil;
+import ro.nextreports.engine.util.converter.ConverterChain;
+import ro.nextreports.engine.util.converter.ConverterException;
 import ro.nextreports.server.StorageConstants;
 import ro.nextreports.server.domain.DataSource;
 import ro.nextreports.server.domain.Entity;
@@ -64,11 +67,6 @@ import ro.nextreports.server.web.common.panel.NextFeedbackPanel;
 import ro.nextreports.server.web.core.EntityBrowserPanel;
 import ro.nextreports.server.web.core.validation.DuplicationEntityValidator;
 import ro.nextreports.server.web.core.validation.JcrNameValidator;
-
-import ro.nextreports.engine.ReleaseInfoAdapter;
-import ro.nextreports.engine.util.ReportUtil;
-import ro.nextreports.engine.util.converter.ConverterChain;
-import ro.nextreports.engine.util.converter.ConverterException;
 
 public class UploadNextReportPanel extends Panel {
 
@@ -294,7 +292,7 @@ public class UploadNextReportPanel extends Panel {
                 } 
             	
                 if (xml != null) {
-                	xmlFile.setDataProvider(new JcrDataProviderImpl(TYPE.BYTES, xml.getBytes("UTF-8")));
+                	xmlFile.setDataProvider(new JcrDataProviderImpl(xml.getBytes("UTF-8")));
                 }	
             	reportContent.setNextFile(xmlFile);
 
@@ -306,7 +304,7 @@ public class UploadNextReportPanel extends Panel {
                     LOG.info("*** UPLOAD: image file path = '" + imageFile.getPath() + "'");
                     imageFile.setMimeType(iu.getContentType());
                     imageFile.setLastModified(Calendar.getInstance());
-                    imageFile.setDataProvider(new JcrDataProviderImpl(TYPE.BYTES, iu.getBytes()));
+                    imageFile.setDataProvider(new JcrDataProviderImpl(iu.getBytes()));
                     imageFiles.add(imageFile);
                 }
                 reportContent.setImageFiles(imageFiles);

@@ -28,6 +28,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
+import org.quartz.TriggerKey;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -124,7 +125,7 @@ public class DefaultSchedulerService implements SchedulerService {
             List<JobDetail> jobs = QuartzUtil.getAllJobDetails(scheduler);
             for (JobDetail job : jobs) {
                 //System.out.println("*** jobName=" + job.getName() + "  name=" + schedulerJob.getPath());
-                if (job.getName().equals(schedulerJob.getPath())) {
+                if (job.getKey().getName().equals(schedulerJob.getPath())) {
                     return job;
                 }
             }
@@ -155,7 +156,7 @@ public class DefaultSchedulerService implements SchedulerService {
                 continue;
             }
             ReportJobInfo jobInfo = new ReportJobInfo();
-            String jobName = job.getName();
+            String jobName = job.getKey().getName();
             jobInfo.setJobName(jobName);
             jobInfo.setRunner(getUser(job).getUsername());
             jobInfo.setRunnerKey((String) job.getJobDataMap().get(RunReportJob.RUNNER_KEY));
@@ -170,7 +171,8 @@ public class DefaultSchedulerService implements SchedulerService {
             } else {
                 Trigger trigger;
                 try {
-                    trigger = scheduler.getTrigger(job.getGroup(), job.getName());
+                	TriggerKey triggerKey = new TriggerKey(job.getKey().getName(), job.getKey().getGroup());
+                    trigger = scheduler.getTrigger(triggerKey);
                 } catch (SchedulerException e) {
                     throw new RuntimeException(e);
                 }

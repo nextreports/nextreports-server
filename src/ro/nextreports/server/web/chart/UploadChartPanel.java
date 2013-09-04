@@ -40,12 +40,13 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
-import org.jcrom.JcrDataProvider.TYPE;
 import org.jcrom.JcrDataProviderImpl;
 import org.jcrom.JcrFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ro.nextreports.engine.ReleaseInfoAdapter;
+import ro.nextreports.engine.util.NextChartUtil;
 import ro.nextreports.server.StorageConstants;
 import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.ChartContent;
@@ -59,9 +60,6 @@ import ro.nextreports.server.web.common.panel.NextFeedbackPanel;
 import ro.nextreports.server.web.core.EntityBrowserPanel;
 import ro.nextreports.server.web.core.validation.DuplicationEntityValidator;
 import ro.nextreports.server.web.core.validation.JcrNameValidator;
-
-import ro.nextreports.engine.ReleaseInfoAdapter;
-import ro.nextreports.engine.util.NextChartUtil;
 
 /**
  * @author Decebal Suiu
@@ -251,7 +249,7 @@ public class UploadChartPanel extends Panel {
             	xmlFile.setLastModified(Calendar.getInstance());
             	xmlFile.setPath(StorageUtil.createPath(chartContent.getPath(), xmlFile.getName()));
             	xmlFile.setMimeType("text/xml");
-            	xmlFile.setDataProvider(new JcrDataProviderImpl(TYPE.BYTES, upload.getBytes()));
+            	xmlFile.setDataProvider(new JcrDataProviderImpl(upload.getBytes()));
             	chartContent.setChartFile(xmlFile);
 
                 chart.setContent(chartContent);

@@ -28,7 +28,6 @@ import org.springframework.beans.factory.config.AbstractFactoryBean;
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.domain.EntityFragment;
 
-
 /**
  * @author Decebal Suiu
  */
@@ -36,8 +35,7 @@ public class JcromFactoryBean extends AbstractFactoryBean {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(JcromFactoryBean.class);
 
-	@SuppressWarnings("unchecked")
-	private Set<Class> entityClasses;
+	private Set<Class<?>> entityClasses;
 	
 	private Set<String> entityPackages; 
 
@@ -72,8 +70,7 @@ public class JcromFactoryBean extends AbstractFactoryBean {
 		return Jcrom.class;
 	}
 
-	@SuppressWarnings("unchecked")
-	public void setEntityClasses(Set<Class> entityClasses) {
+	public void setEntityClasses(Set<Class<?>> entityClasses) {
 		this.entityClasses = entityClasses;
 	}
 	
@@ -94,7 +91,7 @@ public class JcromFactoryBean extends AbstractFactoryBean {
     	return entityFragmentClassNames.contains(className);
     }
 
-	private void debugMappedClasses(Set<Class> mappedClasses) {
+	private void debugMappedClasses(Set<Class<?>> mappedClasses) {
 		for (Class<?> mappedClass : mappedClasses) {			
 			if (checkEntity(mappedClass)) {
 				LOG.debug(mappedClass.getName() + " [Entity]");

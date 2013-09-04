@@ -16,26 +16,24 @@
  */
 package ro.nextreports.server.report.jasper.util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.Map;
-import java.util.Collection;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.io.FilenameUtils;
-import org.jcrom.JcrDataProvider;
 import org.jcrom.JcrDataProviderImpl;
 import org.jcrom.JcrFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ro.nextreports.engine.queryexec.IdName;
 import ro.nextreports.server.domain.JasperContent;
 import ro.nextreports.server.domain.Report;
 import ro.nextreports.server.report.jasper.JasperParameterSource;
 import ro.nextreports.server.report.util.ReportUtil;
-
-import ro.nextreports.engine.queryexec.IdName;
 
 /**
  * Created by IntelliJ IDEA.
@@ -81,7 +79,7 @@ public class JasperUtil {
             masterContent = masterContent.replaceAll(oldName, newName);
             imageFile.setName(newName);
         }
-        reportContent.getMaster().setDataProvider(new JcrDataProviderImpl(JcrDataProvider.TYPE.BYTES, masterContent.getBytes()));
+        reportContent.getMaster().setDataProvider(new JcrDataProviderImpl(masterContent.getBytes()));
 
         return report;
     }
@@ -110,7 +108,7 @@ public class JasperUtil {
                 }
             }
         }
-        masterFile.setDataProvider(new JcrDataProviderImpl(JcrDataProvider.TYPE.BYTES, masterContent.getBytes()));
+        masterFile.setDataProvider(new JcrDataProviderImpl(masterContent.getBytes()));
 
         return report;
     }
@@ -140,9 +138,9 @@ public class JasperUtil {
 //                	LOG.debug("master = " + master);
                 }
             }
-            masterFile.setDataProvider(new JcrDataProviderImpl(JcrDataProvider.TYPE.BYTES, masterContent.getBytes()));
+            masterFile.setDataProvider(new JcrDataProviderImpl(masterContent.getBytes()));
             for (int i = 1, size = jasperFiles.size(); i < size; i++) {
-                jasperFiles.get(i).setDataProvider(new JcrDataProviderImpl(JcrDataProvider.TYPE.BYTES, subreportsContent.get(i - 1).getBytes()));
+                jasperFiles.get(i).setDataProvider(new JcrDataProviderImpl(subreportsContent.get(i - 1).getBytes()));
             }
         }
     }
@@ -173,9 +171,9 @@ public class JasperUtil {
 //                	LOG.debug("master = " + master);
                 }
             }
-            masterFile.setDataProvider(new JcrDataProviderImpl(JcrDataProvider.TYPE.BYTES, masterContent.getBytes()));
+            masterFile.setDataProvider(new JcrDataProviderImpl(masterContent.getBytes()));
             for (int i = 0, size = subreportFiles.size(); i < size; i++) {
-                subreportFiles.get(i).setDataProvider(new JcrDataProviderImpl(JcrDataProvider.TYPE.BYTES, subreportsContent.get(i).getBytes()));
+                subreportFiles.get(i).setDataProvider(new JcrDataProviderImpl(subreportsContent.get(i).getBytes()));
             }
         }
 

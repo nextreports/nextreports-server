@@ -454,7 +454,7 @@ public class StorageWebService {
     	xmlFile.setLastModified(Calendar.getInstance());
     	xmlFile.setPath(StorageUtil.createPath(reportContent.getPath(), xmlFile.getName()));
     	xmlFile.setMimeType("text/xml");
-    	xmlFile.setDataProvider(new JcrDataProviderImpl(TYPE.BYTES, reportMetaData.getMainFile().getFileContent()));
+    	xmlFile.setDataProvider(new JcrDataProviderImpl(reportMetaData.getMainFile().getFileContent()));
     	reportContent.setNextFile(xmlFile);
 
         List<JcrFile> imageFiles = new ArrayList<JcrFile>();
@@ -466,7 +466,7 @@ public class StorageWebService {
                 String mimeType = MimeTypeUtil.getMimeType(fmd.getFileContent());
                 imageFile.setMimeType(mimeType);
                 imageFile.setLastModified(Calendar.getInstance());
-                imageFile.setDataProvider(new JcrDataProviderImpl(TYPE.BYTES, fmd.getFileContent()));
+                imageFile.setDataProvider(new JcrDataProviderImpl(fmd.getFileContent()));
                 imageFiles.add(imageFile);
             }
         }
@@ -484,7 +484,7 @@ public class StorageWebService {
     	xmlFile.setLastModified(Calendar.getInstance());
     	xmlFile.setPath(StorageUtil.createPath(chartContent.getPath(), xmlFile.getName()));
     	xmlFile.setMimeType("text/xml");
-    	xmlFile.setDataProvider(new JcrDataProviderImpl(TYPE.BYTES, chartMetaData.getMainFile().getFileContent()));
+    	xmlFile.setDataProvider(new JcrDataProviderImpl(chartMetaData.getMainFile().getFileContent()));
     	chartContent.setChartFile(xmlFile);
     	
 		return chartContent;

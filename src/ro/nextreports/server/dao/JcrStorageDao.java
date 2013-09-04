@@ -36,7 +36,6 @@ import net.sf.ehcache.Ehcache;
 import org.apache.jackrabbit.core.NodeImpl;
 import org.apache.jackrabbit.util.ISO9075;
 import org.apache.jackrabbit.value.ValueFactoryImpl;
-import org.jcrom.JcrDataProvider.TYPE;
 import org.jcrom.JcrDataProviderImpl;
 import org.jcrom.JcrFile;
 import org.jcrom.JcrMappingException;
@@ -67,7 +66,6 @@ import ro.nextreports.server.exception.NotFoundException;
 import ro.nextreports.server.exception.ReferenceException;
 import ro.nextreports.server.util.ServerUtil;
 import ro.nextreports.server.util.StorageUtil;
-
 
 /**
  * @author Decebal Suiu
@@ -1029,7 +1027,7 @@ public class JcrStorageDao extends AbstractJcrDao implements StorageDao, Initial
 				logo.setLastModified(Calendar.getInstance());
 				logo.setPath(StorageUtil.createPath(settings.getPath(),	logo.getName()));
 				logo.setMimeType("image/png");
-				logo.setDataProvider(new JcrDataProviderImpl(TYPE.BYTES, content));
+				logo.setDataProvider(new JcrDataProviderImpl(content));
 				settings.setLogo(logo);
 			}
 			settings.setColorTheme(theme);

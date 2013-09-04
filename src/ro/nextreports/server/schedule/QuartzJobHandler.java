@@ -17,14 +17,20 @@
 package ro.nextreports.server.schedule;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
-import org.quartz.CronTrigger;
+import org.quartz.CronScheduleBuilder;
+import org.quartz.JobBuilder;
+import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
+import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
+import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -61,9 +67,9 @@ public class QuartzJobHandler {
     public void addJob(SchedulerJob job) throws Exception {
         // TODO test for null/empty
         String key = UUID.randomUUID().toString();
-        JobDetail jobDetail = new JobDetail();
+        String jobName= null;
 		if (job.getPath() != null) {
-			jobDetail.setName(job.getPath());
+			jobName = job.getPath();
 		} else {
             String path = "";
             if  (!StorageUtil.isVersion(job.getReport())) {
@@ -77,63 +83,65 @@ public class QuartzJobHandler {
                     LOG.error(e.getMessage(), e);
                 }
             }
-            jobDetail.setName(path + ReportJobInfo.NAME_DELIMITER + key); 
+            jobName = path + ReportJobInfo.NAME_DELIMITER + key; 
 		}
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("jobDetailName = " + jobDetail.getName());
-		}		
-		jobDetail.setGroup(Scheduler.DEFAULT_GROUP);
-		jobDetail.setJobClass(RunReportJob.class);
-		jobDetail.getJobDataMap().put(RunReportJob.SCHEDULER_JOB, job);
-		jobDetail.getJobDataMap().put(RunReportJob.MAIL_SENDER, mailSender);		
-		jobDetail.getJobDataMap().put(RunReportJob.REPORT_SERVICE, reportService);
-        jobDetail.getJobDataMap().put(RunReportJob.STORAGE_SERVICE, storageService);
-        jobDetail.getJobDataMap().put(RunReportJob.SECURITY_SERVICE, securityService);
-        jobDetail.getJobDataMap().put(RunReportJob.AUDITOR, auditor);
-        
+			LOG.debug("jobName = {}", jobName);
+		}
+
+        JobDataMap jobData = new JobDataMap();
+        jobData.put(RunReportJob.SCHEDULER_JOB, job);
+        jobData.put(RunReportJob.MAIL_SENDER, mailSender);		
+        jobData.put(RunReportJob.REPORT_SERVICE, reportService);
+        jobData.put(RunReportJob.STORAGE_SERVICE, storageService);
+        jobData.put(RunReportJob.SECURITY_SERVICE, securityService);
+        jobData.put(RunReportJob.AUDITOR, auditor);
+                
         String runnerId = job.getId();
         String runnerType = RunReportHistory.SCHEDULER;
         if (runnerId == null) {
     		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     		String username = user.getUsername();
-    		if (LOG.isDebugEnabled()) {
-    			LOG.debug("username = " + username);
-    		}
+    		LOG.debug("username = {}" + username);
     		runnerId = user.getId();
     		runnerType = RunReportHistory.USER;
         }
-        jobDetail.getJobDataMap().put(RunReportJob.RUNNER_TYPE, runnerType);
-        jobDetail.getJobDataMap().put(RunReportJob.RUNNER_ID, runnerId);
-        jobDetail.getJobDataMap().put(RunReportJob.RUNNER_KEY,  key);
-        jobDetail.getJobDataMap().put(RunReportJob.REPORT_TYPE, job.getReport().getType());
-        if (LOG.isDebugEnabled()) {
-        	LOG.debug("runnerType = " + runnerType);
-            LOG.debug("runnerId = " + runnerId);
-        }
+        jobData.put(RunReportJob.RUNNER_TYPE, runnerType);
+        jobData.put(RunReportJob.RUNNER_ID, runnerId);
+        jobData.put(RunReportJob.RUNNER_KEY,  key);
+        jobData.put(RunReportJob.REPORT_TYPE, job.getReport().getType());
+        LOG.debug("runnerType = {}", runnerType);
+        LOG.debug("runnerId = {}", runnerId);
 
         AuditEvent auditEvent = new AuditEvent("Run report");
         auditEvent.getContext().put("PATH", StorageUtil.getPathWithoutRoot(job.getReport().getPath()));
-        jobDetail.getJobDataMap().put(RunReportJob.AUDIT_EVENT, auditEvent);
+        jobData.put(RunReportJob.AUDIT_EVENT, auditEvent);
+
+        JobDetail jobDetail = JobBuilder.newJob(RunReportJob.class).
+        		withIdentity(jobName, Scheduler.DEFAULT_GROUP).
+        		usingJobData(jobData).
+        		build();
 
         Trigger trigger;
         SchedulerTime schedulerTime = job.getTime();
         if ((schedulerTime != null) && (schedulerTime.getCronEntry() != null)) {
-        	trigger = new CronTrigger();
-        	trigger.setStartTime(schedulerTime.getStartActivationDate());
-        	trigger.setEndTime(schedulerTime.getEndActivationDate());
-        	String cronEntry = schedulerTime.getCronEntry();
-        	if (LOG.isDebugEnabled()) {
-        		LOG.debug("cronEntry = " + cronEntry);
-        	}
-        	((CronTrigger) trigger).setCronExpression(cronEntry);        	
+        	trigger = TriggerBuilder.newTrigger().
+        	    	// ?! (many triggers for the same job)
+        			withIdentity(jobDetail.getKey().getName(), jobDetail.getKey().getGroup()).       			
+        			startAt(schedulerTime.getStartActivationDate()).
+        			endAt(schedulerTime.getEndActivationDate()).
+        	        // trigger.setMisfireInstruction(Trigger.INSTRUCTION_SET_TRIGGER_COMPLETE);
+        			withSchedule(CronScheduleBuilder.cronSchedule(schedulerTime.getCronEntry()).withMisfireHandlingInstructionFireAndProceed()).
+        			build();
         } else {
-        	trigger = new SimpleTrigger();
-        	trigger.setStartTime(new Date(System.currentTimeMillis() + 1000));
+        	trigger = TriggerBuilder.newTrigger().
+        	    	// ?! (many triggers for the same job)
+        			withIdentity(jobDetail.getKey().getName(), jobDetail.getKey().getGroup()).
+        			startAt(new Date(System.currentTimeMillis() + 1000)).
+        	        // trigger.setMisfireInstruction(Trigger.INSTRUCTION_SET_TRIGGER_COMPLETE);
+//        			withSchedule(SimpleScheduleBuilder.simpleSchedule().withMisfireHandlingInstructionIgnoreMisfires()).
+        			build();
         }
-    	// ?! (many triggers for the same job)
-        trigger.setName(jobDetail.getName());
-        trigger.setGroup(Scheduler.DEFAULT_GROUP);
-        trigger.setMisfireInstruction(Trigger.INSTRUCTION_SET_TRIGGER_COMPLETE);
 
 		scheduler.scheduleJob(jobDetail, trigger);
 
@@ -142,7 +150,8 @@ public class QuartzJobHandler {
 	}
 
 	public void removeJob(String jobName) throws Exception {
-		scheduler.deleteJob(jobName, Scheduler.DEFAULT_GROUP);
+		JobKey jobKey = new JobKey(jobName, Scheduler.DEFAULT_GROUP);
+		scheduler.deleteJob(jobKey);
 
         // FOR DEBUG ONLY !
 		listJobs(scheduler);
@@ -153,16 +162,16 @@ public class QuartzJobHandler {
     		return;
     	}
     	
-    	String[] jobGroups = scheduler.getJobGroupNames();
-    	if (jobGroups.length == 0) {
+    	List<String> jobGroups = scheduler.getJobGroupNames();
+    	if (jobGroups.isEmpty()) {
     		LOG.debug("No jobs !!!");
     	}
 
     	for (String jobGroup : jobGroups) {
-    		LOG.debug("Group '" + jobGroup + "' contains the following jobs:");
-    		String[] jobsInGroup = scheduler.getJobNames(jobGroup);
-    		for (String jobInGroup : jobsInGroup) {
-    			LOG.debug("- " + jobInGroup);
+    		LOG.debug("Group '{}' contains the following jobs:", jobGroup);
+    		Set<JobKey> jobKeys = scheduler.getJobKeys(GroupMatcher.jobGroupEquals(jobGroup));
+    		for (JobKey jobKey : jobKeys) {
+    			LOG.debug("- {}", jobKey.getName());
     		}
     	}
     }
@@ -196,4 +205,5 @@ public class QuartzJobHandler {
     public void setAuditor(Auditor auditor) {
         this.auditor = auditor;
     }
+    
 }

@@ -20,12 +20,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
+import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
+import org.quartz.TriggerKey;
+import org.quartz.impl.matchers.GroupMatcher;
 
 /**
  * @author Decebal Suiu
@@ -35,11 +39,11 @@ public class QuartzUtil {
 	public static List<JobDetail> getAllJobDetails(Scheduler scheduler) throws SchedulerException {
 		List<JobDetail> jobDetails = new ArrayList<JobDetail>();
 		
-		String[] groupNames = scheduler.getJobGroupNames();
+		List<String> groupNames = scheduler.getJobGroupNames();
 		for (String jobGroup : groupNames) {
-			String[] names = scheduler.getJobNames(jobGroup);
-			for (String jobName : names) {
-				jobDetails.add(scheduler.getJobDetail(jobName, jobGroup));
+    		Set<JobKey> jobKeys = scheduler.getJobKeys(GroupMatcher.jobGroupEquals(jobGroup)); 
+			for (JobKey jobKey : jobKeys) {
+				jobDetails.add(scheduler.getJobDetail(jobKey));
 			}
 		}
 		
@@ -49,35 +53,33 @@ public class QuartzUtil {
 	public static List<Trigger> getAllTriggers(Scheduler scheduler) throws SchedulerException {
 		List<Trigger> triggers = new ArrayList<Trigger>();
 		
-		String[] groupNames = scheduler.getTriggerGroupNames();
+		List<String> groupNames = scheduler.getTriggerGroupNames();
 		for (String triggerGroup : groupNames) {
-			String[] names = scheduler.getTriggerNames(triggerGroup);
-			for (String triggerName : names) {
-				triggers.add(scheduler.getTrigger(triggerName, triggerGroup));
+			Set<TriggerKey> triggerKeys = scheduler.getTriggerKeys(GroupMatcher.triggerGroupEquals(triggerGroup));
+			for (TriggerKey triggerKey : triggerKeys) {
+				triggers.add(scheduler.getTrigger(triggerKey));
 			}
 		}
 		
 		return triggers;
 	}
     
-	@SuppressWarnings("unchecked")
 	public static List<String> getRunningJobNames(Scheduler scheduler) throws SchedulerException {
 		List<JobExecutionContext> jobs = scheduler.getCurrentlyExecutingJobs();
 
 		List<String> runningJobs = new ArrayList<String>();
 		for (JobExecutionContext job : jobs) {
-			runningJobs.add(job.getJobDetail().getName());
+			runningJobs.add(job.getJobDetail().getKey().getName());
 		}
 
 		return runningJobs;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static Map<String, JobExecutionContext> getRunningJobs(Scheduler scheduler) throws SchedulerException {
 		Map<String, JobExecutionContext> runningJobs = new HashMap<String, JobExecutionContext>();
 		List<JobExecutionContext> jobs = scheduler.getCurrentlyExecutingJobs();
 		for (JobExecutionContext context : jobs) {
-			runningJobs.put(context.getJobDetail().getName(), context);
+			runningJobs.put(context.getJobDetail().getKey().getName(), context);
 		}
 		
 		return runningJobs;		

@@ -28,9 +28,10 @@ import ro.nextreports.server.domain.Settings;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.web.common.behavior.AlertBehavior;
 
-
 public abstract class AbstractSettingsPanel extends Panel {
 
+	private static final long serialVersionUID = 1L;
+	
 	@SpringBean
 	StorageService storageService;
 
@@ -50,7 +51,9 @@ public abstract class AbstractSettingsPanel extends Panel {
         
         form.add(new AjaxSubmitLink("change") {
 
-            @Override
+            private static final long serialVersionUID = 1L;
+
+			@Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 onChange(form, target);
             }
@@ -66,7 +69,7 @@ public abstract class AbstractSettingsPanel extends Panel {
 	
 	protected abstract void addComponents(Form<Settings> form);
 	
-	public void onChange(Form form, AjaxRequestTarget target) {
+	public void onChange(Form<?> form, AjaxRequestTarget target) {
     	try {                  
     		beforeChange(form, target);
         	storageService.modifyEntity((Settings)form.getModelObject());
@@ -79,10 +82,10 @@ public abstract class AbstractSettingsPanel extends Panel {
         target.add(this);
     }	
 	
-	protected void beforeChange(Form form, AjaxRequestTarget target) {		
+	protected void beforeChange(Form<?> form, AjaxRequestTarget target) {		
 	}
 	
-	protected void afterChange(Form form, AjaxRequestTarget target) {		
+	protected void afterChange(Form<?> form, AjaxRequestTarget target) {		
 	}
 
 }

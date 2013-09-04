@@ -1,5 +1,5 @@
 /* Created by JReleaseInfo AntTask from Open Source Competence Group */
-/* Creation date Wed Aug 28 17:22:11 EEST 2013 */
+/* Creation date Wed Sep 04 13:51:56 EEST 2013 */
 package ro.nextreports.server;
 
 import java.util.Date;
@@ -12,11 +12,11 @@ import java.util.Date;
 public class ReleaseInfo {
 
 
-   /** buildDate (set during build process to 1377699731243L). */
-   private static Date buildDate = new Date(1377699731243L);
+   /** buildDate (set during build process to 1378291916115L). */
+   private static Date buildDate = new Date(1378291916115L);
 
    /**
-    * Get buildDate (set during build process to Wed Aug 28 17:22:11 EEST 2013).
+    * Get buildDate (set during build process to Wed Sep 04 13:51:56 EEST 2013).
     * @return Date buildDate
     */
    public static final Date getBuildDate() { return buildDate; }

@@ -16,23 +16,29 @@
  */
 package ro.nextreports.server.web.report.jasper;
 
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.jcrom.JcrFile;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.jcrom.JcrDataProviderImpl;
-import org.jcrom.JcrDataProvider;
+import org.jcrom.JcrFile;
 
 import ro.nextreports.server.domain.JasperContent;
 import ro.nextreports.server.domain.Report;
@@ -48,18 +54,6 @@ import ro.nextreports.server.web.core.EntityBrowserPanel;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Map;
-import java.io.Serializable;
-//
-// Created by IntelliJ IDEA.
-// User: mihai.panaitescu
-// Date: 14-Sep-2009
-// Time: 15:09:06
 
 //
 public class ChangeJasperParameterPanel extends Panel {
@@ -229,7 +223,7 @@ public class ChangeJasperParameterPanel extends Panel {
         parametersFile.setPath(StorageUtil.createPath(jc.getPath(), parametersFile.getName()));
         parametersFile.setMimeType("text/xml");
         parametersFile.setLastModified(Calendar.getInstance());
-        parametersFile.setDataProvider(new JcrDataProviderImpl(JcrDataProvider.TYPE.BYTES, fileContent.getBytes()));
+        parametersFile.setDataProvider(new JcrDataProviderImpl(fileContent.getBytes()));
         jc.setParametersFile(parametersFile);
 
         report.setContent(jc);

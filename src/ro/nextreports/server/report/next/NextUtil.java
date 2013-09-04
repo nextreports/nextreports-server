@@ -17,24 +17,23 @@
 package ro.nextreports.server.report.next;
 
 import java.io.ByteArrayInputStream;
-import java.util.List;
-import java.util.UUID;
-import java.util.Map;
-import java.util.HashMap;
 import java.sql.Connection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import org.jcrom.JcrDataProviderImpl;
+import org.jcrom.JcrFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ro.nextreports.engine.Report;
 import ro.nextreports.engine.chart.Chart;
 import ro.nextreports.engine.util.LoadReportException;
-import ro.nextreports.engine.util.ReportUtil;
 import ro.nextreports.engine.util.NextChartUtil;
 import ro.nextreports.engine.util.ParameterUtil;
-import org.jcrom.JcrFile;
-import org.jcrom.JcrDataProviderImpl;
-import org.jcrom.JcrDataProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import ro.nextreports.engine.util.ReportUtil;
 import ro.nextreports.server.domain.ChartContent;
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.domain.NextContent;
@@ -106,7 +105,7 @@ public class NextUtil {
             masterContent = masterContent.replaceAll(oldName, newName);
             imageFile.setName(newName);
         }
-        reportContent.getNextFile().setDataProvider(new JcrDataProviderImpl(JcrDataProvider.TYPE.BYTES, masterContent.getBytes()));
+        reportContent.getNextFile().setDataProvider(new JcrDataProviderImpl(masterContent.getBytes()));
 
         return report;
     }
@@ -136,7 +135,7 @@ public class NextUtil {
                 }
             }
         }
-        masterFile.setDataProvider(new JcrDataProviderImpl(JcrDataProvider.TYPE.BYTES, masterContent.getBytes()));
+        masterFile.setDataProvider(new JcrDataProviderImpl(masterContent.getBytes()));
 
         return report;
     }

@@ -46,7 +46,7 @@ public class StorageUpdate13 extends StorageUpdate {
     	Workspace workspace = session.getWorkspace();
     	    	
     	NodeTypeManagerImpl nodeTypeManager = (NodeTypeManagerImpl) workspace.getNodeTypeManager();
-    	nodeTypeManager.unregisterNodeType(StorageConstants.NEXT_REPORT_MIXIN);
+//    	nodeTypeManager.unregisterNodeType(StorageConstants.NEXT_REPORT_MIXIN);
     	    	
     	NodeTypeTemplate nodeTypeTemplate = nodeTypeManager.createNodeTypeTemplate();
     	nodeTypeTemplate.setName(StorageConstants.NEXT_REPORT_MIXIN);

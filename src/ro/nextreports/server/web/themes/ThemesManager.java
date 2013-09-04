@@ -31,11 +31,12 @@ import java.util.Set;
 
 import javax.servlet.ServletContext;
 
-import org.apache.commons.httpclient.util.URIUtil;
+//import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.lang.text.StrSubstitutor;
+import org.apache.http.client.utils.URIUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -108,8 +109,9 @@ public class ThemesManager {
 			String resolvedString = sub.replace(styleTemplate);					
 			ServletContext context = NextServerApplication.get().getServletContext();
 			String fileName = context.getRealPath(generatedFilePath);			
-			URI outputURI = new URI(("file:///"+ URIUtil.encodePath(fileName)));                		
-			File styleFile = new File(outputURI); 				
+//			URI outputURI = new URI(("file:///"+ URIUtil.encodePath(fileName)));                		
+//			File styleFile = new File(outputURI);
+			File styleFile = new File(fileName);
 			FileUtils.writeStringToFile(styleFile, resolvedString);
 			LOG.info("Generated style file " + templateFile + " in folder " + styleFile.getAbsolutePath());
 		} catch (Exception e) {
