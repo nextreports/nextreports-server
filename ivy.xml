@@ -127,7 +127,7 @@
         </dependency>
 
         <!-- JSch SSH client -->
-        <dependency org="com.jcraft" name="jsch" rev="0.1.44"/>
+        <dependency org="com.jcraft" name="jsch" rev="0.1.50"/>
 
         <!-- Jersey REST -->
         <dependency org="com.sun.jersey" name="jersey-core" rev="1.7"/>
