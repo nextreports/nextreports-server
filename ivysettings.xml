@@ -20,7 +20,7 @@
             <!-- Spring Framework Extensions - JCR -->
             <ibiblio name="se-jcr" root="https://src.springframework.org/svn/se-jcr/repo" m2compatible="true"/>
             <!-- Ftp4j -->
-            <ibiblio name="se-jcr" root="http://repo.laubenberger.net/maven2" m2compatible="true"/>
+            <ibiblio name="ftp4j" root="http://repo.laubenberger.net/maven2" m2compatible="true"/>
         </chain>
     </resolvers>
     
