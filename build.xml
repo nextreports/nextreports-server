@@ -76,6 +76,7 @@ Copyright:
         <!-- Compile the java code from ${app.src} into ${app.classes} -->
         <javac       
         	srcdir="${app.src}"
+            source="1.6"
         	excludes="**/JettyLauncher.java"
             destdir="${app.classes}"
             debug="${javac.debug}"
