@@ -26,6 +26,7 @@ import java.io.ObjectOutputStream;
 import javax.jcr.Binary;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.ValueFactory;
@@ -48,8 +49,9 @@ public class StorageUpdate21 extends StorageUpdate {
 		convertOldIdNameClass();
 	}
 
+	// IdName values can be found in ParameterValue entities which are used in Dashboards widget parameters or Scheduler report runtime parameters
 	private void convertOldIdNameClass() throws RepositoryException {
-		String searchRoot = "/jcr:root" + ISO9075.encodePath(StorageConstants.DASHBOARDS_ROOT);
+		String searchRoot = "/jcr:root" + ISO9075.encodePath(StorageConstants.NEXT_SERVER_ROOT);
 		String searchPropertyName = "className";
 		String searchPropertyValue = "com.asf.nextserver.domain.ParameterValue";
 		String statement = searchRoot + "//*[@" + searchPropertyName + "='" + searchPropertyValue + "']";
@@ -59,7 +61,12 @@ public class StorageUpdate21 extends StorageUpdate {
         LOG.info("Found " + nodes.getSize() +  " parameter value nodes");
         while (nodes.hasNext()) {
         	Node node = nodes.nextNode();
-        	Property property = node.getProperty("value");
+        	Property property = null;
+        	try {
+        		property = node.getProperty("value");
+        	} catch (PathNotFoundException ex) {
+        		continue;
+        	}
         	try {
 	        	Object value = deserialize(property.getBinary().getStream());
 	        	if (value instanceof Object[]) {
