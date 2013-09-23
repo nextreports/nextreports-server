@@ -27,14 +27,15 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
 import javax.jcr.RepositoryException;
 
-import org.apache.wicket.model.StringResourceModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +43,7 @@ import ro.nextreports.server.domain.DataSource;
 import ro.nextreports.server.domain.KeyValue;
 import ro.nextreports.server.domain.Settings;
 import ro.nextreports.server.service.StorageService;
+import ro.nextreports.server.web.language.LanguageManager;
 
 import ro.nextreports.engine.querybuilder.sql.dialect.CSVDialect;
 import ro.nextreports.engine.querybuilder.sql.dialect.Dialect;
@@ -87,7 +89,9 @@ public class ConnectionUtil {
 			} catch (Exception e) {
 				e.printStackTrace();
 				LOG.error(e.getMessage(), e);
-				throw new RepositoryException(new StringResourceModel("Connection.failed", null).getString() + " '" + dataSource.getPath() + "'", e);
+				Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
+				ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);			
+				throw new RepositoryException(bundle.getString("Connection.failed") + " '" + dataSource.getPath() + "'", e);
 			}
 		} else {
 			// wait just the number of seconds configured (deterministic)
@@ -108,7 +112,9 @@ public class ConnectionUtil {
 	        	new Thread(createConnectionTask).start();
 	        	connection = createConnectionTask.get(connectionTimeout, TimeUnit.SECONDS);        	
 			} catch (Exception e) {
-				throw new RepositoryException(new StringResourceModel("Connection.failed", null).getString() + " '" + dataSource.getPath() + "'", e);
+				Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
+				ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);		
+				throw new RepositoryException(bundle.getString("Connection.failed") + " '" + dataSource.getPath() + "'", e);
 			}		
 			return connection;
 		}
