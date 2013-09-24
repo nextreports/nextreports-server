@@ -11,15 +11,14 @@
 	<available property="ivy.installed" value="true" file="${ivy.jar.file}" type="file"/>
 	
     <target name="proxy">
-        <!--
+    	<!--
         <property name="proxy.host" value="192.168.16.1"/>  
         <property name="proxy.port" value="128"/>
         <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"/>
         -->
     </target>
 
-    <target name="ivy.download" unless="ivy.installed">
-        <antcall target="proxy"/>
+    <target name="ivy.download" depends="proxy" unless="ivy.installed">
         <mkdir dir="${ivy.jar.dir}"/>
         <echo message="Installing Ivy..."/>
         <get src="${central.repo}/org/apache/ivy/ivy/${ivy.install.version}/${ivy.jar.name}" dest="${ivy.jar.file}"/>
