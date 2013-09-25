@@ -33,7 +33,7 @@ import ro.nextreports.server.service.SecurityService;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.web.NextServerSession;
 import ro.nextreports.server.web.common.behavior.AlertBehavior;
-import ro.nextreports.server.web.core.settings.LogoResourceReference;
+import ro.nextreports.server.web.core.settings.LogoResource;
 import ro.nextreports.server.web.security.ChangePasswordPanel;
 import ro.nextreports.server.web.security.cas.CasUtil;
 
@@ -59,7 +59,7 @@ public class HeaderPanel extends Panel {
         	
         final WebMarkupContainer imageContainer = new WebMarkupContainer("imageContainer");
         imageContainer.setOutputMarkupPlaceholderTag(true);                        
-        imageContainer.add(new Image("logoImage", new LogoResourceReference()));   
+        imageContainer.add(new Image("logoImage", new LogoResource()));   
         add(imageContainer);
 
         add(new Label("currentUser", NextServerSession.get().getUsername()));
