@@ -261,7 +261,10 @@ public class RunReportJob implements Job {
 								distributionContext.setSecurityService(securityService);
 								distributionContext.setMailFrom(mailFrom);
 								distributionContext.setMailSender(mailSender);
-								distributionContext.setMessage(alertDestination.getMailBody());
+								String sValue = (value == null) ? "" : value.toString();								
+								String mailMessage = alertDestination.getMailBody().replaceAll("\\$\\{val\\}", sValue);								
+								distributionContext.setMessage(mailMessage);
+								alertDestination.setMailBody(mailMessage);
 								distributionContext.setAlertMessage(message);
 								alertDistributor.distribute(null, alertDestination, distributionContext);
 							} catch (DistributionException e) {
