@@ -30,6 +30,7 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
+import org.quartz.Trigger.CompletedExecutionInstruction;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,8 +132,8 @@ public class QuartzJobHandler {
         			startAt(schedulerTime.getStartActivationDate()).
         			endAt(schedulerTime.getEndActivationDate()).
         	        // trigger.setMisfireInstruction(Trigger.INSTRUCTION_SET_TRIGGER_COMPLETE);
-        			withSchedule(CronScheduleBuilder.cronSchedule(schedulerTime.getCronEntry()).withMisfireHandlingInstructionFireAndProceed()).
-        			build();
+        			withSchedule(CronScheduleBuilder.cronSchedule(schedulerTime.getCronEntry()).withMisfireHandlingInstructionDoNothing()).
+        			build();        	        	
         } else {
         	trigger = TriggerBuilder.newTrigger().
         	    	// ?! (many triggers for the same job)
