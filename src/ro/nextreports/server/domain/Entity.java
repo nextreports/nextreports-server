@@ -19,9 +19,9 @@ package ro.nextreports.server.domain;
 import java.util.Date;
 
 import org.jcrom.AbstractJcrEntity;
+import org.jcrom.annotations.JcrIdentifier;
 import org.jcrom.annotations.JcrNode;
 import org.jcrom.annotations.JcrProperty;
-import org.jcrom.annotations.JcrUUID;
 
 import ro.nextreports.server.security.Securizable;
 
@@ -34,7 +34,7 @@ public abstract class Entity extends AbstractJcrEntity implements Securizable {
 
 	private static final long serialVersionUID = 1L;
 
-	@JcrUUID
+	@JcrIdentifier
 	protected String id;
 
 	@JcrProperty
