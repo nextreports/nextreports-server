@@ -732,6 +732,12 @@ public class JcrStorageDao extends AbstractJcrDao implements StorageDao, Initial
 					versionInfo.setName(version.getName());
 					try {
 						Entity entity = getEntity(nodes.nextNode());
+						// after StorageUpdate20 when com.asf.nextserver package was renamed with ro.nextreports.server
+						// all version nodes remained with older className (they cannot be changed because they are protected)
+						// so they cannot be accessed anymore!
+						if (entity == null) {
+							continue;
+						}
 						String createdBy = entity.getLastUpdatedBy();
 						if (createdBy == null) {
 							createdBy = entity.getCreatedBy();
