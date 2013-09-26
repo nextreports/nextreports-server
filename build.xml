@@ -278,6 +278,9 @@ Copyright:
     	<!-- Copy the minimum jetty distributuion -->
     	<copy todir="${app.dist}">
     		<fileset dir="jetty"/>
+    		<fileset dir="${app.home}">    		            	
+    		     <include name="run.bat"/>
+    		</fileset>
     	</copy>
     	
     	<property name="jetty.webapps" value="${app.dist}/webapps"/>    	
