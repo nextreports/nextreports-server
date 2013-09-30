@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="nextreports-server-setup" default="release" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="nextreports-server-setup" default="setup" xmlns:ivy="antlib:org.apache.ivy.ant">
 
     <import file="build.xml"/>
 
@@ -11,10 +11,14 @@
     
     <target name="setup" depends="data.zip,client,dist">
         <!-- Add ant task -->
-        <taskdef name="install4j" classname="com.install4j.Install4JTask" classpath="${install4j.ant.jar}"/>
+        <taskdef
+            name="install4j"
+            classname="com.install4j.Install4JTask"
+            classpath="${install4j.ant.jar}"
+        />
 
         <!-- Copy some files -->
-        <copy file="${app.home}/setup/nextserver.install4j" todir="${app.target}"/>
+        <copy file="${app.home}/stuff/setup/nextserver.install4j" todir="${app.target}"/>
     
         <!-- Call Install4j -->
         <property name="absolute.app.home" location="${app.home}"/>
