@@ -9,7 +9,7 @@
     <!-- S E T U P                                                          -->
     <!-- ================================================================== -->
     
-    <target name="setup" depends="data.zip,client,dist">
+    <target name="setup" depends="clean, data.zip,client,dist">
         <!-- Add ant task -->
         <taskdef
             name="install4j"
