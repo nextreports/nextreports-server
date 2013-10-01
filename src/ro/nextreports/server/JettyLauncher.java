@@ -46,7 +46,7 @@ public class JettyLauncher {
         contextHandler.addHandler(new ResourceHandler());
         server.addHandler(contextHandler);
 
-        server.addHandler(new WebAppContext("webapp", "/nextserver"));
+        server.addHandler(new WebAppContext("webapp", "/nextreports-server"));
 
         long t = System.currentTimeMillis();
         server.start();

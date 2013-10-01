@@ -128,7 +128,7 @@ public class ApplicationLoaderListener implements ServletContextListener {
 	
     private static void deployDemoData(String nextServerHome) throws IOException {    	
     	    	    	
-    	String archiveName = "nextserver-data-" + ReleaseInfo.getVersion();    	
+    	String archiveName = "nextreports-server-data-" + ReleaseInfo.getVersion();    	
 		File dataRoot = new File(nextServerHome);
 		if (dataRoot.exists() && dataRoot.isDirectory()) {
 			return;
