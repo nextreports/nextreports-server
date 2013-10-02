@@ -279,10 +279,14 @@ Copyright:
     	<copy todir="${app.dist}">
     		<fileset dir="jetty"/>
     		<fileset dir="${app.home}">    		            	
-    		     <include name="run.bat"/>
+                <include name="run.bat"/>
+        		<include name="run.sh"/>
     		</fileset>
     	</copy>
     	
+        <!-- Make run.sh executable -->
+        <chmod file="${app.dist}/run.sh" perm="ugo+rx"/>
+
     	<property name="jetty.webapps" value="${app.dist}/webapps"/>    	
     	<copy file="${app.target}/${app.war}" todir="${jetty.webapps}"/>
     	
