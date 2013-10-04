@@ -29,7 +29,7 @@
     <!-- P U B L I S H                                                      -->
     <!-- ================================================================== -->
 
-    <target name="publish" depends="jar.client,pom">
+    <target name="publish" depends="client.jar,pom">
         <artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file"/>
 			<arg value="-Durl=${repo.baseUrl}/snapshots/"/>
