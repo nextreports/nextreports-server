@@ -28,6 +28,6 @@ Execute the script:
 - run.bat (for windows)
 - run.sh (for linux/unix)
 
-Start an internet browser immediately after the server starts (it displays in command prompt something like "Started SelectChannelConnector@0.0.0.0:8081") and type `//http://localhost:@httpPort@/nextreports-server` (for example http://localhost:8081/nextreports-server).  
-In login page enter the default username and password: _admin_ as username and _1_ as password. 
+Start an internet browser immediately after the server starts (it displays in command prompt something like "Started SelectChannelConnector@0.0.0.0:8081") and type `http://localhost:@httpPort@/nextreports-server` (for example http://localhost:8081/nextreports-server).  
+In login page enter the default username and password: __admin__ as username and __1__ as password. 
 
