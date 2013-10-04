@@ -16,3 +16,18 @@ Steps:
 - build the artifacts (with `ant clean release`)
 
 After above steps a folder _artifacts_ is created and all goodies are in that folder.
+
+How to run
+-------------------
+It's very simple to run the nextreports-server.   
+First, you must build the project using above steps.   
+After building process go to _dist_ folder and replace some variables:
+- `@httpPort@` in ./etc/jetty.xml (for example you can replace this variable with _8081_)
+- `@reportsHome@` in ./contexts/reports.xml (for example you can replace this variable with _reports_)
+Execute the script:
+- run.bat (for windows)
+- run.sh (for linux/unix)
+
+Start an internet browser immediately after the server starts (it displays in command prompt something like "Started SelectChannelConnector@0.0.0.0:8081") and type `//http://localhost:@httpPort@/nextreports-server` (for example http://localhost:8081/nextreports-server).  
+In login page enter the default username and password: _admin_ as username and _1_ as password. 
+
