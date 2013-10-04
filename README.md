@@ -23,7 +23,8 @@ It's very simple to run the nextreports-server.
 First, you must build the project using above steps.   
 After building process go to _dist_ folder and replace some variables:
 - `@httpPort@` in ./etc/jetty.xml (for example you can replace this variable with _8081_)
-- `@reportsHome@` in ./contexts/reports.xml (for example you can replace this variable with _reports_)
+- `@reportsHome@` in ./contexts/reports.xml (for example you can replace this variable with _reports_)  
+
 Execute the script:
 - run.bat (for windows)
 - run.sh (for linux/unix)
