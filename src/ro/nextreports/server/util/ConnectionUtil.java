@@ -294,6 +294,9 @@ public class ConnectionUtil {
     
     public static List<KeyValue> convertPropertiesToList(Properties properties, String path) {
     	List<KeyValue> list = new ArrayList<KeyValue>();
+    	if (properties == null) {
+    		return list;
+    	}
     	for (Object key : properties.keySet()) {
     		KeyValue kv = new KeyValue();
     		kv.setKey((String)key);
