@@ -32,3 +32,22 @@ Execute the script:
 Start an internet browser immediately after the server starts (it displays in command prompt something like "Started SelectChannelConnector@0.0.0.0:8081") and type `http://localhost:@httpPort@/nextreports-server` (for example http://localhost:8081/nextreports-server).  
 In login page enter the default username and password: __admin__ as username and __1__ as password. 
 
+Using Maven
+-------------------
+NextReports Server comes with some web services that allows other applications to interact with the server using a simple API on following levels: 
+- storage level: list reports, charts, folders, data sources; create folders; publish reports, charts and data sources; download reports and charts (these methods are also used by NextReports Designer)
+- process level: run reports on the server from your proprietary applications with your specific parameters values
+
+In your pom.xml you must define the dependencies to nextreports-server-clients artifacts with:
+
+```xml
+<dependency>
+    <groupId>ro.nextreports</groupId>
+    <artifactId>nextreports-server-client</artifactId>
+    <version>${nextreports-server-client.version}</version>
+</dependency>    
+```
+
+where ${nextreports-server-client.version} is the last nextreports-server-client version.
+
+You may want to check for the latest released version using [Maven Search](http://search.maven.org/#search%7Cga%7C1%7Cnextreports-server-client)
