@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="publish" default="publish" xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+<project name="publish" default="snapshot" xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
     <import file="build.xml"/>
 
@@ -16,27 +16,88 @@
     <taskdef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" classpathref="ant.tasks.path"/>
 
     <!-- ================================================================== -->
+    <!-- J A V A D O C                                                      -->
+    <!-- ================================================================== -->
+    
+    <target name="javadoc">
+        <mkdir dir="${app.target}/javadoc"/>
+
+        <javadoc packagenames="ro/nextreports/server/api/client"
+               sourcepath="src"
+               destdir="${app.target}/javadoc" 
+               classpathref="classpath" 
+               author="false">
+            <doctitle><![CDATA[<h1>NextReports Server Client ${app.version}</h1>]]></doctitle>           
+        </javadoc>
+    </target>
+
+    <!-- ================================================================== -->
     <!-- P O M                                                              -->
     <!-- ================================================================== -->
 
     <target name="pom" depends="ivy.resolve">
-        <ivy:makepom ivyfile="ivy-client.xml" pomfile="${pom}">
+        <!-- put in pom dependencies only for compile and runtime conf -->
+        <ivy:makepom templatefile="pom-template.xml" ivyfile="ivy-client.xml" pomfile="${pom}">
             <mapping conf="client" scope="default"/>
         </ivy:makepom>
     </target>
 
+
     <!-- ================================================================== -->
-    <!-- P U B L I S H                                                      -->
+    <!-- S N A P S H O T                                                    -->
     <!-- ================================================================== -->
 
-    <target name="publish" depends="client.jar,pom">
+    <target name="snapshot" depends="clean,client.jar,javadoc,pom">
         <artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file"/>
-			<arg value="-Durl=${repo.baseUrl}/snapshots/"/>
-			<arg value="-DrepositoryId=sonatype-nexus-snapshots"/>
+			<arg value="-Durl=${repo.snapshotsUrl}"/>
+			<arg value="-DrepositoryId=${repo.snapshotsId}"/>
 			<arg value="-DpomFile=${pom}"/>
 			<arg value="-Dfile=${app.target}/${app.client.jar}"/>
 		</artifact:mvn>
     </target>
+
+    <!-- ================================================================== -->
+    <!-- S T A G E                                                          -->
+    <!-- ================================================================== -->
     
+    <!-- Before this, update project version (both build.xml and pom.xml) from SNAPSHOT to RELEASE -->
+    <target name="stage" depends="clean,client.jar,javadoc,pom">
+        <jar destfile="${sources.jar}" basedir="${app.src}" includes="ro/nextreports/server/api/client/**"/>
+        <jar destfile="${javadoc.jar}" basedir="${app.target}/javadoc"/>
+
+        <!-- Sign and deploy the main artifact -->
+		<artifact:mvn>
+			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file"/>
+			<arg value="-Durl=${repo.stagingUrl}"/>
+			<arg value="-DrepositoryId=${repo.stagingId}"/>
+			<arg value="-DpomFile=${pom}"/>
+			<arg value="-Dfile=${app.target}/${app.client.jar}"/>
+            <arg value="-Pgpg"/>
+		</artifact:mvn>
+
+		<!-- Sign and deploy the sources artifact -->
+		<artifact:mvn>
+			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file"/>
+			<arg value="-Durl=${repo.stagingUrl}"/>
+			<arg value="-DrepositoryId=${repo.stagingId}"/>
+			<arg value="-DpomFile=${pom}"/>
+			<arg value="-Dfile=${sources.jar}"/>
+			<arg value="-Dclassifier=sources"/>
+            <arg value="-Pgpg"/>
+		</artifact:mvn>
+
+		<!-- sign and deploy the javadoc artifact -->
+		<artifact:mvn>
+			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file"/>
+			<arg value="-Durl=${repo.stagingUrl}"/>
+			<arg value="-DrepositoryId=${repo.stagingId}"/>
+			<arg value="-DpomFile=${pom}"/>
+			<arg value="-Dfile=${javadoc.jar}"/>
+			<arg value="-Dclassifier=javadoc"/>
+            <arg value="-Pgpg"/>
+		</artifact:mvn>
+    </target>
+
 </project>
+

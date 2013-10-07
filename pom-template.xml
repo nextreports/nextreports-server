@@ -1,0 +1,48 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ro.nextreports</groupId>
+    <artifactId>${app.name}-client</artifactId>
+    <version>${app.version}</version>
+    <packaging>jar</packaging>
+
+    <name>NextReports Server Client</name>
+    <url>https://github.com/nextreports/nextreports-server</url>
+
+    <description>
+        NextReports Server allows you to schedule NextReports and Jasper reports and to automatically deliver reports via 
+        E-mail, FTP, SSH, Windows Share, WebDAV to your business contacts in most popular file formats like HTML, EXCEL, PDF, RTF, CSV, TSV, TXT, XML.
+        NextReports Server will present your charts, table reports and alarm reports in real time inside dashboards.
+        Users can perform data analyze using drill-down and pivot structures.
+    </description>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:https://github.com/nextreports/${app.name}.git</connection>
+        <developerConnection>scm:git:https://github.com/nextreports/${app.name}.git</developerConnection>
+        <url>git@github.com/nextreports/${app.name}.git</url>
+    </scm>
+  
+    <developers>
+        <developer>
+            <id>decebals</id>
+            <name>Decebal Suiu</name>
+            <email>decebal.suiu@gmail.com</email>
+        </developer>
+        <developer>
+            <id>dpmihai</id>
+            <name>Mihai Dinca-Panaitescu</name>
+            <email>dpmihai@yahoo.com</email>            
+        </developer>
+    </developers>
+
+</project>
+
+
