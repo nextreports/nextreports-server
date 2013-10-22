@@ -76,6 +76,8 @@
         <property name="filterProcessesUrl" value="/app/j_integration_security_check"/>
         <property name="usernameParameter" value="username"/>
         <property name="secretParameter" value="secret"/>
+        <property name="secretKey" value="#{settings.getIntegrationSecretKey()}"/>
+        <property name="whiteIp" value="#{settings.getIntegrationWhiteIp()}"/>
         <!--
         <property name="authenticationFailureHandler" ref="failureHandler"/>
         <property name="authenticationSuccessHandler" ref="successHandler"/>

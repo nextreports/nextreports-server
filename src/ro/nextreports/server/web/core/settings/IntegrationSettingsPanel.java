@@ -28,6 +28,8 @@ import ro.nextreports.server.service.StorageService;
 
 public class IntegrationSettingsPanel extends AbstractSettingsPanel {
 	
+	private static final long serialVersionUID = 1L;
+
 	@SpringBean
 	private StorageService storageService;		
 	
@@ -39,13 +41,17 @@ public class IntegrationSettingsPanel extends AbstractSettingsPanel {
 
 	@Override
 	protected void addComponents(Form<Settings> form) {
-		
 		final TextField<String> drillUrl = new TextField<String>("integration.drillUrl");		
 	    form.add(drillUrl);
 	    
 	    final TextField<String> notifyUrl = new TextField<String>("integration.notifyUrl");		
 	    form.add(notifyUrl);
-	   
+
+	    final TextField<String> secretKey = new TextField<String>("integration.secretKey");		
+	    form.add(secretKey);
+
+	    final TextField<String> whiteList = new TextField<String>("integration.whiteIp");		
+	    form.add(whiteList);
 	}		
 	
 	public void setStorageService(StorageService storageService) {

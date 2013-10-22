@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Required;
 import ro.nextreports.server.domain.Settings;
 import ro.nextreports.server.service.StorageService;
 
-
 public class SettingsBean {
 	
 	private StorageService storageService;	
@@ -29,7 +28,7 @@ public class SettingsBean {
 	public Settings getSettings() {
 //		return storageService.getSettings();
 		Settings settings = storageService.getSettings();
-		System.out.println(">>>>>> settings = " + settings);
+//		System.out.println(">>>>>> settings = " + settings);
 		
 		return settings;
 	}	
@@ -46,6 +45,7 @@ public class SettingsBean {
 		if (settings.getMailServer() == null) {
 			return "127.0.0.1";
 		}
+		
 		return settings.getMailServer().getIp();
 	}
 	
@@ -54,6 +54,7 @@ public class SettingsBean {
 		if (settings.getMailServer() == null) {
 			return 25;
 		}
+		
 		return settings.getMailServer().getPort();
 	}
 	
@@ -62,6 +63,7 @@ public class SettingsBean {
 		if (settings.getSynchronizer() == null) {
 			return "0 0 6 * * ?";
 		}
+		
 		return settings.getSynchronizer().getCronExpression();
 	}
 	
@@ -70,6 +72,7 @@ public class SettingsBean {
 		if (settings.getScheduler() == null) {
 			return 5;
 		}
+		
 		return settings.getScheduler().getCorePoolSize();
 	}
 	
@@ -78,6 +81,7 @@ public class SettingsBean {
 		if (settings.getScheduler() == null) {
 			return 10;
 		}
+		
 		return settings.getScheduler().getMaxPoolSize();		
 	}
 	
@@ -86,6 +90,7 @@ public class SettingsBean {
 		if (settings.getScheduler() == null) {
 			return 25;
 		}
+		
 		return settings.getScheduler().getQueueCapacity();
 	}
 	
@@ -93,5 +98,13 @@ public class SettingsBean {
 		Settings settings = getSettings();
 		return settings.getBaseUrl();
 	}
-			
+	
+	public String getIntegrationSecretKey() {
+		return getSettings().getIntegration().getSecretKey();
+	}
+
+	public String getIntegrationWhiteIp() {
+		return getSettings().getIntegration().getWhiteIp();
+	}
+
 }

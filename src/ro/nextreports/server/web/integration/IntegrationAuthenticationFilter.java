@@ -48,7 +48,6 @@ import org.springframework.web.filter.GenericFilterBean;
 
 import ro.nextreports.server.domain.User;
 
-
 /**
  * @author Decebal Suiu
  */
@@ -59,8 +58,10 @@ public class IntegrationAuthenticationFilter extends GenericFilterBean implement
 	public static final String SPRING_SECURITY_FORM_SECRET_KEY = "j_secret";
 
     private String usernameParameter = SPRING_SECURITY_FORM_USERNAME_KEY;
-    private String  secretParameter = SPRING_SECURITY_FORM_SECRET_KEY;
+    private String secretParameter = SPRING_SECURITY_FORM_SECRET_KEY;
     private boolean postOnly = true;
+    private String secretKey;
+    private String whiteIp;
 
     private ApplicationEventPublisher eventPublisher;
     private AuthenticationDetailsSource authenticationDetailsSource = new WebAuthenticationDetailsSource();
@@ -92,7 +93,15 @@ public class IntegrationAuthenticationFilter extends GenericFilterBean implement
         this.eventPublisher = eventPublisher;
     }
     
-    @Override
+    public void setSecretKey(String secretKey) {
+		this.secretKey = secretKey;
+	}
+
+	public void setWhiteIp(String whiteIp) {
+		this.whiteIp = whiteIp;
+	}
+
+	@Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
 
@@ -253,6 +262,22 @@ public class IntegrationAuthenticationFilter extends GenericFilterBean implement
         }
         
 		username = username.trim();
+		secret = secret.trim();
+		
+		// is client behind something?
+	    String ipAddress = request.getHeader("X-FORWARDED-FOR");  
+	    if (ipAddress == null) {  
+	    	ipAddress = request.getRemoteAddr();  
+	    }
+//	    System.out.println("ipAddress = " + ipAddress);
+//	    System.out.println("whiteIp = " + whiteIp);
+	    if (!whiteIp.isEmpty() && !whiteIp.equals(ipAddress)) {
+	    	throw new AuthenticationServiceException("Invalid remote address");
+	    }
+		   		
+		if (!secretKey.isEmpty() && !secretKey.equals(secret)) {
+			throw new AuthenticationServiceException("Invalid secret key");	
+		}
 
 		User user = (User) userDetailsService.loadUserByUsername(username);
 //		System.out.println("user = " + user);

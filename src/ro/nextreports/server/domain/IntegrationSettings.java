@@ -20,11 +20,19 @@ import org.jcrom.annotations.JcrProperty;
 
 public class IntegrationSettings  extends EntityFragment {
 	
+	private static final long serialVersionUID = 1L;
+
 	@JcrProperty
 	private String drillUrl;
 	
 	@JcrProperty
 	private String notifyUrl;
+	
+	@JcrProperty
+	private String secretKey;
+	
+	@JcrProperty
+	private String whiteIp;
 	
 	public IntegrationSettings() {
 		super();
@@ -44,6 +52,22 @@ public class IntegrationSettings  extends EntityFragment {
 
 	public void setNotifyUrl(String notifyUrl) {
 		this.notifyUrl = notifyUrl;
+	}
+
+	public String getSecretKey() {
+		return secretKey;
+	}
+
+	public void setSecretKey(String secretKey) {
+		this.secretKey = secretKey;
+	}
+
+	public String getWhiteIp() {
+		return whiteIp;
+	}
+
+	public void setWhiteIp(String whiteIp) {
+		this.whiteIp = whiteIp;
 	}
 
 	@Override
