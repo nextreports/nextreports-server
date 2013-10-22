@@ -27,6 +27,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.context.MessageSource;
@@ -271,11 +272,11 @@ public class IntegrationAuthenticationFilter extends GenericFilterBean implement
 	    }
 //	    System.out.println("ipAddress = " + ipAddress);
 //	    System.out.println("whiteIp = " + whiteIp);
-	    if (!whiteIp.isEmpty() && !whiteIp.equals(ipAddress)) {
+	    if (!StringUtils.isEmpty(whiteIp) && !whiteIp.equals(ipAddress)) {
 	    	throw new AuthenticationServiceException("Invalid remote address");
 	    }
 		   		
-		if (!secretKey.isEmpty() && !secretKey.equals(secret)) {
+		if (!StringUtils.isEmpty(secretKey) && !secretKey.equals(secret)) {
 			throw new AuthenticationServiceException("Invalid secret key");	
 		}
 
