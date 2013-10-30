@@ -24,11 +24,14 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ro.nextreports.server.domain.IFrameSettings;
+import ro.nextreports.server.exception.NotFoundException;
+import ro.nextreports.server.service.DashboardService;
+import ro.nextreports.server.service.SecurityService;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.util.ChartUtil;
+import ro.nextreports.server.util.PermissionUtil;
 import ro.nextreports.server.web.dashboard.model.WidgetModel;
 import ro.nextreports.server.web.security.SecurityUtil;
-
 
 /**
  * @author Decebal Suiu
@@ -39,6 +42,12 @@ public class WidgetWebPage extends WebPage {
 	
 	@SpringBean
     private StorageService storageService;
+	
+	@SpringBean
+    private DashboardService dashboardService;
+	
+	@SpringBean
+    private SecurityService securityService;
 
 	public WidgetWebPage(PageParameters pageParameters) {
 		
@@ -51,6 +60,24 @@ public class WidgetWebPage extends WebPage {
 		// TODO test for id parameter
 		String widgetId = pageParameters.get("id").toString();
 		//System.out.println("widgetId = " + widgetId);
+		
+		if (iframeSettings.isUseAuthentication()) {			
+			try {
+				String dashboardId = storageService.getDashboardId(widgetId);
+				String user = SecurityUtil.getLoggedUsername();
+				String owner = dashboardService.getDashboardOwner(dashboardId);
+				if (!owner.equals(user)) {
+					boolean hasRead = securityService.hasPermissionsById(user, PermissionUtil.getRead(), dashboardId);
+					if (!hasRead) {
+						add(new WidgetErrorView("widget", null, new Exception("You do not have rights to see this iframe!")));
+						return;
+					}
+				}
+			} catch (NotFoundException e) {
+				add(new WidgetErrorView("widget", null, new Exception("Could not load iframe: " + e.getMessage())));
+				return;
+			}
+		}
 		
 		String width = pageParameters.get("width").toString();		
 		//System.out.println("width = " + width);
