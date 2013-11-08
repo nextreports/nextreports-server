@@ -16,6 +16,8 @@
  */
 package ro.nextreports.server.web;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -53,11 +55,13 @@ import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import ro.nextreports.server.ReleaseInfo;
 import ro.nextreports.server.StorageConstants;
 import ro.nextreports.server.dao.StorageDao;
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.domain.IFrameSettings;
 import ro.nextreports.server.domain.SchedulerJob;
+import ro.nextreports.server.domain.Settings;
 import ro.nextreports.server.domain.User;
 import ro.nextreports.server.exception.MaintenanceException;
 import ro.nextreports.server.schedule.QuartzJobHandler;
@@ -66,11 +70,12 @@ import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.web.common.misc.NoVersionMountMapper;
 import ro.nextreports.server.web.core.ErrorPage;
 import ro.nextreports.server.web.core.HomePage;
-import ro.nextreports.server.web.core.LicenseErrorPage;
 import ro.nextreports.server.web.core.MaintenancePage;
 import ro.nextreports.server.web.core.SecurePage;
 import ro.nextreports.server.web.core.settings.LogoResourceReference;
 import ro.nextreports.server.web.dashboard.WidgetWebPage;
+import ro.nextreports.server.web.debug.Info;
+import ro.nextreports.server.web.debug.InfoUtil;
 import ro.nextreports.server.web.debug.SystemInfoPage;
 import ro.nextreports.server.web.debug.SystemLogPage;
 import ro.nextreports.server.web.integration.DashboardsPage;
@@ -110,6 +115,9 @@ public class NextServerApplication extends WebApplication  {
 	@Override
 	public void init() {
 		super.init();
+		
+		// log system info
+		logSystemInfo();
 		
 		// spring
 		addSpringInjection();        
@@ -203,6 +211,10 @@ public class NextServerApplication extends WebApplication  {
 		getRequestCycleListeners().add(new ExceptionRequestCycleListener());
 		getRequestCycleListeners().add(new LoggingRequestCycleListener());
 		getRequestCycleListeners().add(new MaintenanceRequestCycleListener());
+		
+		logSettings(storageService.getSettings());
+		
+		LOG.info("NextReports Server " +  ReleaseInfo.getVersion() + " started.");
 	}			
 
 	public Class<? extends Page> getHomePage() {
@@ -448,5 +460,36 @@ public class NextServerApplication extends WebApplication  {
 	public static void setMaintenance(boolean maintenance) {
 		NextServerApplication.maintenance = maintenance;
 	}		
+	
+	private void logSystemInfo() {
+		LOG.info("############ S Y S T E M    P R O P E R T I E S ############");
+		List<String> names =InfoUtil.getSystemProperties();
+		for (String name : names) {			
+			LOG.info(String.format("%-40s", name) + " : " + System.getProperty(name));
+		}
+		
+		LOG.info("############ J V M    A R G U M E N T S ############");		
+		List<String> arguments = InfoUtil.getJVMArguments();
+		for (String argument : arguments) {		
+			LOG.info(argument);
+		}
+		
+		LOG.info("############ G E N E R A L    J V M     I N F O ############");
+		List<Info> infos = InfoUtil.getGeneralJVMInfo();
+		for (Info info : infos) {
+			LOG.info(String.format("%-20s", info.getDisplayName()) + " : " + info.getValue());
+		}
+		
+		LOG.info("############ E N D     S Y S T E M     I N F O ############");
+	}
+	
+	private void logSettings(Settings settings) {
+		LOG.info("############ S E R V E R    S E T T I N G S ############");
+		List<Info> infos = InfoUtil.getServerSettings(settings);
+		for (Info info : infos) {
+			LOG.info(String.format("%-40s", info.getDisplayName()) + " : " + info.getValue());
+		}				
+		LOG.info("############ E N D    S E R V E R    S E T T I N G S ############");
+	}
 	
 }

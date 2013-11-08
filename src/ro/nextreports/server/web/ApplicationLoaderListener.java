@@ -59,6 +59,9 @@ public class ApplicationLoaderListener implements ServletContextListener {
 	}
 
 	private void config() {
+		
+		LOG.info("NextReports Server " + ReleaseInfo.getVersion() + " starting ... ");
+		
 		CompositeConfiguration config = new CompositeConfiguration();
 		config.addConfiguration(new SystemConfiguration());
 		try {
