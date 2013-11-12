@@ -17,6 +17,7 @@
 package ro.nextreports.server.report.next;
 
 import java.io.ByteArrayInputStream;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
@@ -60,9 +61,9 @@ public class NextUtil {
         } catch (Exception e) {
             e.printStackTrace();
             LOG.error(e.getMessage(), e);
-        }
-        byte[] bytes = reportContent.getNextFile().getDataProvider().getBytes();
-        try {
+        }      
+        byte[] bytes = reportContent.getNextFile().getDataProvider().getBytes();       
+        try {        
 			return ReportUtil.loadReport(new ByteArrayInputStream(bytes));
 		} catch (LoadReportException e) {
 			LOG.error(e.getMessage(), e);
@@ -96,16 +97,21 @@ public class NextUtil {
     // Rename images so that their name is unique
     public static ro.nextreports.server.domain.Report renameImagesAsUnique(ro.nextreports.server.domain.Report report) {
         NextContent reportContent = (NextContent) report.getContent();
-        String masterContent = new String(reportContent.getNextFile().getDataProvider().getBytes());
-        for (JcrFile imageFile : reportContent.getImageFiles()) {
-            String oldName = imageFile.getName();
-            int index = oldName.lastIndexOf(ro.nextreports.server.report.util.ReportUtil.EXTENSION_SEPARATOR);
-            String newName = oldName.substring(0, index) + ro.nextreports.server.report.util.ReportUtil.IMAGE_DELIM +
-                    UUID.randomUUID().toString() + oldName.substring(index);
-            masterContent = masterContent.replaceAll(oldName, newName);
-            imageFile.setName(newName);
-        }
-        reportContent.getNextFile().setDataProvider(new JcrDataProviderImpl(masterContent.getBytes()));
+		try {
+			String masterContent = new String(reportContent.getNextFile().getDataProvider().getBytes(), "UTF-8");
+			for (JcrFile imageFile : reportContent.getImageFiles()) {
+				String oldName = imageFile.getName();
+				int index = oldName.lastIndexOf(ro.nextreports.server.report.util.ReportUtil.EXTENSION_SEPARATOR);
+				String newName = oldName.substring(0, index) + ro.nextreports.server.report.util.ReportUtil.IMAGE_DELIM
+						+ UUID.randomUUID().toString() + oldName.substring(index);
+				masterContent = masterContent.replaceAll(oldName, newName);
+				imageFile.setName(newName);
+			}
+			reportContent.getNextFile().setDataProvider(new JcrDataProviderImpl(masterContent.getBytes("UTF-8")));
+		} catch (UnsupportedEncodingException e) {
+			LOG.error("Error inside renameImagesAsUnique: " + e.getMessage(), e);
+			e.printStackTrace();
+		}
 
         return report;
     }
@@ -115,29 +121,34 @@ public class NextUtil {
     public static ro.nextreports.server.domain.Report restoreImagesName(ro.nextreports.server.domain.Report report) {
         NextContent reportContent = (NextContent) report.getContent();
         JcrFile masterFile = reportContent.getNextFile();
-        String masterContent = new String(masterFile.getDataProvider().getBytes());
-        if (reportContent.getImageFiles() != null) {
-            for (JcrFile imageFile : reportContent.getImageFiles()) {
-                String oldName = imageFile.getName();                
-                int startIndex = oldName.indexOf(ro.nextreports.server.report.util.ReportUtil.IMAGE_DELIM);
-                int extIndex = oldName.lastIndexOf(ro.nextreports.server.report.util.ReportUtil.EXTENSION_SEPARATOR);
-                String newName;
-                if (startIndex < 0) {
-                	newName = oldName;
-                } else {
-                	newName = oldName.substring(0, startIndex) + oldName.substring(extIndex);
-                }
-                masterContent = masterContent.replaceAll(oldName, newName);
-                imageFile.setName(newName);
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Image " + ": " + oldName + " > " + newName);
-//            	LOG.debug("master = " + master);
-                }
-            }
-        }
-        masterFile.setDataProvider(new JcrDataProviderImpl(masterContent.getBytes()));
+		try {
+			String masterContent = new String(masterFile.getDataProvider().getBytes(), "UTF-8");
+			if (reportContent.getImageFiles() != null) {
+				for (JcrFile imageFile : reportContent.getImageFiles()) {
+					String oldName = imageFile.getName();
+					int startIndex = oldName.indexOf(ro.nextreports.server.report.util.ReportUtil.IMAGE_DELIM);
+					int extIndex = oldName.lastIndexOf(ro.nextreports.server.report.util.ReportUtil.EXTENSION_SEPARATOR);
+					String newName;
+					if (startIndex < 0) {
+						newName = oldName;
+					} else {
+						newName = oldName.substring(0, startIndex) + oldName.substring(extIndex);
+					}
+					masterContent = masterContent.replaceAll(oldName, newName);
+					imageFile.setName(newName);
+					if (LOG.isDebugEnabled()) {
+						LOG.debug("Image " + ": " + oldName + " > " + newName);
+						// LOG.debug("master = " + master);
+					}
+				}
+			}
+			masterFile.setDataProvider(new JcrDataProviderImpl(masterContent.getBytes("UTF-8")));
+		} catch (UnsupportedEncodingException e) {
+			LOG.error("Error inside renameImagesAsUnique: " + e.getMessage(), e);
+			e.printStackTrace();
+		}
 
-        return report;
+		return report;
     }
 
     public static QueryRuntime createQueryRuntime(StorageService storageService, ro.nextreports.server.domain.Report report) {

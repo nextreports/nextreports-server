@@ -274,7 +274,7 @@ public class DefaultChartService implements ChartService {
 						outputStream = new ByteArrayOutputStream();
 						runner.run(outputStream);
 						outputStream.close();
-						return new String(outputStream.toByteArray());
+						return new String(outputStream.toByteArray(),  "UTF-8");
 					} finally {
 						if (outputStream != null) {
 							try {

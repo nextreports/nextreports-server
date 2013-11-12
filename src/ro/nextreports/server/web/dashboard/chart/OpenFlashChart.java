@@ -126,30 +126,36 @@ public class OpenFlashChart extends GenericPanel<String> implements IResourceLis
 		//System.out.println("OpenFlashChart.createJsonResource()");
 		String jsonData = getJsonData();
 		//System.out.println("jsonData = " + jsonData);
-		IResource jsonResource = new ByteArrayResource("text/plain", jsonData.getBytes()) {
+		IResource jsonResource = null;
+		try {
+			jsonResource = new ByteArrayResource("text/plain", jsonData.getBytes("UTF-8")) {
 
-			private static final long serialVersionUID = 1L;			
-						
-			// These headers are needed for IE 
-			//
-			// Pragma & Cache-Control are needed for https (otherwise a #2032 Error will be thrown)
-			// see http://dwairi.wordpress.com/2009/01/15/open-flash-chart-ie-and-ssl/
-			//
-			// Use no-store for Cache-Control & Expires to force IE to not cache flash (otherwise refresh actions &
-			// drill-down are not working)
-			// see http://www.cfcoffee.co.uk/index.cfm/2010/1/24/IE-and-XML-issue-over-SSL
-			//
-			@Override
-			protected void setResponseHeaders(ResourceResponse data, Attributes attributes) {
-				// TODO wicket 1.5
-				//data.getHeaders().addHeader("Pragma", "public"); 
-				//data.getHeaders().addHeader("Cache-Control", "no-store, must-revalidate");
-				//data.getHeaders().addHeader("Expires", "-1");	        
-				data.disableCaching();
-				super.setResponseHeaders(data, attributes);
-			}
-			
-		};
+				private static final long serialVersionUID = 1L;			
+							
+				// These headers are needed for IE 
+				//
+				// Pragma & Cache-Control are needed for https (otherwise a #2032 Error will be thrown)
+				// see http://dwairi.wordpress.com/2009/01/15/open-flash-chart-ie-and-ssl/
+				//
+				// Use no-store for Cache-Control & Expires to force IE to not cache flash (otherwise refresh actions &
+				// drill-down are not working)
+				// see http://www.cfcoffee.co.uk/index.cfm/2010/1/24/IE-and-XML-issue-over-SSL
+				//
+				@Override
+				protected void setResponseHeaders(ResourceResponse data, Attributes attributes) {
+					// TODO wicket 1.5
+					//data.getHeaders().addHeader("Pragma", "public"); 
+					//data.getHeaders().addHeader("Cache-Control", "no-store, must-revalidate");
+					//data.getHeaders().addHeader("Expires", "-1");	        
+					data.disableCaching();
+					super.setResponseHeaders(data, attributes);
+				}
+				
+			};
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			throw new RuntimeException("OpenFlashChart.createJsonResource : " + e.getMessage());
+		}
 		
 		return jsonResource;
 	}
