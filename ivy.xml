@@ -60,11 +60,14 @@
             <exclude org="rome" module="rome"/>
             <exclude org="de.l3s.boilerpipe" module="boilerpipe"/>
             -->
+			<!--
+            <exclude org="org.apache.derby" module="derby"/>
+            -->
         </dependency>
         <dependency org="org.apache.jackrabbit" name="jackrabbit-jcr-commons" rev="${jackrabbit.version}"/>
         <dependency org="org.apache.jackrabbit" name="jackrabbit-spi" rev="${jackrabbit.version}"/>
         <dependency org="org.apache.jackrabbit" name="jackrabbit-spi-commons" rev="${jackrabbit.version}"/>
-                
+                        
         <!-- Wicket -->
         <dependency org="org.apache.wicket" name="wicket-core" rev="${wicket.version}"/>
         <dependency org="org.apache.wicket" name="wicket-extensions" rev="${wicket.version}"/>       
@@ -98,13 +101,13 @@
 
         <!-- Spring JCR -->
         <dependency org="org.springframework" name="se-jcr" rev="0.9">
-	        <exclude org="org.springframework" module="spring"/>
-	        <exclude org="org.springframework" module="spring-webmvc"/>
-	        <exclude org="org.apache.jackrabbit" module="jackrabbit-jca"/>
-	        <exclude org="org.apache.jackrabbit" module="jackrabbit-jcr-rmi"/>
-	        <exclude org="geronimo-spec" module="geronimo-spec-jta"/>
-	        <exclude org="geronimo-spec" module="geronimo-spec-j2ee-connector"/>
-	        <exclude org="javax.servlet" module="servlet-api"/>	        
+            <exclude org="org.springframework" module="spring"/>
+            <exclude org="org.springframework" module="spring-webmvc"/>
+            <exclude org="org.apache.jackrabbit" module="jackrabbit-jca"/>
+            <exclude org="org.apache.jackrabbit" module="jackrabbit-jcr-rmi"/>
+            <exclude org="geronimo-spec" module="geronimo-spec-jta"/>
+            <exclude org="geronimo-spec" module="geronimo-spec-j2ee-connector"/>
+            <exclude org="javax.servlet" module="servlet-api"/>         
         </dependency>
 
         <!-- Java Transaction -->
@@ -157,6 +160,9 @@
         <!-- Jasypt : encryption -->
         <dependency org="org.jasypt" name="jasypt" rev="1.9.0"/>
         <dependency org="org.jasypt" name="jasypt-spring3" rev="1.9.0"/>
+        
+        <!-- Force resolve a specific derby jdbc driver -->
+        <dependency org="org.apache.derby" name="derby" rev="10.10.1.1"/>
     </dependencies>           
             
 </ivy-module>
