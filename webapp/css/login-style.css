@@ -27,7 +27,7 @@ body { background: url(../images/general_bg.png); }
               .left, .right { width: 400px; margin: 0px; padding: 0px; float:left; text-align:left; }
 	                  .left { margin-right: 10px; }
                      .right { margin-left: 10px; }
-                 .text_logo { font-family:"UbuntuLight", Arial, Helvetica, sans-serif; font-size:11px; padding: 0 0 18px; width: 300px; color: #505050; }
+                 .text_logo { font-family:Arial, Helvetica, sans-serif; font-size:11px; padding: 0 0 18px; width: 300px; color: #505050; }
                .text-shadow { text-shadow: 0px 1px 0px #ffffff; }
               .text-justify { text-align: justify; }
          .text-shadow-light { text-shadow: 0px -1px 0px #758b1e; }
@@ -40,7 +40,7 @@ body { background: url(../images/general_bg.png); }
                      .green { color: #8cb200;}
 
              #next-products { width: 100%; margin-top: 16px; }
-           #next-products p { font-family:"UbuntuLight", Arial, Helvetica, sans-serif; font-size:11px; color: #666666; line-height: 18px; }
+           #next-products p { font-family:Arial, Helvetica, sans-serif; font-size:11px; color: #666666; line-height: 18px; }
 
                          h2 { font-family: 'LatoBlack', Arial, Helvetica, sans-serif; font-size: 16px; padding-bottom: 6px; }
                        h2 a { text-decoration:none; color: #000000; }
@@ -66,7 +66,7 @@ body { background: url(../images/general_bg.png); }
 }
 
 #login-form a{
-    font-family:"UbuntuRegular", Arial, Helvetica, sans-serif;
+    font-family:Arial, Helvetica, sans-serif;
     font-size: 12px;
     color: #789800;
     text-decoration:none;
@@ -81,9 +81,9 @@ body { background: url(../images/general_bg.png); }
 
 .info {
     color: #789800;
-    font-family: 'UbuntuRegular', Arial, Helvetica, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
-    text-align:left;
+    text-align:justify;
     display:block;
     width: 300px;
     margin: 20px 0 10px 0;           
@@ -99,8 +99,9 @@ body { background: url(../images/general_bg.png); }
 #login-form label {
 	color: #313030;
 	display: block;
-	font-family: 'UbuntuBold', Arial, Helvetica, sans-serif;
-	font-size: 14px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-weight: bold;
 	height: 18px;
 	line-height: 18px;
 	text-transform: capitalize;
@@ -110,7 +111,7 @@ body { background: url(../images/general_bg.png); }
 #login-form input[type="text"], #login-form input[type="password"], #login-form select{
 	background-color: #f9f9f9;
 	border: 1px solid #b0b0b0;	
-	font-family: 'UbuntuMedium', Arial, Helvetica, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	
 	margin-bottom: 12px;
@@ -127,7 +128,7 @@ body { background: url(../images/general_bg.png); }
 #login-form select{
 	background-color: #f9f9f9;
 	border: 1px solid #b0b0b0;	
-	font-family: 'UbuntuMedium', Arial, Helvetica, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	
 	margin-bottom: 12px;
