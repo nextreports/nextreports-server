@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.util.collections.MultiMap;
 
 import ro.nextreports.server.pivot.Aggregator;
@@ -93,7 +94,7 @@ public class PivotUtil {
 			// grand total column
 			if (!columnFields.isEmpty() && pivotModel.isShowGrandTotalForRow()) {
 				if (i == 0) {
-					row.add("Grand Total");
+					row.add(new StringResourceModel("pivot.grandTotal", null).getString());
 					for (int k = 0; k < dataFields.size() - 1; k++) {
 						row.add("");
 					}
@@ -142,7 +143,7 @@ public class PivotUtil {
 			List<Object> row = new ArrayList<Object>();		
 			data.add(row);
 			
-			row.add("Grand Total");
+			row.add(new StringResourceModel("pivot.grandTotal", null).getString());
 			for (int k = 0; k < rowFields.size() - 1; k++) {
 				row.add("");
 			}

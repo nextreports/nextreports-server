@@ -61,10 +61,10 @@ public class PivotAreaPanel extends Panel {
 
 		this.area = area;
 		
-		add(new Label("name", area.getName().toUpperCase()));
+		add(new Label("name", getString("pivot." + area.getName()).toUpperCase()));
 
 		final ModalWindow modal = new ModalWindow("modal");
-		modal.setTitle("Aggregator");		
+		modal.setTitle(getString("pivot.aggregator"));		
 		add(modal);
 		
 		WebMarkupContainer fieldsContainer = new WebMarkupContainer("fieldsContainer");

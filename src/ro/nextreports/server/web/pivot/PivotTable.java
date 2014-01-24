@@ -106,7 +106,7 @@ public class PivotTable extends Panel {
 			// rendering grand total column
 			RepeatingView grandTotalColumn = new RepeatingView("grandTotalColumn");
 			if (i == 0) {
-				tmp = new Label(grandTotalColumn.newChildId(), "Grand Total");
+				tmp = new Label(grandTotalColumn.newChildId(), getString("pivot.grandTotal"));
 				tmp.add(AttributeModifier.append("colspan", dataFields.size()));
 				grandTotalColumn.add(tmp);
 			} else if (i < columnFields.size()) {
@@ -170,7 +170,7 @@ public class PivotTable extends Panel {
 		grandTotalRow.setVisible(!rowFields.isEmpty() && pivotModel.isShowGrandTotalForColumn());
 		add(grandTotalRow);
 		
-		Label grandTotalRowHeader = new Label("rowHeader", "Grand Total");
+		Label grandTotalRowHeader = new Label("rowHeader", getString("pivot.grandTotal"));
 		grandTotalRowHeader.add(AttributeModifier.append("colspan", rowFields.size()));
 		grandTotalRow.add(grandTotalRowHeader);
 		

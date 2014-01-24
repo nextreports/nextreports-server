@@ -39,7 +39,7 @@ public class DrillDownNavigationPanel extends Panel {
             }
 
             public String getDisplayString() {
-                return "Up One Level";
+                return getString("drill.up.one.level");
             }
 
             public void onClick(AjaxRequestTarget target) {
@@ -55,7 +55,7 @@ public class DrillDownNavigationPanel extends Panel {
             }
 
             public String getDisplayString() {
-                return "Up To Root";
+                return getString("drill.up.to.root");
             }
 
             public void onClick(AjaxRequestTarget target) {

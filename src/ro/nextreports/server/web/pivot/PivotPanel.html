@@ -9,16 +9,18 @@
 		<form>
 		   <span style="margin-left: 5px; float:left;">
 		       <label class="checkbox">
-		           <input wicket:id="showGrandTotalForColumn" type="checkbox"/> Show grand total for column
+		           <input wicket:id="showGrandTotalForColumn" type="checkbox"/>
+		           <wicket:message key="pivot.showGrandTotalForColumn">[]</wicket:message>
 		       </label>
 		       &nbsp;&nbsp;&nbsp;
 		       <label class="checkbox">
-		           <input wicket:id="showGrandTotalForRow" type="checkbox"/> Show grand total for row
+		           <input wicket:id="showGrandTotalForRow" type="checkbox"/>
+		           <wicket:message key="pivot.showGrandTotalForRow">[]</wicket:message>
 		       </label>
 		   </span>
 		</form>
     </div>
-	<a wicket:id="compute" href="#" class="button" style="margin-left: 5px; clear: both;">Compute</a>      
+	<a wicket:id="compute" href="#" class="button" style="margin-left: 5px; clear: both;"><wicket:message key="pivot.compute">[]</wicket:message></a>      
 	<div style="overflow-x: auto; clear:both;">    
 	   <table wicket:id="pivotTable" class="pivot grid"></table>
 	</div>
