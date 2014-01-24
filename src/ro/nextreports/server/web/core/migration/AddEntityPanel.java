@@ -161,11 +161,6 @@ public class AddEntityPanel extends FormContentPanel {
 			private static final long serialVersionUID = 1L;
 			
 			@Override
-			protected boolean acceptEntityAsChild(Entity entity) {
-				return false;
-			}
-			
-			@Override
 			protected List<Entity> getChildren(String id) throws NotFoundException {
 				// sort
 				List<Entity> children = super.getChildren(id);								
@@ -189,6 +184,7 @@ public class AddEntityPanel extends FormContentPanel {
 		} else {
 			rootPath = StorageConstants.DASHBOARDS_ROOT;
 		}
+		
 		return rootPath;
 	}
 	
@@ -225,7 +221,11 @@ public class AddEntityPanel extends FormContentPanel {
 
                 @Override
 				protected String getOtherStyleClass(Entity t) {
-					return getClosedStyleClass();
+                	if (t instanceof ro.nextreports.server.domain.Folder) {
+                		return getClosedStyleClass();
+                	}
+                	
+                	return super.getOtherStyleClass(t);
 				}
 
     			@Override

@@ -261,8 +261,12 @@ public class AddWidgetPanel extends FormContentPanel {
     			}
 
                 @Override
-				protected String getOtherStyleClass(Entity t) {
-					return getClosedStyleClass();
+                protected String getOtherStyleClass(Entity t) {
+                	if (t instanceof ro.nextreports.server.domain.Folder) {
+                		return getClosedStyleClass();
+                	}
+                	
+                	return super.getOtherStyleClass(t);
 				}
 
     			@Override
