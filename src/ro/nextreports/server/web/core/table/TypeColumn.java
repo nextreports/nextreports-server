@@ -16,7 +16,6 @@
  */
 package ro.nextreports.server.web.core.table;
 
-
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.model.Model;
@@ -36,8 +35,7 @@ import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.domain.Folder;
 import ro.nextreports.server.domain.Report;
 
-//
-public class TypeColumn extends AbstractColumn<Entity> {
+public class TypeColumn extends AbstractColumn<Entity, String> {
 
     private static final long serialVersionUID = 8996645553273419939L;
 

@@ -16,11 +16,11 @@
  */
 package ro.nextreports.server.web.common.misc;
 
+import org.apache.wicket.core.request.handler.ListenerInterfaceRequestHandler;
+import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.component.IRequestablePage;
-import org.apache.wicket.request.handler.ListenerInterfaceRequestHandler;
-import org.apache.wicket.request.mapper.MountedMapper;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 
@@ -34,16 +34,18 @@ public class NoVersionMountMapper extends MountedMapper {
         super(path, pageClass, new PageParametersEncoder());
     }
 
-    @Override protected void encodePageComponentInfo(Url url, PageComponentInfo info) {
-        // do nothing so that component info does not get
-        // rendered in url
+    @Override 
+    protected void encodePageComponentInfo(Url url, PageComponentInfo info) {
+        // do nothing so that component info does not get rendered in url
     }
 
-    @Override public Url mapHandler(IRequestHandler requestHandler) {
+    @Override 
+    public Url mapHandler(IRequestHandler requestHandler) {
         if (requestHandler instanceof ListenerInterfaceRequestHandler) {
             return null;
-        } else {
-            return super.mapHandler(requestHandler);
         }
+        
+        return super.mapHandler(requestHandler);
     }
+    
 } 

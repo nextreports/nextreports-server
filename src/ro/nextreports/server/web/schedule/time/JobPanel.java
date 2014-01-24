@@ -26,37 +26,35 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.extensions.yui.calendar.DateTimeField;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.markup.html.IHeaderResponse;
 
+import ro.nextreports.engine.util.DateUtil;
 import ro.nextreports.server.domain.SchedulerJob;
 import ro.nextreports.server.domain.SchedulerTime;
 import ro.nextreports.server.schedule.ScheduleConstants;
 import ro.nextreports.server.web.common.form.AdvancedForm;
 import ro.nextreports.server.web.schedule.validator.DaysValidator;
 
-import ro.nextreports.engine.util.DateUtil;
-
-//
 // Created by IntelliJ IDEA.
 // User: mihai.panaitescu
 // Date: 19-May-2009
 // Time: 10:24:20
-
-//
 public class JobPanel extends Panel {
 
-    private SchedulerJob schedulerJob;
+    private static final long serialVersionUID = 1L;
+    
+	private SchedulerJob schedulerJob;
     private Label advancedLabel;
     private CheckBox advancedCheckBox;
     private MinutelyJobPanel minutelyPanel;
@@ -67,6 +65,7 @@ public class JobPanel extends Panel {
 
     public JobPanel(String id, SchedulerJob schedulerJob) {
         super(id);
+        
         this.schedulerJob = schedulerJob;
         addComponents();
         setOutputMarkupId(true);
@@ -76,6 +75,7 @@ public class JobPanel extends Panel {
     @Override
     protected void onInitialize() {
         super.onInitialize();
+        
         addDaysValidator(findParent(AdvancedForm.class));
     }
 
@@ -324,7 +324,6 @@ public class JobPanel extends Panel {
     public SchedulerTime getSchedulerTime() {
         return schedulerJob.getTime();
     }
-    
 
 }
 

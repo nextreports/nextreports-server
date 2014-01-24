@@ -18,9 +18,12 @@ package ro.nextreports.server.web.common.behavior;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 
-//
+/**
+ * @author Decebal Suiu
+ */
 public class AlertBehavior extends Behavior {
 
 	private static final long serialVersionUID = 1L;
@@ -38,7 +41,8 @@ public class AlertBehavior extends Behavior {
     @Override
 	public void renderHead(Component component, IHeaderResponse response) {
 		super.renderHead(component, response);
-        response.renderOnLoadJavaScript("alert('" + message + "');");
+		
+        response.render(OnLoadHeaderItem.forScript("alert('" + message + "');"));
     }
     
 }

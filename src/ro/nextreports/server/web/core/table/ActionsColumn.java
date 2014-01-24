@@ -16,13 +16,13 @@
  */
 package ro.nextreports.server.web.core.table;
 
-import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.web.core.ActionPanel;
@@ -32,7 +32,7 @@ import ro.nextreports.server.web.core.ActionPanel;
  * Date: 16-Sep-2010
  * Time: 13:24:44
  */
-public class ActionsColumn extends AbstractColumn<Entity> {
+public class ActionsColumn extends AbstractColumn<Entity, String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -47,7 +47,7 @@ public class ActionsColumn extends AbstractColumn<Entity> {
 
     public void populateItem(Item<ICellPopulator<Entity>> cellItem, String componentId, IModel<Entity> model) {
         cellItem.add(new ActionPanel(componentId, model));
-        cellItem.add(new SimpleAttributeModifier("class", "actions-col"));
+        cellItem.add(AttributeModifier.append("class", "actions-col"));
     }
 
 }

@@ -32,7 +32,6 @@ import ro.nextreports.server.web.core.action.DefaultActionContext;
 import ro.nextreports.server.web.core.section.EntitySection;
 import ro.nextreports.server.web.core.section.SectionManager;
 
-
 /**
  * @author Decebal Suiu
  */
@@ -46,11 +45,11 @@ public class EntityMenuModel extends LoadableDetachableModel<List<MenuItem>> {
 	@SpringBean
 	private SectionManager sectionManager;
 	
-	public EntityMenuModel(IModel<Entity> entityModel, String sectionId) {
-		Injector.get().inject(this);
-		
+	public EntityMenuModel(IModel<Entity> entityModel, String sectionId) {		
 		this.entityModel = entityModel;
 		this.sectionId = sectionId;
+		
+		Injector.get().inject(this);
 	}
 	
 	@Override

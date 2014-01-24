@@ -18,10 +18,10 @@ package ro.nextreports.server.web.security;
 
 import java.util.List;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -33,13 +33,13 @@ import org.apache.wicket.model.PropertyModel;
 
 import ro.nextreports.server.domain.AclEntry;
 import ro.nextreports.server.domain.Entity;
-import ro.nextreports.server.web.security.PermissionPanel;
-
 
 /**
  * @author Decebal Suiu
  */
 public class UserAclEntryPanel extends Panel {
+
+	private static final long serialVersionUID = 1L;
 
 	public UserAclEntryPanel(String id, Entity entity, AclEntry aclEntry, List<String> notGrantedUsers) {
 		super(id);
@@ -56,8 +56,10 @@ public class UserAclEntryPanel extends Panel {
         // override
     }
 
-	class UserAclEntryForm extends Form<AclEntry> {
+	private class UserAclEntryForm extends Form<AclEntry> {
 
+		private static final long serialVersionUID = 1L;
+		
 		private boolean recursive;
 		
 		public UserAclEntryForm(String id, final Entity entity, AclEntry aclEntry, List<String> notGrantedUsers) {
@@ -94,12 +96,14 @@ public class UserAclEntryPanel extends Panel {
 
             };
             if (modify) {
-                addLink.add(new SimpleAttributeModifier("rawValue", "Modify"));
+                addLink.add(AttributeModifier.replace("rawValue", "Modify"));
             }
 
             add(addLink);
             
-            add(new AjaxLink("cancel") {
+            add(new AjaxLink<Void>("cancel") {
+
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				public void onClick(AjaxRequestTarget target) {

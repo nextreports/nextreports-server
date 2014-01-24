@@ -24,11 +24,11 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -58,13 +58,14 @@ import ro.nextreports.server.web.common.panel.NextFeedbackPanel;
 import ro.nextreports.server.web.core.EntityBrowserPanel;
 import ro.nextreports.server.web.core.validation.DuplicationEntityValidator;
 
-
 /**
  * @author Decebal Suiu
  */
 public class UserPanel extends Panel {
 
-    private String parentPath;
+    private static final long serialVersionUID = 1L;
+    
+	private String parentPath;
     private boolean modify;
 
     @SpringBean
@@ -101,7 +102,9 @@ public class UserPanel extends Panel {
 
     private class UserForm extends AdvancedForm<User> {
 
-    	private String password;
+    	private static final long serialVersionUID = 1L;
+    	
+		private String password;
         private List<Group> selectedGroups;
 
         @SuppressWarnings("unchecked")
@@ -116,6 +119,8 @@ public class UserPanel extends Panel {
             add(new Label("title", title));
 
             TextField<String> nameTextField = new TextField<String>("name") {
+
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				public boolean isEnabled() {
@@ -172,12 +177,16 @@ public class UserPanel extends Panel {
             add(choice);
 
             add(new AjaxCheckBox("admin") {
-                protected void onUpdate(AjaxRequestTarget ajaxRequestTarget) {                    
+            	
+                private static final long serialVersionUID = 1L;
+
+				protected void onUpdate(AjaxRequestTarget ajaxRequestTarget) {                    
                     profileLabel.setVisible(!user.isAdmin());
                     choice.setVisible(!user.isAdmin());
                     ajaxRequestTarget.add(profileLabel);
                     ajaxRequestTarget.add(choice);
                 }
+                
             });
                                     
             final ArrayList<Group> groups = new ArrayList<Group>();
@@ -277,7 +286,7 @@ public class UserPanel extends Panel {
                 }
             };
             if (modify) {
-                createLink.add(new SimpleAttributeModifier("rawValue", "Modify"));
+                createLink.add(AttributeModifier.replace("rawValue", "Modify"));
             }
 
             add(createLink);

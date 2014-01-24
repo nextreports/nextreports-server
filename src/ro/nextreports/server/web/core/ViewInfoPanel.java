@@ -49,6 +49,8 @@ import ro.nextreports.engine.util.ReportUtil;
 
 public class ViewInfoPanel extends Panel {
 	
+	private static final long serialVersionUID = 1L;
+	
 	@SpringBean
 	private SettingsBean settings;
 
@@ -77,8 +79,11 @@ public class ViewInfoPanel extends Panel {
         }
         add(new MultiLineLabel("sql", new Model<String>(sql)));
 
-        add(new AjaxLink("cancel") {
-            @Override
+        add(new AjaxLink<Void>("cancel") {
+        	
+			private static final long serialVersionUID = 1L;
+
+			@Override
             public void onClick(AjaxRequestTarget target) {
                 EntityBrowserPanel panel = findParent(EntityBrowserPanel.class);
                 panel.backwardWorkspace(target);
@@ -107,8 +112,11 @@ public class ViewInfoPanel extends Panel {
         String sql = ReportUtil.getSql(NextUtil.getNextReport(settings.getSettings(), chart));        
         add(new MultiLineLabel("sql", new Model<String>(sql)));
 
-        add(new AjaxLink("cancel") {
-            @Override
+        add(new AjaxLink<Void>("cancel") {
+        	
+			private static final long serialVersionUID = 1L;
+
+			@Override
             public void onClick(AjaxRequestTarget target) {
                 EntityBrowserPanel panel = findParent(EntityBrowserPanel.class);
                 panel.backwardWorkspace(target);
@@ -117,9 +125,9 @@ public class ViewInfoPanel extends Panel {
         });
     }
 
-    private List<IColumn<ParamView>> createColumns() {
-        List<IColumn<ParamView>> columns = new ArrayList<IColumn<ParamView>>();
-        columns.add(new AbstractColumn<ParamView>(new Model<String>(getString("ActionContributor.Info.entityName"))) {
+    private List<IColumn<ParamView, String>> createColumns() {
+        List<IColumn<ParamView, String>> columns = new ArrayList<IColumn<ParamView, String>>();
+        columns.add(new AbstractColumn<ParamView, String>(new Model<String>(getString("ActionContributor.Info.entityName"))) {
             public void populateItem(Item<ICellPopulator<ParamView>> item, String componentId,
                                      final IModel<ParamView> rowModel) {
                 final ParamView param = rowModel.getObject();
@@ -127,7 +135,7 @@ public class ViewInfoPanel extends Panel {
                 item.add(new Label(componentId, new Model<String>(name)));
             }
         });
-        columns.add(new AbstractColumn<ParamView>(new Model<String>(getString("ActionContributor.EditParameters.parameterClass"))) {
+        columns.add(new AbstractColumn<ParamView, String>(new Model<String>(getString("ActionContributor.EditParameters.parameterClass"))) {
             public void populateItem(Item<ICellPopulator<ParamView>> item, String componentId,
                                      final IModel<ParamView> rowModel) {
                 final ParamView param = rowModel.getObject();
@@ -135,7 +143,7 @@ public class ViewInfoPanel extends Panel {
                 item.add(new Label(componentId, new Model<String>(clas)));
             }
         });
-        columns.add(new AbstractColumn<ParamView>(new Model<String>(getString("ActionContributor.EditParameters.parameterType"))) {
+        columns.add(new AbstractColumn<ParamView, String>(new Model<String>(getString("ActionContributor.EditParameters.parameterType"))) {
             public void populateItem(Item<ICellPopulator<ParamView>> item, String componentId,
                                      final IModel<ParamView> rowModel) {
                 final ParamView param = rowModel.getObject();
@@ -143,7 +151,7 @@ public class ViewInfoPanel extends Panel {
                 item.add(new Label(componentId, new Model<String>(type)));
             }
         });
-        columns.add(new AbstractColumn<ParamView>(new Model<String>(getString("ActionContributor.Info.source"))) {
+        columns.add(new AbstractColumn<ParamView, String>(new Model<String>(getString("ActionContributor.Info.source"))) {
             public void populateItem(Item<ICellPopulator<ParamView>> item, String componentId,
                                      final IModel<ParamView> rowModel) {
                 final ParamView param = rowModel.getObject();
@@ -151,7 +159,7 @@ public class ViewInfoPanel extends Panel {
                 item.add(new Label(componentId, new Model<String>(source)));
             }
         });
-        columns.add(new AbstractColumn<ParamView>(new Model<String>(getString("ActionContributor.Info.defaultSource"))) {
+        columns.add(new AbstractColumn<ParamView, String>(new Model<String>(getString("ActionContributor.Info.defaultSource"))) {
             public void populateItem(Item<ICellPopulator<ParamView>> item, String componentId,
                                      final IModel<ParamView> rowModel) {
                 final ParamView param = rowModel.getObject();
@@ -173,8 +181,8 @@ public class ViewInfoPanel extends Panel {
     }
 
     private void addParametersTable(ParamViewDataProvider dataProvider) {
-        List<IColumn<ParamView>> columns = createColumns();
-        DataTable<ParamView> table = new BaseTable<ParamView>("table", columns, dataProvider, 300);
+        List<IColumn<ParamView, String>> columns = createColumns();
+        DataTable<ParamView, String> table = new BaseTable<ParamView>("table", columns, dataProvider, 300);
         table.setOutputMarkupId(true);
         add(table);
     }
@@ -182,6 +190,5 @@ public class ViewInfoPanel extends Panel {
     public void setSettings(SettingsBean settings) {		
 		this.settings = settings;
 	}
-
 
 }

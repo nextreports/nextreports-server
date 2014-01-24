@@ -16,7 +16,6 @@
  */
 package ro.nextreports.server.web.core.table;
 
-
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.model.Model;
 //
@@ -28,8 +27,7 @@ import org.apache.wicket.model.StringResourceModel;
 
 import ro.nextreports.server.domain.Entity;
 
-//
-public class CreatedByColumn extends PropertyColumn<Entity> {
+public class CreatedByColumn extends PropertyColumn<Entity, String> {
 
     private static final long serialVersionUID = 3305164903913095423L;
 

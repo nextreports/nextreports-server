@@ -14,30 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ro.nextreports.server.web.dashboard.tree;
+package ro.nextreports.server.util;
+
+import java.text.Collator;
+import java.util.Comparator;
 
 import ro.nextreports.server.domain.Entity;
-import ro.nextreports.server.web.core.tree.EntityNode;
-import ro.nextreports.server.web.core.tree.EntityTreeModel;
+import ro.nextreports.server.domain.Folder;
 
-public class WidgetEntityTreeModel extends EntityTreeModel {
-	
-	private WidgetType widgetType;
-	
-	public WidgetEntityTreeModel(String rootPath, WidgetType widgetType) {
-		super(rootPath);
-		setWidgetType(widgetType);
+/**
+ * @author Decebal Suiu
+ */
+public class EntityComparator implements Comparator<Entity> {
+
+	@Override
+	public int compare(Entity o1, Entity o2) {
+		if (o1 instanceof Folder) {
+			if (o2 instanceof Folder) {
+				return Collator.getInstance().compare(o1.getName(), o2.getName());
+			} else {
+				return -1;
+			}
+		} else {
+			if (o2 instanceof Folder) {
+				return 1;
+			} else {
+				return Collator.getInstance().compare(o1.getName(), o2.getName());
+			}
+		}
 	}
 	
-	protected EntityNode createEntityNode(Entity entity) {
-		return new WidgetEntityNode(entity, widgetType);
-	}
-	
-	private void setWidgetType(WidgetType widgetType) {
-    	if (!WidgetType.isDefined(widgetType)) {
-    		throw new IllegalArgumentException("Invalid widget type : " + widgetType);
-    	}
-    	this.widgetType = widgetType;
-    }
-
 }

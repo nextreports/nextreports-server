@@ -20,7 +20,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.AbstractLink;
@@ -28,7 +27,6 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 
 import ro.nextreports.server.web.common.panel.GenericPanel;
-
 
 /**
  * @author Decebal Suiu
@@ -79,7 +77,7 @@ public class FormPanel<T> extends GenericPanel<T> {
 		form.add(okButton);
 		
 		if (useByDialog) {
-			container.add(new SimpleAttributeModifier("class", "form-container form-container-dialog"));
+			container.add(AttributeModifier.append("class", "form-container form-container-dialog"));
 		}
 	}
 

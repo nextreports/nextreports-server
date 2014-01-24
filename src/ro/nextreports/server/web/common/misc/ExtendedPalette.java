@@ -22,7 +22,8 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.form.palette.Palette;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
@@ -139,11 +140,11 @@ public class ExtendedPalette<T> extends Palette<T> {
         };
     }
 
-    @Override
+	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		
-	    response.renderJavaScriptReference(new PackageResourceReference(ExtendedPalette.class, "extendedpalette.js"));
+		response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(ExtendedPalette.class, "extendedpalette.js")));
 	}
 
 	/**

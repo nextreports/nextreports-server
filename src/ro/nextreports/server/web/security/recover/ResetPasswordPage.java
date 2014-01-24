@@ -19,7 +19,6 @@ package ro.nextreports.server.web.security.recover;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.HiddenField;
@@ -45,7 +44,6 @@ import ro.nextreports.server.web.common.form.AdvancedForm;
 import ro.nextreports.server.web.common.panel.NextFeedbackPanel;
 import ro.nextreports.server.web.core.HomePage;
 import ro.nextreports.server.web.core.settings.LogoResource;
-
 
 /**
  * @author Decebal Suiu
@@ -141,13 +139,16 @@ public class ResetPasswordPage extends WebPage {
 		});
 	}
 	
+	// TODO wicket-6
+	/*
 	//TODO: importul asta de jquery doar pentru DefaultFocusBehavior, nu e cam mult?
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		
         // add jquery.js
-        response.renderJavaScriptReference("js/jquery-1.7.2.min.js");
-	}	
+        response.render(JavaScriptHeaderItem.forUrl("js/jquery-1.7.2.min.js"));
+	}
+	*/	
 
 }

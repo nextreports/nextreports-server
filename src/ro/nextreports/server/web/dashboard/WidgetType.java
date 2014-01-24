@@ -14,18 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ro.nextreports.server.web.core.tree;
+package ro.nextreports.server.web.dashboard;
 
-import org.apache.wicket.model.IModel;
+public enum WidgetType {
 
-import ro.nextreports.server.domain.Entity;
+    CHART("Chart"),
+    TABLE("Table"),
+    ALARM("Alarm"),
+    INDICATOR("Indicator"),
+    PIVOT("Pivot");
+    
+    private final String name;
 
+    private WidgetType(String name) {
+        this.name = name;
+    }
 
-/**
- * @author Decebal Suiu
- */
-public interface EntityNode extends TreeNode {
-	
-    public IModel<Entity> getNodeModel();    
+    public String toString() {
+        return name;
+    }
+    
+    public static boolean isDefined(WidgetType widgetType) {
+    	boolean result = false;
+    	for (WidgetType wt : values()) {
+    		if (wt.toString().equals(widgetType.toString())) {
+    			result = true;
+    			break;
+    		}
+    	}
+    	return result;
+    }
 
 }

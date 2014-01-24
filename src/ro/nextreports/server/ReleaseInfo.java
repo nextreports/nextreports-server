@@ -1,5 +1,5 @@
 /* Created by JReleaseInfo AntTask from Open Source Competence Group */
-/* Creation date Wed Sep 04 13:51:56 EEST 2013 */
+/* Creation date Tue Jan 14 15:24:12 EET 2014 */
 package ro.nextreports.server;
 
 import java.util.Date;
@@ -12,11 +12,11 @@ import java.util.Date;
 public class ReleaseInfo {
 
 
-   /** buildDate (set during build process to 1378291916115L). */
-   private static Date buildDate = new Date(1378291916115L);
+   /** buildDate (set during build process to 1389705852145L). */
+   private static Date buildDate = new Date(1389705852145L);
 
    /**
-    * Get buildDate (set during build process to Wed Sep 04 13:51:56 EEST 2013).
+    * Get buildDate (set during build process to Tue Jan 14 15:24:12 EET 2014).
     * @return Date buildDate
     */
    public static final Date getBuildDate() { return buildDate; }
@@ -69,11 +69,11 @@ public class ReleaseInfo {
    public static final String getCopyright() { return copyright; }
 
 
-   /** version (set during build process to "6.2-SNAPSHOT"). */
-   private static String version = "6.2-SNAPSHOT";
+   /** version (set during build process to "7.0-SNAPSHOT"). */
+   private static String version = "7.0-SNAPSHOT";
 
    /**
-    * Get version (set during build process to "6.2-SNAPSHOT").
+    * Get version (set during build process to "7.0-SNAPSHOT").
     * @return String version
     */
    public static final String getVersion() { return version; }

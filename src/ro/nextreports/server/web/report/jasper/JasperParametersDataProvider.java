@@ -31,11 +31,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import ro.nextreports.server.domain.Report;
 import ro.nextreports.server.report.jasper.JasperParameterSource;
 import ro.nextreports.server.service.ReportService;
-import ro.nextreports.server.service.StorageService;
 
-
-//
-public class JasperParametersDataProvider extends SortableDataProvider<JasperParameterSource> {
+public class JasperParametersDataProvider extends SortableDataProvider<JasperParameterSource, String> {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -51,18 +48,22 @@ public class JasperParametersDataProvider extends SortableDataProvider<JasperPar
         Injector.get().inject(this);
     }
 
-    public Iterator<JasperParameterSource> iterator(int first, int count) {
+    @Override
+    public Iterator<JasperParameterSource> iterator(long first, long count) {
         return getParameters().iterator();
     }
 
+    @Override
     public IModel<JasperParameterSource> model(JasperParameterSource p) {
         return new Model<JasperParameterSource>(p);
     }
 
-    public int size() {
+    @Override
+    public long size() {
         return getParameters().size();
     }
 
+    @Override
     public void detach() {
         parameters = null;
     }
@@ -85,6 +86,7 @@ public class JasperParametersDataProvider extends SortableDataProvider<JasperPar
         for (Serializable ser : map.values()) {
             result.add((JasperParameterSource) ser);
         }
+        
         return result;
     }
 

@@ -27,7 +27,6 @@ import ro.nextreports.server.web.core.section.EntitySection;
 import ro.nextreports.server.web.core.section.SectionContextUtil;
 import ro.nextreports.server.web.core.section.SectionManager;
 
-
 /**
  * @author Decebal Suiu
  */

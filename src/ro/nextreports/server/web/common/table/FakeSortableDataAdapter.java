@@ -25,7 +25,7 @@ import org.apache.wicket.model.IModel;
 /**
  * @author Decebal Suiu
  */
-public class FakeSortableDataAdapter<T> extends SortableDataProvider<T> {
+public class FakeSortableDataAdapter<T> extends SortableDataProvider<T, String> {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -36,7 +36,7 @@ public class FakeSortableDataAdapter<T> extends SortableDataProvider<T> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Iterator<T> iterator(int first, int count) {
+	public Iterator<T> iterator(long first, long count) {
 		return (Iterator<T>) provider.iterator(first, count);
 	}
 
@@ -45,7 +45,8 @@ public class FakeSortableDataAdapter<T> extends SortableDataProvider<T> {
 		return provider.model((T) object);
 	}
 
-	public int size() {
+	@Override
+	public long size() {
 		return provider.size();
 	}
 

@@ -17,33 +17,38 @@
 package ro.nextreports.server.web.common.behavior;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.markup.html.form.palette.Palette;
 import org.apache.wicket.markup.html.form.FormComponent;
 
 /**
  * @author Decebal Suiu
  */
-public class ValidationMessageBehavior extends AbstractBehavior {
+public class ValidationMessageBehavior extends Behavior {
 	
+	private static final long serialVersionUID = 1L;
+
+	// TODO wicket-6
 	@Override
-	public void onRendered(Component c) {
-    	FormComponent fc = null;
-    	if (c instanceof Palette) {
-    		fc = ((Palette) c).getRecorderComponent();
-    	} else if (c instanceof FormComponent) {
-    		fc = (FormComponent) c;
+	public void afterRender(Component component) {
+		super.afterRender(component);
+		
+    	FormComponent<?> fc = null;
+    	if (component instanceof Palette) {
+    		fc = ((Palette<?>) component).getRecorderComponent();
+    	} else if (component instanceof FormComponent) {
+    		fc = (FormComponent<?>) component;
     	}
     	
     	if ((fc != null) && !fc.isValid() ) {
 			String error;
 			if (fc.hasFeedbackMessage()) {
-				error = fc.getFeedbackMessage().getMessage().toString();
+				error = fc.getFeedbackMessages().first().toString(); // ?!
 			} else {
 				error = "Your input is invalid.";
 			}
-			c.getResponse().write("<div class=\"validationMessage\">" + error + "</div>");
+			component.getResponse().write("<div class=\"validationMessage\">" + error + "</div>");
 		}
 	}
-	
+
 }

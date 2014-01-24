@@ -25,8 +25,9 @@ import ro.nextreports.server.web.core.action.ActionAjaxLink;
 import ro.nextreports.server.web.core.action.ActionContext;
 import ro.nextreports.server.web.report.ReportRunHistoryPanel;
 
-//
 public class RunHistoryActionLink extends ActionAjaxLink {
+
+	private static final long serialVersionUID = 1L;
 
 	public RunHistoryActionLink(ActionContext actionContext) {
 		super(actionContext);

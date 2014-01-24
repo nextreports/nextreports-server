@@ -44,7 +44,7 @@ public interface StorageService {
 
 	public Entity[] getEntityChildrenById(String id) throws NotFoundException;
 	
-	public Entity[] getEntityChildrenById(String id, int firstResult, int maxResults) throws NotFoundException;
+	public Entity[] getEntityChildrenById(String id, long firstResult, long maxResults) throws NotFoundException;
 
 	public Entity[] getEntitiesByClassName(String path, String className) throws NotFoundException;
 	

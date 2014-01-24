@@ -31,9 +31,7 @@ import ro.nextreports.server.domain.RunReportHistory;
 import ro.nextreports.server.domain.SchedulerJob;
 import ro.nextreports.server.service.StorageService;
 
-
-//
-public class SchedulerJobHistoryDataProvider extends SortableDataProvider<RunReportHistory> {
+public class SchedulerJobHistoryDataProvider extends SortableDataProvider<RunReportHistory, String> {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -48,15 +46,18 @@ public class SchedulerJobHistoryDataProvider extends SortableDataProvider<RunRep
     	this.job = job;
     }
 
-	public Iterator<? extends RunReportHistory> iterator(int first, int count) {
+    @Override
+	public Iterator<? extends RunReportHistory> iterator(long first, long count) {
 		return getHistories().iterator();
 	}
 
+    @Override
 	public IModel<RunReportHistory> model(RunReportHistory history) {
 		return new Model<RunReportHistory>(history);
 	}
 
-	public int size() {
+    @Override
+	public long size() {
 		return getHistories().size();
 	}
 

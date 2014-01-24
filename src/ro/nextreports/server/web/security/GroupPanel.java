@@ -16,12 +16,15 @@
  */
 package ro.nextreports.server.web.security;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.text.Collator;
 
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -31,9 +34,6 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import ro.nextreports.server.domain.Group;
 import ro.nextreports.server.domain.User;
@@ -47,13 +47,14 @@ import ro.nextreports.server.web.common.renderer.StringChoiceRenderer;
 import ro.nextreports.server.web.core.EntityBrowserPanel;
 import ro.nextreports.server.web.core.validation.DuplicationEntityValidator;
 
-
 /**
  * @author Decebal Suiu
  */
 public class GroupPanel extends Panel {
 
-    private String parentPath;
+    private static final long serialVersionUID = 1L;
+    
+	private String parentPath;
     private boolean modify;
 
     @SpringBean
@@ -170,7 +171,7 @@ public class GroupPanel extends Panel {
                 }
             };
             if (modify) {
-                createLink.add(new SimpleAttributeModifier("rawValue", "Modify"));
+                createLink.add(AttributeModifier.replace("rawValue", "Modify"));
             }
 
             add(createLink);

@@ -40,7 +40,6 @@ import org.apache.wicket.util.visit.IVisitor;
 import ro.nextreports.server.web.common.event.BulkMenuUpdateEvent;
 import ro.nextreports.server.web.common.panel.GenericPanel;
 
-
 /**
  * User: mihai.panaitescu
  * Date: 26-May-2010
@@ -57,7 +56,7 @@ public class AjaxCheckTablePanel<T> extends Panel {
     
     private List<T> selectedObjects;
 
-    public AjaxCheckTablePanel(String id, List<IColumn<T>> columns, ISortableDataProvider<T> dataProvider, int rowsPerPage) {
+    public AjaxCheckTablePanel(String id, List<IColumn<T, String>> columns, ISortableDataProvider<T, String> dataProvider, int rowsPerPage) {
         super(id);
         
         this.setOutputMarkupId(true);
@@ -147,7 +146,7 @@ public class AjaxCheckTablePanel<T> extends Panel {
     	return true;
     }
     
-    private class CheckableTableColumn extends PropertyColumn<T> {
+    private class CheckableTableColumn extends PropertyColumn<T, String> {
 
 		private static final long serialVersionUID = 1L;
 

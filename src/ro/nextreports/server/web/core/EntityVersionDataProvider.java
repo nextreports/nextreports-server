@@ -29,9 +29,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import ro.nextreports.server.domain.VersionInfo;
 import ro.nextreports.server.service.StorageService;
 
-
-//
-public class EntityVersionDataProvider extends SortableDataProvider<VersionInfo> {
+public class EntityVersionDataProvider extends SortableDataProvider<VersionInfo, String> {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -47,43 +45,45 @@ public class EntityVersionDataProvider extends SortableDataProvider<VersionInfo>
     	Injector.get().inject(this);
     }
 
-	public Iterator<? extends VersionInfo> iterator(int first, int count) {
+    @Override
+	public Iterator<? extends VersionInfo> iterator(long first, long count) {
 		return getVersions().iterator();
 	}
 
+    @Override
 	public IModel<VersionInfo> model(VersionInfo version) {
 		return new Model<VersionInfo>(version);
 	}
 
-	public int size() {
+    @Override
+	public long size() {
 		return getVersions().size();
 	}
 
+    @Override
 	public void detach() {
 		versions = null;
 	}
 
     private List<VersionInfo> getVersions() {
-        if (versions == null) {
-        	try {
-				versions = getReportVersions();
-			} catch (Exception e) {
-				// TODO
-				throw new RuntimeException(e);
-			}
-        }
+    	if (versions == null) {
+    		try {
+    			versions = getReportVersions();
+    		} catch (Exception e) {
+    			// TODO
+    			throw new RuntimeException(e);
+    		}
+    	}
 
-        System.out.println("get " + versions.size() + " versions");
+    	System.out.println("get " + versions.size() + " versions");
 
-        return versions;
+    	return versions;
     }
 
-   private List<VersionInfo> getReportVersions() throws Exception {
-        VersionInfo[] array = storageService.getVersionInfos(entityId);
-        return Arrays.asList(array);
+    private List<VersionInfo> getReportVersions() throws Exception {
+    	VersionInfo[] array = storageService.getVersionInfos(entityId);
+    	return Arrays.asList(array);
     }
-
-
 
 }
 

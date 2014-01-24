@@ -81,10 +81,10 @@ import ro.nextreports.engine.util.ObjectCloner;
 
 public class WidgetPopupMenuModel extends LoadableDetachableModel<List<MenuItem>> {
 	
-	public static final int POPUP_WIDTH = 700;
-	public static final int POPUP_HEIGHT = 400;
-	
 	private static final long serialVersionUID = 1L;
+	
+	public static final int POPUP_WIDTH = 700;
+	public static final int POPUP_HEIGHT = 400;	
 
 	@SpringBean
 	private StorageService storageService;
@@ -303,7 +303,7 @@ public class WidgetPopupMenuModel extends LoadableDetachableModel<List<MenuItem>
 		if (oldRefreshTime != refreshTime) {			
 			for (Behavior behavior : widgetPanel.getBehaviors()) {
 				if (behavior instanceof AjaxSelfUpdatingTimerBehavior) {
-					((AjaxSelfUpdatingTimerBehavior) behavior).stop();
+					((AjaxSelfUpdatingTimerBehavior) behavior).stop(target);
 					// do not remove the behavior : after changing , the event is called one more time 
 					// on the client so it has to be present ...
 				}

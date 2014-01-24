@@ -46,7 +46,6 @@ import ro.nextreports.server.web.core.section.tab.ImageTabbedPanel;
 import ro.nextreports.server.web.core.section.tab.SectionTab;
 import ro.nextreports.server.web.language.LanguageManager;
 
-
 /**
  * @author Decebal Suiu
  */
@@ -54,8 +53,8 @@ public class HomePage extends BasePage {
 
 	private static final long serialVersionUID = 1L;
 	
-	private transient IPushService pushService;
-	private IPushNode<Message> pushNode;
+//	private transient IPushService pushService;
+//	private IPushNode<Message> pushNode;
 	private Label growlLabel;
 	
 	@SpringBean
@@ -90,11 +89,14 @@ public class HomePage extends BasePage {
 		super.onInitialize();
 		
     	// push
-    	initPush();
+		// TODO wicket-6
+//    	initPush();
     	
     	// create messages
     	//createTestMessages();
     	
+		// TODO wicket-6
+		/*
     	reportService.addReportListener(new ReportListener() {
 			
 			@Override
@@ -107,6 +109,7 @@ public class HomePage extends BasePage {
 				}
 			}
 		});
+		*/
 	}
 
 	private void initPush() {
@@ -124,11 +127,14 @@ public class HomePage extends BasePage {
 			
 	    };
 
+	    // TODO wicket-6
+	    /*
 	     // obtain a reference to a Push service implementation
 	    pushService = TimerPushService.get();
 
 		// install push node into this panel
-	    pushNode = pushService.installNode(this, handler);	    
+	    pushNode = pushService.installNode(this, handler);
+	    */	    
 	}
 	
 	private Message createMessage(ReportResultEvent event) {				

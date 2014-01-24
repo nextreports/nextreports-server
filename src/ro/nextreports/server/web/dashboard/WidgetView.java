@@ -16,11 +16,10 @@
  */
 package ro.nextreports.server.web.dashboard;
 
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.model.IModel;
 
 import ro.nextreports.server.web.common.panel.GenericPanel;
-
 
 /**
  * @author Decebal Suiu
@@ -35,7 +34,7 @@ public class WidgetView extends GenericPanel<Widget> {
 		setOutputMarkupId(true);
 		
 		if ( (getWidget() != null) && getWidget().isCollapsed()) {
-			add(new SimpleAttributeModifier("style", "display: none"));
+			add(AttributeAppender.append("style", "display: none"));
 		}		
 	}
 	

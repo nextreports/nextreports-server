@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 package ro.nextreports.server.dao;
+
 import java.util.List;
 
 import ro.nextreports.server.cache.Cache;
@@ -27,7 +28,6 @@ import ro.nextreports.server.domain.VersionInfo;
 import ro.nextreports.server.exception.DuplicationException;
 import ro.nextreports.server.exception.NotFoundException;
 import ro.nextreports.server.exception.ReferenceException;
-
 
 /**
  * @author Decebal Suiu
@@ -50,7 +50,7 @@ public interface StorageDao {
 
     public Entity[] getEntityChildrenById(String id) throws NotFoundException;
     
-    public Entity[] getEntityChildrenById(String id, int firstResult, int maxResults) throws NotFoundException;
+    public Entity[] getEntityChildrenById(String id, long firstResult, long maxResults) throws NotFoundException;
 
     public String addEntity(Entity entity) throws DuplicationException;
     

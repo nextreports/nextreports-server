@@ -21,18 +21,18 @@ import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
-import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ro.nextreports.server.domain.Chart;
@@ -44,11 +44,12 @@ import ro.nextreports.server.web.common.misc.AjaxConfirmLink;
 import ro.nextreports.server.web.common.table.BaseTable;
 import ro.nextreports.server.web.core.EntityBrowserPanel;
 
-
 public class DrillDownEntityPanel extends Panel {
 
-    private Entity entity;
-    private DataTable<DrillDownEntity> table;
+    private static final long serialVersionUID = 1L;
+    
+	private Entity entity;
+    private DataTable<DrillDownEntity, String> table;
     private DrillDownEntitiesDataProvider dataProvider;
     private ModalWindow dialog;
 
@@ -57,12 +58,13 @@ public class DrillDownEntityPanel extends Panel {
 
     public DrillDownEntityPanel(String id, final Entity entity) {
         super(id);
+        
         this.entity = entity;
+        
         init();
     }
 
     private void init() {
-
         add(new Label("legend", getString("ActionContributor.Drill.name")));
         add(new Label("entityName", new Model<String>(entity.getName())));
 
@@ -159,8 +161,8 @@ public class DrillDownEntityPanel extends Panel {
     }
 
     private void addTable() {
-        List<IColumn<DrillDownEntity>> columns = new ArrayList<IColumn<DrillDownEntity>>();
-        columns.add(new AbstractColumn<DrillDownEntity>(new Model<String>(getString("ActionContributor.Drill.index"))) {
+        List<IColumn<DrillDownEntity, String>> columns = new ArrayList<IColumn<DrillDownEntity, String>>();
+        columns.add(new AbstractColumn<DrillDownEntity, String>(new Model<String>(getString("ActionContributor.Drill.index"))) {
 
             @Override
             public String getCssClass() {
@@ -172,11 +174,12 @@ public class DrillDownEntityPanel extends Panel {
                 final DrillDownEntity drill = rowModel.getObject();
                 final String index = String.valueOf(drill.getIndex());
                 item.add(new Label(componentId, new Model<String>(index)));
-                item.add(new SimpleAttributeModifier("class", "name-col"));
+                item.add(AttributeAppender.append("class", "name-col"));
             }
+            
         });
 
-        columns.add(new AbstractColumn<DrillDownEntity>(new Model<String>(getString("ActionContributor.Drill.target"))) {
+        columns.add(new AbstractColumn<DrillDownEntity, String>(new Model<String>(getString("ActionContributor.Drill.target"))) {
 
             public void populateItem(Item<ICellPopulator<DrillDownEntity>> item, String componentId,
                                      final IModel<DrillDownEntity> rowModel) {
@@ -191,7 +194,7 @@ public class DrillDownEntityPanel extends Panel {
             }
         });
 
-        columns.add(new AbstractColumn<DrillDownEntity>(new Model<String>(getString("ActionContributor.Drill.parameter"))) {
+        columns.add(new AbstractColumn<DrillDownEntity, String>(new Model<String>(getString("ActionContributor.Drill.parameter"))) {
 
             public void populateItem(Item<ICellPopulator<DrillDownEntity>> item, String componentId,
                                      final IModel<DrillDownEntity> rowModel) {
@@ -204,7 +207,7 @@ public class DrillDownEntityPanel extends Panel {
             }
         });
         
-        columns.add(new AbstractColumn<DrillDownEntity>(new Model<String>(getString("ActionContributor.Drill.type"))) {
+        columns.add(new AbstractColumn<DrillDownEntity, String>(new Model<String>(getString("ActionContributor.Drill.type"))) {
 
     		public void populateItem(Item<ICellPopulator<DrillDownEntity>> item, String componentId,
                                  final IModel<DrillDownEntity> rowModel) {
@@ -222,7 +225,7 @@ public class DrillDownEntityPanel extends Panel {
     	});
         
         
-        columns.add(new AbstractColumn<DrillDownEntity>(new Model<String>(getString("ActionContributor.Drill.column"))) {
+        columns.add(new AbstractColumn<DrillDownEntity, String>(new Model<String>(getString("ActionContributor.Drill.column"))) {
 
         		public void populateItem(Item<ICellPopulator<DrillDownEntity>> item, String componentId,
                                      final IModel<DrillDownEntity> rowModel) {

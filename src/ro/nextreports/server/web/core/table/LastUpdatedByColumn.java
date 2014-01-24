@@ -27,7 +27,7 @@ import ro.nextreports.server.domain.Entity;
  * Date: 21-May-2010
  * Time: 11:50:27
  */
-public class LastUpdatedByColumn  extends PropertyColumn<Entity> {
+public class LastUpdatedByColumn  extends PropertyColumn<Entity, String> {
 
     private static final long serialVersionUID = -3389104734723971295L;
 

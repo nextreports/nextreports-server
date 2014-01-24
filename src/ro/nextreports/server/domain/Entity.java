@@ -25,7 +25,6 @@ import org.jcrom.annotations.JcrProperty;
 
 import ro.nextreports.server.security.Securizable;
 
-
 /**
  * @author Decebal Suiu
  */

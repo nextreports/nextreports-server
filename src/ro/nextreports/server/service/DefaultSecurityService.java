@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.protocol.HTTP;
-import org.apache.wicket.request.UrlEncoder;
+import org.apache.wicket.util.encoding.UrlEncoder;
 import org.jasypt.digest.StringDigester;
 import org.jasypt.encryption.StringEncryptor;
 import org.springframework.beans.factory.annotation.Required;
@@ -39,7 +39,6 @@ import ro.nextreports.server.security.Profile;
 import ro.nextreports.server.util.Pair;
 import ro.nextreports.server.util.PermissionUtil;
 import ro.nextreports.server.util.ServerUtil;
-
 
 /**
  * @author Decebal Suiu

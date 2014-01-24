@@ -16,10 +16,8 @@
  */
 package ro.nextreports.server.web.core;
 
-import java.text.Collator;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -31,9 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ro.nextreports.server.domain.Entity;
-import ro.nextreports.server.domain.Folder;
 import ro.nextreports.server.service.StorageService;
-
+import ro.nextreports.server.util.EntityComparator;
 
 /**
  * @author Decebal Suiu
@@ -56,18 +53,22 @@ public class EntityDataProvider implements IDataProvider<Entity> {
     	Injector.get().inject(this);
     }
     
-	public Iterator<? extends Entity> iterator(int first, int count) {
+    @Override
+	public Iterator<? extends Entity> iterator(long first, long count) {
 		return getChildren().iterator();
 	}
 
+	@Override
 	public IModel<Entity> model(Entity entity) {
 		return new EntityModel(entity.getId());
 	}
 
-	public int size() {
+	@Override
+	public long size() {
 		return getChildren().size();
 	}
 
+	@Override
 	public void detach() {
 		children = null;
 	}
@@ -96,24 +97,8 @@ public class EntityDataProvider implements IDataProvider<Entity> {
         	LOG.debug("Load " + entities.length + " entities for '" + path + "' in " + time + " ms");
         }
         List<Entity> result = Arrays.asList(entities);
-        Collections.sort(result, new Comparator<Entity>() {
-
-            public int compare(Entity o1, Entity o2) {
-                if (o1 instanceof Folder) {
-                    if (o2 instanceof Folder) {
-                        return Collator.getInstance().compare(o1.getName(),o2.getName());
-                    } else {
-                        return -1;
-                    }
-                } else {
-                    if (o2 instanceof Folder) {
-                        return 1;
-                    } else {
-                        return Collator.getInstance().compare(o1.getName(),o2.getName());
-                    }
-                }
-            }
-        });
+        Collections.sort(result, new EntityComparator());
+        
         return result;
     }
 

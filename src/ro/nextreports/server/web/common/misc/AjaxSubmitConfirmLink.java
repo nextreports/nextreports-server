@@ -16,17 +16,16 @@
  */
 package ro.nextreports.server.web.common.misc;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.ajax.IAjaxCallDecorator;
-import org.apache.wicket.ajax.calldecorator.AjaxPreprocessingCallDecorator;
 import org.apache.wicket.markup.html.form.Form;
-//
+
 // Created by IntelliJ IDEA.
 // User: mihai.panaitescu
 // Date: 08-Sep-2009
 // Time: 16:40:17
-
-//
 public abstract class AjaxSubmitConfirmLink<T> extends AjaxSubmitLink {
 
     private static final long serialVersionUID = 1010550444630392385L;
@@ -60,29 +59,18 @@ public abstract class AjaxSubmitConfirmLink<T> extends AjaxSubmitLink {
 	}
 
 	@Override
-	protected IAjaxCallDecorator getAjaxCallDecorator() {
-		return new ConfirmAjaxCallDecorator(super.getAjaxCallDecorator());
-	}
-
-	class ConfirmAjaxCallDecorator extends AjaxPreprocessingCallDecorator {
-
-		private static final long serialVersionUID = 2155228645806565335L;
-
-		public ConfirmAjaxCallDecorator(IAjaxCallDecorator delegate) {
-			super(delegate);
+	protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+		super.updateAjaxAttributes(attributes);
+		
+		if (StringUtils.isNotEmpty(getMessage()) && showDialog()) {
+			String message = getMessage().replaceAll("'", "\"");
+			StringBuilder precondition = new StringBuilder("if(!confirm('").append(message).append("')) { return false; };");
+			
+			AjaxCallListener listener = new AjaxCallListener();
+			listener.onPrecondition(precondition);
+			
+			attributes.getAjaxCallListeners().add(listener);
 		}
-
-		@Override
-		public CharSequence preDecorateScript(CharSequence script) {
-			if (showDialog()) {
-				// doesn't work if you have ' chars in the message
-				String message = getMessage().replaceAll("'", "\"");
-				String extraJs = "if (!confirm('" + message + "')) return false; ";
-				return extraJs + script;
-			}
-
-			return script;
-		}
-
 	}
+	
 }

@@ -32,11 +32,10 @@ import ro.nextreports.server.domain.AclEntry;
 import ro.nextreports.server.service.SecurityService;
 import ro.nextreports.server.web.report.ParamView;
 
-
 /**
  * @author Decebal Suiu
  */
-public class AclEntryDataProvider extends SortableDataProvider<AclEntry> {
+public class AclEntryDataProvider extends SortableDataProvider<AclEntry, String> {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -51,7 +50,8 @@ public class AclEntryDataProvider extends SortableDataProvider<AclEntry> {
     	this.entityId = entityId;
     }
 
-	public Iterator<? extends AclEntry> iterator(int first, int count) {
+    @Override
+	public Iterator<? extends AclEntry> iterator(long first, long count) {
 		return getAclEntries().iterator();
 	}
 
@@ -59,7 +59,8 @@ public class AclEntryDataProvider extends SortableDataProvider<AclEntry> {
 		return new Model<ParamView>(version);
 	}
 
-	public int size() {
+	@Override
+	public long size() {
 		return getAclEntries().size();
 	}
 

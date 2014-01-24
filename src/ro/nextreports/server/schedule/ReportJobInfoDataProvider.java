@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.IModel;
@@ -29,11 +30,10 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import ro.nextreports.server.domain.ReportJobInfo;
 import ro.nextreports.server.service.SchedulerService;
 
-
 /**
  * @author Decebal Suiu
  */
-public class ReportJobInfoDataProvider extends SortableDataProvider<ReportJobInfo> {
+public class ReportJobInfoDataProvider extends SortableDataProvider<ReportJobInfo, String> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -46,15 +46,18 @@ public class ReportJobInfoDataProvider extends SortableDataProvider<ReportJobInf
     	Injector.get().inject(this);
     }
     
-	public Iterator<? extends ReportJobInfo> iterator(int first, int count) {
+    @Override
+	public Iterator<? extends ReportJobInfo> iterator(long first, long count) {		
 		return getChildren().iterator();
 	}
 
+	@Override
 	public IModel<ReportJobInfo> model(ReportJobInfo entity) {
 		return new Model<ReportJobInfo>(entity);
 	}
 
-	public int size() {
+	@Override
+	public long size() {
 		return getChildren().size();
 	}
 
@@ -69,7 +72,7 @@ public class ReportJobInfoDataProvider extends SortableDataProvider<ReportJobInf
 				children = loadChildren();
 			} catch (Exception e) {
 				// TODO
-				throw new RuntimeException(e);
+				throw new WicketRuntimeException(e);
 			}
         }
         

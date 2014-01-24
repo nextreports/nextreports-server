@@ -29,6 +29,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
@@ -38,7 +39,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColu
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.extensions.yui.calendar.DateField;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Check;
@@ -56,13 +57,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.validation.validator.MaximumValidator;
-import org.apache.wicket.validation.validator.MinimumValidator;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.validation.validator.RangeValidator;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import ro.nextreports.engine.util.DateUtil;
 import ro.nextreports.server.StorageConstants;
 import ro.nextreports.server.domain.DateRange;
 import ro.nextreports.server.domain.Entity;
@@ -88,8 +88,8 @@ import ro.nextreports.server.web.common.table.ImageLinkPropertyColumn;
 import ro.nextreports.server.web.common.table.SortableDataAdapter;
 import ro.nextreports.server.web.core.BasePage;
 import ro.nextreports.server.web.core.EntityBrowserPanel;
-
-import ro.nextreports.engine.util.DateUtil;
+import ro.nextreports.server.web.report.RunHistoryPanel.CheckBoxHeaderPanel;
+import ro.nextreports.server.web.report.RunHistoryPanel.CheckBoxPanel;
 
 //
 public class RunHistoryPanel extends Panel {
@@ -106,7 +106,7 @@ public class RunHistoryPanel extends Panel {
     private SecurityService securityService;
 
     private RunReportHistoryDataProvider runHistoryDataProvider;
-    private DataTable<RunReportHistory> runHistoryTable;
+    private DataTable<RunReportHistory, String> runHistoryTable;
 
     private CheckGroup<RunReportHistory> group;
     private Date time;   
@@ -269,8 +269,8 @@ public class RunHistoryPanel extends Panel {
         form.add(rowsLabel);
         TextField<Integer> rowsTextField = new TextField<Integer>("rows", new PropertyModel(this, "rowsPerPage"));
         rowsTextField.setRequired(true);
-        rowsTextField.add(new MinimumValidator(5));
-        rowsTextField.add(new MaximumValidator(1000));
+        rowsTextField.add(RangeValidator.minimum(5));
+        rowsTextField.add(RangeValidator.maximum(1000));
         rowsTextField.setLabel(Model.of(getString("ActionContributor.RunHistory.rows")));
         form.add(rowsTextField);
         
@@ -372,20 +372,20 @@ public class RunHistoryPanel extends Panel {
     	target.add(feedbackPanel);
     }
 
-	public DataTable<RunReportHistory> getRunHistoryTable() {
+	public DataTable<RunReportHistory, String> getRunHistoryTable() {
 		return runHistoryTable;
 	}
 
-	protected DataTable<RunReportHistory> createRunHistoryTable(RunReportHistoryDataProvider dataProvider) {
-    	SortableDataProvider<RunReportHistory> sortableDataProvider = new SortableDataAdapter<RunReportHistory>(dataProvider);
+	protected DataTable<RunReportHistory, String> createRunHistoryTable(RunReportHistoryDataProvider dataProvider) {
+    	SortableDataProvider<RunReportHistory, String> sortableDataProvider = new SortableDataAdapter<RunReportHistory>(dataProvider);
     	sortableDataProvider.setSort("endDate", SortOrder.DESCENDING);
         return new BaseTable<RunReportHistory>("runHistoryTable", createHistoryTableColumns(), sortableDataProvider, rowsPerPage);
     }
 
-    protected List<IColumn<RunReportHistory>> createHistoryTableColumns() {
-        List<IColumn<RunReportHistory>> columns = new ArrayList<IColumn<RunReportHistory>>();
+    protected List<IColumn<RunReportHistory, String>> createHistoryTableColumns() {
+        List<IColumn<RunReportHistory, String>> columns = new ArrayList<IColumn<RunReportHistory, String>>();
 
-        columns.add(new AbstractColumn<RunReportHistory>(new Model<String>(getString("ActionContributor.EditParameters.parameterSelect"))) {
+        columns.add(new AbstractColumn<RunReportHistory, String>(new Model<String>(getString("ActionContributor.EditParameters.parameterSelect"))) {
 
             public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId, IModel<RunReportHistory> rowModel) {
                 try {
@@ -408,7 +408,7 @@ public class RunHistoryPanel extends Panel {
 
         });
 
-        columns.add(new PropertyColumn<RunReportHistory>(new Model<String>(getString("Report")), "path", "path") {
+        columns.add(new PropertyColumn<RunReportHistory, String>(new Model<String>(getString("Report")), "path", "path") {
 
             @Override
 			public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId, IModel<RunReportHistory> rowModel) {
@@ -422,7 +422,7 @@ public class RunHistoryPanel extends Panel {
 
         });
 
-        columns.add(new AbstractColumn<RunReportHistory>(new Model<String>(getString("ActionContributor.DataSource.url"))) {
+        columns.add(new AbstractColumn<RunReportHistory, String>(new Model<String>(getString("ActionContributor.DataSource.url"))) {
 
             public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId,
                                      final IModel<RunReportHistory> rowModel) {
@@ -440,7 +440,7 @@ public class RunHistoryPanel extends Panel {
 
         });
 
-        columns.add(new PropertyColumn<RunReportHistory>(new Model<String>(getString("DashboardNavigationPanel.owner")), "runnerId", "runnerId") {
+        columns.add(new PropertyColumn<RunReportHistory, String>(new Model<String>(getString("DashboardNavigationPanel.owner")), "runnerId", "runnerId") {
 
             @Override
             protected IModel<?> createLabelModel(IModel<RunReportHistory> rowModel) {
@@ -462,14 +462,14 @@ public class RunHistoryPanel extends Panel {
             }
 
         });
-        columns.add(new PropertyColumn<RunReportHistory>(new Model<String>(getString("ActionContributor.RunHistory.type")), "runnerType", "runnerType") {
+        columns.add(new PropertyColumn<RunReportHistory, String>(new Model<String>(getString("ActionContributor.RunHistory.type")), "runnerType", "runnerType") {
         	@Override
             public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId, IModel<RunReportHistory> rowModel) {                
                 item.add(new Label(componentId, getString("MonitorPanel.runnerType." + rowModel.getObject().getRunnerType())));
             }
         });
         columns.add(new DateColumn<RunReportHistory>(new Model<String>(getString("startDate")), "startDate", "startDate"));
-        columns.add(new PropertyColumn<RunReportHistory>(new Model<String>(getString("duration")), "duration", "duration") {
+        columns.add(new PropertyColumn<RunReportHistory, String>(new Model<String>(getString("duration")), "duration", "duration") {
 
             @Override
             public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId, IModel<RunReportHistory> rowModel) {

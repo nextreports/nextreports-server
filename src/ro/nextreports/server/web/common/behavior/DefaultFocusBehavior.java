@@ -18,14 +18,13 @@ package ro.nextreports.server.web.common.behavior;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.form.FormComponent;
 
 /**
  * @author Decebal Suiu
- * @see http
- *      ://apache-wicket.1842946.n4.nabble.com/Default-Focus-Behavior-td1868610
- *      .html
+ * @see http://apache-wicket.1842946.n4.nabble.com/Default-Focus-Behavior-td1868610.html
  */
 public class DefaultFocusBehavior extends Behavior {
 
@@ -42,7 +41,8 @@ public class DefaultFocusBehavior extends Behavior {
 	@Override
 	public void renderHead(Component component, IHeaderResponse response) {
 		super.renderHead(component, response);
-		response.renderOnLoadJavaScript("document.getElementById('" + component.getMarkupId() + "').focus();");
+		
+		response.render(OnLoadHeaderItem.forScript("document.getElementById('" + component.getMarkupId() + "').focus();"));
 	}
 
 }

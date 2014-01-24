@@ -59,18 +59,22 @@ public class RunReportHistoryDataProvider implements IDataProvider<RunReportHist
         this(null);
     }
     
-    public Iterator<? extends RunReportHistory> iterator(int first, int count) {
+    @Override
+    public Iterator<? extends RunReportHistory> iterator(long first, long count) {
 		return getChildren().iterator();
 	}
 
+    @Override
 	public IModel<RunReportHistory> model(RunReportHistory entity) {
 		return new Model<RunReportHistory>(entity);
 	}
 
-	public int size() {
+	@Override
+	public long size() {
 		return getChildren().size();
 	}
 
+	@Override
 	public void detach() {
 		children = null;
 	}

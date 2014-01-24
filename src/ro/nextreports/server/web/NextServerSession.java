@@ -195,14 +195,16 @@ public class NextServerSession extends WebSession {
     //   Distribution ok and test buttons are generated a message (AbstractDestinationPanel.java)
     //   Delete History not visible (RunHistoryPanel.java) 
     public boolean isDemo() {
-       if (!isSignedIn()) {
+		if (!isSignedIn()) {
 			return false;
 		}
-        Settings settings = storageService.getSettings();
-        String baseUrl = settings.getBaseUrl();
-				        
-        return getUser().getName().equals("demo") && "http://demo.next-reports.com".equals(baseUrl);
-    }
+		
+		Settings settings = storageService.getSettings();
+		String baseUrl = settings.getBaseUrl();
+
+		return getUser().getName().equals("demo")
+				&& "http://demo.next-reports.com".equals(baseUrl);
+	}
 
     public PasteContext getPasteContext() {
         return pasteContext;

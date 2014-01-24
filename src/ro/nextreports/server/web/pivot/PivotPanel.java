@@ -22,7 +22,9 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.event.IEvent;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -33,7 +35,6 @@ import ro.nextreports.server.pivot.DefaultPivotModel;
 import ro.nextreports.server.pivot.PivotDataSource;
 import ro.nextreports.server.pivot.PivotField;
 import ro.nextreports.server.pivot.PivotModel;
-
 
 /**
  * @author Decebal Suiu
@@ -139,8 +140,8 @@ public class PivotPanel extends Panel {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		
-        response.renderJavaScriptReference(new PackageResourceReference(PivotPanel.class, "pivot.js"));
-        response.renderCSSReference(new PackageResourceReference(PivotPanel.class, "pivot.css"));
+        response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(PivotPanel.class, "pivot.js")));
+        response.render(CssHeaderItem.forReference(new PackageResourceReference(PivotPanel.class, "pivot.css")));
 	}
 
     protected PivotModel createPivotModel(PivotDataSource pivotDataSource) {

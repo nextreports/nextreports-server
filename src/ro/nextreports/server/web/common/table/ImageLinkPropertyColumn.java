@@ -28,7 +28,7 @@ import ro.nextreports.server.settings.SettingsBean;
 import ro.nextreports.server.web.common.panel.AbstractImageAjaxLinkPanel;
 
 
-public class ImageLinkPropertyColumn<T> extends AbstractColumn<T> {
+public class ImageLinkPropertyColumn<T> extends AbstractColumn<T, String> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -41,6 +41,7 @@ public class ImageLinkPropertyColumn<T> extends AbstractColumn<T> {
 		Injector.get().inject(this);
 	}	
 
+    @Override
 	public void populateItem(Item<ICellPopulator<T>> item, String componentId, final IModel<T> rowModel) {
         item.add(new AbstractImageAjaxLinkPanel(componentId) {
 

@@ -27,6 +27,8 @@ import org.apache.wicket.markup.html.image.resource.RenderedDynamicImageResource
 
 public class AlarmDynamicImageResource extends RenderedDynamicImageResource {
 
+	private static final long serialVersionUID = 1L;
+	
 	private int x = 10; // top-bottom padding
 	private int d = 3;  // distance between circle and border
 	private int radius;
@@ -38,31 +40,33 @@ public class AlarmDynamicImageResource extends RenderedDynamicImageResource {
 
 	public AlarmDynamicImageResource(int size, Color color) {
 		super(size, size);
+		
 		this.size = size;
+		this.color = color;
+		
 		radius = (size - 2 * x) / 2;
 		circle = new Ellipse2D.Double(x, x, 2 * radius, 2 * radius);
 		border = new Ellipse2D.Double(x - d, x - d, 2 * radius + 2 * d, 2 * radius + 2 * d);
-		this.color = color;
 	}
 
-	protected boolean render(Graphics2D g2d) {
-		
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+	@Override
+	protected boolean render(Graphics2D graphics, Attributes attributes) {
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		graphics.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-		g2d.setPaint(Color.WHITE);
+		graphics.setPaint(Color.WHITE);
 		Rectangle rectangle = new Rectangle(0, 0, getWidth(), getHeight());
-		g2d.fill(rectangle);
+		graphics.fill(rectangle);
 
 		if (color != null) {
-			g2d.setPaint(new GradientPaint(size / 4, size / 4, Color.WHITE,
+			graphics.setPaint(new GradientPaint(size / 4, size / 4, Color.WHITE,
 					size - 2 * x, size - 2 * x, color, false));
 		}
-		g2d.fill(circle);
-		g2d.setPaint(Color.GRAY);
-		g2d.draw(circle);
-		g2d.setPaint(Color.GRAY);
-		g2d.draw(border);
+		graphics.fill(circle);
+		graphics.setPaint(Color.GRAY);
+		graphics.draw(circle);
+		graphics.setPaint(Color.GRAY);
+		graphics.draw(border);
 
 		return true;
 	}				

@@ -27,7 +27,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.validation.validator.MinimumValidator;
+import org.apache.wicket.validation.validator.RangeValidator;
 
 import ro.nextreports.server.cache.Cacheable;
 import ro.nextreports.server.domain.Entity;
@@ -35,8 +35,9 @@ import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.web.common.form.FormContentPanel;
 import ro.nextreports.server.web.core.EntityBrowserPanel;
 
-
 public class CacheSettingsPanel extends FormContentPanel {
+	
+	private static final long serialVersionUID = 1L;
 	
 	private List<Entity> list;
 	private int expirationTime = 0;
@@ -86,7 +87,7 @@ public class CacheSettingsPanel extends FormContentPanel {
         TextField<Integer> timeField = new TextField<Integer>("timeField", new PropertyModel<Integer>(this, "expirationTime"));
     	timeField.setLabel(new Model<String>(getString("ActionContributor.Cache.expiration")));
     	timeField.setRequired(true);    
-    	timeField.add(new MinimumValidator(1));
+    	timeField.add(RangeValidator.minimum(1));
     	container.add(timeField);
     	
     	add(container);

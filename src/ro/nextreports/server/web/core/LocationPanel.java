@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -42,9 +42,8 @@ import ro.nextreports.server.web.core.section.EntitySection;
 import ro.nextreports.server.web.core.section.SectionContextUtil;
 import ro.nextreports.server.web.core.section.SectionManager;
 
-
 /**
- * @author decebal
+ * @author Decebal Suiu
  */
 public class LocationPanel extends GenericPanel<Entity> {
 
@@ -67,12 +66,16 @@ public class LocationPanel extends GenericPanel<Entity> {
         
         add(new ListView<String>("location", new LocationModel()) {
 
-            @Override
+			private static final long serialVersionUID = 1L;
+
+			@Override
             protected void populateItem(ListItem<String> item) {
             	final String path = item.getModelObject();
                 AjaxLink<String> link = new AjaxLink<String>("link", new Model<String>(path)) {
 
-                    @Override
+					private static final long serialVersionUID = 1L;
+
+					@Override
                     public void onClick(AjaxRequestTarget target) {
                     	Entity entity;
                 		try {
@@ -89,7 +92,7 @@ public class LocationPanel extends GenericPanel<Entity> {
                 item.add(link);
                 if (SectionContextUtil.getCurrentPath(sectionId).equals(path)) {
                     // is last
-                    item.add(new SimpleAttributeModifier("class", "bread-current"));
+                    item.add(AttributeAppender.append("class", "bread-current"));
                 }
             }
 
@@ -114,7 +117,7 @@ public class LocationPanel extends GenericPanel<Entity> {
 		}
     }
     
-    class LocationModel extends LoadableDetachableModel<List<String>> {
+    private class LocationModel extends LoadableDetachableModel<List<String>> {
 
 		private static final long serialVersionUID = 1L;
 
@@ -153,7 +156,7 @@ public class LocationPanel extends GenericPanel<Entity> {
     	
     }
     
-    class LookForModel extends LoadableDetachableModel<String> {
+    private class LookForModel extends LoadableDetachableModel<String> {
     	
 		private static final long serialVersionUID = 1L;
 

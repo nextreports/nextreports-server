@@ -17,13 +17,14 @@
 package ro.nextreports.server.web.core;
 
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
 
 import ro.nextreports.server.web.NextServerSession;
 import ro.nextreports.server.web.common.misc.AjaxBusyIndicator;
-
 
 /**
  * @author Decebal Suiu
@@ -76,20 +77,18 @@ public abstract class BasePage extends SecurePage /*implements IAjaxIndicatorAwa
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		
-        // add jquery.js
-//		response.renderJavaScriptReference("js/jquery-1.7.2.min.js");
-        
+		        
         // add nextserver.js
-        response.renderJavaScriptReference("js/nextserver.js");
+        response.render(JavaScriptHeaderItem.forUrl("js/nextserver.js"));
 
         // add busy-indicator.js
-		response.renderJavaScriptReference(new PackageResourceReference(BasePage.class, "busy-indicator.js"));
+        // TODO wicket-6
+//		response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(BasePage.class, "busy-indicator.js")));
 		        
         if (isInternetExplorer()) {        	        	
-        	response.renderCSSReference("css/style-ie.css");
-            response.renderJavaScriptReference("js/jquery.pngFix.js");
-            response.renderJavaScriptReference("js/pngFix.js");
+        	response.render(CssHeaderItem.forUrl("css/style-ie.css"));
+            response.render(JavaScriptHeaderItem.forUrl("js/jquery.pngFix.js"));
+            response.render(JavaScriptHeaderItem.forUrl("js/pngFix.js"));
         }
 	}
 

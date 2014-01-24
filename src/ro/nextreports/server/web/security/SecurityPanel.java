@@ -16,17 +16,17 @@
  */
 package ro.nextreports.server.web.security;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Collections;
 import java.util.Comparator;
-import java.text.Collator;
+import java.util.List;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
@@ -54,17 +54,13 @@ import ro.nextreports.server.web.common.panel.AbstractImageLabelPanel;
 import ro.nextreports.server.web.common.table.BaseTable;
 import ro.nextreports.server.web.common.table.BooleanImagePropertyColumn;
 import ro.nextreports.server.web.core.StackPanel;
-import ro.nextreports.server.web.security.AclEntryDataProvider;
-import ro.nextreports.server.web.security.GroupAclEntryPanel;
-import ro.nextreports.server.web.security.UserAclEntryPanel;
-
 
 /**
  * @author Decebal Suiu
  */
 public class SecurityPanel extends Panel {
 
-    private DataTable<AclEntry> table;
+    private DataTable<AclEntry, String> table;
     private ModalWindow dialog;
 
     @SpringBean
@@ -78,7 +74,7 @@ public class SecurityPanel extends Panel {
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
 
-        List<IColumn<AclEntry>> columns = new ArrayList<IColumn<AclEntry>>();
+        List<IColumn<AclEntry, String>> columns = new ArrayList<IColumn<AclEntry, String>>();
         columns.add(new NameColumn());
         columns.add(new ActionsColumn());
         columns.add(new TypeColumn());
@@ -269,7 +265,7 @@ public class SecurityPanel extends Panel {
         return result;
     }
 
-    class NameColumn extends AbstractColumn<AclEntry> {
+    private class NameColumn extends AbstractColumn<AclEntry, String> {
 
         public NameColumn() {
             super(new Model<String>(getString("NameColumn.name")));
@@ -302,12 +298,12 @@ public class SecurityPanel extends Panel {
 
             };
             cellItem.add(component);
-            cellItem.add(new SimpleAttributeModifier("class", "name-col"));
+            cellItem.add(AttributeModifier.append("class", "name-col"));
         }
 
     }
 
-    class TypeColumn extends AbstractColumn<AclEntry> {
+    private class TypeColumn extends AbstractColumn<AclEntry, String> {
 
         public TypeColumn() {
             super(new Model<String>(getString("TypeColumn.name")));
@@ -323,7 +319,7 @@ public class SecurityPanel extends Panel {
 
     }
 
-    class ActionsColumn extends AbstractColumn<AclEntry> {
+    private class ActionsColumn extends AbstractColumn<AclEntry, String> {
 
         public ActionsColumn() {
             super(new Model<String>(getString("ActionsColumn.name")));
@@ -336,12 +332,12 @@ public class SecurityPanel extends Panel {
 
         public void populateItem(Item<ICellPopulator<AclEntry>> cellItem, String componentId, IModel<AclEntry> model) {
             cellItem.add(new ActionPanel(componentId, model));
-            cellItem.add(new SimpleAttributeModifier("class", "actions-col"));
+            cellItem.add(AttributeModifier.append("class", "actions-col"));
         }
 
     }
 
-    class ActionPanel extends Panel {
+    private class ActionPanel extends Panel {
 
         public ActionPanel(String id, final IModel<AclEntry> model) {
             super(id, model);

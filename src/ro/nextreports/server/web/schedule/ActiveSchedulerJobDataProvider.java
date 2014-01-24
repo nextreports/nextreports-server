@@ -29,13 +29,12 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import ro.nextreports.server.domain.SchedulerJob;
 import ro.nextreports.server.service.SchedulerService;
 
-
 /**
  * User: mihai.panaitescu
  * Date: 11-Jun-2010
  * Time: 11:54:39
  */
-public class ActiveSchedulerJobDataProvider extends SortableDataProvider<SchedulerJob> {
+public class ActiveSchedulerJobDataProvider extends SortableDataProvider<SchedulerJob, String> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -48,15 +47,18 @@ public class ActiveSchedulerJobDataProvider extends SortableDataProvider<Schedul
     	Injector.get().inject(this);
     }
 
-	public Iterator<? extends SchedulerJob> iterator(int first, int count) {
+    @Override
+	public Iterator<? extends SchedulerJob> iterator(long first, long count) {
 		return getChildren().iterator();
 	}
 
+	@Override
 	public IModel<SchedulerJob> model(SchedulerJob entity) {
 		return new Model<SchedulerJob>(entity);
 	}
 
-	public int size() {
+	@Override
+	public long size() {
 		return getChildren().size();
 	}
 

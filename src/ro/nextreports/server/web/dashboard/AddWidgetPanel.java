@@ -18,32 +18,39 @@ package ro.nextreports.server.web.dashboard;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
+import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
+import org.apache.wicket.extensions.markup.html.repeater.tree.content.Folder;
+import org.apache.wicket.extensions.markup.html.repeater.tree.theme.WindowsTheme;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
-import org.apache.wicket.markup.html.tree.BaseTree;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import ro.nextreports.engine.util.ParameterUtil;
 import ro.nextreports.server.StorageConstants;
 import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.Entity;
-import ro.nextreports.server.domain.Folder;
 import ro.nextreports.server.domain.Report;
+import ro.nextreports.server.exception.NotFoundException;
+import ro.nextreports.server.report.ReportConstants;
+import ro.nextreports.server.report.next.NextUtil;
 import ro.nextreports.server.service.ReportService;
 import ro.nextreports.server.service.StorageService;
+import ro.nextreports.server.util.EntityComparator;
 import ro.nextreports.server.web.common.form.FormContentPanel;
 import ro.nextreports.server.web.common.form.FormPanel;
-import ro.nextreports.server.web.dashboard.tree.WidgetEntityNode;
-import ro.nextreports.server.web.dashboard.tree.WidgetEntityTree;
-import ro.nextreports.server.web.dashboard.tree.WidgetType;
-
+import ro.nextreports.server.web.core.tree.EntityTreeProvider;
 
 /**
  * @author Decebal Suiu
@@ -62,7 +69,7 @@ public class AddWidgetPanel extends FormContentPanel {
 	private Entity entity;
 	
 	private Component swapComponent;
-	private WidgetEntityTree tree;
+	private EntityTree tree;
 	
 	public AddWidgetPanel() {
 		super(FormPanel.CONTENT_ID);										
@@ -76,13 +83,19 @@ public class AddWidgetPanel extends FormContentPanel {
 		List<WidgetType> types = new ArrayList<WidgetType>();
 		types.addAll(Arrays.asList(WidgetType.values()));
 		IChoiceRenderer<WidgetType>  renderer = new ChoiceRenderer<WidgetType> () {
+			
+			private static final long serialVersionUID = 1L;
+
+			@Override
 			public Object getDisplayValue(WidgetType  object) {
 				return getString(object.toString());
 			}
 
+			@Override
 			public String getIdValue(WidgetType object, int index) {    
 				return object.toString();
 			}
+			
 	    };
 		DropDownChoice<WidgetType> typeDropDownChoice = new DropDownChoice<WidgetType>("type", 
 				new PropertyModel<WidgetType>(this, "type"), types, renderer);
@@ -102,7 +115,7 @@ public class AddWidgetPanel extends FormContentPanel {
 						tree = null;						
 					}	
 				} else {
-					tree = createTree();
+					tree = createTree(getRootPath());
 					tree.setOutputMarkupId(true);
 					swapComponent.replaceWith(tree);
 					swapComponent = tree;					
@@ -116,10 +129,11 @@ public class AddWidgetPanel extends FormContentPanel {
 	
 	public boolean isDrillDownable() {
 		if (entity instanceof Chart) {
-			return ((Chart)entity).getDrillDownEntities().size() > 0;
+			return ((Chart) entity).getDrillDownEntities().size() > 0;
 		} else if (entity instanceof Report) {
-			return ((Report)entity).getDrillDownEntities().size() > 0;
+			return ((Report) entity).getDrillDownEntities().size() > 0;
 		}
+		
 		return false;
 	}
 
@@ -147,20 +161,63 @@ public class AddWidgetPanel extends FormContentPanel {
 		return entity;
 	}		
 	
-	protected WidgetEntityTree createTree() {
-				
-        return new WidgetEntityTree("tree", getRootPath(), type) {
+    protected EntityTree createTree(String rootPath) {
+    	ITreeProvider<Entity> treeProvider = new EntityTreeProvider(rootPath) {
 
 			private static final long serialVersionUID = 1L;
 
-            @Override
-            protected void onNodeLinkClicked(Object node, BaseTree tree, AjaxRequestTarget target) {
-                onNodeClicked((WidgetEntityNode) node, target);
-            }
+			@Override
+			protected boolean acceptEntityAsChild(Entity entity) {
+				if (WidgetType.CHART.equals(type)) {
+		    		return true;
+		    	} 
+				
+				if ((entity instanceof ro.nextreports.server.domain.Folder) || (entity instanceof Chart)) {
+					return true;
+				}
+				
+				if (entity instanceof Report) {
+					Report report = (Report) entity;
+					
+					boolean isTableReport = WidgetType.TABLE.equals(type) && 
+											report.getType().equals(ReportConstants.NEXT) && 
+											report.isTableType();
+					boolean isAlarmReport = WidgetType.ALARM.equals(type) &&
+											report.getType().equals(ReportConstants.NEXT) &&
+											report.isAlarmType();
+					boolean isIndicatorReport = WidgetType.INDICATOR.equals(type) &&
+							report.getType().equals(ReportConstants.NEXT) &&
+							report.isIndicatorType();
+					boolean isPivot = WidgetType.PIVOT.equals(type) &&
+									  report.getType().equals(ReportConstants.NEXT);
 
-        };
+					if (isTableReport || isAlarmReport || isIndicatorReport || isPivot) {					
+						ro.nextreports.engine.Report nextReport = NextUtil.getNextReport(storageService.getSettings(), report);					
+						if (ParameterUtil.allParametersHaveDefaults(ParameterUtil.getUsedNotHiddenParametersMap(nextReport))) {
+							if (isAlarmReport || isIndicatorReport || (isTableReport && NextUtil.reportHasHeader(nextReport)) || isPivot) {
+								return true;
+							}
+						}					
+					} 
+				}
+				
+				return false;
+			}
+
+			@Override
+			protected List<Entity> getChildren(String id) throws NotFoundException {
+				// sort
+				List<Entity> children = super.getChildren(id);								
+				Collections.sort(children, new EntityComparator());
+				
+				return children;
+			}
+			
+    	};
+    	
+        return new EntityTree("tree", treeProvider);
     }
-	
+
 	private String getRootPath() {
 		String rootPath;
 		if (WidgetType.CHART.equals(type)) {
@@ -168,17 +225,61 @@ public class AddWidgetPanel extends FormContentPanel {
 		} else {
 			rootPath = StorageConstants.REPORTS_ROOT;
 		}
+		
 		return rootPath;
 	}
 	
-	private void onNodeClicked(WidgetEntityNode node, AjaxRequestTarget target) {
-        Entity selectedEntity = node.getNodeModel().getObject();        
-        if ( !(selectedEntity instanceof Folder)) {
-        	entity = selectedEntity;
+	private void onNodeClicked(Entity entity, AjaxRequestTarget target) {
+        if (!(entity instanceof ro.nextreports.server.domain.Folder)) {
+        	this.entity = entity;
         } else {
-        	entity = null;
+        	this.entity = null;
         }   
+        
         target.add(getFeadbackPanel());
 	}				
 	
+    class EntityTree extends NestedTree<Entity> {
+
+    	private static final long serialVersionUID = 1L;
+    	
+    	public EntityTree(String id, ITreeProvider<Entity> provider) {
+			super(id, provider);
+			
+    		add(new WindowsTheme());
+		}
+
+		@Override
+		protected Component newContentComponent(String id, IModel<Entity> model) {
+			return new Folder<Entity>(id, this, model) {
+
+    			private static final long serialVersionUID = 1L;
+
+    			@Override
+    			protected boolean isClickable() {
+    				return true;
+    			}
+
+                @Override
+				protected String getOtherStyleClass(Entity t) {
+					return getClosedStyleClass();
+				}
+
+    			@Override
+    			protected void onClick(AjaxRequestTarget target) {    				    				
+    				super.onClick(target);
+    				
+    				onNodeClicked(getModelObject(), target);
+    			}
+    			
+    			@Override
+    			protected IModel<?> newLabelModel(IModel<Entity> model) {
+    				return Model.of(model.getObject().getName());
+    			}
+    			
+    		};
+		}
+
+    }    
+    
 }

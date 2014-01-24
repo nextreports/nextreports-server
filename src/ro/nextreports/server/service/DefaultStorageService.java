@@ -45,7 +45,6 @@ import ro.nextreports.server.util.PermissionUtil;
 import ro.nextreports.server.util.SearchManager;
 import ro.nextreports.server.util.ServerUtil;
 
-
 /**
  * @author Decebal Suiu
  */
@@ -108,7 +107,7 @@ public class DefaultStorageService implements StorageService {
     // This method must be used only where there is no need for security (like users whichare seen only by administrators)
     @Transactional(readOnly = true)		
 	@Profile
-	public Entity[] getEntityChildrenById(String id, int firstResult, int maxResults) throws NotFoundException {
+	public Entity[] getEntityChildrenById(String id, long firstResult, long maxResults) throws NotFoundException {
     	return storageDao.getEntityChildrenById(id, firstResult, maxResults);
 	}
 	

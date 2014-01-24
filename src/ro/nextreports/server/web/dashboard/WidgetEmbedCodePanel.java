@@ -26,11 +26,10 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.validation.validator.MinimumValidator;
+import org.apache.wicket.validation.validator.RangeValidator;
 
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.web.core.UrlUtil;
-
 
 /**
  * @author Decebal Suiu
@@ -68,11 +67,11 @@ public class WidgetEmbedCodePanel extends Panel {
 		
 		TextField<Integer> width = new TextField<Integer>("width", new PropertyModel<Integer>(this, "width"));
 		width.setRequired(true);
-		width.add(new MinimumValidator<Integer>(100));
+		width.add(RangeValidator.minimum(100));
 		form.add(width);
 		TextField<Integer> height = new TextField<Integer>("height", new PropertyModel<Integer>(this, "height"));
 		height.setRequired(true);
-		height.add(new MinimumValidator<Integer>(100));
+		height.add(RangeValidator.minimum(100));
 		form.add(height);
 		
 		form.add(new AjaxSubmitLink("link") {
@@ -86,11 +85,12 @@ public class WidgetEmbedCodePanel extends Panel {
 				target.add(feedbackPanel);
 			}	
 			
-			 protected void onError(AjaxRequestTarget target, Form<?> form) {      
-				 model.setError(true);
-				 target.add(codeLabel);
-                 target.add(feedbackPanel);
-             }
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {      
+				model.setError(true);
+				target.add(codeLabel);
+				target.add(feedbackPanel);
+			}
 
 		});
 		
@@ -124,13 +124,16 @@ public class WidgetEmbedCodePanel extends Panel {
 		return sb.toString();
 	}
 	
-	private class ErrorLoadableDetachableModel extends LoadableDetachableModel{
+	private class ErrorLoadableDetachableModel extends LoadableDetachableModel<String> {
 		
-		private boolean error =false;
+		private static final long serialVersionUID = 1L;
+		
+		private boolean error = false;
 		private String widgetId;
 		
 		public ErrorLoadableDetachableModel(String widgetId) {
 			super();
+			
 			this.widgetId = widgetId;
 		}
 		
@@ -141,7 +144,8 @@ public class WidgetEmbedCodePanel extends Panel {
 		@Override
 		protected String load() {				
 			return getCode(widgetId, error);
-		}			
+		}		
+		
 	}
 
 }

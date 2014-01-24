@@ -29,7 +29,9 @@ import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -78,7 +80,6 @@ import ro.nextreports.server.web.dashboard.table.TableWidgetRuntimePanel;
 import ro.nextreports.server.web.report.DynamicParameterRuntimePanel;
 import ro.nextreports.server.web.report.ParameterRuntimePanel;
 
-
 /**
  * @author Decebal Suiu
  */
@@ -122,10 +123,10 @@ public class DashboardPanel extends GenericPanel<Dashboard> {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		
-        response.renderJavaScriptReference(new PackageResourceReference(DashboardPanel.class, "dashboard.js"));
-        response.renderCSSReference(new PackageResourceReference(DashboardPanel.class, "dashboard.css"));
+        response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(DashboardPanel.class, "dashboard.js")));
+        response.render(CssHeaderItem.forReference(new PackageResourceReference(DashboardPanel.class, "dashboard.css")));
         if (isInternetExplorer()) {
-        	response.renderCSSReference(new PackageResourceReference(DashboardPanel.class, "dashboard-ie.css"));
+        	response.render(CssHeaderItem.forReference(new PackageResourceReference(DashboardPanel.class, "dashboard-ie.css")));
         } 
 	}
 
@@ -568,7 +569,7 @@ public class DashboardPanel extends GenericPanel<Dashboard> {
 			if (oldRefreshTime != refreshTime) {
 				for (Behavior behavior : widgetPanel.getBehaviors()) {
 					if (behavior instanceof AjaxSelfUpdatingTimerBehavior) {
-						((AjaxSelfUpdatingTimerBehavior) behavior).stop();
+						((AjaxSelfUpdatingTimerBehavior) behavior).stop(target);
 						// do not remove the behavior : after changing , the
 						// event is called one more
 						// time on the client so it has to be present ...

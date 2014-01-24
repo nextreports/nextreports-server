@@ -20,7 +20,8 @@ import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -40,7 +41,6 @@ import ro.nextreports.server.web.common.misc.AjaxBusyIndicator;
 import ro.nextreports.server.web.common.panel.NextFeedbackPanel;
 import ro.nextreports.server.web.core.settings.LogoResource;
 import ro.nextreports.server.web.security.recover.ForgotPasswordPage;
-
 
 /**
  * @author Decebal Suiu
@@ -89,9 +89,8 @@ public class LoginPage extends WebPage {
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 final User user = (User) form.getModelObject();
 				if (NextServerSession.get().signIn(user.getUsername(), user.getPassword(), user.getRealm())) {
-					if (!continueToOriginalDestination()) {
-						setResponsePage(getApplication().getHomePage());
-					}
+					// TODO wicket-6
+					continueToOriginalDestination();
 				} else {
 					error(getLocalizer().getString("loginError", this));
 				}
@@ -110,12 +109,15 @@ public class LoginPage extends WebPage {
         add(new AjaxBusyIndicator());
 	}
 
+	// TODO wicket-6
+	/*
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		
         // add jquery.js
-        response.renderJavaScriptReference("js/jquery-1.7.2.min.js");
-	}	
+        response.render(JavaScriptHeaderItem.forUrl("js/jquery-1.7.2.min.js"));
+	}
+	*/	
 	
 }

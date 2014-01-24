@@ -16,34 +16,47 @@
  */
 package ro.nextreports.server.web.report;
 
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.html.panel.EmptyPanel;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.markup.html.form.palette.Palette;
 import org.apache.wicket.extensions.markup.html.form.palette.component.Recorder;
 import org.apache.wicket.extensions.yui.calendar.DateField;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.extensions.yui.calendar.DateTimeField;
-import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ro.nextreports.engine.Report;
+import ro.nextreports.engine.queryexec.IdName;
+import ro.nextreports.engine.queryexec.QueryParameter;
+import ro.nextreports.engine.util.DateUtil;
+import ro.nextreports.engine.util.ParameterUtil;
 import ro.nextreports.server.domain.DataSource;
 import ro.nextreports.server.domain.ReportRuntimeParameterModel;
 import ro.nextreports.server.report.next.NextRuntimeParameterModel;
@@ -52,21 +65,6 @@ import ro.nextreports.server.service.ReportService;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.util.ServerUtil;
 import ro.nextreports.server.web.common.misc.ExtendedPalette;
-import ro.nextreports.server.web.report.ManualListPanel;
-
-import ro.nextreports.engine.queryexec.QueryParameter;
-import ro.nextreports.engine.queryexec.IdName;
-import ro.nextreports.engine.util.ParameterUtil;
-import ro.nextreports.engine.Report;
-import ro.nextreports.engine.util.DateUtil;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Date;
-import java.io.Serializable;
 
 /**
  * User: mihai.panaitescu

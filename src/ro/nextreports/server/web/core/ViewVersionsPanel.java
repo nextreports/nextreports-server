@@ -57,15 +57,13 @@ import ro.nextreports.server.web.core.EntityVersionDataProvider;
 import ro.nextreports.server.web.report.ReportResource;
 import ro.nextreports.server.web.schedule.ScheduleWizard;
 
-
-//
 public class ViewVersionsPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
 	
 	private Report report;
     private Chart chart;
-    private DataTable<VersionInfo> table;
+    private DataTable<VersionInfo, String> table;
     private EntityVersionDataProvider dataProvider;
 
     @SpringBean
@@ -114,8 +112,8 @@ public class ViewVersionsPanel extends Panel {
     }
 
     private void addVersionsTable() {
-        List<IColumn<VersionInfo>> columns = new ArrayList<IColumn<VersionInfo>>();
-        columns.add(new AbstractColumn<VersionInfo>(new Model<String>(getString("name"))) {
+        List<IColumn<VersionInfo, String>> columns = new ArrayList<IColumn<VersionInfo, String>>();
+        columns.add(new AbstractColumn<VersionInfo, String>(new Model<String>(getString("name"))) {
 
 			private static final long serialVersionUID = 1L;
 
@@ -134,7 +132,7 @@ public class ViewVersionsPanel extends Panel {
             
         });
         columns.add(new ActionsColumn());
-        columns.add(new AbstractColumn<VersionInfo>(new Model<String>(getString("author"))) {
+        columns.add(new AbstractColumn<VersionInfo, String>(new Model<String>(getString("author"))) {
         	
 			private static final long serialVersionUID = 1L;
 
@@ -147,7 +145,7 @@ public class ViewVersionsPanel extends Panel {
 			
         });
         columns.add(new DateColumn<VersionInfo>(new Model<String>(getString("date")), "createdDate", "createdDate" ));
-        columns.add(new AbstractColumn<VersionInfo>(new Model<String>(getString("current"))) {
+        columns.add(new AbstractColumn<VersionInfo, String>(new Model<String>(getString("current"))) {
         	
 			private static final long serialVersionUID = 1L;
 
@@ -178,7 +176,7 @@ public class ViewVersionsPanel extends Panel {
         }
     }
 
-    private class ActionsColumn extends AbstractColumn<VersionInfo> {
+    private class ActionsColumn extends AbstractColumn<VersionInfo, String> {
 
 		private static final long serialVersionUID = 1L;
 

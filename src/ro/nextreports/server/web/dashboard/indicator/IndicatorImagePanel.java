@@ -19,7 +19,9 @@ package ro.nextreports.server.web.dashboard.indicator;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -27,12 +29,13 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
-import ro.nextreports.server.web.dashboard.WidgetPopupMenuModel;
-
 import ro.nextreports.engine.exporter.util.IndicatorData;
+import ro.nextreports.server.web.dashboard.WidgetPopupMenuModel;
 
 public class IndicatorImagePanel extends Panel {
 	
+	private static final long serialVersionUID = 1L;
+
 	private final ResourceReference INDICATOR_UTIL_JS = new JavaScriptResourceReference(IndicatorHTML5Panel.class, "indicator_util.js");
 	
 	private IndicatorDynamicImageResource imageResource;
@@ -45,6 +48,7 @@ public class IndicatorImagePanel extends Panel {
 		this.height = h;
 
 		NonCachingImage image = new NonCachingImage("indImage", new PropertyModel(this, "imageResource")) {
+			
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -66,11 +70,9 @@ public class IndicatorImagePanel extends Panel {
 		
 		add(image);
 		//add(new ResizeBehavior());
-				
 	}			
-	
 			
-	class ResizeBehavior extends AbstractDefaultAjaxBehavior {		
+	private class ResizeBehavior extends AbstractDefaultAjaxBehavior {		
 		
 		private static final String HEIGHT = "height";
 		
@@ -79,10 +81,10 @@ public class IndicatorImagePanel extends Panel {
 			super.renderHead(component, response);
 			
 			//include js file
-	        response.renderJavaScriptReference(INDICATOR_UTIL_JS);
+			response.render(JavaScriptHeaderItem.forReference(INDICATOR_UTIL_JS));
 			
-			response.renderOnLoadJavaScript(getResizeEndDefinition());	
-			response.renderOnLoadJavaScript(getResizeJavaScript());			
+			response.render(OnLoadHeaderItem.forScript(getResizeEndDefinition()));	
+			response.render(OnLoadHeaderItem.forScript(getResizeJavaScript()));			
 		}
 		
 		// http://stackoverflow.com/questions/2996431/detect-when-a-window-is-resized-using-javascript
@@ -103,7 +105,7 @@ public class IndicatorImagePanel extends Panel {
 			StringBuilder sb = new StringBuilder();
 			sb.append("$(window).bind(\'resizeEnd\', function(){");
 			sb.append("var ih = getIndicatorHeight();");
-			sb.append("wicketAjaxGet('" + getCallbackUrl() + "&" + HEIGHT + "='ih" 
+			sb.append("Wicket.Ajax.get('" + getCallbackUrl() + "&" + HEIGHT + "='ih" 
 					+ ", null, null, function() { return true; })");
 			sb.append("});");
 			System.out.println("--->   " + sb.toString());
@@ -118,7 +120,6 @@ public class IndicatorImagePanel extends Panel {
 			target.add(this.getComponent());
 			
 		}
-				
 		
 	}
 

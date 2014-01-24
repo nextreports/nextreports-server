@@ -16,8 +16,10 @@
  */
 package ro.nextreports.server.web.core.menu;
 
+import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
+
+import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.web.common.menu.MenuPanel;
-import ro.nextreports.server.web.core.tree.EntityTree;
 
 /**
  * @author Decebal Suiu
@@ -26,7 +28,7 @@ public class EntityTreeMenuPanel extends MenuPanel {
 
 	private static final long serialVersionUID = 1L;
 	
-    public EntityTreeMenuPanel(String id, EntityTree tree) {
+    public EntityTreeMenuPanel(String id, NestedTree<Entity> tree) {
         super(id, new EntityTreeMenuModel(tree));
     }
 

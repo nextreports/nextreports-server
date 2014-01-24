@@ -16,9 +16,9 @@
  */
 package ro.nextreports.server.web.common.misc;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.ajax.IAjaxCallDecorator;
-import org.apache.wicket.ajax.calldecorator.AjaxPreprocessingCallDecorator;
+import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.model.IModel;
 
@@ -27,7 +27,7 @@ import org.apache.wicket.model.IModel;
  */
 public abstract class AjaxConfirmLink<T> extends AjaxLink<T> {
 
-	private static final long serialVersionUID = 3034440259588339615L;
+	private static final long serialVersionUID = 1L;
 
 	protected String message;
 	
@@ -37,6 +37,7 @@ public abstract class AjaxConfirmLink<T> extends AjaxLink<T> {
 
 	public AjaxConfirmLink(String id, String message) {
 		super(id);
+		
 		this.message = message;
 	}
 
@@ -46,6 +47,7 @@ public abstract class AjaxConfirmLink<T> extends AjaxLink<T> {
 
 	public AjaxConfirmLink(String id, IModel<T> object, String message) {
 		super(id, object);
+		
 		this.message = message;
 	}
 
@@ -58,41 +60,18 @@ public abstract class AjaxConfirmLink<T> extends AjaxLink<T> {
 	}
 
 	@Override
-	protected IAjaxCallDecorator getAjaxCallDecorator() {
-		return new ConfirmAjaxCallDecorator(super.getAjaxCallDecorator());
-	}
-	
-    protected CharSequence decorateOnSuccessScript(Component c, CharSequence script) {
-		return script;
-	}
-
-	class ConfirmAjaxCallDecorator extends AjaxPreprocessingCallDecorator {
-
-		private static final long serialVersionUID = 2155228645806565335L;
-
-		public ConfirmAjaxCallDecorator(IAjaxCallDecorator delegate) {
-			super(delegate);
-		}
-
-		@Override
-		public CharSequence preDecorateScript(CharSequence script) {
-			if (showDialog()) {
-				// doesn't work if you have ' chars in the message
-				String message = getMessage().replaceAll("'", "\"");
-				String extraJs = "if (!confirm('" + message + "')) return false; ";
-				return extraJs + script;
-			}
-			
-			return script;
-		}
+	protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+		super.updateAjaxAttributes(attributes);
 		
-		@Override
-		public CharSequence decorateOnSuccessScript(Component c, CharSequence script) {
-			return AjaxConfirmLink.this.decorateOnSuccessScript(c, script);
-		}				
-
+		if (StringUtils.isNotEmpty(getMessage()) && showDialog()) {
+			String message = getMessage().replaceAll("'", "\"");
+			StringBuilder precondition = new StringBuilder("if(!confirm('").append(message).append("')) { return false; };");
+			
+			AjaxCallListener listener = new AjaxCallListener();
+			listener.onPrecondition(precondition);
+			
+			attributes.getAjaxCallListeners().add(listener);
+		}
 	}
-	
-    
 	
 }

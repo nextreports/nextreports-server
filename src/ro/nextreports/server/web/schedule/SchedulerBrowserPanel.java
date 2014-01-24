@@ -43,13 +43,14 @@ import ro.nextreports.server.web.core.table.ActivePropertyColumn;
 import ro.nextreports.server.web.core.table.NameColumn;
 import ro.nextreports.server.web.core.table.NextRunDateColumn;
 
-
 /**
  * @author Decebal Suiu
  */
 public class SchedulerBrowserPanel extends EntityBrowserPanel {
 
-    @SpringBean
+    private static final long serialVersionUID = 1L;
+
+	@SpringBean
     private SchedulerService schedulerService;
 
     @SpringBean
@@ -61,15 +62,15 @@ public class SchedulerBrowserPanel extends EntityBrowserPanel {
     }
 
 	@Override
-    protected List<IColumn<Entity>> createTableColumns() {
-        List<IColumn<Entity>> columns = new ArrayList<IColumn<Entity>>();
+    protected List<IColumn<Entity, String>> createTableColumns() {
+        List<IColumn<Entity, String>> columns = new ArrayList<IColumn<Entity, String>>();
         columns.add(new NameColumn() {
             public void onEntitySelection(Entity entity, AjaxRequestTarget target) {
                 selectEntity(entity, target);
             }
         });
         columns.add(new ActionsColumn());
-        columns.add(new PropertyColumn<Entity>(new Model<String>(getString("type")), "time.type", "time.type") {
+        columns.add(new PropertyColumn<Entity, String>(new Model<String>(getString("type")), "time.type", "time.type") {
             @Override
 			public void populateItem(Item<ICellPopulator<Entity>> item, String componentId, IModel<Entity> rowModel) {
                 SchedulerTime st = ((SchedulerJob) rowModel.getObject()).getTime();                                
@@ -78,7 +79,7 @@ public class SchedulerBrowserPanel extends EntityBrowserPanel {
     			item.add(label);
 			}
         });
-        columns.add(new PropertyColumn<Entity>(new Model<String>(getString("Report")), "report.path", "report.path") {
+        columns.add(new PropertyColumn<Entity, String>(new Model<String>(getString("Report")), "report.path", "report.path") {
         	
             @Override
 			public void populateItem(Item<ICellPopulator<Entity>> item, String componentId, IModel<Entity> rowModel) {

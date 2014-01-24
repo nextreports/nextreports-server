@@ -16,10 +16,10 @@
  */
 package ro.nextreports.server.web.action.schedule;
 
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.domain.SchedulerJob;
@@ -28,12 +28,13 @@ import ro.nextreports.server.web.core.action.ActionAjaxLink;
 import ro.nextreports.server.web.core.action.ActionContext;
 import ro.nextreports.server.web.schedule.ScheduleWizard;
 
-
 /**
  * @author Decebal Suiu
  */
 public class ModifyActionLink extends ActionAjaxLink {
 
+	private static final long serialVersionUID = 1L;
+	
 	private static final Logger LOG = LoggerFactory.getLogger(ModifyActionLink.class);
 	
 	public ModifyActionLink(ActionContext actionContext) {
@@ -50,7 +51,7 @@ public class ModifyActionLink extends ActionAjaxLink {
 
             EntityBrowserPanel panel = findParent(EntityBrowserPanel.class);
             ScheduleWizard wizard = new ScheduleWizard("work", job);
-            wizard.add(new SimpleAttributeModifier("class", "wizardScheduler"));
+            wizard.add(AttributeModifier.append("class", "wizardScheduler"));
             panel.forwardWorkspace(wizard  , target);
             
             //setResponsePage(new ScheduleWizardPage(job));

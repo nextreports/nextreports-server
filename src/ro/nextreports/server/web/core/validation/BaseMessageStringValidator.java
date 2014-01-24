@@ -23,6 +23,8 @@ import org.apache.wicket.validation.validator.StringValidator;
  */
 public abstract class BaseMessageStringValidator extends StringValidator {
 
+	private static final long serialVersionUID = 1L;
+	
 	protected final String errorMessage;
 
     public BaseMessageStringValidator(String errorMessage) {

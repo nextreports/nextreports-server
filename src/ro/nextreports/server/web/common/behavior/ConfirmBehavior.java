@@ -17,22 +17,26 @@
 package ro.nextreports.server.web.common.behavior;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.model.IModel;
 
 /**
  * @author Decebal Suiu
  */
-public class ConfirmBehavior extends AbstractBehavior {
+public class ConfirmBehavior extends Behavior {
 	
-     private final IModel<String> message;
+	private static final long serialVersionUID = 1L;
+	
+	private final IModel<String> message;
 
      public ConfirmBehavior(IModel<String> message) {
          super();
+         
          this.message = message;
      }
 
+     @Override
      public void onComponentTag(Component component, ComponentTag tag) {
          StringBuilder handler = new StringBuilder(128);
          handler.append("if (!confirm('");
@@ -50,6 +54,7 @@ public class ConfirmBehavior extends AbstractBehavior {
      @Override
      public void detach(Component component) {
          super.detach(component);
+         
          message.detach();
      }
 

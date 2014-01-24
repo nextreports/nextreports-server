@@ -18,13 +18,14 @@ package ro.nextreports.server.web;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.http.protocol.HTTP;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.Session;
 import org.apache.wicket.authorization.IAuthorizationStrategy;
 import org.apache.wicket.authorization.strategies.page.SimplePageAuthorizationStrategy;
+import org.apache.wicket.core.request.handler.PageProvider;
+import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.devutils.DevUtilsPage;
 import org.apache.wicket.markup.html.pages.RedirectPage;
 import org.apache.wicket.protocol.http.PageExpiredException;
@@ -33,15 +34,12 @@ import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
-import org.apache.wicket.request.UrlEncoder;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.handler.PageProvider;
-import org.apache.wicket.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.response.filter.AjaxServerAndClientTimeFilter;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.odlabs.wiquery.core.WiQuerySettings;
+import org.apache.wicket.util.encoding.UrlEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -66,7 +64,6 @@ import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.web.common.misc.NoVersionMountMapper;
 import ro.nextreports.server.web.core.ErrorPage;
 import ro.nextreports.server.web.core.HomePage;
-import ro.nextreports.server.web.core.LicenseErrorPage;
 import ro.nextreports.server.web.core.MaintenancePage;
 import ro.nextreports.server.web.core.SecurePage;
 import ro.nextreports.server.web.core.settings.LogoResourceReference;
@@ -83,13 +80,6 @@ import ro.nextreports.server.web.security.cas.CasUtil;
 import ro.nextreports.server.web.security.recover.ForgotPasswordPage;
 import ro.nextreports.server.web.security.recover.ResetPasswordPage;
 import ro.nextreports.server.web.themes.ThemesManager;
-
-/*
-import com.asf.license.License;
-import com.asf.license.LicenseException;
-import com.asf.license.LicenseManager;
-import com.asf.license.LicenseNotFoundException;
-*/
 
 /**
  * @author Decebal Suiu
@@ -205,6 +195,7 @@ public class NextServerApplication extends WebApplication  {
 		getRequestCycleListeners().add(new MaintenanceRequestCycleListener());
 	}			
 
+	@Override
 	public Class<? extends Page> getHomePage() {
 		return HomePage.class;
 	}
@@ -253,12 +244,6 @@ public class NextServerApplication extends WebApplication  {
 					}
 				}
 				
-				/*
-				if (b) {
-					checkLicense();
-				}
-				*/
-				 
 				return b;
 			}
 
@@ -290,20 +275,22 @@ public class NextServerApplication extends WebApplication  {
         }
 	}
 
+	/*
 	@Override
 	protected void validateInit() {
 	    super.validateInit();
 	    
-	    WiQuerySettings.get().setAutoImportJQueryResource(false);
+	    // TODO wicket-6
+//	    WiQuerySettings.get().setAutoImportJQueryResource(false);
 	}
+	*/
 	
-	@SuppressWarnings("unchecked")
 	private SchedulerJob[] getSchedulerJobs() {
 		PlatformTransactionManager transactionManager = (PlatformTransactionManager) getSpringBean("transactionManager");
     	TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
-    	SchedulerJob[] schedulerJobs = (SchedulerJob[]) transactionTemplate.execute(new TransactionCallback() {
+    	SchedulerJob[] schedulerJobs = transactionTemplate.execute(new TransactionCallback<SchedulerJob[]>() {
 
-			public Object doInTransaction(TransactionStatus transactionStatus) {
+			public SchedulerJob[] doInTransaction(TransactionStatus transactionStatus) {
 				StorageDao storageDao = (StorageDao) getSpringBean("storageDao");
 				try {
 			    	Entity[] entities = storageDao.getEntitiesByClassName(StorageConstants.SCHEDULER_ROOT, SchedulerJob.class.getName());
@@ -323,21 +310,7 @@ public class NextServerApplication extends WebApplication  {
 
 		return schedulerJobs;
 	}
-	
-	/*
-	private void checkLicense() {
-		try {
-			License license = LicenseManager.getInstance().getLicense();
-			boolean b = LicenseManager.getInstance().isValidLicense(license);
-			if (!b) {
-				throw new RuntimeException(new LicenseException("Invalid license"));
-			}
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-	*/
-	
+		
 	private void runUserSynchronizerJob() {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Run user synchronizer job ...");
@@ -357,6 +330,14 @@ public class NextServerApplication extends WebApplication  {
         }
 	}
 
+	public static boolean isMaintenance() {
+		return maintenance;
+	}
+
+	public static void setMaintenance(boolean maintenance) {
+		NextServerApplication.maintenance = maintenance;
+	}		
+
 	private class ExceptionRequestCycleListener extends AbstractRequestCycleListener {
 				
 		@Override
@@ -365,16 +346,7 @@ public class NextServerApplication extends WebApplication  {
 				LOG.error("Page expired", e); // !?
 				return null; // see getApplicationSettings().setPageExpiredErrorPage
 			}
-			
-			Throwable t = ExceptionUtils.getRootCause(e);
-			/*
-			if ((t instanceof LicenseNotFoundException) || (t instanceof LicenseException)) {
-				PageParameters parameters = new PageParameters();
-				parameters.add("errorMessage", t.getMessage());
-				return new RenderPageRequestHandler(new PageProvider(LicenseErrorPage.class, parameters));
-			}
-			*/
-			
+						
 			if (e instanceof MaintenanceException) {				
 				return new RenderPageRequestHandler(new PageProvider(MaintenancePage.class));				
 			}
@@ -436,17 +408,11 @@ public class NextServerApplication extends WebApplication  {
 					super.onBeginRequest(cycle);
 					return;
 				}
+				
 				throw new MaintenanceException();
 			}
-		}		
+		}
+		
 	}
-
-	public static boolean isMaintenance() {
-		return maintenance;
-	}
-
-	public static void setMaintenance(boolean maintenance) {
-		NextServerApplication.maintenance = maintenance;
-	}		
 	
 }

@@ -25,10 +25,10 @@ import org.apache.wicket.model.IModel;
 
 import ro.nextreports.server.domain.Entity;
 
+public class EntityListDataProvider extends SortableDataProvider<Entity, String> {
 
-//
-public class EntityListDataProvider extends SortableDataProvider<Entity> {
-
+	private static final long serialVersionUID = 1L;
+	
 	private transient List<Entity> list;
 
     public EntityListDataProvider() {
@@ -39,18 +39,22 @@ public class EntityListDataProvider extends SortableDataProvider<Entity> {
     	this.list = list;
     }
 
-	public Iterator<? extends Entity> iterator(int first, int count) {
+    @Override
+	public Iterator<? extends Entity> iterator(long first, long count) {
 		return getList().iterator();
 	}
 
+    @Override
 	public IModel<Entity> model(Entity entity) {
 		return new EntityModel(entity.getId());
 	}
 
-	public int size() {
+    @Override
+	public long size() {
 		return getList().size();
 	}
 
+    @Override
 	public void detach() {
 	}
 

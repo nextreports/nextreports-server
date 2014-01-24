@@ -19,15 +19,15 @@ package ro.nextreports.server.web.common.table;
 import java.text.DateFormat;
 import java.util.Date;
 
+import org.apache.wicket.core.util.lang.PropertyResolver;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.util.lang.PropertyResolver;
 
 /**
  * @author Decebal Suiu
  */
-public class DateColumn<T> extends PropertyColumn<T> {
+public class DateColumn<T> extends PropertyColumn<T, String> {
 	
 	private static final long serialVersionUID = 6240590562722410222L;
 

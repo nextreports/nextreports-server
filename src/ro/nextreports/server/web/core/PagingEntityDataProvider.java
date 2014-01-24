@@ -44,11 +44,13 @@ public class PagingEntityDataProvider extends EntityDataProvider {
     	super(entityModel);    	    	
     }
     
-	public Iterator<? extends Entity> iterator(int first, int count) {
+    @Override
+	public Iterator<? extends Entity> iterator(long first, long count) {
 		return getChildren(first, count).iterator();
 	}	
 
-	public int size() {
+	@Override
+	public long size() {
 		if (count == -1) {
 			try {
 				count = storageService.countEntityChildrenById(entityModel.getObject().getId());
@@ -59,11 +61,12 @@ public class PagingEntityDataProvider extends EntityDataProvider {
 		return count;
 	}
 
+	@Override
 	public void detach() {
 		count = -1;
 	}   
 
-    private List<Entity> getChildren(int first, int count)  {
+    private List<Entity> getChildren(long first, long count)  {
     	List<Entity> result = new ArrayList<Entity>();
     	long time = System.currentTimeMillis();
     	String id = entityModel.getObject().getId();
@@ -96,6 +99,7 @@ public class PagingEntityDataProvider extends EntityDataProvider {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+		
         return result;
     }
 

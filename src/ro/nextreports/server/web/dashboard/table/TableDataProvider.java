@@ -38,7 +38,7 @@ import ro.nextreports.engine.exporter.util.TableData;
 /**
  * @author Decebal Suiu
  */
-public class TableDataProvider extends SortableDataProvider<RowData> {
+public class TableDataProvider extends SortableDataProvider<RowData, String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -71,20 +71,23 @@ public class TableDataProvider extends SortableDataProvider<RowData> {
     }
 
     @SuppressWarnings("unchecked")
-	public Iterator<RowData> iterator(int first, int count) {
+    @Override
+	public Iterator<RowData> iterator(long first, long count) {
         try {
-			return getCache().subList(first, first+count).iterator();
+			return getCache().subList((int) first, (int) (first + count)).iterator();
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			return IteratorUtils.EMPTY_ITERATOR;
 		}
     }
 
+    @Override
     public IModel<RowData> model(RowData object) {
         return new Model<RowData>(object);
     }
 
-    public int size() {
+    @Override
+    public long size() {
         try {
 			return getCache().size();
 		} catch (Exception e) {

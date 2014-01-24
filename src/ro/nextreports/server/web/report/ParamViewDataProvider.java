@@ -45,7 +45,7 @@ import ro.nextreports.server.service.StorageService;
 import ro.nextreports.engine.queryexec.QueryParameter;
 
 //
-public class ParamViewDataProvider extends SortableDataProvider<ParamView> {
+public class ParamViewDataProvider extends SortableDataProvider<ParamView, String> {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -69,18 +69,22 @@ public class ParamViewDataProvider extends SortableDataProvider<ParamView> {
         Injector.get().inject(this);
     }
 
-    public Iterator<? extends ParamView> iterator(int first, int count) {
+    @Override
+    public Iterator<? extends ParamView> iterator(long first, long count) {
         return getParams().iterator();
     }
 
+    @Override
     public IModel<ParamView> model(ParamView version) {
         return new Model<ParamView>(version);
     }
 
-    public int size() {
+    @Override
+    public long size() {
         return getParams().size();
     }
 
+    @Override
     public void detach() {
         params = null;
     }
@@ -98,11 +102,11 @@ public class ParamViewDataProvider extends SortableDataProvider<ParamView> {
                 throw new RuntimeException(e);
             }
         }
+        
         return params;
     }
 
     public List<ParamView> getParamViews(Report report) {
-
         List<ParamView> views = new ArrayList<ParamView>();
         if (ReportConstants.NEXT.equals(report.getType())) {
             java.util.List<QueryParameter> parameters = NextUtil.getNextReport(storageService.getSettings(), (NextContent) report.getContent()).getParameters();
@@ -133,6 +137,7 @@ public class ParamViewDataProvider extends SortableDataProvider<ParamView> {
                 ex.printStackTrace();
             }
         }
+        
         return views;
     }
 
@@ -142,6 +147,7 @@ public class ParamViewDataProvider extends SortableDataProvider<ParamView> {
         for (QueryParameter qp : parameters) {
             views.add(createParamView(qp));
         }
+        
         return views;
     }
 
@@ -152,13 +158,13 @@ public class ParamViewDataProvider extends SortableDataProvider<ParamView> {
         pv.setType(qp.getSelection());
         pv.setSource(qp.getSource());
         pv.setDefaultSource(qp.getDefaultSource());
+        
         return pv;
     }
 
     private List<JasperParameterSource> loadJasperParameters(Report report) {
         List<JasperParameterSource> list = new ArrayList<JasperParameterSource>();
         try {
-
             Map<String, Serializable> map = reportService.getReportUserParameters(report, new ArrayList<ExternalParameter>());
 
             for (String key : map.keySet()) {
@@ -171,6 +177,7 @@ public class ParamViewDataProvider extends SortableDataProvider<ParamView> {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        
         return list;
     }
 
@@ -179,6 +186,7 @@ public class ParamViewDataProvider extends SortableDataProvider<ParamView> {
         if ((name == null) || name.trim().equals("")) {
             name = parameter.getName();
         }
+        
         return name;
     }
 

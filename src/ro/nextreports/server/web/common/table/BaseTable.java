@@ -25,11 +25,11 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDat
 /**
  * @author Decebal Suiu
  */
-public class BaseTable<T> extends AjaxFallbackDefaultDataTable<T> {
+public class BaseTable<T> extends AjaxFallbackDefaultDataTable<T, String> {
 
 	private static final long serialVersionUID = 1L;
 
-	public BaseTable(String id, List<IColumn<T>> columns, ISortableDataProvider<T> dataProvider, int rowsPerPage) {
+	public BaseTable(String id, List<IColumn<T, String>> columns, ISortableDataProvider<T, String> dataProvider, int rowsPerPage) {
 		super(id, columns, dataProvider, rowsPerPage);
 	}
 

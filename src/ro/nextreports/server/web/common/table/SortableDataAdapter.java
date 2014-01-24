@@ -34,7 +34,7 @@ import org.springframework.beans.support.SortDefinition;
 /**
  * @author Decebal Suiu
  */
-public class SortableDataAdapter<T> extends SortableDataProvider<T> {
+public class SortableDataAdapter<T> extends SortableDataProvider<T, String> {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -51,16 +51,17 @@ public class SortableDataAdapter<T> extends SortableDataProvider<T> {
 		this.comparators = comparators;
 	}
 
-	public Iterator<T> iterator(int first, int count) {
-		int size = provider.size();
-		List<T> resources = new ArrayList<T>(size);
+	@Override
+	public Iterator<T> iterator(long first, long count) {
+		long size = provider.size();
+		List<T> resources = new ArrayList<T>((int) size);
 		Iterator<? extends T> iter = provider.iterator(0, size);
 		while (iter.hasNext()) {
 			resources.add(iter.next());
 		}
 
 		if (comparators != null) {
-			SortParam sortParam = getSort();
+			SortParam<String> sortParam = getSort();
 			if (sortParam != null) {
 				String sortProperty = sortParam.getProperty();
 				if (sortProperty != null) {
@@ -78,15 +79,17 @@ public class SortableDataAdapter<T> extends SortableDataProvider<T> {
 			}
 		}
 		
-		return Collections.unmodifiableList(resources.subList(first, first + count)).iterator();
+		return Collections.unmodifiableList(resources.subList((int) first, (int) (first + count))).iterator();
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public IModel<T> model(Object object) {
 		return provider.model((T) object);
 	}
 
-	public int size() {
+	@Override
+	public long size() {
 		return provider.size();
 	}
 

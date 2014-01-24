@@ -19,7 +19,9 @@ package ro.nextreports.server.web.schedule;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
@@ -31,8 +33,6 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -46,14 +46,14 @@ import ro.nextreports.server.web.common.table.BooleanImagePropertyColumn;
 import ro.nextreports.server.web.common.table.DateColumn;
 import ro.nextreports.server.web.core.EntityBrowserPanel;
 
-
-//
 public class SchedulerJobHistoryPanel extends Panel {
 
-    @SpringBean
+    private static final long serialVersionUID = 1L;
+
+	@SpringBean
     private ReportService reportService;
 
-    private DataTable<RunReportHistory> table;
+    private DataTable<RunReportHistory, String> table;
     private SchedulerJobHistoryDataProvider dataProvider;
 
     public SchedulerJobHistoryPanel(String id, final SchedulerJob job) {
@@ -62,14 +62,14 @@ public class SchedulerJobHistoryPanel extends Panel {
         Label name = new Label("jobName", new Model<String>(job.getName()));
         add(name);
 
-        List<IColumn<RunReportHistory>> columns = new ArrayList<IColumn<RunReportHistory>>();
+        List<IColumn<RunReportHistory, String>> columns = new ArrayList<IColumn<RunReportHistory, String>>();
         columns.add(new DateColumn<RunReportHistory>(new Model<String>(getString("startDate")), "startDate", "startDate"));
-        columns.add(new PropertyColumn<RunReportHistory>(new Model<String>(getString("duration")), "duration", "duration") {
+        columns.add(new PropertyColumn<RunReportHistory, String>(new Model<String>(getString("duration")), "duration", "duration") {
         	
 			@Override
 			public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId, IModel<RunReportHistory> rowModel) {				
 				super.populateItem(item, componentId, rowModel);
-				item.add(new SimpleAttributeModifier("width", "70px"));
+				item.add(AttributeModifier.replace("width", "70px"));
 			}
 
 			@Override
@@ -91,12 +91,12 @@ public class SchedulerJobHistoryPanel extends Panel {
 			@Override
 			public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId, IModel<RunReportHistory> rowModel) {
 				super.populateItem(item, componentId, rowModel);
-				item.add(new SimpleAttributeModifier("width", "50px"));
+				item.add(AttributeModifier.replace("width", "50px"));
 			}
         	
         });
 
-        columns.add(new AbstractColumn<RunReportHistory>(new Model<String>(getString("ActionContributor.RunHistory.message"))) {
+        columns.add(new AbstractColumn<RunReportHistory, String>(new Model<String>(getString("ActionContributor.RunHistory.message"))) {
         	
             public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId,
                                      final IModel<RunReportHistory> rowModel) {
@@ -106,7 +106,7 @@ public class SchedulerJobHistoryPanel extends Panel {
             }
             
         });
-        columns.add(new AbstractColumn<RunReportHistory>(new Model<String>(getString("Url"))) {
+        columns.add(new AbstractColumn<RunReportHistory, String>(new Model<String>(getString("Url"))) {
         	
             public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId,
                                      final IModel<RunReportHistory> rowModel) {

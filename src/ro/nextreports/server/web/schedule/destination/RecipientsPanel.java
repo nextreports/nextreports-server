@@ -19,9 +19,9 @@ package ro.nextreports.server.web.schedule.destination;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
@@ -39,14 +39,15 @@ import ro.nextreports.server.web.common.misc.AjaxSubmitConfirmLink;
 import ro.nextreports.server.web.common.panel.AbstractImageLabelPanel;
 import ro.nextreports.server.web.common.table.BaseTable;
 
-
 /**
  * @author Decebal Suiu
  */
 public  class RecipientsPanel extends Panel {
 
-    private RecipientDataProvider provider;
-	private DataTable<Recipient> table;
+    private static final long serialVersionUID = 1L;
+    
+	private RecipientDataProvider provider;
+	private DataTable<Recipient, String> table;
 	private transient List<Recipient> marked = new ArrayList<Recipient>();
 	private CheckGroup<Recipient> group;
 
@@ -58,13 +59,13 @@ public  class RecipientsPanel extends Panel {
 		setOutputMarkupId(true);
 		setOutputMarkupPlaceholderTag(true);
 		
-        List<IColumn<Recipient>> columns = new ArrayList<IColumn<Recipient>>();
-        columns.add(new AbstractColumn<Recipient>(new Model<String>(getString("select"))) {
+        List<IColumn<Recipient, String>> columns = new ArrayList<IColumn<Recipient, String>>();
+        columns.add(new AbstractColumn<Recipient, String>(new Model<String>(getString("select"))) {
 
             public void populateItem(Item<ICellPopulator<Recipient>> item, String componentId, IModel<Recipient> rowModel) {
                 try {
                     item.add(new CheckBoxPanel(componentId, rowModel, item));
-                    item.add(new SimpleAttributeModifier("width", "30px"));
+                    item.add(AttributeModifier.replace("width", "30px"));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -109,7 +110,7 @@ public  class RecipientsPanel extends Panel {
 		return provider.size() != 0;
 	}
 	
-    class CheckBoxPanel extends Panel {
+    private class CheckBoxPanel extends Panel {
 
         public CheckBoxPanel(String id, IModel<Recipient> model, final Item<ICellPopulator<Recipient>> item) {
             super(id, model);
@@ -118,10 +119,11 @@ public  class RecipientsPanel extends Panel {
 
     }
 
-    class CheckBoxHeaderPanel extends Panel {
+    private class CheckBoxHeaderPanel extends Panel {
 
         public CheckBoxHeaderPanel(String id) {
             super(id);
+            
             CheckGroupSelector selector = new CheckGroupSelector("groupselector");
             group.add(selector);
             add(selector);
@@ -129,7 +131,7 @@ public  class RecipientsPanel extends Panel {
 
     }
     
-    class RecipientColumn extends AbstractColumn<Recipient> {
+    private class RecipientColumn extends AbstractColumn<Recipient, String> {
 
         public RecipientColumn() {
             super(new Model<String>(getString("ActionContributor.Run.destination.recipient")));
@@ -164,4 +166,5 @@ public  class RecipientsPanel extends Panel {
             item.add(component);
         }
     }
+    
 }

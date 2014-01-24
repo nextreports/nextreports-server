@@ -3,7 +3,8 @@ $(document).ready(function() {
 	
 	// wicket ajax handlers
 //	Wicket.Ajax.registerPreCallHandler(onStartAjax);
-	Wicket.Ajax.registerPostCallHandler(onInit);
+//	Wicket.Ajax.registerPostCallHandler(onInit);
+	Wicket.Event.subscribe('/ajax/call/complete', onInit);
 //	Wicket.Ajax.registerPostCallHandler(onStopAjax);
 //	Wicket.Ajax.registerFailureHandler(onStopAjax);
 });

@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
-public abstract class LinkPropertyColumn<T> extends PropertyColumn<T> {
+public abstract class LinkPropertyColumn<T> extends PropertyColumn<T, String> {
 		
 	private static final long serialVersionUID = 1L;
 	private IModel labelModel;
@@ -32,6 +32,7 @@ public abstract class LinkPropertyColumn<T> extends PropertyColumn<T> {
 	@SuppressWarnings("unchecked")
 	public LinkPropertyColumn(IModel displayModel, IModel labelModel) {
 		super(displayModel, null);
+		
 		this.labelModel = labelModel;
 	}
 

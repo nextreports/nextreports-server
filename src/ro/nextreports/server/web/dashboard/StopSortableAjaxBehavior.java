@@ -62,7 +62,7 @@ public abstract class StopSortableAjaxBehavior extends AbstractDefaultAjaxBehavi
 			protected void execute(JsScopeContext scopeContext) {
 //				scopeContext.append(FirebugLogger.log("stop ...................."));
 				scopeContext.append("var data = onStopWidgetMove();");
-				scopeContext.append("wicketAjaxGet('" + getCallbackUrl() 
+				scopeContext.append("Wicket.Ajax.get('" + getCallbackUrl() 
 						+ "&" + JSON_DATA + "='+ data" 
 						+ ", null, null, function() { return true; })");
 			}

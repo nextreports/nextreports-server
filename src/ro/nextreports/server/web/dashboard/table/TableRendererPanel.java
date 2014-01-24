@@ -82,15 +82,15 @@ public class TableRendererPanel extends GenericPanel<Report> {
         return table;
     }
 
-    private List<IColumn<RowData>> getPropertyColumns(List<String> header) {
-		List<IColumn<RowData>> columns = new ArrayList<IColumn<RowData>>();
+    private List<IColumn<RowData, String>> getPropertyColumns(List<String> header) {
+		List<IColumn<RowData, String>> columns = new ArrayList<IColumn<RowData, String>>();
 		int columnCount = header.size();		
 		boolean isDrillDownlable =  drillContext != null;
 		boolean isLastDrill = (drillContext != null) && drillContext.isLast();		
 		for (int i = 0; i < columnCount; i++) {		
 			final int j = i;
 			if (!isDrillDownlable || isLastDrill) {				
-			    columns.add(new PropertyColumn<RowData>(new Model<String>(header.get(i)), "cellValues." + i) {
+			    columns.add(new PropertyColumn<RowData, String>(new Model<String>(header.get(i)), "cellValues." + i) {
 			    	 public void populateItem(Item cellItem, String componentId, IModel rowModel) {
 			    		setCellStyle(cellItem, rowModel, j);
 						super.populateItem(cellItem, componentId, rowModel); 
@@ -100,7 +100,7 @@ public class TableRendererPanel extends GenericPanel<Report> {
 			} else {				
 				// link is added only for the column from the drill down report				
 				if (drillContext.getColumn() != i+1) {
-					columns.add(new PropertyColumn<RowData>(new Model<String>(header.get(i)), "cellValues." + i));
+					columns.add(new PropertyColumn<RowData, String>(new Model<String>(header.get(i)), "cellValues." + i));
 				} else {					
 					columns.add(new LinkPropertyColumn<RowData>(new Model<String>(header.get(i)), "cellValues." + i) {
 						

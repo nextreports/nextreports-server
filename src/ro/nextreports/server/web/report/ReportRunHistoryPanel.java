@@ -16,16 +16,17 @@
  */
 package ro.nextreports.server.web.report;
 
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
 import ro.nextreports.server.domain.Report;
 
-//
 public class ReportRunHistoryPanel extends Panel {
 
-    public ReportRunHistoryPanel(String id, final Report report) {
+    private static final long serialVersionUID = 1L;
+
+	public ReportRunHistoryPanel(String id, final Report report) {
         super(id);
 
         String text = "";
@@ -40,4 +41,5 @@ public class ReportRunHistoryPanel extends Panel {
 
         add(new RunHistoryPanel("runHistoryPanel", report));
     }
+    
 }

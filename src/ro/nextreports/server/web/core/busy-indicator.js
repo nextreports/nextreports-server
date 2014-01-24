@@ -4,9 +4,13 @@ var isBusy = false;
 function setup() {
     document.getElementsByTagName('body')[0].onclick = clickHandler;
     hideBusy();
-    Wicket.Ajax.registerPreCallHandler(showBusy);
-    Wicket.Ajax.registerPostCallHandler(hideBusy);
-    Wicket.Ajax.registerFailureHandler(hideBusy);
+
+//    Wicket.Ajax.registerPreCallHandler(showBusy);
+    Wicket.Event.subscribe('/ajax/call/before', showBusy);        
+//    Wicket.Ajax.registerPostCallHandler(hideBusy);
+    Wicket.Event.subscribe('/ajax/call/complete', hideBusy);
+//    Wicket.Ajax.registerFailureHandler(hideBusy);    
+    Wicket.Event.subscribe('/ajax/call/failure', hideBusy);
 }
 
 function hideBusy() {

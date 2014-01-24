@@ -51,7 +51,6 @@ import ro.nextreports.server.web.common.menu.MenuItem;
 import ro.nextreports.server.web.common.menu.MenuPanel;
 import ro.nextreports.server.web.common.table.BaseTable;
 
-
 /**
  * User: mihai.panaitescu
  * Date: 23-Sep-2010
@@ -62,7 +61,7 @@ public class DestinationsPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	
 	private SchedulerJob schedulerJob;
-    private DataTable<Destination> table;
+    private DataTable<Destination, String> table;
     private DestinationsDataProvider dataProvider;
     private WebMarkupContainer container;
     private DropDownChoice<String> typeChoice;
@@ -85,8 +84,8 @@ public class DestinationsPanel extends Panel {
     }
 
     private void addTable() {
-        List<IColumn<Destination>> columns = new ArrayList<IColumn<Destination>>();
-        columns.add(new AbstractColumn<Destination>(new Model<String>(getString("type"))) {
+        List<IColumn<Destination, String>> columns = new ArrayList<IColumn<Destination, String>>();
+        columns.add(new AbstractColumn<Destination, String>(new Model<String>(getString("type"))) {
 
 			private static final long serialVersionUID = 1L;
 
@@ -106,7 +105,7 @@ public class DestinationsPanel extends Panel {
 
         columns.add(new ActionsColumn());
 
-        columns.add(new AbstractColumn<Destination>(new Model<String>(getString("name"))) {
+        columns.add(new AbstractColumn<Destination, String>(new Model<String>(getString("name"))) {
 
 			private static final long serialVersionUID = 1L;
 
@@ -163,7 +162,7 @@ public class DestinationsPanel extends Panel {
         });
     }
 
-    class ActionsColumn extends AbstractColumn<Destination> {
+    private class ActionsColumn extends AbstractColumn<Destination, String> {
 
 		private static final long serialVersionUID = 1L;
 
@@ -183,7 +182,7 @@ public class DestinationsPanel extends Panel {
 
     }
 
-    class ActionPanel extends Panel {
+    private class ActionPanel extends Panel {
 
 		private static final long serialVersionUID = 1L;
 

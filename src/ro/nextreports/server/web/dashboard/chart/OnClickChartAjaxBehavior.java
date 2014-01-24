@@ -36,7 +36,7 @@ public class OnClickChartAjaxBehavior extends AbstractDefaultAjaxBehavior {
 	}
 
 	public String getOnClickJavaScript() {		
-		return "wicketAjaxGet('" + getCallbackUrl() 
+		return "Wicket.Ajax.get('" + getCallbackUrl() 
 			+ "&" + X_VALUE + "=" + JsonExporter.X_VALUE 
 			+ "', null, null, function() { return true; })";
 	}

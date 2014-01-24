@@ -31,24 +31,29 @@ import java.util.List;
  * Date: 24-Sep-2010
  * Time: 11:32:20
  */
-public class DestinationsDataProvider extends SortableDataProvider<Destination> {
+public class DestinationsDataProvider extends SortableDataProvider<Destination, String> {
 
-    private SchedulerJob schedulerJob;
+    private static final long serialVersionUID = 1L;
+    
+	private SchedulerJob schedulerJob;
 
     public DestinationsDataProvider(SchedulerJob schedulerJob) {
         super();
+        
         this.schedulerJob = schedulerJob;
     }
 
-    public Iterator<? extends Destination> iterator(int first, int count) {
-
+    @Override
+    public Iterator<? extends Destination> iterator(long first, long count) {
         return schedulerJob.getDestinations().iterator();
     }
 
-    public int size() {
+    @Override
+    public long size() {
         return schedulerJob.getDestinations().size();
     }
 
+    @Override
     public IModel<Destination> model(Destination destination) {
         return new Model<Destination>(destination);
     }

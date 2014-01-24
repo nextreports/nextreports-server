@@ -16,23 +16,23 @@
  */
 package ro.nextreports.server.web.common.table;
 
-import org.apache.wicket.markup.html.form.CheckGroup;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.Check;
-import org.apache.wicket.markup.html.form.CheckGroupSelector;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.repeater.Item;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.wicket.Component;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.markup.html.form.Check;
+import org.apache.wicket.markup.html.form.CheckGroup;
+import org.apache.wicket.markup.html.form.CheckGroupSelector;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
-import org.apache.wicket.Component;
-
-import java.util.List;
-import java.util.ArrayList;
+import org.apache.wicket.model.Model;
 
 /**
  * User: mihai.panaitescu
@@ -45,11 +45,11 @@ public class CheckTablePanel<T> extends Panel {
     private CheckGroup<T> group;
     private transient List<T> marked = new ArrayList<T>();
 
-     public CheckTablePanel(String id, List<IColumn<T>> columns, ISortableDataProvider<T> provider) {
+     public CheckTablePanel(String id, List<IColumn<T, String>> columns, ISortableDataProvider<T, String> provider) {
          this(id, columns, provider, Integer.MAX_VALUE);
      }
 
-    public CheckTablePanel(String id, List<IColumn<T>> columns, ISortableDataProvider<T> provider, int rows) {
+    public CheckTablePanel(String id, List<IColumn<T, String>> columns, ISortableDataProvider<T, String> provider, int rows) {
         super(id);
 
         group = new CheckGroup<T>("group", marked);
@@ -78,12 +78,14 @@ public class CheckTablePanel<T> extends Panel {
         return dataTable;
     }
 
-    private IColumn<T> createCheckColumn() {
-        return new AbstractColumn<T>(new Model<String>("Select")) {
+    private IColumn<T, String> createCheckColumn() {
+        return new AbstractColumn<T, String>(new Model<String>("Select")) {
 
-            public void populateItem(Item<ICellPopulator<T>> item, String componentId, IModel<T> rowModel) {
+            private static final long serialVersionUID = 1L;
+
+			public void populateItem(Item<ICellPopulator<T>> item, String componentId, IModel<T> rowModel) {
                 item.add(new CheckBoxPanel(componentId, rowModel, item));
-                item.add(new SimpleAttributeModifier("class", "checkboxColumn"));
+                item.add(AttributeAppender.append("class", "checkboxColumn"));
             }
 
             @Override
@@ -94,8 +96,8 @@ public class CheckTablePanel<T> extends Panel {
         };
     }
 
-    protected List<IColumn<T>> createTableColumns(List<IColumn<T>> cols) {
-        List<IColumn<T>> columns = new ArrayList<IColumn<T>>();
+    protected List<IColumn<T, String>> createTableColumns(List<IColumn<T, String>> cols) {
+        List<IColumn<T, String>> columns = new ArrayList<IColumn<T, String>>();
         columns.add(createCheckColumn());
         columns.addAll(cols);
         return columns;
@@ -105,25 +107,26 @@ public class CheckTablePanel<T> extends Panel {
         return item;
     }
 
-    class CheckBoxPanel extends Panel {
+    private class CheckBoxPanel extends Panel {
 
         public CheckBoxPanel(String id, IModel<T> model, final Item<ICellPopulator<T>> item) {
             super(id, model);
+            
             add(new Check<T>("select", model));
         }
 
     }
 
-    class CheckBoxHeaderPanel extends Panel {
+    private class CheckBoxHeaderPanel extends Panel {
 
         public CheckBoxHeaderPanel(String id) {
             super(id);
+            
             CheckGroupSelector selector = new CheckGroupSelector("groupselector");
             group.add(selector);
             add(selector);
         }
 
     }
-
 
 }

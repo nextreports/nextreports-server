@@ -26,7 +26,10 @@ import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.FeedbackMessages;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.request.resource.PackageResourceReference;
 
 /**
@@ -49,14 +52,14 @@ public class JGrowlAjaxBehavior extends AbstractDefaultAjaxBehavior {
 		super.renderHead(component, response);
 		
 //		System.out.println("JGrowl render head");
-		response.renderJavaScriptReference(new PackageResourceReference(JGrowlAjaxBehavior.class, "jquery.jgrowl.js"));
-        response.renderCSSReference(new PackageResourceReference(JGrowlAjaxBehavior.class, "jquery.jgrowl.css"));
-        response.renderCSSReference(new PackageResourceReference(JGrowlAjaxBehavior.class, "jgrowl.css"));
+		response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(JGrowlAjaxBehavior.class, "jquery.jgrowl.js")));
+        response.render(CssHeaderItem.forReference(new PackageResourceReference(JGrowlAjaxBehavior.class, "jquery.jgrowl.css")));
+        response.render(CssHeaderItem.forReference(new PackageResourceReference(JGrowlAjaxBehavior.class, "jgrowl.css")));
 
 		String feedback = renderFeedback();
 		if (!StringUtils.isEmpty(feedback)) {
 //			System.out.println("rendering");
-			response.renderOnDomReadyJavaScript(feedback);
+			response.render(OnDomReadyHeaderItem.forScript(feedback));
 		}
 	}
 	
@@ -69,14 +72,6 @@ public class JGrowlAjaxBehavior extends AbstractDefaultAjaxBehavior {
 		}
 
 	}
-
-	/*
-	@Override
-	protected void onBind() {
-		// Add the jgrowl css so the components that use the behaviour don't have to do it.
-		getComponent().add((CSSPackageResource.getHeaderContribution(this.getClass(), "jquery.jgrowl.css")));
-	}
-	*/
 
 	private String renderFeedback() {
 		//	this.getComponent().getFeedbackMessage();

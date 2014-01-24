@@ -181,7 +181,10 @@ public class UploadChartPanel extends Panel {
             uploadField.setRequired(true);
             uploadField.setLabel(new Model<String>(getString("ActionContributor.UploadChart.file")));
             uploadField.add(new AjaxEventBehavior("onchange") {
-                protected void onEvent(AjaxRequestTarget target) {
+            	
+                private static final long serialVersionUID = 1L;
+
+				protected void onEvent(AjaxRequestTarget target) {
                     Request request = RequestCycle.get().getRequest();
                     String filename = request.getRequestParameters().getParameterValue("filename").toString();
                     String text = getModel().getObject().getName();
@@ -195,12 +198,13 @@ public class UploadChartPanel extends Panel {
                     target.add(name);
                 }
 
-                @Override
-				protected CharSequence generateCallbackScript(CharSequence partialCall) {
-                    CharSequence callbackScript = super.generateCallbackScript(partialCall);
-                    return callbackScript + "&filename=' + this.value + '";
+				// TODO wicket-6
+				@Override
+				public CharSequence getCallbackScript() {
+					CharSequence callbackScript = super.getCallbackScript();
+					return callbackScript + "&filename=' + this.value + '";
 				}
-
+				
             });
             add(uploadField);
 

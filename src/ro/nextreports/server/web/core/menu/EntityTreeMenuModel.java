@@ -21,13 +21,13 @@ import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.StringResourceModel;
 
+import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.web.common.menu.MenuItem;
 import ro.nextreports.server.web.common.menu.MenuPanel;
-import ro.nextreports.server.web.core.tree.EntityTree;
-
 
 /**
  * @author Decebal Suiu
@@ -36,9 +36,9 @@ public class EntityTreeMenuModel extends LoadableDetachableModel<List<MenuItem>>
 
 	private static final long serialVersionUID = 1L;
 	
-	private EntityTree tree;
+	private NestedTree<Entity> tree;
 	
-	public EntityTreeMenuModel(EntityTree tree) {
+	public EntityTreeMenuModel(NestedTree<Entity> tree) {
 		this.tree = tree;
 	}
 	
@@ -51,8 +51,11 @@ public class EntityTreeMenuModel extends LoadableDetachableModel<List<MenuItem>>
         	private static final long serialVersionUID = 1L;
         	
             public void onClick(AjaxRequestTarget target) {
+            	// TODO wicket-6
+            	/*
                 tree.getTreeState().expandAll();
                 tree.updateTree(target);
+                */
             }
             
         };
@@ -62,8 +65,11 @@ public class EntityTreeMenuModel extends LoadableDetachableModel<List<MenuItem>>
         	private static final long serialVersionUID = 1L;
         	
             public void onClick(AjaxRequestTarget target) {
+            	// TODO wicket-6
+            	/*
                 tree.getTreeState().collapseAll();
                 tree.updateTree(target);
+                */
             }
             
         };

@@ -26,11 +26,11 @@ import org.apache.wicket.model.Model;
 
 import ro.nextreports.server.domain.SmtpDestination;
 
+public class RecipientDataProvider extends SortableDataProvider<Recipient, String> {
 
-//
-public class RecipientDataProvider extends SortableDataProvider<Recipient> {
-
-    private SmtpDestination smtpDestination;
+    private static final long serialVersionUID = 1L;
+    
+	private SmtpDestination smtpDestination;
 
     public RecipientDataProvider(SmtpDestination smtpDestination) {
         super();
@@ -47,15 +47,17 @@ public class RecipientDataProvider extends SortableDataProvider<Recipient> {
         this.smtpDestination = smtpDestination;
     }
 
-    public Iterator<? extends Recipient> iterator(int first, int count) {
-
+    @Override
+    public Iterator<? extends Recipient> iterator(long first, long count) {
         return getRecipients().iterator();
     }
 
-    public int size() {
+    @Override
+    public long size() {
         return getRecipients().size();
     }
 
+    @Override
     public IModel<Recipient> model(Recipient recipient) {
         return new Model<Recipient>(recipient);
     }

@@ -25,7 +25,9 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
@@ -36,13 +38,12 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import ro.nextreports.server.service.DashboardService;
-import ro.nextreports.server.web.dashboard.WidgetView;
-import ro.nextreports.server.web.dashboard.model.WidgetModel;
-
 import ro.nextreports.engine.ReportRunnerException;
 import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.engine.exporter.util.IndicatorData;
+import ro.nextreports.server.service.DashboardService;
+import ro.nextreports.server.web.dashboard.WidgetView;
+import ro.nextreports.server.web.dashboard.model.WidgetModel;
 
 public class IndicatorWidgetView  extends WidgetView  {
 	
@@ -188,9 +189,9 @@ public class IndicatorWidgetView  extends WidgetView  {
 			super.renderHead(component, response);					
 			
 			//include js file
-	        response.renderJavaScriptReference(INDICATOR_UTIL_JS);
+	        response.render(JavaScriptHeaderItem.forReference(INDICATOR_UTIL_JS));
 	        
-	        response.renderOnLoadJavaScript(getJavascript());	
+	        response.render(OnLoadHeaderItem.forScript(getJavascript()));	
 		}
 
 		@Override
@@ -205,7 +206,7 @@ public class IndicatorWidgetView  extends WidgetView  {
 					container.replace(new IndicatorHTML5Panel("image", width, height, indicatorModel).setOutputMarkupId(true));
 				} else {
 					// for image height must be a little less than html5 panel
-					// to have two indicators (one under the other) in dashbord to occupy same height as a single chart
+					// to have two indicators (one under the other) in dashboard to occupy same height as a single chart
 					if ("122".equals(height)) {
 						height = "120";
 					}
@@ -220,7 +221,7 @@ public class IndicatorWidgetView  extends WidgetView  {
 		private String getJavascript() {
 			StringBuilder sb = new StringBuilder();
 			sb.append("var data = isCanvasEnabled();");
-			sb.append("wicketAjaxGet('" + getCallbackUrl() + "&" + PARAM + "='+ data" 
+			sb.append("wicket.Ajax.get('" + getCallbackUrl() + "&" + PARAM + "='+ data" 
 				+ ", null, null, function() { return true; })");
 			return sb.toString();
 		}

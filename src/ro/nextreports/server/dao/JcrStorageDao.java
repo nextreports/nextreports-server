@@ -39,10 +39,10 @@ import org.apache.jackrabbit.value.ValueFactoryImpl;
 import org.jcrom.JcrDataProviderImpl;
 import org.jcrom.JcrFile;
 import org.jcrom.JcrMappingException;
+import org.jcrom.annotations.JcrIdentifier;
 import org.jcrom.annotations.JcrName;
 import org.jcrom.annotations.JcrNode;
 import org.jcrom.annotations.JcrPath;
-import org.jcrom.annotations.JcrUUID;
 import org.jcrom.util.NodeFilter;
 import org.jcrom.util.ReflectionUtils;
 import org.springframework.beans.factory.InitializingBean;
@@ -172,7 +172,7 @@ public class JcrStorageDao extends AbstractJcrDao implements StorageDao, Initial
     	return getEntityChildrenById(id, 0, Integer.MAX_VALUE);
     }
 
-    public Entity[] getEntityChildrenById(String id, int firstResult, int maxResults) throws NotFoundException { 
+    public Entity[] getEntityChildrenById(String id, long firstResult, long maxResults) throws NotFoundException { 
     	//long s1 = System.currentTimeMillis();
     	//boolean sortable = true;
         Node node = checkId(id);
@@ -383,7 +383,7 @@ public class JcrStorageDao extends AbstractJcrDao implements StorageDao, Initial
 	}
 	
 	static Field findUUIDField( Object obj ) {
-		return findAnnotatedField(obj, JcrUUID.class);
+		return findAnnotatedField(obj, JcrIdentifier.class);
 	}
     
     public void modifyEntity(Entity entity) {

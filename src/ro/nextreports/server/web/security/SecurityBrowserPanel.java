@@ -35,19 +35,20 @@ import ro.nextreports.server.web.core.table.LastUpdatedByColumn;
 import ro.nextreports.server.web.core.table.LastUpdatedDateColumn;
 import ro.nextreports.server.web.core.table.NameColumn;
 
-
 /**
  * @author Decebal Suiu
  */
 public class SecurityBrowserPanel extends EntityBrowserPanel {
+
+	private static final long serialVersionUID = 1L;
 
 	public SecurityBrowserPanel(String id, String sectionId) {
 		super(id, sectionId);
 	}
 
 	@Override
-	protected List<IColumn<Entity>> createTableColumns() {
-		List<IColumn<Entity>> columns = new ArrayList<IColumn<Entity>>();
+	protected List<IColumn<Entity, String>> createTableColumns() {
+		List<IColumn<Entity, String>> columns = new ArrayList<IColumn<Entity, String>>();
         columns.add(new NameColumn() {
         	
             public void onEntitySelection(Entity entity, AjaxRequestTarget target) {
@@ -64,11 +65,13 @@ public class SecurityBrowserPanel extends EntityBrowserPanel {
         return columns;
 	}
 	
+	@Override
 	protected int getEntitiesPerPage() {
 		return 25;
 	}
 	
-	protected ISortableDataProvider<Entity> getEntityDataProvider()  {
+	@Override
+	protected ISortableDataProvider<Entity, String> getEntityDataProvider()  {
 		EntityDataProvider dataProvider = new PagingEntityDataProvider(getModel());
 		// see ENtityBrowserPanel onNodeClicked were FakeSortableDataAdapter is used to take 
 		// the count with or without security!

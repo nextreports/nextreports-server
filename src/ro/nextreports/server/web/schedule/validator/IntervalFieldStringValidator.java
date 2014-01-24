@@ -18,6 +18,7 @@ package ro.nextreports.server.web.schedule.validator;
 
 import org.apache.wicket.validation.validator.StringValidator;
 import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.util.lang.Classes;
 
 import ro.nextreports.server.web.schedule.time.SelectIntervalPanel;
@@ -26,7 +27,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Arrays;
-
 
 /**
  * User: mihai.panaitescu
@@ -38,37 +38,41 @@ import java.util.Arrays;
 //  - checks that in a string "a-b" a is previous b (see  SelectIntervalPanel.getComparator)  
 public class IntervalFieldStringValidator extends StringValidator {
 
-    private String entityType;
+    private static final long serialVersionUID = 1L;
+    
+	private String entityType;
 
     public IntervalFieldStringValidator(String entityType) {
         this.entityType = entityType;
     }
 
-    protected void onValidate(IValidatable<String> stringIValidatable) {
-        boolean error = false;
-        String s = stringIValidatable.getValue();
+    // TODO wicket-6
+    @Override
+    public void validate(IValidatable<String> validatable) {
+        boolean hasError = false;
+        String s = validatable.getValue();
         String[] elements = s.split(",");
         if (elements.length > 1) {
             List<String> nonDuplicatesList = new ArrayList<String>(new LinkedHashSet<String>(Arrays.asList(elements)));
             if (elements.length != nonDuplicatesList.size()) {
                 // have duplicates
-                error = true;
+            	hasError = true;
             }
         } else {
             elements = s.split("-");
             if (elements.length == 2) {
                 if (SelectIntervalPanel.getComparator(entityType, false).compare(elements[0], elements[1]) >= 0) {
-                    error = true;
+                	hasError = true;
                 }
             }
         }
-        if (error) {
-            error(stringIValidatable, resourceKey());
+        
+        if (hasError) {
+			ValidationError error = new ValidationError();
+			String messageKey = Classes.simpleName(IntervalFieldStringValidator.class);
+			error.addKey(messageKey);
+			validatable.error(error);
         }
     }
 
-    @Override
-    protected String resourceKey() {
-        return Classes.simpleName(IntervalFieldStringValidator.class);
-    }
 }

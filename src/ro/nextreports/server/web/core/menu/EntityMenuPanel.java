@@ -21,7 +21,6 @@ import org.apache.wicket.model.IModel;
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.web.common.menu.MenuPanel;
 
-
 /**
  * @author Decebal Suiu
  */

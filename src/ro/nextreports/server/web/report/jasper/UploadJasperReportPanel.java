@@ -70,11 +70,11 @@ import ro.nextreports.server.web.core.EntityBrowserPanel;
 import ro.nextreports.server.web.core.validation.DuplicationEntityValidator;
 import ro.nextreports.server.web.core.validation.JcrNameValidator;
 
-
-//
 public class UploadJasperReportPanel extends Panel {
 
-    private static final Logger LOG = LoggerFactory.getLogger(UploadJasperReportPanel.class);
+    private static final long serialVersionUID = 1L;
+
+	private static final Logger LOG = LoggerFactory.getLogger(UploadJasperReportPanel.class);
 
     private FileUploadField masterUploadField;
     private MultiFileUploadField subreportsUploadField;
@@ -278,6 +278,7 @@ public class UploadJasperReportPanel extends Panel {
             	
 				private static final long serialVersionUID = 1L;
 
+				@Override
 				protected void onEvent(AjaxRequestTarget target) {
                      Request request = RequestCycle.get().getRequest();
                      String filename = request.getRequestParameters().getParameterValue("filename").toString();
@@ -292,12 +293,13 @@ public class UploadJasperReportPanel extends Panel {
                      target.add(name);
                  }
 
-                 @Override
-				protected CharSequence generateCallbackScript(CharSequence partialCall) {
-                	 CharSequence callbackScrip = super.generateCallbackScript(partialCall);
-                     return callbackScrip + "&filename=' + this.value + '";
-				}
-
+				// TODO wicket-6
+				@Override
+				public CharSequence getCallbackScript() {
+					CharSequence callbackScrip = super.getCallbackScript();
+                    return callbackScrip + "&filename=' + this.value + '";
+                }
+				
              });
             parametersUploadField = new FileUploadField("parameterFile", new Model(new ArrayList<FileUpload>()));
             imagesUploadField = new MultiFileUploadField("imageFile", new PropertyModel(this, "imagesUploads"), 3);

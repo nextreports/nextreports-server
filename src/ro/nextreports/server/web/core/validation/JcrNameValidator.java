@@ -26,7 +26,9 @@ import org.apache.wicket.validation.ValidationError;
  */
 public class JcrNameValidator extends BaseMessageStringValidator {
 
-    public JcrNameValidator() {
+    private static final long serialVersionUID = 1L;
+
+	public JcrNameValidator() {
         this(null);
     }
 
@@ -34,15 +36,17 @@ public class JcrNameValidator extends BaseMessageStringValidator {
         super(errorMessage);
     }
 
-    @Override
-    protected void onValidate(IValidatable<String> validatable) {
+    // TODO wicket-6
+	@Override
+	public void validate(IValidatable<String> validatable) {
         // check rawValue is a valid jcr name
         String value = validatable.getValue();
         try {
             NameParser.checkFormat(value);
         } catch (IllegalNameException e) {
             if (errorMessage == null) {
-                error(validatable);
+            	ValidationError error = new ValidationError();
+        		validatable.error(error);
             } else {
                 ValidationError error = new ValidationError();
                 String message = String.format(errorMessage, value);

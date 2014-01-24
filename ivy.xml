@@ -118,8 +118,8 @@
 
         <!-- Wiquery -->        
         <dependency org="org.codehaus.jackson" name="jackson-mapper-asl" rev="1.9.4"/>
-        <dependency org="org.odlabs.wiquery" name="wiquery-core" rev="${wicket.version}"/>
-        <dependency org="org.odlabs.wiquery" name="wiquery-jquery-ui" rev="${wicket.version}"/>
+        <dependency org="org.odlabs.wiquery" name="wiquery-core" rev="${wiquery.version}"/>
+        <dependency org="org.odlabs.wiquery" name="wiquery-jquery-ui" rev="${wiquery.version}"/>
 
         <!-- JCifs Samba client -->
         <dependency org="jcifs" name="jcifs" rev="1.3.17">
@@ -157,6 +157,9 @@
         <!-- Jasypt : encryption -->
         <dependency org="org.jasypt" name="jasypt" rev="1.9.0"/>
         <dependency org="org.jasypt" name="jasypt-spring3" rev="1.9.0"/>
+        
+        <!-- Force resolve a specific derby jdbc driver -->
+        <dependency org="org.apache.derby" name="derby" rev="10.10.1.1"/>
     </dependencies>           
             
 </ivy-module>

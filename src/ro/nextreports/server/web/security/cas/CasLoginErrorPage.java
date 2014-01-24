@@ -16,21 +16,22 @@
  */
 package ro.nextreports.server.web.security.cas;
 
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
-
-import ro.nextreports.server.web.security.cas.CasUtil;
-
 
 /**
  * @author Decebal Suiu
  */
 public class CasLoginErrorPage extends WebPage {
     
-    public CasLoginErrorPage() {
+    private static final long serialVersionUID = 1L;
+
+	public CasLoginErrorPage() {
+    	super();
+    	
         String logoutUrl = CasUtil.getLogoutUrl();
-        add(new WebMarkupContainer("casLogin").add(new SimpleAttributeModifier("href", logoutUrl)));
+        add(new WebMarkupContainer("casLogin").add(AttributeModifier.replace("href", logoutUrl)));
     }
 
 }

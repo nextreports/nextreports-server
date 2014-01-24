@@ -32,7 +32,6 @@ import ro.nextreports.server.web.core.action.DefaultActionContext;
 import ro.nextreports.server.web.core.section.EntitySection;
 import ro.nextreports.server.web.core.section.SectionManager;
 
-
 /**
  * @author Decebal Suiu
  */

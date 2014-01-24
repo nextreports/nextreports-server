@@ -18,6 +18,8 @@ package ro.nextreports.server.web.core.settings;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.core.request.handler.PageProvider;
+import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -28,8 +30,6 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.handler.PageProvider;
-import org.apache.wicket.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
 
@@ -38,8 +38,9 @@ import ro.nextreports.server.web.core.validation.ImageValidator;
 import ro.nextreports.server.web.language.LanguageManager;
 import ro.nextreports.server.web.themes.ThemesManager;
 
-
 public class ChangeLogoPanel extends Panel {
+
+	private static final long serialVersionUID = 1L;
 
 	@SpringBean
 	private StorageService storageService;

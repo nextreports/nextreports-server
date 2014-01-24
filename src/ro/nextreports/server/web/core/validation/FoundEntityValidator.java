@@ -24,7 +24,9 @@ import org.apache.wicket.validation.ValidationError;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.util.StorageUtil;
 
-
+/**
+ * @author Decebal Suiu
+ */
 public class FoundEntityValidator extends BaseMessageStringValidator {
 	
 	private static final long serialVersionUID = 1L;
@@ -40,12 +42,15 @@ public class FoundEntityValidator extends BaseMessageStringValidator {
 
     public FoundEntityValidator(String parentPath, String errorMessage) {
         super(errorMessage);
+        
         this.parentPath = parentPath;
+        
         Injector.get().inject(this);
     }
 
-    @Override
-	protected void onValidate(IValidatable<String> validatable) {	
+    // TODO wicket-6
+	@Override
+	public void validate(IValidatable<String> validatable) {
 		String value = validatable.getValue();
 		String path = StorageUtil.createPath(parentPath, value);		
 		if (storageService.entityExists(path)) {			

@@ -19,7 +19,9 @@ package ro.nextreports.server.web.dashboard.indicator;
 import java.awt.Color;
 
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
@@ -30,11 +32,14 @@ import ro.nextreports.engine.exporter.util.IndicatorData;
 
 public class IndicatorHTML5Panel extends GenericPanel<IndicatorData> {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private final ResourceReference INDICATOR_JS = new JavaScriptResourceReference(IndicatorHTML5Panel.class, "indicator.js");
 	private boolean zoom = false;
 
 	public IndicatorHTML5Panel(String id, String width, String height, IModel<IndicatorData> model) {
 		super(id, model);
+		
 		WebMarkupContainer container = new WebMarkupContainer("canvas");
 		container.setOutputMarkupId(true);
 		container.add(new AttributeAppender("width", width));
@@ -45,16 +50,15 @@ public class IndicatorHTML5Panel extends GenericPanel<IndicatorData> {
 		
 	@Override
     public void renderHead(IHeaderResponse response) {
-				
-		response.renderOnLoadJavaScript(getResizeEndDefinition());
-		response.renderOnLoadJavaScript(getResizeJavaScript());
+		response.render(OnLoadHeaderItem.forScript(getResizeEndDefinition()));
+		response.render(OnLoadHeaderItem.forScript(getResizeJavaScript()));
 	
 		// must call indicator onLoad instead of onDomReady to appear it in iframe
 		// $(document).ready in the iframe seems to be fired too soon and the iframe content isn't even loaded yet
-		response.renderOnLoadJavaScript(getIndicatorCall());
+		response.render(OnLoadHeaderItem.forScript(getIndicatorCall()));
 		
 		//include js file
-        response.renderJavaScriptReference(INDICATOR_JS);
+        response.render(JavaScriptHeaderItem.forReference(INDICATOR_JS));
         
         //<script> tag
         //response.renderJavaScript(getJavaScript(), null); 

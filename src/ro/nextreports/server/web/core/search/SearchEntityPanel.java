@@ -96,7 +96,6 @@ import ro.nextreports.server.web.core.table.TypeColumn;
 import ro.nextreports.server.web.report.ReportSection;
 import ro.nextreports.server.web.schedule.SchedulerSection;
 
-
 public class SearchEntityPanel extends GenericPanel<Entity> implements AjaxUpdateListener {
 
 	private static final long serialVersionUID = 1L;
@@ -231,7 +230,7 @@ public class SearchEntityPanel extends GenericPanel<Entity> implements AjaxUpdat
     }
 
     protected AjaxCheckTablePanel<Entity> createTablePanel(EntityListDataProvider dataProvider) {
-        SortableDataProvider<Entity> sortableDataProvider = new SortableDataAdapter<Entity>(dataProvider);
+        SortableDataProvider<Entity, String> sortableDataProvider = new SortableDataAdapter<Entity>(dataProvider);
         return new AjaxCheckTablePanel<Entity>("table", createTableColumns(), sortableDataProvider, 10) {
         	
 			private static final long serialVersionUID = 1L;
@@ -244,8 +243,8 @@ public class SearchEntityPanel extends GenericPanel<Entity> implements AjaxUpdat
         };
     }
 
-    protected List<IColumn<Entity>> createTableColumns() {
-        List<IColumn<Entity>> columns = new ArrayList<IColumn<Entity>>();
+    protected List<IColumn<Entity, String>> createTableColumns() {
+        List<IColumn<Entity, String>> columns = new ArrayList<IColumn<Entity, String>>();
         columns.add(new EntityNameColumn());
         columns.add(new ActionsColumn());
 
@@ -629,7 +628,7 @@ public class SearchEntityPanel extends GenericPanel<Entity> implements AjaxUpdat
 
     }
 
-    class EntityNameColumn extends PropertyColumn<Entity> {
+    private class EntityNameColumn extends PropertyColumn<Entity, String> {
 
         public EntityNameColumn() {
             super(new Model<String>(getString("ActionContributor.Search.entityName")), "name", "name");
@@ -685,7 +684,7 @@ public class SearchEntityPanel extends GenericPanel<Entity> implements AjaxUpdat
         
     }
 
-    private class EntityPathColumn extends AbstractColumn<Entity> {
+    private class EntityPathColumn extends AbstractColumn<Entity, String> {
 
 		private static final long serialVersionUID = 1L;
 
@@ -700,9 +699,9 @@ public class SearchEntityPanel extends GenericPanel<Entity> implements AjaxUpdat
         }
     }
 
-    private class ActionsColumn extends AbstractColumn<Entity> {
+    private class ActionsColumn extends AbstractColumn<Entity, String> {
 
-        private static final long serialVersionUID = -7166798281827700607L;
+        private static final long serialVersionUID = 1L;
 
         public ActionsColumn() {
             super(new Model<String>(getString("ActionContributor.Search.entityActions")));

@@ -26,7 +26,8 @@ import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -44,7 +45,6 @@ import org.odlabs.wiquery.ui.sortable.SortableBehavior;
 import ro.nextreports.server.pivot.Aggregator;
 import ro.nextreports.server.pivot.PivotField;
 import ro.nextreports.server.pivot.PivotModel;
-
 
 /**
  * @author Decebal Suiu
@@ -137,7 +137,7 @@ public class PivotAreaPanel extends Panel {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		
-		response.renderJavaScriptReference(new PackageResourceReference(PivotAreaPanel.class, "pivot.js"));
+		response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(PivotAreaPanel.class, "pivot.js")));
 	}
 
 	@Override

@@ -29,8 +29,7 @@ import ro.nextreports.server.domain.Report;
 import ro.nextreports.server.domain.ReportRuntimeTemplate;
 import ro.nextreports.server.service.ReportService;
 
-
-public class TemplatesDataProvider extends SortableDataProvider<ReportRuntimeTemplate> {
+public class TemplatesDataProvider extends SortableDataProvider<ReportRuntimeTemplate, String> {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -45,15 +44,18 @@ public class TemplatesDataProvider extends SortableDataProvider<ReportRuntimeTem
     	this.report = report;
     }
 
-	public Iterator<? extends ReportRuntimeTemplate> iterator(int first, int count) {
+    @Override
+	public Iterator<? extends ReportRuntimeTemplate> iterator(long first, long count) {
 		return getTemplates().iterator();
 	}
 
+	@Override
 	public IModel<ReportRuntimeTemplate> model(ReportRuntimeTemplate template) {
 		return new Model<ReportRuntimeTemplate>(template);
 	}
 
-	public int size() {
+	@Override
+	public long size() {
 		return getTemplates().size();
 	}
 

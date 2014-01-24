@@ -17,20 +17,23 @@
 package ro.nextreports.server.web.core;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
+import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
-import org.apache.wicket.markup.html.tree.BaseTree;
-import org.apache.wicket.markup.html.tree.DefaultTreeState;
-import org.apache.wicket.markup.html.tree.ITreeState;
+import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
+import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
+import org.apache.wicket.extensions.markup.html.repeater.tree.content.Folder;
+import org.apache.wicket.extensions.markup.html.repeater.tree.theme.WindowsTheme;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +42,8 @@ import ro.nextreports.server.StorageConstants;
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.exception.NotFoundException;
 import ro.nextreports.server.service.StorageService;
+import ro.nextreports.server.util.EntityComparator;
+import ro.nextreports.server.util.I18NUtil;
 import ro.nextreports.server.web.NextServerSession;
 import ro.nextreports.server.web.chart.ChartSection;
 import ro.nextreports.server.web.common.event.AjaxUpdateEvent;
@@ -63,11 +68,8 @@ import ro.nextreports.server.web.core.table.LastUpdatedByColumn;
 import ro.nextreports.server.web.core.table.LastUpdatedDateColumn;
 import ro.nextreports.server.web.core.table.NameColumn;
 import ro.nextreports.server.web.core.table.TypeColumn;
-import ro.nextreports.server.web.core.tree.DefaultEntityNode;
-import ro.nextreports.server.web.core.tree.EntityNode;
-import ro.nextreports.server.web.core.tree.EntityTree;
+import ro.nextreports.server.web.core.tree.EntityTreeProvider;
 import ro.nextreports.server.web.report.ReportSection;
-
 
 /**
  * @author Decebal Suiu
@@ -84,7 +86,7 @@ public class EntityBrowserPanel extends StackPanel implements AjaxUpdateListener
     protected MenuPanel treeMenuPanel;
     protected MenuPanel menuPanel;
     protected EntityTree tree;
-    protected ISortableDataProvider<Entity> dataProvider;
+    protected ISortableDataProvider<Entity, String> dataProvider;
     protected AjaxCheckTablePanel<Entity> tablePanel;
 
     protected String sectionId;
@@ -139,28 +141,35 @@ public class EntityBrowserPanel extends StackPanel implements AjaxUpdateListener
     @Override
     protected void onBeforeRender() {
         selectEntity(getModelObject(), null);
+        
         super.onBeforeRender();
     }
 
     protected EntityTree createTree(String rootPath) {
-        return new EntityTree("tree", rootPath) {
+    	ITreeProvider<Entity> treeProvider = new EntityTreeProvider(rootPath) {
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-            protected ITreeState newTreeState() {
-                return new TreeState();
-            }
+			protected boolean acceptEntityAsChild(Entity entity) {
+				return (entity instanceof ro.nextreports.server.domain.Folder);
+			}
 
-            @Override
-            protected void onNodeLinkClicked(Object node, BaseTree tree, AjaxRequestTarget target) {
-                onNodeClicked((EntityNode) node, target);
-            }
-
-        };
+			@Override
+			protected List<Entity> getChildren(String id) throws NotFoundException {
+				// sort
+				List<Entity> children = super.getChildren(id);
+				Collections.sort(children, new EntityComparator());
+				
+				return children;
+			}
+    		
+    	};
+    	
+        return new EntityTree("tree", treeProvider);
     }
 
-    protected AjaxCheckTablePanel<Entity> createTablePanel(ISortableDataProvider<Entity> dataProvider) {
+    protected AjaxCheckTablePanel<Entity> createTablePanel(ISortableDataProvider<Entity, String> dataProvider) {
         return new AjaxCheckTablePanel<Entity>("work", createTableColumns(), dataProvider, getEntitiesPerPage()) {
         	
 			private static final long serialVersionUID = 1L;
@@ -171,6 +180,7 @@ public class EntityBrowserPanel extends StackPanel implements AjaxUpdateListener
                 selectEntity(entityIModel.getObject(), item, ReportSection.ID);
                 // select chart from dashboard GoTo
                 selectEntity(entityIModel.getObject(), item, ChartSection.ID);
+                
                 return item;
             }
         	
@@ -181,16 +191,18 @@ public class EntityBrowserPanel extends StackPanel implements AjaxUpdateListener
     	return Integer.MAX_VALUE;
     }
     
-    protected ISortableDataProvider<Entity> getEntityDataProvider()  {
-    	EntityDataProvider dataProvider = new EntityDataProvider(getModel());
-    	return new SortableDataAdapter<Entity>(dataProvider);
+    protected ISortableDataProvider<Entity, String> getEntityDataProvider()  {
+    	return new SortableDataAdapter<Entity>(new EntityDataProvider(getModel()));
     }
 
-    protected List<IColumn<Entity>> createTableColumns() {
-        List<IColumn<Entity>> columns = new ArrayList<IColumn<Entity>>();
+    protected List<IColumn<Entity, String>> createTableColumns() {
+        List<IColumn<Entity, String>> columns = new ArrayList<IColumn<Entity, String>>();
         columns.add(new NameColumn() {
         	
-            public void onEntitySelection(Entity entity, AjaxRequestTarget target) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+			public void onEntitySelection(Entity entity, AjaxRequestTarget target) {
                 selectEntity(entity, target);
             }
             
@@ -219,7 +231,6 @@ public class EntityBrowserPanel extends StackPanel implements AjaxUpdateListener
     }
 
     private void addTableLinks() {
-//        menuPanel = new EntityMenuPanel("menuPanel", getModel(), sectionId);
     	menuPanel = new EntityMenuPanel("menuPanel", getModel(), sectionId) {
     		
 			private static final long serialVersionUID = 1L;
@@ -235,10 +246,10 @@ public class EntityBrowserPanel extends StackPanel implements AjaxUpdateListener
         add(menuPanel);
     }
 
-    private void onNodeClicked(EntityNode node, AjaxRequestTarget target) {
-        Entity entity = node.getNodeModel().getObject();
-
+    private void onNodeClicked(Entity entity, AjaxRequestTarget target) {
+    	// set the new selected entity
         setCurrentPath(entity.getPath());
+        
         // TODO
         String count = "unknown";
         try {
@@ -261,12 +272,9 @@ public class EntityBrowserPanel extends StackPanel implements AjaxUpdateListener
             target.add(menuPanel);
             target.add(statusBarPanel);
         }
+        
         tablePanel.unselectAll();
         restoreWorkspace(target);
-    }
-
-    private EntityNode getEntityNode(Entity entity) {
-        return new DefaultEntityNode(entity);
     }
 
     protected void selectEntity(Entity entity, AjaxRequestTarget target) {        
@@ -278,21 +286,29 @@ public class EntityBrowserPanel extends StackPanel implements AjaxUpdateListener
             LOG.debug("Select entity '" + entity.getPath() + "'");
         }
 
-        EntityNode node = getEntityNode(entity);
-        tree.getTreeState().selectNode(node, true);
+        tree.expandsParents(entity, target);
         if (target != null) {
-            tree.updateTree(target);
+            tree.updateBranch(entity, target);
         }
 
-        onNodeClicked(node, target);
+        onNodeClicked(entity, target);
     }
-
+    
     private String getCurrentPath() {
     	return SectionContextUtil.getCurrentPath(sectionId);
     }
     
     private void setCurrentPath(String path) {
     	SectionContextUtil.setCurrentPath(sectionId, path);
+    }
+    
+    private Entity getCurrentEntity() {
+    	String path = getCurrentPath();
+    	try {
+			return storageService.getEntity(path);
+		} catch (NotFoundException e) {
+			throw new WicketRuntimeException(e);
+		}
     }
     
     private String getRootPath() {
@@ -307,8 +323,7 @@ public class EntityBrowserPanel extends StackPanel implements AjaxUpdateListener
 		try {
 			return storageService.getEntity(getRootPath());
 		} catch (NotFoundException e) {
-			// never happening			
-			return null;
+			throw new WicketRuntimeException(e);
 		}
     }
 
@@ -326,57 +341,98 @@ public class EntityBrowserPanel extends StackPanel implements AjaxUpdateListener
             SectionContextUtil.setSelectedEntityPath(sectionId, null);
         }
     }
+    
+    class EntityTree extends NestedTree<Entity> {
 
-    class TreeState extends DefaultTreeState {
+    	private static final long serialVersionUID = 1L;
 
-        private static final long serialVersionUID = -4325208389960407236L;
-
-        @Override
-        public void selectNode(Object node, boolean selected) {
-            if (selected) {
-                expandsParents(getEntity(node));
-            }
+    	public EntityTree(String id, ITreeProvider<Entity> provider) {
+    		super(id, provider);
+    		
+    		add(new WindowsTheme());
         }
 
-        @Override
-        public boolean isNodeSelected(Object node) {            
-            return getCurrentPath().equals(getEntity(node).getPath());
-        }
+    	@Override
+    	protected Component newContentComponent(String id, IModel<Entity> model) {
+    		return new Folder<Entity>(id, this, model) {
 
-        @Override
-        public Collection<Object> getSelectedNodes() {
-            EntityNode node = getEntityNode(getModelObject());
-            return Arrays.asList(new Object[] { node });
-        }
+    			private static final long serialVersionUID = 1L;
 
-        private void expandsParents(Entity entity) {
+    			@Override
+    			protected boolean isClickable() {
+    				return true;
+    			}
+
+    			@Override
+    			protected void onClick(AjaxRequestTarget target) {    				    				
+    				super.onClick(target);
+    				
+    	        	// unselect the (old) selected entity (force repaint)
+    	        	tree.updateNode(getCurrentEntity(), target);
+    				
+    				onNodeClicked(getModelObject(), target);
+    			}
+
+                @Override
+				protected String getOtherStyleClass(Entity t) {
+					return getClosedStyleClass();
+				}
+
+				@Override
+                protected boolean isSelected() {
+                	return getCurrentPath().equals(getModelObject().getPath());
+                }
+
+    			@Override
+    			protected IModel<?> newLabelModel(IModel<Entity> model) {
+    				return Model.of(getNodeLabel(model.getObject()));
+    			}
+    			
+    		};
+    	}
+
+		protected String getNodeLabel(Entity entity) {		
+    		if (I18NUtil.nodeNeedsInternationalization(entity.getName())) {
+    			return getString("node."+ entity.getName());
+    		}
+    		
+    		return entity.getName();
+    	}
+    	
+        protected void expandsParents(Entity entity, AjaxRequestTarget target) {
             String path = entity.getPath();
             String[] tokens = path.split(StorageConstants.PATH_SEPARATOR);
 
-            EntityNode root = tree.getRootEntityNode();
+            Entity root = getRoot();
 
-            Stack<EntityNode> stack = new Stack<EntityNode>();
+            Stack<Entity> stack = new Stack<Entity>();
             stack.add(root);
 
-            String rootPath = root.getNodeModel().getObject().getPath();
+            String rootPath = root.getPath();
             String[] rootTokens = rootPath.split(StorageConstants.PATH_SEPARATOR);
 
-            EntityNode tmp = root;
+            Entity tmp = root;
             for (int i = rootTokens.length; i < tokens.length; i++) {
                 tmp = getChild(tmp, tokens[i]);
                 stack.add(tmp);
             }
-
-            for (EntityNode t : stack) {
-                expandNode(t);
+            
+            for (Entity item : stack) {
+            	tree.expand(item);
+            	tree.updateNode(item, target);
             }
         }
 
-        @SuppressWarnings("unchecked")
-		private EntityNode getChild(EntityNode node, String name) {
-            List<EntityNode> children = (List<EntityNode>) node.getChildren();
-            for (EntityNode tmp : children) {
-                if (name.equals(tmp.getNodeModel().getObject().getName())) {
+		private Entity getChild(Entity node, String name) {
+			Entity[] children;
+			try {
+				children = storageService.getEntityChildren(node.getPath());
+			} catch (NotFoundException e) {
+				throw new WicketRuntimeException(e);
+			}
+			
+            for (Entity tmp : children) {
+                if (name.equals(tmp.getName())) {
                     return tmp;
                 }
             }
@@ -384,10 +440,6 @@ public class EntityBrowserPanel extends StackPanel implements AjaxUpdateListener
             return null;
         }
 
-        private Entity getEntity(Object node) {
-            return ((EntityNode) node).getNodeModel().getObject(); 
-        }
-        
     }
-
+    
 }

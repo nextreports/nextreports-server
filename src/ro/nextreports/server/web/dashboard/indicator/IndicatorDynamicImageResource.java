@@ -32,21 +32,24 @@ import ro.nextreports.engine.exporter.util.IndicatorData;
 
 public class IndicatorDynamicImageResource extends RenderedDynamicImageResource {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private int width;
 	private int height;
 	private IndicatorData data;						
 	
 	public IndicatorDynamicImageResource(int width, int height, IndicatorData data) {
 		super(width, height);	
+		
 		this.width = width;
 		this.height = height;
 		this.data = data;
 	}
 	
-	protected boolean render(Graphics2D g2) {
-				
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);				
+	@Override
+	protected boolean render(Graphics2D graphics, Attributes attributes) {				
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		graphics.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);				
 
 		int canWidth = getWidth();
 		int canHeight = getHeight();
@@ -60,9 +63,9 @@ public class IndicatorDynamicImageResource extends RenderedDynamicImageResource 
 		int x = canWidth/2;
 		int y = 8*size/11; 			
 		
-		g2.setPaint(data.getBackground());
+		graphics.setPaint(data.getBackground());
 		Rectangle rectangle = new Rectangle(0, 0, getWidth(), getHeight());
-		g2.fill(rectangle);			
+		graphics.fill(rectangle);			
 					
 		// draw initial background color
 		Arc2D externalArc = new Arc2D.Double(x-size/2, y-size/2, size, size, 0, 180, Arc2D.OPEN);		
@@ -70,8 +73,8 @@ public class IndicatorDynamicImageResource extends RenderedDynamicImageResource 
 		Area i1 = new Area(externalArc);
 		Area i2 = new Area(innerArc);
 		i1.subtract(i2);
-		g2.setPaint(new Color(240, 240, 240));		
-		g2.fill(i1);
+		graphics.setPaint(new Color(240, 240, 240));		
+		graphics.fill(i1);
 				
 		// draw background color depending on gauge's value
 		double val = data.getValue();
@@ -90,26 +93,26 @@ public class IndicatorDynamicImageResource extends RenderedDynamicImageResource 
 		Area a1 = new Area(externalArcColor);
 		Area a2 = new Area(innerArcColor);
 		a1.subtract(a2);		
-		g2.setPaint(new GradientPaint(x-size/2, y-size/2, Color.WHITE, x+size/2, y-size/2, data.getColor()));		
-		g2.fill(a1);
+		graphics.setPaint(new GradientPaint(x-size/2, y-size/2, Color.WHITE, x+size/2, y-size/2, data.getColor()));		
+		graphics.fill(a1);
 						
 		// clear any glitches under inner arc
 		Arc2D ia = new Arc2D.Double(x-size/2 + arcWidth/2, y-size/2 + arcWidth/2, size - arcWidth, size - arcWidth, 0, 360, Arc2D.PIE);		
 		Area ia2 = new Area(ia);				
-		g2.setPaint(data.getBackground());		
-		g2.fill(ia2);
+		graphics.setPaint(data.getBackground());		
+		graphics.fill(ia2);
 		
 		// draw arcs & base lines
-		g2.setPaint(Color.GRAY);	
-		g2.setStroke(new BasicStroke(1f));
-		g2.draw(externalArc);				
-		g2.draw(innerArc);		
-		g2.drawLine(x-size/2, y, x-size/2 + arcWidth/2, y);
-		g2.drawLine(x+size/2 - arcWidth/2, y, x+size/2, y);		
+		graphics.setPaint(Color.GRAY);	
+		graphics.setStroke(new BasicStroke(1f));
+		graphics.draw(externalArc);				
+		graphics.draw(innerArc);		
+		graphics.drawLine(x-size/2, y, x-size/2 + arcWidth/2, y);
+		graphics.drawLine(x+size/2 - arcWidth/2, y, x+size/2, y);		
 		
 		if (data.isShowMinMax()) {
-			Font font = new Font(g2.getFont().getFontName(), g2.getFont().getStyle(), size / 11);
-			g2.setFont(font);
+			Font font = new Font(graphics.getFont().getFontName(), graphics.getFont().getStyle(), size / 11);
+			graphics.setFont(font);
 			String smin;
 			if (hasNoDecimals(data.getMin())) {
 				smin = String.valueOf((int) data.getMin());
@@ -119,8 +122,8 @@ public class IndicatorDynamicImageResource extends RenderedDynamicImageResource 
 			if ((data.getUnit() != null) && !data.getUnit().isEmpty()) {
 				smin = smin + data.getUnit();
 			}
-			int swidth = g2.getFontMetrics().stringWidth(smin);
-			g2.drawString(smin, x-size/2 + arcWidth / 4 - swidth / 2, y + size/11);
+			int swidth = graphics.getFontMetrics().stringWidth(smin);
+			graphics.drawString(smin, x-size/2 + arcWidth / 4 - swidth / 2, y + size/11);
 
 			String smax;
 			if (hasNoDecimals(data.getMax())) {
@@ -132,21 +135,21 @@ public class IndicatorDynamicImageResource extends RenderedDynamicImageResource 
 			if ((data.getUnit() != null) && !data.getUnit().isEmpty()) {
 				smax = smax + data.getUnit();
 			}
-			swidth = g2.getFontMetrics().stringWidth(smax);
-			g2.drawString(smax, x + size/2 - arcWidth/4 - swidth / 2 , y + size/11);
+			swidth = graphics.getFontMetrics().stringWidth(smax);
+			graphics.drawString(smax, x + size/2 - arcWidth/4 - swidth / 2 , y + size/11);
 		}
 		
 		if ((data.getDescription() != null) && !data.getDescription().isEmpty()) {
-			Font font = new Font(g2.getFont().getFontName(), g2.getFont().getStyle(), size/12); 
-			g2.setFont(font);
-			int swidth = g2.getFontMetrics().stringWidth(data.getDescription());
-			g2.setPaint(Color.GRAY);
-			g2.drawString(data.getDescription(), x - swidth/2 , y + size/12);
+			Font font = new Font(graphics.getFont().getFontName(), graphics.getFont().getStyle(), size/12); 
+			graphics.setFont(font);
+			int swidth = graphics.getFontMetrics().stringWidth(data.getDescription());
+			graphics.setPaint(Color.GRAY);
+			graphics.drawString(data.getDescription(), x - swidth/2 , y + size/12);
 		}
 		
-		Font font = new Font(g2.getFont().getFontName(), Font.BOLD, size/8); 
-		g2.setFont(font);
-		g2.setPaint(Color.BLACK);
+		Font font = new Font(graphics.getFont().getFontName(), Font.BOLD, size/8); 
+		graphics.setFont(font);
+		graphics.setPaint(Color.BLACK);
 		String svalue;
 		if (hasNoDecimals(data.getValue())) {
 			svalue = String.valueOf((int)data.getValue());
@@ -156,14 +159,14 @@ public class IndicatorDynamicImageResource extends RenderedDynamicImageResource 
 		if ((data.getUnit() != null) && !data.getUnit().isEmpty()) {
 			svalue = svalue + data.getUnit();
 		}
-		int swidth = g2.getFontMetrics().stringWidth(svalue);
-		g2.drawString(svalue, x - swidth/2 , y );
+		int swidth = graphics.getFontMetrics().stringWidth(svalue);
+		graphics.drawString(svalue, x - swidth/2 , y );
 		
 		if ((data.getTitle() != null) && !data.getTitle().isEmpty()) {
-			font = new Font(g2.getFont().getFontName(), Font.BOLD, size/11); 
-			g2.setFont(font);
-			swidth = g2.getFontMetrics().stringWidth(data.getTitle());
-			g2.drawString(data.getTitle(), x - swidth/2 , y - radix + arcWidth/2 + size/11 );
+			font = new Font(graphics.getFont().getFontName(), Font.BOLD, size/11); 
+			graphics.setFont(font);
+			swidth = graphics.getFontMetrics().stringWidth(data.getTitle());
+			graphics.drawString(data.getTitle(), x - swidth/2 , y - radix + arcWidth/2 + size/11 );
 		}				
 		
 		return true;
@@ -172,7 +175,5 @@ public class IndicatorDynamicImageResource extends RenderedDynamicImageResource 
 	private boolean hasNoDecimals(double d) {
 		return ((int)d == d);
 	}
-	
-	
 
 }

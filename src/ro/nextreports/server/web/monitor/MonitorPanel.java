@@ -19,17 +19,17 @@ package ro.nextreports.server.web.monitor;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -63,7 +63,6 @@ import ro.nextreports.server.web.core.table.NextRunDateColumn;
 import ro.nextreports.server.web.report.RunHistoryPanel;
 import ro.nextreports.server.web.schedule.ActiveSchedulerJobDataProvider;
 
-
 /**
  * @author decebal
  */
@@ -80,9 +79,9 @@ public class MonitorPanel extends Panel {
     @SpringBean
     private StorageService storageService;
 
-    private DataTable<ReportJobInfo> jobsTable;
-    private DataTable<SchedulerJob> schedulerJobsTable;
-    private DataTable<RunReportHistory> runHistoryTable;
+    private DataTable<ReportJobInfo, String> jobsTable;
+    private DataTable<SchedulerJob, String> schedulerJobsTable;
+    private DataTable<RunReportHistory, String> runHistoryTable;
 
     public MonitorPanel(String id) {
         super(id);
@@ -110,17 +109,17 @@ public class MonitorPanel extends Panel {
         }
     }
 
-    protected DataTable<ReportJobInfo> createJobsTable(ReportJobInfoDataProvider dataProvider) {
+    protected DataTable<ReportJobInfo, String> createJobsTable(ReportJobInfoDataProvider dataProvider) {
         return new BaseTable<ReportJobInfo>("jobsTable", createJobsTableColumns(), dataProvider, Integer.MAX_VALUE);
     }
 
-    protected DataTable<SchedulerJob> createSchedulerJobsTable(ActiveSchedulerJobDataProvider dataProvider) {
+    protected DataTable<SchedulerJob, String> createSchedulerJobsTable(ActiveSchedulerJobDataProvider dataProvider) {
         return new BaseTable<SchedulerJob>("schedulerJobsTable", createActiveSchedulerJobsTableColumns(), dataProvider, Integer.MAX_VALUE);
     }
 
-    protected List<IColumn<ReportJobInfo>> createJobsTableColumns() {
-        List<IColumn<ReportJobInfo>> columns = new ArrayList<IColumn<ReportJobInfo>>();
-        columns.add(new PropertyColumn<ReportJobInfo>(new Model<String>(getString("name")), "jobName", "jobName") {
+    protected List<IColumn<ReportJobInfo, String>> createJobsTableColumns() {
+        List<IColumn<ReportJobInfo, String>> columns = new ArrayList<IColumn<ReportJobInfo, String>>();
+        columns.add(new PropertyColumn<ReportJobInfo, String>(new Model<String>(getString("name")), "jobName", "jobName") {
         	
 			private static final long serialVersionUID = 1L;
 
@@ -132,14 +131,14 @@ public class MonitorPanel extends Panel {
             
         });
 
-        columns.add(new PropertyColumn<ReportJobInfo>(new Model<String>(getString("DashboardNavigationPanel.owner")), "runner", "runner") {
+        columns.add(new PropertyColumn<ReportJobInfo, String>(new Model<String>(getString("DashboardNavigationPanel.owner")), "runner", "runner") {
         	
         	private static final long serialVersionUID = 1L;
         	
             @Override
             public void populateItem(Item<ICellPopulator<ReportJobInfo>> item, String componentId, IModel<ReportJobInfo> rowModel) {
                 super.populateItem(item, componentId, rowModel);
-                item.add(new SimpleAttributeModifier("width", "150px"));
+                item.add(AttributeModifier.replace("width", "150px"));
             }
             
         });
@@ -151,18 +150,18 @@ public class MonitorPanel extends Panel {
             @Override
             public void populateItem(Item<ICellPopulator<ReportJobInfo>> item, String componentId, IModel<ReportJobInfo> rowModel) {
                 super.populateItem(item, componentId, rowModel);
-                item.add(new SimpleAttributeModifier("width", "120px"));
+                item.add(AttributeModifier.replace("width", "120px"));
             }
 
         });
-        columns.add(new PropertyColumn<ReportJobInfo>(new Model<String>(getString("MonitorPanel.runTime")), "runTime", "runTime") {
+        columns.add(new PropertyColumn<ReportJobInfo, String>(new Model<String>(getString("MonitorPanel.runTime")), "runTime", "runTime") {
 
         	private static final long serialVersionUID = 1L;
         	
             @Override
             public void populateItem(Item<ICellPopulator<ReportJobInfo>> item, String componentId, IModel<ReportJobInfo> rowModel) {
                 super.populateItem(item, componentId, rowModel);
-                item.add(new SimpleAttributeModifier("width", "100px"));
+                item.add(AttributeModifier.replace("width", "100px"));
             }
 
             @Override
@@ -179,7 +178,7 @@ public class MonitorPanel extends Panel {
 
         });
 
-        columns.add(new AbstractColumn<ReportJobInfo>(new Model<String>(getString("MonitorPanel.stop"))) {
+        columns.add(new AbstractColumn<ReportJobInfo, String>(new Model<String>(getString("MonitorPanel.stop"))) {
 
         	private static final long serialVersionUID = 1L;
         	
@@ -224,16 +223,16 @@ public class MonitorPanel extends Panel {
         return columns;
     }
 
-    protected List<IColumn<SchedulerJob>> createActiveSchedulerJobsTableColumns() {
-        List<IColumn<SchedulerJob>> columns = new ArrayList<IColumn<SchedulerJob>>();
-        columns.add(new PropertyColumn<SchedulerJob>(new Model<String>(getString("name")), "name", "name") {            
+    protected List<IColumn<SchedulerJob, String>> createActiveSchedulerJobsTableColumns() {
+        List<IColumn<SchedulerJob, String>> columns = new ArrayList<IColumn<SchedulerJob, String>>();
+        columns.add(new PropertyColumn<SchedulerJob, String>(new Model<String>(getString("name")), "name", "name") {            
             @Override
             protected IModel<String> createLabelModel(IModel<SchedulerJob> jobInfoIModel) {
                 return new Model<String>(jobInfoIModel.getObject().getName());
             }
         });
 
-        columns.add(new PropertyColumn<SchedulerJob>(new Model<String>(getString("type")), "time.type", "time.type") {
+        columns.add(new PropertyColumn<SchedulerJob, String>(new Model<String>(getString("type")), "time.type", "time.type") {
             @Override
 			public void populateItem(Item<ICellPopulator<SchedulerJob>> item, String componentId, IModel<SchedulerJob> rowModel) {
                 SchedulerTime st = rowModel.getObject().getTime();
@@ -242,7 +241,7 @@ public class MonitorPanel extends Panel {
     			item.add(label);
 			}
         });
-        columns.add(new PropertyColumn<SchedulerJob>(new Model<String>(getString("Report")), "report.path", "report.path") {
+        columns.add(new PropertyColumn<SchedulerJob, String>(new Model<String>(getString("Report")), "report.path", "report.path") {
 
             @Override
 			public void populateItem(Item<ICellPopulator<SchedulerJob>> item, String componentId, IModel<SchedulerJob> rowModel) {
@@ -256,14 +255,14 @@ public class MonitorPanel extends Panel {
 
         });
         columns.add(new BooleanImagePropertyColumn<SchedulerJob>(new Model<String>(getString("MonitorPanel.running")), "isRunning", "isRunning"));
-        columns.add(new PropertyColumn<SchedulerJob>(new Model<String>(getString("MonitorPanel.runTime")), "runTime", "runTime") {
+        columns.add(new PropertyColumn<SchedulerJob, String>(new Model<String>(getString("MonitorPanel.runTime")), "runTime", "runTime") {
 
         	private static final long serialVersionUID = 1L;
         	
             @Override
             public void populateItem(Item<ICellPopulator<SchedulerJob>> item, String componentId, IModel<SchedulerJob> rowModel) {
                 super.populateItem(item, componentId, rowModel);
-                item.add(new SimpleAttributeModifier("width", "100px"));
+                item.add(AttributeModifier.replace("width", "100px"));
             }
 
             @Override
@@ -282,7 +281,7 @@ public class MonitorPanel extends Panel {
 
         columns.add(new NextRunDateColumn<SchedulerJob>());
 
-        columns.add(new AbstractColumn<SchedulerJob>(new Model<String>(getString("MonitorPanel.stop"))) {
+        columns.add(new AbstractColumn<SchedulerJob, String>(new Model<String>(getString("MonitorPanel.stop"))) {
 
             public void populateItem(Item<ICellPopulator<SchedulerJob>> item, String componentId,
                                      final IModel<SchedulerJob> rowModel) {

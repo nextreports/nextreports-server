@@ -41,6 +41,8 @@ import ro.nextreports.server.web.common.table.AjaxCheckTablePanel;
 
 public class ManageTemplatesPanel extends Panel {
 	
+	private static final long serialVersionUID = 1L;
+	
 	protected AjaxCheckTablePanel<ReportRuntimeTemplate> tablePanel;
 	
 	public ManageTemplatesPanel(String id, Report report) {
@@ -97,17 +99,22 @@ public class ManageTemplatesPanel extends Panel {
 		// override
 	}
 	
-	protected List<IColumn<ReportRuntimeTemplate>> createTableColumns() {
-        List<IColumn<ReportRuntimeTemplate>> columns = new ArrayList<IColumn<ReportRuntimeTemplate>>();
-        columns.add(new AbstractColumn<ReportRuntimeTemplate>(new Model<String>(getString("select"))) {
-            public void populateItem(Item<ICellPopulator<ReportRuntimeTemplate>> item, String componentId, IModel<ReportRuntimeTemplate> rowModel) {
+	protected List<IColumn<ReportRuntimeTemplate, String>> createTableColumns() {
+        List<IColumn<ReportRuntimeTemplate, String>> columns = new ArrayList<IColumn<ReportRuntimeTemplate, String>>();
+        columns.add(new AbstractColumn<ReportRuntimeTemplate, String>(new Model<String>(getString("select"))) {
+        	
+            private static final long serialVersionUID = 1L;
+
+			public void populateItem(Item<ICellPopulator<ReportRuntimeTemplate>> item, String componentId, IModel<ReportRuntimeTemplate> rowModel) {
                 item.add(new Label(componentId, Model.of(rowModel.getObject().getName())));                
-            }            
+            }  
+            
         });        
+        
         return columns;
     }
 	
-	protected AjaxCheckTablePanel<ReportRuntimeTemplate> createTablePanel(ISortableDataProvider<ReportRuntimeTemplate> dataProvider) {
+	protected AjaxCheckTablePanel<ReportRuntimeTemplate> createTablePanel(ISortableDataProvider<ReportRuntimeTemplate, String> dataProvider) {
         return new AjaxCheckTablePanel<ReportRuntimeTemplate>("table", createTableColumns(), dataProvider, 20);
     }
 

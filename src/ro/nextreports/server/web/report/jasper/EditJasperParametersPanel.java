@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
@@ -39,14 +39,13 @@ import ro.nextreports.server.web.common.menu.MenuItem;
 import ro.nextreports.server.web.common.menu.MenuPanel;
 import ro.nextreports.server.web.common.table.BaseTable;
 import ro.nextreports.server.web.core.EntityBrowserPanel;
-import ro.nextreports.server.web.report.jasper.JasperParametersDataProvider;
 
-
-//
 public class EditJasperParametersPanel extends Panel {
 
-    private Report report;
-    private DataTable<JasperParameterSource> table;
+    private static final long serialVersionUID = 1L;
+    
+	private Report report;
+    private DataTable<JasperParameterSource, String> table;
     private JasperParametersDataProvider dataProvider;
 
     public EditJasperParametersPanel(String id, final Report report) {
@@ -56,12 +55,12 @@ public class EditJasperParametersPanel extends Panel {
         Label name = new Label("reportName", new Model<String>(report.getName()));
         add(name);
 
-        List<IColumn<JasperParameterSource>> columns = new ArrayList<IColumn<JasperParameterSource>>();
-        columns.add(new PropertyColumn<JasperParameterSource>(new Model<String>(getString("ActionContributor.EditParameters.parameterName")), "name"));
+        List<IColumn<JasperParameterSource, String>> columns = new ArrayList<IColumn<JasperParameterSource, String>>();
+        columns.add(new PropertyColumn<JasperParameterSource, String>(new Model<String>(getString("ActionContributor.EditParameters.parameterName")), "name"));
         columns.add(new ActionsColumn());
         columns.add(new TypeColumn());
-        columns.add(new PropertyColumn<JasperParameterSource>(new Model<String>(getString("ActionContributor.EditParameters.parameterClass")), "valueClassName"));
-        columns.add(new PropertyColumn<JasperParameterSource>(new Model<String>(getString("ActionContributor.EditParameters.parameterSelect")), "select"));
+        columns.add(new PropertyColumn<JasperParameterSource, String>(new Model<String>(getString("ActionContributor.EditParameters.parameterClass")), "valueClassName"));
+        columns.add(new PropertyColumn<JasperParameterSource, String>(new Model<String>(getString("ActionContributor.EditParameters.parameterSelect")), "select"));
         
         dataProvider = new JasperParametersDataProvider(report);
         table = new BaseTable<JasperParameterSource>("table", columns, dataProvider, 300);
@@ -84,7 +83,7 @@ public class EditJasperParametersPanel extends Panel {
 
     }
     
-    class TypeColumn extends AbstractColumn<JasperParameterSource> {
+    private class TypeColumn extends AbstractColumn<JasperParameterSource, String> {
 
         public TypeColumn() {
             super(new Model<String>(getString("ActionContributor.EditParameters.parameterType")));
@@ -96,7 +95,7 @@ public class EditJasperParametersPanel extends Panel {
         
     }    
 
-    class ActionsColumn extends AbstractColumn<JasperParameterSource> {
+    private class ActionsColumn extends AbstractColumn<JasperParameterSource, String> {
 
         public ActionsColumn() {
             super(new Model<String>(getString("ActionContributor.EditParameters.actions")));
@@ -109,12 +108,12 @@ public class EditJasperParametersPanel extends Panel {
 
         public void populateItem(Item<ICellPopulator<JasperParameterSource>> cellItem, String componentId, IModel<JasperParameterSource> model) {
             cellItem.add(new ActionPanel(componentId, model));
-            cellItem.add(new SimpleAttributeModifier("class", "actions-col"));
+            cellItem.add(AttributeAppender.append("class", "actions-col"));
         }
 
     }
 
-    class ActionPanel extends Panel {
+    private class ActionPanel extends Panel {
 
         public ActionPanel(String id, final IModel<JasperParameterSource> model) {
             super(id, model);

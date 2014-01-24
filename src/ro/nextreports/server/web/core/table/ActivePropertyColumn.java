@@ -36,7 +36,7 @@ import ro.nextreports.server.web.common.panel.AbstractImagePanel;
 import ro.nextreports.server.web.themes.ThemesManager;
 
 
-public class ActivePropertyColumn extends AbstractColumn<Entity> {
+public class ActivePropertyColumn extends AbstractColumn<Entity, String> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -45,6 +45,7 @@ public class ActivePropertyColumn extends AbstractColumn<Entity> {
 
     public ActivePropertyColumn() {
         super(new Model<String>(new StringResourceModel("ActionContributor.Search.entityActive", null).getString()));
+        
         Injector.get().inject(this);
     }
 

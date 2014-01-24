@@ -16,15 +16,15 @@
  */
 package ro.nextreports.server.web.core.table;
 
-import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.StringResourceModel;
-import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 
 import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.DataSource;
@@ -45,7 +45,7 @@ import ro.nextreports.server.web.common.panel.AbstractImageLabelPanel;
  * Date: 16-Sep-2010
  * Time: 13:11:51
  */
-public abstract class NameColumn extends AbstractColumn<Entity> {
+public abstract class NameColumn extends AbstractColumn<Entity, String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -98,7 +98,7 @@ public abstract class NameColumn extends AbstractColumn<Entity> {
             };
         }
         cellItem.add(component);
-        cellItem.add(new SimpleAttributeModifier("class", "name-col"));
+        cellItem.add(AttributeModifier.append("class", "name-col"));
     }
 
     public static String getImage(Entity entity) {

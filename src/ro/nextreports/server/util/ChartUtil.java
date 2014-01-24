@@ -25,13 +25,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.wicket.request.mapper.parameter.INamedParameters.NamedPair;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.mapper.parameter.PageParameters.NamedPair;
-
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ro.nextreports.engine.chart.ChartType;
+import ro.nextreports.engine.queryexec.IdName;
+import ro.nextreports.engine.queryexec.QueryParameter;
+import ro.nextreports.engine.util.ParameterUtil;
 import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.DataSource;
 import ro.nextreports.server.domain.Entity;
@@ -55,11 +58,6 @@ import ro.nextreports.server.web.dashboard.chart.ChartWidget;
 import ro.nextreports.server.web.dashboard.drilldown.DrillDownWidget;
 import ro.nextreports.server.web.dashboard.table.TableWidget;
 import ro.nextreports.server.web.report.ParameterRuntimePanel;
-
-import ro.nextreports.engine.chart.ChartType;
-import ro.nextreports.engine.queryexec.IdName;
-import ro.nextreports.engine.queryexec.QueryParameter;
-import ro.nextreports.engine.util.ParameterUtil;
 
 /**
  * User: mihai.panaitescu

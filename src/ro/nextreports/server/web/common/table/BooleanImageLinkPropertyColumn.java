@@ -17,26 +17,25 @@
 package ro.nextreports.server.web.common.table;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.util.lang.PropertyResolver;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.lang.PropertyResolver;
 
 import ro.nextreports.server.settings.SettingsBean;
 import ro.nextreports.server.web.NextServerApplication;
 import ro.nextreports.server.web.common.panel.AbstractImageAjaxLinkPanel;
 import ro.nextreports.server.web.themes.ThemesManager;
 
-
 /**
  * User: mihai.panaitescu
  * Date: 16-Apr-2010
  * Time: 11:32:29
  */
-public class BooleanImageLinkPropertyColumn<T> extends PropertyColumn<T> {
+public class BooleanImageLinkPropertyColumn<T> extends PropertyColumn<T, String> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -55,6 +54,7 @@ public class BooleanImageLinkPropertyColumn<T> extends PropertyColumn<T> {
 		Injector.get().inject(this);
 	}
 
+	@Override
 	public void populateItem(Item<ICellPopulator<T>> item, String componentId, final IModel<T> rowModel) {
         item.add(new AbstractImageAjaxLinkPanel(componentId) {
 
@@ -70,13 +70,16 @@ public class BooleanImageLinkPropertyColumn<T> extends PropertyColumn<T> {
                 }
             }
 
+			@Override
             public String getDisplayString() {
                 return "";
             }
 
+            @Override
             public void onClick(AjaxRequestTarget target) {
                 onImageClick(rowModel.getObject(), target);
             }
+            
         });
     }
 

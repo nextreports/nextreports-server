@@ -28,9 +28,10 @@ import ro.nextreports.server.domain.DrillDownEntity;
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.domain.Report;
 
+public class DrillDownEntitiesDataProvider extends SortableDataProvider<DrillDownEntity, String> {
 
-public class DrillDownEntitiesDataProvider extends SortableDataProvider<DrillDownEntity> {
-
+	private static final long serialVersionUID = 1L;
+	
 	private Entity entity;
     private transient List<DrillDownEntity> drillDownEntities;
 
@@ -38,18 +39,22 @@ public class DrillDownEntitiesDataProvider extends SortableDataProvider<DrillDow
     	this.entity = entity;
     }
 
-	public Iterator<? extends DrillDownEntity> iterator(int first, int count) {
+    @Override
+	public Iterator<? extends DrillDownEntity> iterator(long first, long count) {
 		return getDrillDownEntities().iterator();
 	}
 
+	@Override
 	public IModel<DrillDownEntity> model(DrillDownEntity entity) {
 		return new Model<DrillDownEntity>(entity);
 	}
 
-	public int size() {
+	@Override
+	public long size() {
 		return getDrillDownEntities().size();
 	}
 
+	@Override
 	public void detach() {
 		drillDownEntities = null;
 	}
@@ -65,8 +70,6 @@ public class DrillDownEntitiesDataProvider extends SortableDataProvider<DrillDow
 
         return drillDownEntities;
     }
-
-
 
 }
 
