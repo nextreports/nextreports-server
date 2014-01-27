@@ -25,6 +25,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.quartz.CronTrigger;
 import org.quartz.TriggerKey;
 import org.quartz.impl.StdScheduler;
+import org.quartz.impl.triggers.CronTriggerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
@@ -76,12 +77,10 @@ public class SynchronizerSettingsPanel extends AbstractSettingsPanel {
 	    	if (!oldCronExpression.equals(settings.getSynchronizer().getCronExpression())) {	    		
 	    		// reschedule user synchronizer
 	    		StdScheduler scheduler = (StdScheduler) NextServerApplication.get().getSpringBean("scheduler");
-	    		CronTriggerFactoryBean cronTriggerFactory = (CronTriggerFactoryBean) NextServerApplication.get().getSpringBean("userSynchronizerTrigger");
+	    		CronTriggerImpl cronTrigger = (CronTriggerImpl) NextServerApplication.get().getSpringBean("userSynchronizerTrigger");
 	    		try {
-					cronTriggerFactory.setCronExpression(settings.getSynchronizer().getCronExpression());
-					CronTrigger cronTrigger = cronTriggerFactory.getObject();
-					TriggerKey triggerKey = cronTrigger.getKey();
-					scheduler.rescheduleJob(triggerKey, cronTrigger);					
+					cronTrigger.setCronExpression(settings.getSynchronizer().getCronExpression());										
+					scheduler.rescheduleJob(cronTrigger.getKey(), cronTrigger);					
 				} catch (Exception e) {					
 					e.printStackTrace();
 					LOG.error(e.getMessage(), e);
