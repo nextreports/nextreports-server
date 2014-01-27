@@ -20,8 +20,6 @@ import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -39,6 +37,7 @@ import ro.nextreports.server.web.common.behavior.DefaultFocusBehavior;
 import ro.nextreports.server.web.common.form.AdvancedForm;
 import ro.nextreports.server.web.common.misc.AjaxBusyIndicator;
 import ro.nextreports.server.web.common.panel.NextFeedbackPanel;
+import ro.nextreports.server.web.core.HomePage;
 import ro.nextreports.server.web.core.settings.LogoResource;
 import ro.nextreports.server.web.security.recover.ForgotPasswordPage;
 
@@ -91,6 +90,7 @@ public class LoginPage extends WebPage {
 				if (NextServerSession.get().signIn(user.getUsername(), user.getPassword(), user.getRealm())) {
 					// TODO wicket-6
 					continueToOriginalDestination();
+					setResponsePage(HomePage.class);
 				} else {
 					error(getLocalizer().getString("loginError", this));
 				}
