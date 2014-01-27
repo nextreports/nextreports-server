@@ -23,7 +23,9 @@ import java.util.concurrent.TimeoutException;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -47,7 +49,10 @@ import ro.nextreports.server.web.dashboard.model.WidgetModel;
 
 public class IndicatorWidgetView  extends WidgetView  {
 	
+	private static final long serialVersionUID = 1L;
+
 	private final ResourceReference INDICATOR_UTIL_JS = new JavaScriptResourceReference(IndicatorHTML5Panel.class, "indicator_util.js");
+	
 	private String PARAM = "Param";
 	private String isHTML5 = "";
 	private WebMarkupContainer container;
@@ -76,6 +81,7 @@ public class IndicatorWidgetView  extends WidgetView  {
 			@Override
 			protected void onInitialize() {
 				super.onInitialize();
+				
 				if (indicatorModel.getObject() == null) {
 					if (indicatorModel.getError() instanceof NoDataFoundException) {
 						setDefaultModelObject("No Data Found");
@@ -93,10 +99,14 @@ public class IndicatorWidgetView  extends WidgetView  {
 		});
 		
 		container = new WebMarkupContainer("indicator") {
+			
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public boolean isVisible() {
 				return !indicatorModel.hasError();
 			}
+			
 		};
 		container.setOutputMarkupId(true);
 		// indicator background color is set to the entire container
@@ -109,6 +119,7 @@ public class IndicatorWidgetView  extends WidgetView  {
 		add(container);				
 					           				
 		add(new HTML5Behavior(zoom, indicatorModel));
+		
 		container.add(new EmptyPanel("image"));
 				
 		//IndicatorHTML5Panel panel = new IndicatorHTML5Panel("image", width, height, indicatorModel);
@@ -133,6 +144,9 @@ public class IndicatorWidgetView  extends WidgetView  {
 	}
 	
 	class IndicatorModel extends LoadableDetachableModel<IndicatorData> {
+		
+		private static final long serialVersionUID = 1L;
+		
 		private Exception error;	
 		private String widgetId;	
 		private Map<String, Object> urlQueryParameters;
@@ -168,12 +182,17 @@ public class IndicatorWidgetView  extends WidgetView  {
 	// else we will show IndicatorImagePanel
     class HTML5Behavior extends AbstractDefaultAjaxBehavior {
     	
-    	private String width;
+    	private static final long serialVersionUID = 1L;
+    	
+		private String width;
     	private String height;
     	private IndicatorModel indicatorModel;
     	    			
 		public HTML5Behavior(boolean zoom, IndicatorModel indicatorModel) {
 			super();
+			
+			this.indicatorModel = indicatorModel;
+			
 			// height used to have two indicators (one under the other) in dashbord to occupy same height as a single chart
 			width = "200";
 			height = "122";
@@ -181,7 +200,18 @@ public class IndicatorWidgetView  extends WidgetView  {
 				width = "100%";
 				height = "100%";
 			}			
-			this.indicatorModel = indicatorModel;
+		}
+
+		@Override
+		protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+			super.updateAjaxAttributes(attributes);
+			
+			StringBuilder javaScript = new StringBuilder();
+			javaScript.append("var data = isCanvasEnabled();");
+			javaScript.append("console.log(data);");
+			javaScript.append("return { '" + PARAM + "': data }"); 
+			
+			attributes.getDynamicExtraParameters().add(javaScript);
 		}
 
 		@Override
@@ -191,12 +221,12 @@ public class IndicatorWidgetView  extends WidgetView  {
 			//include js file
 	        response.render(JavaScriptHeaderItem.forReference(INDICATOR_UTIL_JS));
 	        
-	        response.render(OnLoadHeaderItem.forScript(getJavascript()));	
+	        response.render(OnLoadHeaderItem.forScript(getCallbackFunctionBody()));	
 		}
 
 		@Override
 		protected void respond(AjaxRequestTarget target) {
-			String param = this.getComponent().getRequest().getRequestParameters().getParameterValue(PARAM).toString();					
+			String param = getRequest().getRequestParameters().getParameterValue(PARAM).toString();					
 			//System.out.println("--->  "+param);	
 			// behavior is called on any refresh, we have to call it only once 
 			// (otherwise the panel will be replaced in the same time the old one is refreshed)
@@ -215,16 +245,7 @@ public class IndicatorWidgetView  extends WidgetView  {
 				target.add(container);				
 			}			
 		}
-		
-		// http://diveintohtml5.info/detect.html
-		// this javascript call will make the PARAM available to wicket and can be read in respond method
-		private String getJavascript() {
-			StringBuilder sb = new StringBuilder();
-			sb.append("var data = isCanvasEnabled();");
-			sb.append("wicket.Ajax.get('" + getCallbackUrl() + "&" + PARAM + "='+ data" 
-				+ ", null, null, function() { return true; })");
-			return sb.toString();
-		}
+
     }	
 
 }
