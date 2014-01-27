@@ -45,6 +45,10 @@ public class LanguageManager {
 	public static final String COUNTRY_ROMANIAN = "RO";
 	public static final String PROPERTY_NAME_ROMANIAN = LANGUAGE_ROMANIAN + "_" + COUNTRY_ROMANIAN;
 	
+	public static final String LANGUAGE_POLISH = "pl";
+	public static final String COUNTRY_POLISH = "PL";
+	public static final String PROPERTY_NAME_POLISH = LANGUAGE_POLISH + "_" + COUNTRY_POLISH;
+	
 	public static final List<Language> languages = new ArrayList<Language>();			
 	public static final List<String> LANGUAGES = new ArrayList<String>();		
 	
@@ -56,10 +60,12 @@ public class LanguageManager {
 		languages.add(new Language(LANGUAGE_ENGLISH, COUNTRY_ENGLISH, PROPERTY_NAME_ENGLISH));
 		languages.add(new Language(LANGUAGE_FRENCH, COUNTRY_FRENCH, PROPERTY_NAME_FRENCH));
 		languages.add(new Language(LANGUAGE_ROMANIAN, COUNTRY_ROMANIAN, PROPERTY_NAME_ROMANIAN));
+		languages.add(new Language(LANGUAGE_POLISH, COUNTRY_POLISH, PROPERTY_NAME_POLISH));
 		
 		LANGUAGES.add(PROPERTY_NAME_ENGLISH);
 		LANGUAGES.add(PROPERTY_NAME_FRENCH);
 		LANGUAGES.add(PROPERTY_NAME_ROMANIAN);
+		LANGUAGES.add(PROPERTY_NAME_POLISH);
 		
 		// try to see if other internatinalization filee where added by hand
 		// must have name like NextServerApplication_<lang>_<country>.properties
@@ -67,7 +73,7 @@ public class LanguageManager {
 		// Settings.personalize.language.<lang>_<country> to see it in seetings
 		Collection<File> files = FileUtils.listFiles(new File("."), I18NFileFilter.INSTANCE, TrueFileFilter.INSTANCE);		
 		Set<String> fileNames = new HashSet<String>();
-		for (File file : files) {		
+		for (File file : files) {					
 			String name = file.getName();
 			String baseName = name.substring(0, name.indexOf(".properties"));
 			String[] s = baseName.split("_");
