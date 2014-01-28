@@ -177,18 +177,21 @@ public class NextServerApplication extends WebApplication  {
 		// load all jobs from repository to scheduler
 		addJobsInScheduler();						
 		
-	    StorageService storageService = (StorageService)getSpringBean("storageService");	    		
-		if (storageService.getSettings().getSynchronizer().isRunOnStartup()) {
-			runUserSynchronizerJob();
-		}
 		
-		IFrameSettings iframeSettings = storageService.getSettings().getIframe();
-		if ((iframeSettings != null) && iframeSettings.isEnable()) { 
-			mountPage("/widget", WidgetWebPage.class);
+	    StorageService storageService = (StorageService)getSpringBean("storageService");	  
+	    if (storageService.getSettings() != null) {
+			if (storageService.getSettings().getSynchronizer().isRunOnStartup()) {
+				runUserSynchronizerJob();
+			}
+			
+			IFrameSettings iframeSettings = storageService.getSettings().getIframe();
+			if ((iframeSettings != null) && iframeSettings.isEnable()) { 
+				mountPage("/widget", WidgetWebPage.class);
+			}
+			
+			// set the current color theme at startup
+			ThemesManager.getInstance().setTheme(storageService.getSettings().getColorTheme());
 		}
-		
-		// set the current color theme at startup
-		ThemesManager.getInstance().setTheme(storageService.getSettings().getColorTheme());
 		
 		getRequestCycleListeners().add(new ExceptionRequestCycleListener());
 		getRequestCycleListeners().add(new LoggingRequestCycleListener());

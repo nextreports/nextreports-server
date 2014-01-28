@@ -29,6 +29,9 @@ public class SettingsBean {
 //		return storageService.getSettings();
 		Settings settings = storageService.getSettings();
 //		System.out.println(">>>>>> settings = " + settings);
+		if (settings == null) {
+			settings = new Settings();
+		}
 		
 		return settings;
 	}	
@@ -100,10 +103,16 @@ public class SettingsBean {
 	}
 	
 	public String getIntegrationSecretKey() {
+		if (getSettings().getIntegration() == null) {
+			return "";
+		}
 		return getSettings().getIntegration().getSecretKey();
 	}
 
 	public String getIntegrationWhiteIp() {
+		if (getSettings().getIntegration() == null) {
+			return "";
+		}
 		return getSettings().getIntegration().getWhiteIp();
 	}
 
