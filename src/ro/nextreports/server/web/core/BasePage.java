@@ -29,12 +29,10 @@ import ro.nextreports.server.web.common.misc.AjaxBusyIndicator;
 /**
  * @author Decebal Suiu
  */
-public abstract class BasePage extends SecurePage /*implements IAjaxIndicatorAware*/ {
+public abstract class BasePage extends SecurePage {
 
 	private static final long serialVersionUID = 1L;
-	
-//    private final BusyAjaxIndicator indicatorAppender;
-    
+	    
 	protected HeaderPanel headerPanel;
 	protected FooterPanel footerPanel;
 	protected ModalWindow dialog;
@@ -54,21 +52,11 @@ public abstract class BasePage extends SecurePage /*implements IAjaxIndicatorAwa
 		footerPanel.setRenderBodyOnly(true);
 		add(footerPanel);
 
-		/*
-        indicatorAppender = new BusyAjaxIndicator();
-        add(indicatorAppender);
-        */
         add(new AjaxBusyIndicator());
         
         dialog = new ModalWindow("dialog");        
         add(dialog);        
 	}
-
-	/*
-	public String getAjaxIndicatorMarkupId() {
-		return indicatorAppender.getMarkupId();
-	}
-	*/
 
 	public ModalWindow getDialog() {
 		return dialog;

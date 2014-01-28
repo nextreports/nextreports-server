@@ -53,8 +53,8 @@ public class HomePage extends BasePage {
 
 	private static final long serialVersionUID = 1L;
 	
-//	private transient IPushService pushService;
-//	private IPushNode<Message> pushNode;
+	private transient IPushService pushService;
+	private IPushNode<Message> pushNode;
 	private Label growlLabel;
 	
 	@SpringBean
@@ -89,18 +89,12 @@ public class HomePage extends BasePage {
 		super.onInitialize();
 		
     	// push
-		// TODO wicket-6
-//    	initPush();
+    	initPush();
     	
-    	// create messages
-    	//createTestMessages();
-    	
-		// TODO wicket-6
-		/*
     	reportService.addReportListener(new ReportListener() {
 			
 			@Override
-			public void onFinishRun(ReportResultEvent result) {				
+			public void onFinishRun(ReportResultEvent result) {
 				if (pushService.isConnected(pushNode)) {
 					// forward the Message event via the push service 
 					// to the push event handler
@@ -108,8 +102,8 @@ public class HomePage extends BasePage {
 					pushService.publish(pushNode, message);
 				}
 			}
+			
 		});
-		*/
 	}
 
 	private void initPush() {
@@ -127,14 +121,11 @@ public class HomePage extends BasePage {
 			
 	    };
 
-	    // TODO wicket-6
-	    /*
 	     // obtain a reference to a Push service implementation
 	    pushService = TimerPushService.get();
 
 		// install push node into this panel
 	    pushNode = pushService.installNode(this, handler);
-	    */	    
 	}
 	
 	private Message createMessage(ReportResultEvent event) {				
@@ -161,34 +152,6 @@ public class HomePage extends BasePage {
 		return new Message(sb.toString(), error);
 	}
        
-	/*
-	private void createTestMessages() {
-		System.out.println("#########################");
-		Timer timer = new Timer();
-
-		timer.schedule(new TimerTask() {
-
-			private int count = 0;
-			
-		    public void run() {
-		    	System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-		    	// do your work 
-		    	count++;
-			    Message message = new Message("salutare de la mare " + count + "<br><a href=\"http://www.myagora.ro\">MyAgora</a>", false);
-			    System.out.println(">>> " + message.getText());
-//			    IPushService pushService = TimerPushService.get();
-			    if (pushService.isConnected(pushNode)) {
-		            // forward the Message event via the push service to the push event handler
-		            pushService.publish(pushNode, message);
-				}
-		    }
-		    
-		 }, 0, 30 * 1000);
-
-//		timer.cancel();
-	}
-	*/
-
 	private class Message  {
 		
 		private String text;

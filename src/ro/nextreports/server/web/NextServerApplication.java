@@ -274,16 +274,6 @@ public class NextServerApplication extends WebApplication  {
         	LOG.debug("Added jobs in scheduler in " + t + " ms");
         }
 	}
-
-	/*
-	@Override
-	protected void validateInit() {
-	    super.validateInit();
-	    
-	    // TODO wicket-6
-//	    WiQuerySettings.get().setAutoImportJQueryResource(false);
-	}
-	*/
 	
 	private SchedulerJob[] getSchedulerJobs() {
 		PlatformTransactionManager transactionManager = (PlatformTransactionManager) getSpringBean("transactionManager");
