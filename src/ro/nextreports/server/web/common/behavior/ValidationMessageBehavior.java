@@ -28,7 +28,6 @@ public class ValidationMessageBehavior extends Behavior {
 	
 	private static final long serialVersionUID = 1L;
 
-	// TODO wicket-6
 	@Override
 	public void afterRender(Component component) {
 		super.afterRender(component);
@@ -43,7 +42,7 @@ public class ValidationMessageBehavior extends Behavior {
     	if ((fc != null) && !fc.isValid() ) {
 			String error;
 			if (fc.hasFeedbackMessage()) {
-				error = fc.getFeedbackMessages().first().toString(); // ?!
+				error = fc.getFeedbackMessages().first().getMessage().toString();
 			} else {
 				error = "Your input is invalid.";
 			}
