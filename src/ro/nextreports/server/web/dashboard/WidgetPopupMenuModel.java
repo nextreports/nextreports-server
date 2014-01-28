@@ -24,6 +24,8 @@ import java.util.Map;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
@@ -76,7 +78,6 @@ import ro.nextreports.server.web.report.DynamicParameterRuntimePanel;
 import ro.nextreports.server.web.report.ParameterRuntimePanel;
 import ro.nextreports.server.web.report.ReportSection;
 import ro.nextreports.server.web.security.SecurityUtil;
-
 import ro.nextreports.engine.util.ObjectCloner;
 
 public class WidgetPopupMenuModel extends LoadableDetachableModel<List<MenuItem>> {
@@ -568,11 +569,24 @@ public class WidgetPopupMenuModel extends LoadableDetachableModel<List<MenuItem>
 				return hasWritePermission(model.getObject());
 			}  
 			
-			protected CharSequence decorateOnSuccessScript(Component c, CharSequence script) {
-				return "$('#widget-" + model.getObject().getId() + "').remove();";
+			@Override
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+				super.updateAjaxAttributes(attributes);
+				
+				attributes.getAjaxCallListeners().add(new AjaxCallListener() {
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public CharSequence getSuccessHandler(Component component) {
+						return "$('#widget-" + model.getObject().getId() + "').remove();";
+					}
+					
+				});
 			}
-			
+
 		};				
+		
 		return deleteLink;
 	}
 	
@@ -585,4 +599,5 @@ public class WidgetPopupMenuModel extends LoadableDetachableModel<List<MenuItem>
 
       return false;
   }
+	
 }
