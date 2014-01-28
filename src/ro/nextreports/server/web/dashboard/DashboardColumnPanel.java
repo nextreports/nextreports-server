@@ -112,8 +112,6 @@ class DashboardColumnPanel extends GenericPanel<DashboardColumn> {
 				
 				String dashboardId = dashboardPanel.getDashboard().getId();
 				try {
-					System.out.println(">>>>>>>>>>>>>>>.");
-					System.out.println("widgets = " + widgets);
 					dashboardService.updateWidgetLocations(dashboardId, widgets);
 				} catch (NotFoundException e) {
 					// never happening
