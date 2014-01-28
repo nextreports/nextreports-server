@@ -21,6 +21,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -38,8 +39,6 @@ import ro.nextreports.server.service.SecurityService;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.util.PermissionUtil;
 import ro.nextreports.server.util.ServerUtil;
-import ro.nextreports.server.web.common.panel.GenericPanel;
-
 
 /**
  * @author Decebal Suiu

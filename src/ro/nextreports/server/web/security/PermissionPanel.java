@@ -19,19 +19,20 @@ package ro.nextreports.server.web.security;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 
 import ro.nextreports.server.domain.AclEntry;
 import ro.nextreports.server.util.PermissionUtil;
-import ro.nextreports.server.web.common.panel.GenericPanel;
-
 
 /**
  * @author Decebal Suiu
  */
 public class PermissionPanel extends GenericPanel<AclEntry> {
 
+	private static final long serialVersionUID = 1L;
+	
 	@SuppressWarnings("unused")
 	private boolean all;
 	

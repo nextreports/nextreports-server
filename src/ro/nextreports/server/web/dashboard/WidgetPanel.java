@@ -20,6 +20,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
+import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.slf4j.Logger;
@@ -27,7 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.Entity;
-import ro.nextreports.server.web.common.panel.GenericPanel;
 import ro.nextreports.server.web.dashboard.alarm.AlarmWidget;
 import ro.nextreports.server.web.dashboard.chart.ChartWidget;
 import ro.nextreports.server.web.dashboard.drilldown.DrillDownWidget;

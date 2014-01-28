@@ -20,7 +20,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 import ro.nextreports.server.web.core.section.AbstractSection;
 
-
 /**
  * @author Decebal Suiu
  */

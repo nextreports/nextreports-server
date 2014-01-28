@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import ro.nextreports.server.web.dashboard.WidgetView;
 import ro.nextreports.server.web.dashboard.model.WidgetModel;
 
-
 /**
  * @author Decebal Suiu
  * @author Mihai Dinca-Panaitescu

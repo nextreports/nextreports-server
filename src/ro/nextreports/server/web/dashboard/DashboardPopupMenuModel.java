@@ -51,9 +51,10 @@ import ro.nextreports.server.web.core.section.SectionContext;
 import ro.nextreports.server.web.core.section.SectionContextConstants;
 import ro.nextreports.server.web.security.SecurityPanel;
 
-
 public class DashboardPopupMenuModel extends LoadableDetachableModel<List<MenuItem>> {
 	
+	private static final long serialVersionUID = 1L;
+
 	@SpringBean
 	private StorageService storageService;
 	

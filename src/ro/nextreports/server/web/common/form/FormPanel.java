@@ -24,9 +24,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.Model;
-
-import ro.nextreports.server.web.common.panel.GenericPanel;
 
 /**
  * @author Decebal Suiu

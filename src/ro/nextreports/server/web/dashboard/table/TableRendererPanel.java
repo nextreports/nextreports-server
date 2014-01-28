@@ -21,25 +21,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ro.nextreports.server.domain.DrillEntityContext;
-import ro.nextreports.server.domain.Report;
-import ro.nextreports.server.web.common.panel.GenericPanel;
-import ro.nextreports.server.web.common.table.BaseTable;
-import ro.nextreports.server.web.common.table.LinkPropertyColumn;
-
 import ro.nextreports.engine.exporter.util.StyleFormatConstants;
 import ro.nextreports.engine.util.HtmlUtil;
+import ro.nextreports.server.domain.DrillEntityContext;
+import ro.nextreports.server.domain.Report;
+import ro.nextreports.server.web.common.table.BaseTable;
+import ro.nextreports.server.web.common.table.LinkPropertyColumn;
 
 /**
  * @author Mihai Dinca-Panaitescu

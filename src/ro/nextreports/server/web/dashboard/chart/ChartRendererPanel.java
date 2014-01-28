@@ -21,6 +21,7 @@ import java.util.Map;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -28,22 +29,23 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.DrillEntityContext;
 import ro.nextreports.server.service.ChartService;
-import ro.nextreports.server.web.common.panel.GenericPanel;
-
-import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 
 /**
  * @author Mihai Dinca-Panaitescu
  */
 public class ChartRendererPanel extends GenericPanel<Chart> {
 	
+	private static final long serialVersionUID = 1L;
+	
+	private static final Logger LOG = LoggerFactory.getLogger(ChartRendererPanel.class);
+	
 	private OnClickChartAjaxBehavior onClickChartAjaxBehavior;
 	private DrillEntityContext drillContext;	
 	private Map<String,Object> urlQueryParameters;
-	private static final Logger LOG = LoggerFactory.getLogger(ChartRendererPanel.class);
 	
 	@SpringBean
 	private ChartService chartService;

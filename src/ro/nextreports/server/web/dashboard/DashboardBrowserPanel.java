@@ -18,11 +18,10 @@ package ro.nextreports.server.web.dashboard;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import ro.nextreports.server.domain.Entity;
-import ro.nextreports.server.web.common.panel.GenericPanel;
-
 
 /**
  * @author Decebal Suiu

@@ -17,35 +17,27 @@
 package ro.nextreports.server.web.dashboard;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.PropertyModel;
 
 import ro.nextreports.server.domain.DashboardStatistics;
-import ro.nextreports.server.web.common.panel.GenericPanel;
-
 
 public class DashboardStatisticsPanel extends GenericPanel<DashboardStatistics> {		
 
-	 public DashboardStatisticsPanel(String id) {
-			
+	private static final long serialVersionUID = 1L;
+
+	public DashboardStatisticsPanel(String id) {			
 		super(id, new StatisticsModel());
 			
 		add(new Label("dashboardNo", new PropertyModel(getModel(), "dashboardNo")));
-			
 		add(new Label("linkNo", new PropertyModel(getModel(), "linkNo")));
-			
 		add(new Label("widgetNo", new PropertyModel(getModel(), "widgetNo")));
-			
 		add(new Label("tableNo", new PropertyModel(getModel(), "tableNo")));
-			
 		add(new Label("chartNo", new PropertyModel(getModel(), "chartNo")));
-			
 		add(new Label("alarmNo", new PropertyModel(getModel(), "alarmNo")));
-		
 		add(new Label("indicatorNo", new PropertyModel(getModel(), "indicatorNo")));
-			
 		add(new Label("drillDownNo", new PropertyModel(getModel(), "drillDownNo")));
-		
 		add(new Label("pivotNo", new PropertyModel(getModel(), "pivotNo")));
-						
-	 }		
+	 }
+	
 }

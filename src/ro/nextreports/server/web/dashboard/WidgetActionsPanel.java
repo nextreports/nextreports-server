@@ -16,10 +16,8 @@
  */
 package ro.nextreports.server.web.dashboard;
 
+import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
-
-import ro.nextreports.server.web.common.panel.GenericPanel;
-
 
 /**
  * @author Decebal Suiu
@@ -30,6 +28,7 @@ class WidgetActionsPanel extends GenericPanel<Widget> {
     
     public WidgetActionsPanel(String id, final IModel<Widget> model) {
         super(id, model);       
+        
         add(new WidgetPopupMenuPanel("menuPanel", model));
     }
 

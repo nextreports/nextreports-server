@@ -17,9 +17,8 @@
 package ro.nextreports.server.web.dashboard;
 
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
-
-import ro.nextreports.server.web.common.panel.GenericPanel;
 
 /**
  * @author Decebal Suiu

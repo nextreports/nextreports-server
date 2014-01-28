@@ -16,14 +16,14 @@
  */
 package ro.nextreports.server.web.core;
 
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.panel.Panel;
+import java.util.Stack;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.panel.GenericPanel;
+import org.apache.wicket.markup.html.panel.Panel;
 
 import ro.nextreports.server.domain.Entity;
-import ro.nextreports.server.web.common.panel.GenericPanel;
-
-import java.util.Stack;
 
 
 /**
@@ -33,7 +33,9 @@ import java.util.Stack;
  */
 public class StackPanel extends GenericPanel<Entity> {
 
-    protected static final int STACK_MAX_SIZE = 10;
+    private static final long serialVersionUID = 1L;
+
+	protected static final int STACK_MAX_SIZE = 10;
     
     private WebMarkupContainer workContainer;
     private Stack<Panel> stack;

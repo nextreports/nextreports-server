@@ -34,11 +34,12 @@ import org.apache.wicket.model.PropertyModel;
 import ro.nextreports.server.domain.AclEntry;
 import ro.nextreports.server.domain.Entity;
 
-
 /**
  * @author Decebal Suiu
  */
 public class GroupAclEntryPanel extends Panel {
+
+	private static final long serialVersionUID = 1L;
 
 	public GroupAclEntryPanel(String id, Entity entity, AclEntry aclEntry, List<String> notGrantedGroups) {
 		super(id);

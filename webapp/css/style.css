@@ -1051,6 +1051,16 @@ body#body-login {
 	padding: 2px 4px;
 }
 
+.accordion-group span.tree-content .selected span.tree-label {
+    background-color: #8cb200 !important;
+	color: #ffffff;
+	padding: 2px 4px;
+}
+
+.tree-content a {
+	text-decoration: none !important;
+}
+
 /* Palette Start */
 .paletteContainer table.palette {
     border: 3px;

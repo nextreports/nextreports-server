@@ -24,6 +24,7 @@ import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -33,9 +34,7 @@ import org.odlabs.wiquery.ui.sortable.SortableBehavior;
 import ro.nextreports.server.exception.NotFoundException;
 import ro.nextreports.server.service.DashboardService;
 import ro.nextreports.server.util.WidgetUtil;
-import ro.nextreports.server.web.common.panel.GenericPanel;
 import ro.nextreports.server.web.dashboard.model.WidgetModel;
-
 
 /**
  * @author Decebal Suiu
@@ -113,6 +112,8 @@ class DashboardColumnPanel extends GenericPanel<DashboardColumn> {
 				
 				String dashboardId = dashboardPanel.getDashboard().getId();
 				try {
+					System.out.println(">>>>>>>>>>>>>>>.");
+					System.out.println("widgets = " + widgets);
 					dashboardService.updateWidgetLocations(dashboardId, widgets);
 				} catch (NotFoundException e) {
 					// never happening

@@ -82,8 +82,7 @@ public abstract class BasePage extends SecurePage /*implements IAjaxIndicatorAwa
         response.render(JavaScriptHeaderItem.forUrl("js/nextserver.js"));
 
         // add busy-indicator.js
-        // TODO wicket-6
-//		response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(BasePage.class, "busy-indicator.js")));
+		response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(BasePage.class, "busy-indicator.js")));
 		        
         if (isInternetExplorer()) {        	        	
         	response.render(CssHeaderItem.forUrl("css/style-ie.css"));

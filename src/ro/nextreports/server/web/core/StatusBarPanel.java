@@ -16,14 +16,14 @@
  */
 package ro.nextreports.server.web.core;
 
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.GenericPanel;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.LoadableDetachableModel;
 
 import ro.nextreports.server.domain.Entity;
-import ro.nextreports.server.web.common.panel.GenericPanel;
 import ro.nextreports.server.web.core.section.EntitySection;
 import ro.nextreports.server.web.core.section.SectionContextUtil;
 import ro.nextreports.server.web.core.section.SectionManager;
@@ -35,7 +35,10 @@ import ro.nextreports.server.web.core.section.SectionManager;
  */
 public class StatusBarPanel extends GenericPanel<Entity> {
 
+	private static final long serialVersionUID = 1L;
+	
 	private static final Logger LOG = LoggerFactory.getLogger(StatusBarPanel.class);
+	
 	private String sectionId;
 
 	@SpringBean

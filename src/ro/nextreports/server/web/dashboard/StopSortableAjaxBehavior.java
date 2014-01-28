@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.odlabs.wiquery.core.javascript.JsScopeContext;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 import org.odlabs.wiquery.ui.sortable.SortableBehavior;
@@ -60,16 +61,23 @@ public abstract class StopSortableAjaxBehavior extends AbstractDefaultAjaxBehavi
 
 			@Override
 			protected void execute(JsScopeContext scopeContext) {
-//				scopeContext.append(FirebugLogger.log("stop ...................."));
-				scopeContext.append("var data = onStopWidgetMove();");
-				scopeContext.append("Wicket.Ajax.get('" + getCallbackUrl() 
-						+ "&" + JSON_DATA + "='+ data" 
-						+ ", null, null, function() { return true; })");
+				scopeContext.append(getCallbackFunctionBody());
 			}
 			
 		});
 	}
 
+	@Override
+	protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+		super.updateAjaxAttributes(attributes);
+		
+		StringBuilder javaScript = new StringBuilder();
+		javaScript.append("var data = onStopWidgetMove();");
+		javaScript.append("return { '" + JSON_DATA + "': data }"); 
+		
+		attributes.getDynamicExtraParameters().add(javaScript);
+	}
+	
 	@Override
 	protected void respond(AjaxRequestTarget target) {
 		String jsonData = this.getComponent().getRequest().getRequestParameters().getParameterValue(JSON_DATA).toString();

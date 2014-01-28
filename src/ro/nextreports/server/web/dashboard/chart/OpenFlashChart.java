@@ -23,6 +23,7 @@ import java.util.UUID;
 import org.apache.wicket.IResourceListener;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceRequestHandler;
@@ -32,7 +33,6 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ro.nextreports.server.service.StorageService;
-import ro.nextreports.server.web.common.panel.GenericPanel;
 import ro.nextreports.server.web.core.UrlUtil;
 
 /**
