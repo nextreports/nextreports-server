@@ -92,7 +92,7 @@ public class LoginPage extends WebPage {
 					continueToOriginalDestination();
 					setResponsePage(HomePage.class);
 				} else {
-					error(getLocalizer().getString("loginError", this));
+					error(getString("loginError"));
 				}
 				target.add(form);				
 			}
