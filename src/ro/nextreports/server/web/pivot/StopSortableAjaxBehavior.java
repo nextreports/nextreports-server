@@ -18,6 +18,7 @@ package ro.nextreports.server.web.pivot;
 
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.odlabs.wiquery.core.javascript.JsScopeContext;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 import org.odlabs.wiquery.ui.sortable.SortableBehavior;
@@ -49,19 +50,28 @@ public abstract class StopSortableAjaxBehavior extends AbstractDefaultAjaxBehavi
 	public abstract void onStop(Item[] items, AjaxRequestTarget target);
 	
 	@Override
+	protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+		super.updateAjaxAttributes(attributes);
+		
+		String areasId = getComponent().findParent(PivotPanel.class).get("areas").getMarkupId();
+		
+		StringBuilder javaScript = new StringBuilder();
+		javaScript.append("var data = onStopFieldMove(\"" + areasId + "\");");
+		javaScript.append("return { '" + JSON_DATA + "': data }"); 
+
+		attributes.getDynamicExtraParameters().add(javaScript);
+	}
+
+	@Override
 	protected void onBind() {
 		getComponent().add(sortableBehavior);
-		final String areasId = getComponent().findParent(PivotPanel.class).get("areas").getMarkupId();
 		sortableBehavior.setStopEvent(new JsScopeUiEvent() {
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void execute(JsScopeContext scopeContext) {
-				scopeContext.append("var data = onStopFieldMove(\"" + areasId + "\");");
-				scopeContext.append("wicketAjaxGet('" + getCallbackUrl()
-						+ "&" + JSON_DATA + "='+ data" 
-						+ ", null, null, function() { return true; })");
+				scopeContext.append(getCallbackFunctionBody());
 			}
 			
 		});
