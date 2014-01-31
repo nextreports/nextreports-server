@@ -43,7 +43,9 @@ jQuery.fn.pngFix = function(settings) {
 	var ie55 = (navigator.appName == "Microsoft Internet Explorer" && parseInt(navigator.appVersion) == 4 && navigator.appVersion.indexOf("MSIE 5.5") != -1);
 	var ie6 = (navigator.appName == "Microsoft Internet Explorer" && parseInt(navigator.appVersion) == 4 && navigator.appVersion.indexOf("MSIE 6.0") != -1);
 
-	if (jQuery.browser.msie && (ie55 || ie6)) {
+	// jQuery.browser was removed from jquery 1.9
+	//if (jQuery.browser.msie && (ie55 || ie6)) {
+	if (ie55 || ie6) {
 
 		//fix images with png-source
 		jQuery(this).find("img[src$=.png]").each(function() {
