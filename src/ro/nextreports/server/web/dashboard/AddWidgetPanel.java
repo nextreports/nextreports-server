@@ -69,7 +69,10 @@ public class AddWidgetPanel extends FormContentPanel {
 	private Entity entity;
 	
 	private Component swapComponent;
+	private ITreeProvider<Entity> treeProvider;
 	private EntityTree tree;
+	
+	private IModel<Entity> selected;
 	
 	public AddWidgetPanel() {
 		super(FormPanel.CONTENT_ID);										
@@ -162,7 +165,7 @@ public class AddWidgetPanel extends FormContentPanel {
 	}		
 	
     protected EntityTree createTree(String rootPath) {
-    	ITreeProvider<Entity> treeProvider = new EntityTreeProvider(rootPath) {
+    	treeProvider = new EntityTreeProvider(rootPath) {
 
 			private static final long serialVersionUID = 1L;
 
@@ -217,6 +220,16 @@ public class AddWidgetPanel extends FormContentPanel {
     	
         return new EntityTree("tree", treeProvider);
     }
+    
+    protected boolean isSelected(Entity entity) {
+        IModel<Entity> model = treeProvider.model(entity);
+
+        try {
+            return (selected != null) && selected.equals(model);
+        } finally {
+            model.detach();
+        }
+    }
 
 	private String getRootPath() {
 		String rootPath;
@@ -239,7 +252,7 @@ public class AddWidgetPanel extends FormContentPanel {
         target.add(getFeadbackPanel());
 	}				
 	
-    class EntityTree extends NestedTree<Entity> {
+    private class EntityTree extends NestedTree<Entity> {
 
     	private static final long serialVersionUID = 1L;
     	
@@ -273,10 +286,25 @@ public class AddWidgetPanel extends FormContentPanel {
     			protected void onClick(AjaxRequestTarget target) {    				    				
     				super.onClick(target);
     				
+    				// refresh the old selected node
+    				if (selected != null) {
+    		            tree.updateNode(selected.getObject(), target);
+
+    		            selected.detach();
+    		            selected = null;
+    		        }
+
+    		        selected = treeProvider.model(getModelObject());
+    				
     				onNodeClicked(getModelObject(), target);
     			}
     			
     			@Override
+				protected boolean isSelected() {
+   	                return AddWidgetPanel.this.isSelected(getModelObject());
+				}
+
+				@Override
     			protected IModel<?> newLabelModel(IModel<Entity> model) {
     				return Model.of(model.getObject().getName());
     			}

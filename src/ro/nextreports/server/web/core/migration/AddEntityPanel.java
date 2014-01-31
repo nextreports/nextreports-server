@@ -67,7 +67,10 @@ public class AddEntityPanel extends FormContentPanel {
 	private Entity entity;
 	
 	private Component swapComponent;
+	private ITreeProvider<Entity> treeProvider;
 	private EntityTree tree;
+	
+	private IModel<Entity> selected;
 	
 	public AddEntityPanel() {
 		super(FormPanel.CONTENT_ID);										
@@ -155,24 +158,35 @@ public class AddEntityPanel extends FormContentPanel {
 		return entity;
 	}		
 	
-	 protected EntityTree createTree(String rootPath) {
-    	ITreeProvider<Entity> treeProvider = new EntityTreeProvider(rootPath) {
+	protected EntityTree createTree(String rootPath) {
+		treeProvider = new EntityTreeProvider(rootPath) {
 
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			protected List<Entity> getChildren(String id) throws NotFoundException {
 				// sort
 				List<Entity> children = super.getChildren(id);								
 				Collections.sort(children, new EntityComparator());
-				
+
 				return children;
 			}
-    	};
+			
+		};
 
-    	 return new EntityTree("tree", treeProvider);
-	 }
+		return new EntityTree("tree", treeProvider);
+	}
 	
+    protected boolean isSelected(Entity entity) {
+        IModel<Entity> model = treeProvider.model(entity);
+
+        try {
+            return (selected != null) && selected.equals(model);
+        } finally {
+            model.detach();
+        }
+    }
+
 	private String getRootPath() {
 		String rootPath;
 		if (MigrationEntityType.CHART.equals(type)) {
@@ -198,7 +212,7 @@ public class AddEntityPanel extends FormContentPanel {
         target.add(getFeadbackPanel());
 	}				
 	
-	class EntityTree extends NestedTree<Entity> {
+	private class EntityTree extends NestedTree<Entity> {
 
     	private static final long serialVersionUID = 1L;
     	
@@ -232,8 +246,23 @@ public class AddEntityPanel extends FormContentPanel {
     			protected void onClick(AjaxRequestTarget target) {    				    				
     				super.onClick(target);
     				
+    				// refresh the old selected node
+    				if (selected != null) {
+    		            tree.updateNode(selected.getObject(), target);
+
+    		            selected.detach();
+    		            selected = null;
+    		        }
+
+    		        selected = treeProvider.model(getModelObject());
+    				
     				onNodeClicked(getModelObject(), target);
     			}
+    			
+    			@Override
+				protected boolean isSelected() {
+   	                return AddEntityPanel.this.isSelected(getModelObject());
+				}
     			
     			@Override
     			protected IModel<?> newLabelModel(IModel<Entity> model) {

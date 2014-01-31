@@ -1051,7 +1051,7 @@ body#body-login {
 	padding: 2px 4px;
 }
 
-.accordion-group span.tree-content .selected span.tree-label {
+span.tree-content .selected span.tree-label {
     background-color: ${main-color} !important;
 	color: #ffffff;
 	padding: 2px 4px;
