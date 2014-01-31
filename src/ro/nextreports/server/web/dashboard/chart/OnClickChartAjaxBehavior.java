@@ -28,23 +28,31 @@ public class OnClickChartAjaxBehavior extends AbstractDefaultAjaxBehavior {
 
 	private static final long serialVersionUID = 1L;
 	
-	/** Value identifiant into the request */
-	private static final String X_VALUE = "value";
+	private static final String X_VALUE_PARAM_NAME = "value";
 
 	public OnClickChartAjaxBehavior() {
 		super();
 	}
 
-	public String getOnClickJavaScript() {		
-		return "Wicket.Ajax.get('" + getCallbackUrl() 
-			+ "&" + X_VALUE + "=" + JsonExporter.X_VALUE 
-			+ "', null, null, function() { return true; })";
+	public String getOnClickJavaScript() {
+		StringBuilder javaScript = new StringBuilder();
+		javaScript.append("Wicket.Ajax.get({ u: '");
+		javaScript.append(getCallbackUrl());
+		javaScript.append("&");
+		javaScript.append(X_VALUE_PARAM_NAME);
+		javaScript.append("=");
+		javaScript.append(JsonExporter.X_VALUE);
+		javaScript.append("'})");
+		
+		return javaScript.toString();		
 	}
 	
 	@Override
 	protected void respond(AjaxRequestTarget target) {
-		String value = this.getComponent().getRequest().getRequestParameters().getParameterValue(X_VALUE).toString();		
-		onClickChart(target, value);
+		String value = getComponent().getRequest().getRequestParameters().getParameterValue(X_VALUE_PARAM_NAME).toString();
+		if (value != null) { // defensive
+			onClickChart(target, value);			
+		}		
 	}
 
 	public void onClickChart(AjaxRequestTarget target, String value) {
