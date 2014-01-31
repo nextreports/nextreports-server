@@ -9,3 +9,9 @@ ivy-report/
 # CVS legacy #
 CVS/
 stuff/
+data/
+dist/
+artifacts/
+lib/
+logs/
+reports/
