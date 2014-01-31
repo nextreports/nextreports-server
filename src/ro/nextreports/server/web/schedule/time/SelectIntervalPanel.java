@@ -113,15 +113,34 @@ public class SelectIntervalPanel extends Panel {
         }
         form.add(startLabel);
         form.add(endLabel);
-        final DropDownChoice startChoice = new DropDownChoice("startChoice", new PropertyModel(timeValues, "startTime"), getChoices());
+        
+        IChoiceRenderer<String> choicesRenderer = new ChoiceRenderer<String>() {
+
+			@Override
+			public Object getDisplayValue(String object) {
+				if (Arrays.asList(days).contains(object)) {
+					return getString("JobPanel.day." + object);
+				} else {
+					return object;
+				}
+			}
+        	
+        };
+        
+        final DropDownChoice startChoice = new DropDownChoice("startChoice", new PropertyModel(timeValues, "startTime"), getChoices(), choicesRenderer);
         form.add(startChoice);
-        final DropDownChoice endChoice = new DropDownChoice("endChoice", new PropertyModel(timeValues, "endTime"), getChoices());
+                       
+        final DropDownChoice endChoice = new DropDownChoice("endChoice", new PropertyModel(timeValues, "endTime"), getChoices(), choicesRenderer);
         form.add(endChoice);
 
         final Palette palette = new ExtendedPalette("palette", new PropertyModel(timeValues, "discreteValues"), new Model(getChoices()), new IChoiceRenderer<String>() {
 
             public Object getDisplayValue(String s) {
-                return s;
+            	if (Arrays.asList(days).contains(s)) {
+					return getString("JobPanel.day." + s);
+				} else {
+					return s;
+				}
             }
 
             public String getIdValue(String s, int i) {
