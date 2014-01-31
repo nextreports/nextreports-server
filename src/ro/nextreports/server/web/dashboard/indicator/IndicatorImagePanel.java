@@ -29,6 +29,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
+import ro.nextreports.engine.chart.JsonExporter;
 import ro.nextreports.engine.exporter.util.IndicatorData;
 import ro.nextreports.server.web.dashboard.WidgetPopupMenuModel;
 
@@ -69,10 +70,12 @@ public class IndicatorImagePanel extends Panel {
 		};
 		
 		add(image);
-		//add(new ResizeBehavior());
+//		add(new ResizeBehavior());
 	}			
 			
 	private class ResizeBehavior extends AbstractDefaultAjaxBehavior {		
+		
+		private static final long serialVersionUID = 1L;
 		
 		private static final String HEIGHT = "height";
 		
@@ -105,10 +108,16 @@ public class IndicatorImagePanel extends Panel {
 			StringBuilder sb = new StringBuilder();
 			sb.append("$(window).bind(\'resizeEnd\', function(){");
 			sb.append("var ih = getIndicatorHeight();");
-			sb.append("Wicket.Ajax.get('" + getCallbackUrl() + "&" + HEIGHT + "='ih" 
-					+ ", null, null, function() { return true; })");
+			sb.append("Wicket.Ajax.get({ u: '");
+			sb.append(getCallbackUrl());
+			sb.append("&");
+			sb.append(HEIGHT);
+			sb.append("=");
+			sb.append("ih");
 			sb.append("});");
-			System.out.println("--->   " + sb.toString());
+						
+//			System.out.println("--->   " + sb.toString());
+			
 			return sb.toString();
 		}
 
@@ -116,9 +125,8 @@ public class IndicatorImagePanel extends Panel {
 		protected void respond(AjaxRequestTarget target) {
 			height = this.getComponent().getRequest().getRequestParameters().getParameterValue(HEIGHT).toString();
 			width = height;
-			System.out.println("*** height="+height);
+//			System.out.println("*** height="+height);
 			target.add(this.getComponent());
-			
 		}
 		
 	}

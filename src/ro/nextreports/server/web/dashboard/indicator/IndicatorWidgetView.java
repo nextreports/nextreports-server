@@ -23,7 +23,6 @@ import java.util.concurrent.TimeoutException;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -143,7 +142,7 @@ public class IndicatorWidgetView  extends WidgetView  {
 		}
 	}
 	
-	class IndicatorModel extends LoadableDetachableModel<IndicatorData> {
+	private class IndicatorModel extends LoadableDetachableModel<IndicatorData> {
 		
 		private static final long serialVersionUID = 1L;
 		
@@ -180,7 +179,7 @@ public class IndicatorWidgetView  extends WidgetView  {
 	
 	// if canvas is supported for HTML5 we will show IndicatorHTML5Panel
 	// else we will show IndicatorImagePanel
-    class HTML5Behavior extends AbstractDefaultAjaxBehavior {
+    private class HTML5Behavior extends AbstractDefaultAjaxBehavior {
     	
     	private static final long serialVersionUID = 1L;
     	
