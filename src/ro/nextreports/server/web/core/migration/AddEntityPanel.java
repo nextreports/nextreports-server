@@ -181,7 +181,7 @@ public class AddEntityPanel extends FormContentPanel {
         IModel<Entity> model = treeProvider.model(entity);
 
         try {
-            return (selected != null) && selected.equals(model);
+            return (selected != null) && selected.equals(model)  && !(selected.getObject() instanceof ro.nextreports.server.domain.Folder);
         } finally {
             model.detach();
         }
