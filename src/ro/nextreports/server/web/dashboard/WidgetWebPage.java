@@ -18,6 +18,7 @@ package ro.nextreports.server.web.dashboard;
 
 import java.util.Map;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -26,9 +27,9 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import ro.nextreports.server.domain.IFrameSettings;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.util.ChartUtil;
+import ro.nextreports.server.web.core.NextServerJavaScriptContributor;
 import ro.nextreports.server.web.dashboard.model.WidgetModel;
 import ro.nextreports.server.web.security.SecurityUtil;
-
 
 /**
  * @author Decebal Suiu
@@ -82,6 +83,14 @@ public class WidgetWebPage extends WebPage {
 	protected void setHeaders(WebResponse response) {
 		response.disableCaching();		
 		super.setHeaders(response);
+	}
+
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		
+        // add nextserver.js
+		new NextServerJavaScriptContributor().renderHead(response);
 	}
 		
 }

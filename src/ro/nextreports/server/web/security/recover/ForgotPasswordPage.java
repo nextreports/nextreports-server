@@ -145,16 +145,4 @@ public class ForgotPasswordPage extends WebPage {
 		add(form);
 	}
 
-	// TODO wicket-6
-	/*
-	//TODO: importul asta de jquery doar pentru DefaultFocusBehavior, nu e cam mult?
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		
-        // add jquery.js
-        response.renderJavaScriptReference("js/jquery-1.7.2.min.js");
-	}
-	*/	
-
 }

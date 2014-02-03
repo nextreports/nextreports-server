@@ -88,7 +88,6 @@ public class LoginPage extends WebPage {
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 final User user = (User) form.getModelObject();
 				if (NextServerSession.get().signIn(user.getUsername(), user.getPassword(), user.getRealm())) {
-					// TODO wicket-6
 					continueToOriginalDestination();
 					setResponsePage(HomePage.class);
 				} else {
@@ -109,15 +108,14 @@ public class LoginPage extends WebPage {
         add(new AjaxBusyIndicator());
 	}
 
-	// TODO wicket-6
 	/*
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		
-        // add jquery.js
-        response.render(JavaScriptHeaderItem.forUrl("js/jquery-1.7.2.min.js"));
+        IJavaScriptLibrarySettings settings = NextServerApplication.get().getJavaScriptLibrarySettings();
+        response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(settings.getJQueryReference())));
 	}
-	*/	
+	*/
 	
 }

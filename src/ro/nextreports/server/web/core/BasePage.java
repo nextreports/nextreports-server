@@ -67,7 +67,7 @@ public abstract class BasePage extends SecurePage {
 		super.renderHead(response);
 		        
         // add nextserver.js
-        response.render(JavaScriptHeaderItem.forUrl("js/nextserver.js"));
+		new NextServerJavaScriptContributor().renderHead(response);
 
         // add busy-indicator.js
 		response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(BasePage.class, "busy-indicator.js")));

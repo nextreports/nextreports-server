@@ -24,10 +24,15 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.LogManager;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnLoadHeaderItem;
+import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.basic.MultiLineLabel;
+import org.apache.wicket.settings.IJavaScriptLibrarySettings;
+
+import ro.nextreports.server.web.NextServerApplication;
 
 /**
  * @author Decebal Suiu
@@ -59,6 +64,9 @@ public class SystemLogPage extends WebPage {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
+		
+        IJavaScriptLibrarySettings settings = NextServerApplication.get().getJavaScriptLibrarySettings();
+        response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(settings.getJQueryReference())));
 		
 		response.render(OnLoadHeaderItem.forScript("$(\"#log\").scrollTop($(\"#log\").prop(\"scrollHeight\"));"));
 	}

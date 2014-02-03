@@ -139,16 +139,14 @@ public class ResetPasswordPage extends WebPage {
 		});
 	}
 	
-	// TODO wicket-6
 	/*
-	//TODO: importul asta de jquery doar pentru DefaultFocusBehavior, nu e cam mult?
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		
-        // add jquery.js
-        response.render(JavaScriptHeaderItem.forUrl("js/jquery-1.7.2.min.js"));
+        IJavaScriptLibrarySettings settings = NextServerApplication.get().getJavaScriptLibrarySettings();
+        response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(settings.getJQueryReference())));
 	}
-	*/	
+	*/
 
 }

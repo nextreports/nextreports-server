@@ -14,37 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ro.nextreports.server.web.pivot;
+package ro.nextreports.server.web.core;
 
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
-import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.settings.IJavaScriptLibrarySettings;
 
-import ro.nextreports.server.pivot.PivotDataSource;
 import ro.nextreports.server.web.NextServerApplication;
 
 /**
  * @author Decebal Suiu
  */
-public class PivotPage extends WebPage {
+public class NextServerJavaScriptContributor implements IHeaderContributor {
 
 	private static final long serialVersionUID = 1L;
-
-	public PivotPage() {
-		super();
-
-		PivotDataSource pivotDataSource = PivotDataSourceHandler.getPivotDataSource();
-		add(new PivotPanel("pivot", pivotDataSource));
-	}
 	
 	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		
+	public void renderHead(IHeaderResponse response) {		
+        response.render(JavaScriptHeaderItem.forUrl("js/nextserver.js"));
+        
         IJavaScriptLibrarySettings settings = NextServerApplication.get().getJavaScriptLibrarySettings();
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(settings.getJQueryReference())));
+        response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(settings.getWicketAjaxReference())));
 	}
 
 }
