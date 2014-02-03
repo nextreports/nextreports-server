@@ -37,6 +37,7 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.response.filter.AjaxServerAndClientTimeFilter;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.encoding.UrlEncoder;
@@ -196,6 +197,10 @@ public class NextServerApplication extends WebApplication  {
 		getRequestCycleListeners().add(new ExceptionRequestCycleListener());
 		getRequestCycleListeners().add(new LoggingRequestCycleListener());
 		getRequestCycleListeners().add(new MaintenanceRequestCycleListener());
+		
+		// set a jquery for wicket (we need jquery 1.10.2 mininimum and wicket 6.13 that contains 
+		// this version of jquery doesn't works for us)
+		getJavaScriptLibrarySettings().setJQueryReference(new JavaScriptResourceReference(NextServerApplication.class, "jquery-1.11.0.min.js"));
 	}			
 
 	@Override
