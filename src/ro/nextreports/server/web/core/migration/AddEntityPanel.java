@@ -244,7 +244,14 @@ public class AddEntityPanel extends FormContentPanel {
 
     			@Override
     			protected void onClick(AjaxRequestTarget target) {    				    				
-    				super.onClick(target);
+    				// I don't want the default behavior (collapse node if it's expanded)
+//    				super.onClick(target);
+    				Entity entity = getModelObject();
+    				if (tree.getState(entity) == State.COLLAPSED) {
+    					tree.expand(entity);
+    				} else {
+        	        	tree.updateNode(entity, target);    					
+    				}
     				
     				// refresh the old selected node
     				if (selected != null) {

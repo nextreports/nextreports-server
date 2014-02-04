@@ -29,6 +29,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
+import org.apache.wicket.extensions.markup.html.repeater.tree.AbstractTree.State;
 import org.apache.wicket.extensions.markup.html.repeater.tree.content.Folder;
 import org.apache.wicket.extensions.markup.html.repeater.tree.theme.WindowsTheme;
 import org.apache.wicket.markup.repeater.Item;
@@ -364,13 +365,20 @@ public class EntityBrowserPanel extends StackPanel implements AjaxUpdateListener
     			}
 
     			@Override
-    			protected void onClick(AjaxRequestTarget target) {    				    				
-    				super.onClick(target);
+    			protected void onClick(AjaxRequestTarget target) {
+    				// I don't want the default behavior (collapse node if it's expanded)
+//    				super.onClick(target);
+    				Entity entity = getModelObject();
+    				if (tree.getState(entity) == State.COLLAPSED) {
+    					tree.expand(entity);
+    				} else {
+        	        	tree.updateNode(entity, target);    					
+    				}
     				
     	        	// unselect the (old) selected entity (force repaint)
-    	        	tree.updateNode(getCurrentEntity(), target);
+    	        	tree.updateNode(getCurrentEntity(), target);    	        	
     				
-    				onNodeClicked(getModelObject(), target);
+    				onNodeClicked(entity, target);
     			}
 
                 @Override
