@@ -18,8 +18,10 @@ package ro.nextreports.server.web.common.event;
 
 /**
  * Components listening for events have to implement this interface.
+ * @deprecated Use wicket builtin event mechanism.
  * 
  * @author Decebal Suiu
+ * 
  */
 public interface AjaxUpdateListener {
 	
