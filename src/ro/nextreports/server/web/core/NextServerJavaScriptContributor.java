@@ -36,8 +36,7 @@ public class NextServerJavaScriptContributor implements IHeaderContributor {
         IJavaScriptLibrarySettings settings = NextServerApplication.get().getJavaScriptLibrarySettings();
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(settings.getJQueryReference())));
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(settings.getWicketAjaxReference())));
-        
-        response.render(JavaScriptHeaderItem.forUrl("js/nextserver.js"));               
+        response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forUrl("js/nextserver.js")));               
 	}
 
 }
