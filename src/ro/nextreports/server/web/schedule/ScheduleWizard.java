@@ -24,6 +24,7 @@ import java.util.HashMap;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.wizard.IWizard;
 import org.apache.wicket.extensions.wizard.Wizard;
 import org.apache.wicket.extensions.wizard.WizardModel;
 import org.apache.wicket.extensions.wizard.WizardStep;
@@ -301,6 +302,13 @@ public class ScheduleWizard extends Wizard {
             return getString("ActionContributor.Run.schedulerName");
         }
 
+        @Override
+    	public Component getHeader(final String id, final Component parent, final IWizard wizard) {
+    		Component c = super.getHeader(id, parent, wizard);
+    		c.get("summary").setEscapeModelStrings(false);
+    		return c;
+    	}
+        
         public String getName() {
             return schedulerJob.getName();
         }
@@ -399,6 +407,13 @@ public class ScheduleWizard extends Wizard {
             return result;
         }
         
+        @Override
+    	public Component getHeader(final String id, final Component parent, final IWizard wizard) {
+    		Component c = super.getHeader(id, parent, wizard);
+    		c.get("summary").setEscapeModelStrings(false);
+    		return c;
+    	}
+        
         // replace entire panel to have all dependent parameters compute their values
         public void onAjaxUpdate(AjaxUpdateEvent event) {   
         	boolean changed = false;
@@ -479,6 +494,13 @@ public class ScheduleWizard extends Wizard {
         public String getSummary() {
             return getString("ActionContributor.Run.time");
         }
+        
+        @Override
+    	public Component getHeader(final String id, final Component parent, final IWizard wizard) {
+    		Component c = super.getHeader(id, parent, wizard);
+    		c.get("summary").setEscapeModelStrings(false);
+    		return c;
+    	}
 
     }
 
@@ -504,6 +526,13 @@ public class ScheduleWizard extends Wizard {
             }
             return result;
         }
+        
+        @Override
+    	public Component getHeader(final String id, final Component parent, final IWizard wizard) {
+    		Component c = super.getHeader(id, parent, wizard);
+    		c.get("summary").setEscapeModelStrings(false);
+    		return c;
+    	}
 
     }
 
