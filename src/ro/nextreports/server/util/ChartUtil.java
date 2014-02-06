@@ -71,11 +71,13 @@ public class ChartUtil {
     public static final String CHART_NONE = "None";
     public static final String CHART_LINE = "Line";
     public static final String CHART_BAR = "Bar";
+    public static final String CHART_BAR_COMBO = "Bar Line";
     public static final String CHART_HORIZONTAL_BAR = "Horizontal Bar";
     public static final String CHART_STACKED_BAR = "Stacked Bar";
+    public static final String CHART_STACKED_BAR_COMBO = "Stacked Bar Line";
     public static final String CHART_PIE = "Pie";
     public static final String CHART_AREA = "Area";    
-    public static final List<String> CHART_TYPES = Arrays.asList(CHART_LINE, CHART_BAR, CHART_HORIZONTAL_BAR, CHART_STACKED_BAR, CHART_PIE, CHART_AREA);
+    public static final List<String> CHART_TYPES = Arrays.asList(CHART_LINE, CHART_BAR, CHART_BAR_COMBO, CHART_HORIZONTAL_BAR, CHART_STACKED_BAR, CHART_STACKED_BAR_COMBO, CHART_PIE, CHART_AREA);
 
     public static WidgetRuntimeModel getStoredRuntimeModel(Settings settings, ChartWidget chartWidget, ReportService reportService,
                                                           DataSourceService dataSourceService) {
@@ -500,10 +502,14 @@ public class ChartUtil {
     public static String getChartType(byte type) {
         if (ChartType.BAR == type) {
             return CHART_BAR;
+        }  else if (ChartType.BAR_COMBO == type) {
+            return CHART_BAR_COMBO;
         }  else if (ChartType.HORIZONTAL_BAR == type) {
             return CHART_HORIZONTAL_BAR;
         } else if (ChartType.STACKED_BAR == type) {
             return CHART_STACKED_BAR;
+        } else if (ChartType.STACKED_BAR_COMBO == type) {
+            return CHART_STACKED_BAR_COMBO;    
         } else if (ChartType.PIE == type) {
             return CHART_PIE;
         } else if (ChartType.LINE == type) {

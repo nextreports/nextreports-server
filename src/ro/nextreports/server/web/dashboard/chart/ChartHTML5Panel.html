@@ -1,0 +1,21 @@
+<wicket:head>
+	<style type="text/css">
+     
+  		.tip {
+		    background-color:white;
+		    border:1px solid gray;
+		    border-radius: 5px;
+		    -moz-border-radius: 5px;
+		    -webkit-border-radius: 5px;
+		    position:absolute;
+		    left:-2000px;
+		    top:100px;
+		    z-index: 999999;
+		 }
+    
+	</style>
+</wicket:head>
+<wicket:panel>   
+     <canvas wicket:id="chartCanvas"></canvas>
+     <canvas wicket:id="tipCanvas" class="tip"></canvas>               
+</wicket:panel>

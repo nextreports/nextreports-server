@@ -90,14 +90,29 @@ public class DefaultChartService implements ChartService {
         return getJsonData(chart, null, null);
 	}
     
+    public String getJsonData(Chart chart, boolean isHTML5)
+            throws ReportRunnerException, NoDataFoundException, TimeoutException {
+        return getJsonData(chart, null, null, isHTML5);
+	}
+    
     public String getJsonData(ChartWidget chartWidget)
             throws ReportRunnerException, NoDataFoundException, TimeoutException {
         return getJsonData(null, chartWidget, null, null);
+    }
+    
+    public String getJsonData(ChartWidget chartWidget, boolean isHTML5)
+            throws ReportRunnerException, NoDataFoundException, TimeoutException {
+        return getJsonData(null, chartWidget, null, null, isHTML5);
     }
 
     public String getJsonData(Chart chart, DrillEntityContext drillContext)
             throws ReportRunnerException, NoDataFoundException, TimeoutException {
         return getJsonData(chart, null, drillContext, null);
+	}
+    
+    public String getJsonData(Chart chart, DrillEntityContext drillContext, boolean isHTML5)
+            throws ReportRunnerException, NoDataFoundException, TimeoutException {
+        return getJsonData(chart, null, drillContext, null, isHTML5);
 	}
 
     public String getJsonData(ChartWidget chartWidget, DrillEntityContext drillContext)
@@ -105,27 +120,57 @@ public class DefaultChartService implements ChartService {
         return getJsonData(null, chartWidget, drillContext, null);
     }
     
+    public String getJsonData(ChartWidget chartWidget, DrillEntityContext drillContext, boolean isHTML5)
+            throws ReportRunnerException, NoDataFoundException, TimeoutException {
+        return getJsonData(null, chartWidget, drillContext, null, isHTML5);
+    }
+    
     public String getJsonData(Chart chart, Map<String,Object> urlQueryParameters)
             throws ReportRunnerException, NoDataFoundException, TimeoutException {
     	return getJsonData(chart, null, null, urlQueryParameters);
+    }
+    
+    public String getJsonData(Chart chart, Map<String,Object> urlQueryParameters, boolean isHTML5)
+            throws ReportRunnerException, NoDataFoundException, TimeoutException {
+    	return getJsonData(chart, null, null, urlQueryParameters, isHTML5);
     }
     
     public String getJsonData(Chart chart, DrillEntityContext drillContext, Map<String,Object> urlQueryParameters)
             throws ReportRunnerException, NoDataFoundException, TimeoutException {
     	return getJsonData(chart, null, drillContext, urlQueryParameters);
     }
+    
+    public String getJsonData(Chart chart, DrillEntityContext drillContext, Map<String,Object> urlQueryParameters, boolean isHTML5)
+            throws ReportRunnerException, NoDataFoundException, TimeoutException {
+    	return getJsonData(chart, null, drillContext, urlQueryParameters, isHTML5);
+    }
 
     public String getJsonData(ChartWidget chartWidget, Map<String,Object> urlQueryParameters)
             throws ReportRunnerException, NoDataFoundException, TimeoutException {
     	return getJsonData(null, chartWidget, null, urlQueryParameters);
+    }
+    
+    public String getJsonData(ChartWidget chartWidget, Map<String,Object> urlQueryParameters, boolean isHTML5)
+            throws ReportRunnerException, NoDataFoundException, TimeoutException {
+    	return getJsonData(null, chartWidget, null, urlQueryParameters, isHTML5);
     }
    
     public String getJsonData(ChartWidget chartWidget, DrillEntityContext drillContext, Map<String,Object> urlQueryParameters)
             throws ReportRunnerException, NoDataFoundException, TimeoutException {
     	return getJsonData(null, chartWidget, drillContext, urlQueryParameters);
     }
-
+    
+    public String getJsonData(ChartWidget chartWidget, DrillEntityContext drillContext, Map<String,Object> urlQueryParameters, boolean isHTML5)
+            throws ReportRunnerException, NoDataFoundException, TimeoutException {
+    	return getJsonData(null, chartWidget, drillContext, urlQueryParameters, isHTML5);
+    }
+    
     private String getJsonData(Chart chart, ChartWidget chartWidget, DrillEntityContext drillContext, Map<String,Object> urlQueryParameters)
+            throws ReportRunnerException, NoDataFoundException, TimeoutException {
+    	return getJsonData(chart, chartWidget, drillContext, urlQueryParameters, false);
+    }
+
+    private String getJsonData(Chart chart, ChartWidget chartWidget, DrillEntityContext drillContext, Map<String,Object> urlQueryParameters, boolean isHTML5)
             throws ReportRunnerException, NoDataFoundException, TimeoutException {
     	
         if ((chart != null) && (chartWidget != null)) {
@@ -247,6 +292,9 @@ public class DefaultChartService implements ChartService {
         }                
         
         final ChartRunner runner = new ChartRunner();
+        if (isHTML5) {
+        	runner.setGraphicType(ChartRunner.HTML5_TYPE);
+        }
         runner.setParameterValues(parameterValues);
         runner.setChart(nextChart);  
         //connection was not created yet (all parameters have static default values)
@@ -274,7 +322,7 @@ public class DefaultChartService implements ChartService {
 						outputStream = new ByteArrayOutputStream();
 						runner.run(outputStream);
 						outputStream.close();
-						return new String(outputStream.toByteArray());
+						return new String(outputStream.toByteArray(),  "UTF-8");
 					} finally {
 						if (outputStream != null) {
 							try {

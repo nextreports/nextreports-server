@@ -126,7 +126,9 @@ public class OpenFlashChart extends GenericPanel<String> implements IResourceLis
 		//System.out.println("OpenFlashChart.createJsonResource()");
 		String jsonData = getJsonData();
 		//System.out.println("jsonData = " + jsonData);
-		IResource jsonResource = new ByteArrayResource("text/plain", jsonData.getBytes()) {
+		IResource jsonResource = null;
+		try {
+			jsonResource = new ByteArrayResource("text/plain", jsonData.getBytes("UTF-8")) {
 
 			private static final long serialVersionUID = 1L;			
 						
@@ -150,6 +152,10 @@ public class OpenFlashChart extends GenericPanel<String> implements IResourceLis
 			}
 			
 		};
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			throw new RuntimeException("OpenFlashChart.createJsonResource : " + e.getMessage());
+		}
 		
 		return jsonResource;
 	}

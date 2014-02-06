@@ -54,5 +54,29 @@ public interface ChartService {
 
     public String getJsonData(ChartWidget chartWidget, DrillEntityContext drillContext, Map<String,Object> urlQueryParameters)
             throws ReportRunnerException, NoDataFoundException, TimeoutException;
+    
+	public String getJsonData(Chart chart, boolean isHTML5)
+            throws ReportRunnerException, NoDataFoundException, TimeoutException;
+
+    public String getJsonData(ChartWidget chartWidget, boolean isHTML5)
+            throws ReportRunnerException, NoDataFoundException, TimeoutException;
+
+    public String getJsonData(Chart chart, DrillEntityContext drillContext, boolean isHTML5)
+            throws ReportRunnerException, NoDataFoundException, TimeoutException;
+
+    public String getJsonData(ChartWidget chartWidget, DrillEntityContext drillContext, boolean isHTML5)
+            throws ReportRunnerException, NoDataFoundException, TimeoutException;
+    
+    public String getJsonData(Chart chart, Map<String,Object> urlQueryParameters, boolean isHTML5)
+            throws ReportRunnerException, NoDataFoundException, TimeoutException;
+
+    public String getJsonData(ChartWidget chartWidget, Map<String,Object> urlQueryParameters, boolean isHTML5)
+            throws ReportRunnerException, NoDataFoundException, TimeoutException;
+
+    public String getJsonData(Chart chart, DrillEntityContext drillContext, Map<String,Object> urlQueryParameters, boolean isHTML5)
+            throws ReportRunnerException, NoDataFoundException, TimeoutException;
+
+    public String getJsonData(ChartWidget chartWidget, DrillEntityContext drillContext, Map<String,Object> urlQueryParameters, boolean isHTML5)
+            throws ReportRunnerException, NoDataFoundException, TimeoutException;
 	
 }

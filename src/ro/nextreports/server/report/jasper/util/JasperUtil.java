@@ -17,6 +17,7 @@
 package ro.nextreports.server.report.jasper.util;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -70,16 +71,21 @@ public class JasperUtil {
     // Images are in the master file
     public static Report renameImagesAsUnique(Report report) {
         JasperContent reportContent = (JasperContent) report.getContent();
-        String masterContent = new String(reportContent.getMaster().getDataProvider().getBytes());
-        for (JcrFile imageFile : reportContent.getImageFiles()) {
-            String oldName = imageFile.getName();
-            int index = oldName.lastIndexOf(ReportUtil.EXTENSION_SEPARATOR);
-            String newName = oldName.substring(0, index) + ReportUtil.IMAGE_DELIM +
-                    UUID.randomUUID().toString() + oldName.substring(index);
-            masterContent = masterContent.replaceAll(oldName, newName);
-            imageFile.setName(newName);
-        }
-        reportContent.getMaster().setDataProvider(new JcrDataProviderImpl(masterContent.getBytes()));
+		try {
+			String masterContent = new String(reportContent.getMaster().getDataProvider().getBytes(), "UTF-8");
+			for (JcrFile imageFile : reportContent.getImageFiles()) {
+				String oldName = imageFile.getName();
+				int index = oldName.lastIndexOf(ReportUtil.EXTENSION_SEPARATOR);
+				String newName = oldName.substring(0, index) + ReportUtil.IMAGE_DELIM + UUID.randomUUID().toString()
+						+ oldName.substring(index);
+				masterContent = masterContent.replaceAll(oldName, newName);
+				imageFile.setName(newName);
+			}
+			reportContent.getMaster().setDataProvider(new JcrDataProviderImpl(masterContent.getBytes("UTF-8")));
+		} catch (UnsupportedEncodingException e) {
+			LOG.error("Error inside JasperUtil.renameImagesAsUnique: " + e.getMessage(), e);
+			e.printStackTrace();
+		}
 
         return report;
     }
@@ -93,22 +99,27 @@ public class JasperUtil {
     public static Report restoreImagesName(Report report) {
         JasperContent reportContent = (JasperContent) report.getContent();
         JcrFile masterFile = reportContent.getMaster();
-        String masterContent = new String(masterFile.getDataProvider().getBytes());
-        if (reportContent.getImageFiles() != null) {
-            for (JcrFile imageFile : reportContent.getImageFiles()) {
-                String oldName = imageFile.getName();
-                int startIndex = oldName.indexOf(ReportUtil.IMAGE_DELIM);
-                int extIndex = oldName.lastIndexOf(ReportUtil.EXTENSION_SEPARATOR);
-                String newName = oldName.substring(0, startIndex) + oldName.substring(extIndex);
-                masterContent = masterContent.replaceAll(oldName, newName);
-                imageFile.setName(newName);
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Image " + ": " + oldName + " > " + newName);
-//            	LOG.debug("master = " + master);
-                }
-            }
-        }
-        masterFile.setDataProvider(new JcrDataProviderImpl(masterContent.getBytes()));
+		try {
+			String masterContent = new String(masterFile.getDataProvider().getBytes(), "UTF-8");
+			if (reportContent.getImageFiles() != null) {
+				for (JcrFile imageFile : reportContent.getImageFiles()) {
+					String oldName = imageFile.getName();
+					int startIndex = oldName.indexOf(ReportUtil.IMAGE_DELIM);
+					int extIndex = oldName.lastIndexOf(ReportUtil.EXTENSION_SEPARATOR);
+					String newName = oldName.substring(0, startIndex) + oldName.substring(extIndex);
+					masterContent = masterContent.replaceAll(oldName, newName);
+					imageFile.setName(newName);
+					if (LOG.isDebugEnabled()) {
+						LOG.debug("Image " + ": " + oldName + " > " + newName);
+						// LOG.debug("master = " + master);
+					}
+				}
+			}
+			masterFile.setDataProvider(new JcrDataProviderImpl(masterContent.getBytes("UTF-8")));
+		} catch (UnsupportedEncodingException e) {
+			LOG.error("Error inside JasperUtil.restoreImagesName: " + e.getMessage(), e);
+			e.printStackTrace();
+		}
 
         return report;
     }
@@ -118,64 +129,74 @@ public class JasperUtil {
     public static void renameSubreportsInMaster(List<JcrFile> jasperFiles, String id) {
         if (jasperFiles.size() > 1) {
             JcrFile masterFile = jasperFiles.get(0);
-            String masterContent = new String(masterFile.getDataProvider().getBytes());
-            List<String> subreportsContent = new ArrayList<String>();
-            for (int i = 1, size = jasperFiles.size(); i < size; i++) {
-                subreportsContent.add(new String(jasperFiles.get(i).getDataProvider().getBytes()));
-            }
-            for (int i = 1, size = jasperFiles.size(); i < size; i++) {
-                String name = jasperFiles.get(i).getName();
-                String oldName = FilenameUtils.getBaseName(name) + "." + JASPER_COMPILED_EXT;
-                String newName = getUnique(name, id) + "." + JASPER_COMPILED_EXT;
-                masterContent = masterContent.replaceAll(oldName, newName);
-                for (int j = 1; j < size; j++) {
-                    if (j != i) {
-                        subreportsContent.set(j - 1, subreportsContent.get(j - 1).replaceAll(oldName, newName));
-                    }
-                }
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Subreport " + name + ": " + oldName + " > " + newName);
-//                	LOG.debug("master = " + master);
-                }
-            }
-            masterFile.setDataProvider(new JcrDataProviderImpl(masterContent.getBytes()));
-            for (int i = 1, size = jasperFiles.size(); i < size; i++) {
-                jasperFiles.get(i).setDataProvider(new JcrDataProviderImpl(subreportsContent.get(i - 1).getBytes()));
-            }
-        }
+			try {
+				String masterContent = new String(masterFile.getDataProvider().getBytes(), "UTF-8");
+				List<String> subreportsContent = new ArrayList<String>();
+				for (int i = 1, size = jasperFiles.size(); i < size; i++) {
+					subreportsContent.add(new String(jasperFiles.get(i).getDataProvider().getBytes(), "UTF-8"));
+				}
+				for (int i = 1, size = jasperFiles.size(); i < size; i++) {
+					String name = jasperFiles.get(i).getName();
+					String oldName = FilenameUtils.getBaseName(name) + "." + JASPER_COMPILED_EXT;
+					String newName = getUnique(name, id) + "." + JASPER_COMPILED_EXT;
+					masterContent = masterContent.replaceAll(oldName, newName);
+					for (int j = 1; j < size; j++) {
+						if (j != i) {
+							subreportsContent.set(j - 1, subreportsContent.get(j - 1).replaceAll(oldName, newName));
+						}
+					}
+					if (LOG.isDebugEnabled()) {
+						LOG.debug("Subreport " + name + ": " + oldName + " > " + newName);
+						// LOG.debug("master = " + master);
+					}
+				}
+				masterFile.setDataProvider(new JcrDataProviderImpl(masterContent.getBytes("UTF-8")));
+				for (int i = 1, size = jasperFiles.size(); i < size; i++) {
+					jasperFiles.get(i).setDataProvider(new JcrDataProviderImpl(subreportsContent.get(i - 1).getBytes("UTF-8")));
+				}
+			} catch (UnsupportedEncodingException e) {
+				LOG.error("Error inside JasperUtil.renameSubreportsInMaster: " + e.getMessage(), e);
+				e.printStackTrace();
+			}
+		}
     }
 
     // Restore subreports in master (eliminate the id) and in subreports
     public static Report restoreSubreportsInMaster(Report report) {
         JasperContent reportContent = (JasperContent) report.getContent();
         List<JcrFile> subreportFiles = reportContent.getSubreports();
-        if (subreportFiles.size() > 0) {
-            JcrFile masterFile = reportContent.getMaster();
-            String masterContent = new String(masterFile.getDataProvider().getBytes());
-            List<String> subreportsContent = new ArrayList<String>();
-            for (int i = 0, size = subreportFiles.size(); i < size; i++) {
-                subreportsContent.add(new String(subreportFiles.get(i).getDataProvider().getBytes()));
-            }
-            for (int i = 0, size = subreportFiles.size(); i < size; i++) {
-                String name = subreportFiles.get(i).getName();
-                String oldName = getUnique(name, report.getId()) + "." + JASPER_COMPILED_EXT;
-                String newName = name + "." + JASPER_COMPILED_EXT;
-                masterContent = masterContent.replaceAll(oldName, newName);
-                for (int j = 0; j < size; j++) {
-                    if (j != i) {
-                        subreportsContent.set(j, subreportsContent.get(j).replaceAll(oldName, newName));
-                    }
-                }
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Subreport " + name + ": " + oldName + " > " + newName);
-//                	LOG.debug("master = " + master);
-                }
-            }
-            masterFile.setDataProvider(new JcrDataProviderImpl(masterContent.getBytes()));
-            for (int i = 0, size = subreportFiles.size(); i < size; i++) {
-                subreportFiles.get(i).setDataProvider(new JcrDataProviderImpl(subreportsContent.get(i).getBytes()));
-            }
-        }
+		if (subreportFiles.size() > 0) {
+			JcrFile masterFile = reportContent.getMaster();
+			try {
+				String masterContent = new String(masterFile.getDataProvider().getBytes(), "UTF-8");
+				List<String> subreportsContent = new ArrayList<String>();
+				for (int i = 0, size = subreportFiles.size(); i < size; i++) {
+					subreportsContent.add(new String(subreportFiles.get(i).getDataProvider().getBytes(), "UTF-8"));
+				}
+				for (int i = 0, size = subreportFiles.size(); i < size; i++) {
+					String name = subreportFiles.get(i).getName();
+					String oldName = getUnique(name, report.getId()) + "." + JASPER_COMPILED_EXT;
+					String newName = name + "." + JASPER_COMPILED_EXT;
+					masterContent = masterContent.replaceAll(oldName, newName);
+					for (int j = 0; j < size; j++) {
+						if (j != i) {
+							subreportsContent.set(j, subreportsContent.get(j).replaceAll(oldName, newName));
+						}
+					}
+					if (LOG.isDebugEnabled()) {
+						LOG.debug("Subreport " + name + ": " + oldName + " > " + newName);
+						// LOG.debug("master = " + master);
+					}
+				}
+				masterFile.setDataProvider(new JcrDataProviderImpl(masterContent.getBytes("UTF-8")));
+				for (int i = 0, size = subreportFiles.size(); i < size; i++) {
+					subreportFiles.get(i).setDataProvider(new JcrDataProviderImpl(subreportsContent.get(i).getBytes("UTF-8")));
+				}
+			} catch (UnsupportedEncodingException e) {
+				LOG.error("Error inside JasperUtil.restoreSubreportsInMaster: " + e.getMessage(), e);
+				e.printStackTrace();
+			}
+		}
 
         return report;
     }

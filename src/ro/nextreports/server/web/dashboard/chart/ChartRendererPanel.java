@@ -106,23 +106,39 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 			};
 			add(onClickChartAjaxBehavior);
 		}
+		
+		boolean isHTML5 = false;
 						
-		final OpenFlashChartModel chartModel = new OpenFlashChartModel(model, widget);
+		final ChartModel chartModel = new ChartModel(model, widget, isHTML5);
 
 		// see WidgetPanel to understand to prefech
         //		chartModel.getObject();
 		
 		// TODO put width, height in settings
-		if (zoom) {
-			OpenFlashChart ofc = new OpenFlashChart("chart", "100%", "100%", chartModel);
-			ofc.setDetachedPage(true);
-			add(ofc);
-		} else {
-			if ((width == null) || (height == null)) {
-				width = "100%";
-				height = "300";
+		if (isHTML5) {
+			if (zoom) {
+				ChartHTML5Panel hp = new ChartHTML5Panel("chart", "100%", "100%", chartModel);
+				//hp.setDetachedPage(true);
+				add(hp);
+			} else {
+				if ((width == null) || (height == null)) {
+					width = "100%";
+					height = "300";
+				}
+				add(new ChartHTML5Panel("chart", width, height, chartModel));			
 			}
-			add(new OpenFlashChart("chart", width, height, chartModel));			
+		} else {
+			if (zoom) {
+				OpenFlashChart ofc = new OpenFlashChart("chart", "100%", "100%", chartModel);
+				ofc.setDetachedPage(true);
+				add(ofc);
+			} else {
+				if ((width == null) || (height == null)) {
+					width = "100%";
+					height = "300";
+				}
+				add(new OpenFlashChart("chart", width, height, chartModel));			
+			}
 		}
 		
 		add(new Label("error", new Model<String>()) {
@@ -150,17 +166,19 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 		});
 	}
 		
-	class OpenFlashChartModel extends LoadableDetachableModel<String> {
+	class ChartModel extends LoadableDetachableModel<String> {
 		
 		private static final long serialVersionUID = 1L;
 
 		private ChartWidget widget;
 		private Throwable error;
 		private IModel<Chart> model;
+		private boolean isHTML5;
 		
-		public OpenFlashChartModel(IModel<Chart> model, ChartWidget widget) {
+		public ChartModel(IModel<Chart> model, ChartWidget widget, boolean isHTML5) {
 			this.model = model;
-			this.widget = widget;			
+			this.widget = widget;	
+			this.isHTML5 = isHTML5;
 		}
 		
 		@Override
@@ -169,9 +187,9 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 			try {
 				if (drillContext == null) {							
 					if (widget == null) {											
-						return chartService.getJsonData(model.getObject(), urlQueryParameters);						
+						return chartService.getJsonData(model.getObject(), urlQueryParameters, isHTML5);						
 					} else {										
-						return chartService.getJsonData(widget, urlQueryParameters);						
+						return chartService.getJsonData(widget, urlQueryParameters, isHTML5);						
 					}
 				}
 
@@ -191,9 +209,9 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
                 if (drillContext.getDrillParameterValues().isEmpty() && (widget != null)) {                	        
                     // use chart widget  (instead of chart) because it also keeps the chart settings!!
                 	chart = (Chart)widget.getEntity();
-                	jsonData = chartService.getJsonData(widget, drillContext, urlQueryParameters);
+                	jsonData = chartService.getJsonData(widget, drillContext, urlQueryParameters, isHTML5);
                 } else {					
-                    jsonData = chartService.getJsonData(chart, drillContext, urlQueryParameters);
+                    jsonData = chartService.getJsonData(chart, drillContext, urlQueryParameters, isHTML5);
                 }
                 if (chart != null) {
                 	LOG.debug("current chart = " + chart.getName());

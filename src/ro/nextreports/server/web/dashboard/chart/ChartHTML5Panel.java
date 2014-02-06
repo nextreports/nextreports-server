@@ -14,9 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ro.nextreports.server.web.dashboard.indicator;
-
-import java.awt.Color;
+package ro.nextreports.server.web.dashboard.chart;
 
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -28,27 +26,33 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
-import ro.nextreports.engine.exporter.util.IndicatorData;
-
 /* 
  * @author Mihai Dinca-Panaitescu 
  */
-public class IndicatorHTML5Panel extends GenericPanel<IndicatorData> {
+public class ChartHTML5Panel extends GenericPanel<String> {
 	
 	private static final long serialVersionUID = 1L;
-	
-	private final ResourceReference INDICATOR_JS = new JavaScriptResourceReference(IndicatorHTML5Panel.class, "indicator.js");
-	private boolean zoom = false;
-
-	public IndicatorHTML5Panel(String id, String width, String height, IModel<IndicatorData> model) {
-		super(id, model);
 		
-		WebMarkupContainer container = new WebMarkupContainer("canvas");
-		container.setOutputMarkupId(true);
-		container.add(new AttributeAppender("width", width));
-		container.add(new AttributeAppender("height", height));
-		zoom = "100%".equals(width) || "100%".equals(height);
+	private final ResourceReference NEXTCHARTS_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, "nextcharts-1.0.min.js");
+	private boolean zoom = false;
+	private String width;
+	private String height;
+	
+	public ChartHTML5Panel(String id, String width, String height, IModel<String> jsonModel) {
+		super(id, jsonModel);
+		this.width = width;
+		this.height = height;		
+		WebMarkupContainer container = new WebMarkupContainer("chartCanvas");
+		container.setOutputMarkupId(true);		
+//		container.add(new AttributeAppender("width", width));
+//		container.add(new AttributeAppender("height", height));
+		zoom = "100%".equals(width) && "100%".equals(height);
 		add(container);
+		WebMarkupContainer tipContainer = new WebMarkupContainer("tipCanvas");
+		tipContainer.setOutputMarkupId(true);		
+		tipContainer.add(new AttributeAppender("width", 1));
+		tipContainer.add(new AttributeAppender("height", 25));
+		add(tipContainer);
 	}
 		
 	@Override
@@ -58,29 +62,26 @@ public class IndicatorHTML5Panel extends GenericPanel<IndicatorData> {
 	
 		// must call indicator onLoad instead of onDomReady to appear it in iframe
 		// $(document).ready in the iframe seems to be fired too soon and the iframe content isn't even loaded yet
-		response.render(OnLoadHeaderItem.forScript(getIndicatorCall()));
+		response.render(OnLoadHeaderItem.forScript(getNextChartJavascriptCall()));
 		
-		//include js file
-        response.render(JavaScriptHeaderItem.forReference(INDICATOR_JS));
+		//include js file		
+        response.render(JavaScriptHeaderItem.forReference(NEXTCHARTS_JS));
         
         //<script> tag
         //response.renderJavaScript(getJavaScript(), null); 
     }
 	
-	private String getIndicatorCall() {		 
-		IndicatorData data = getModel().getObject();
+	// nextChart(data, canvas, tipCanvas, width, height)
+	private String getNextChartJavascriptCall() {	
+		System.out.println("**** width="+width + "   height=" + height + "  zoom="+zoom);
+		String data = getModel().getObject();
 		StringBuilder sb = new StringBuilder();		
-		sb.append("indicator(\"").
-		   append(get("canvas").getMarkupId()).
-		   append("\",\"").append(toString(data.getColor())).
-		   append("\",\"").append(data.getTitle()).
-		   append("\",\"").append(data.getDescription()).
-		   append("\",\"").append(data.getUnit()).
-		   append("\",").append(data.getMin()).
-		   append(",").append(data.getMax()).
-		   append(",").append(data.getValue()).
-		   append(",\"").append(data.isShowMinMax()).
-		   append("\",\"").append(zoom).
+		sb.append("nextChart(").
+		   append(data).
+		   append(",\"").append(get("chartCanvas").getMarkupId()).
+		   append("\",\"").append(get("tipCanvas").getMarkupId()).	
+		   append("\",\"").append(width).	
+		   append("\",\"").append(height).		   
 		   append("\");");			
 		return sb.toString();
 	}
@@ -102,25 +103,9 @@ public class IndicatorHTML5Panel extends GenericPanel<IndicatorData> {
 	private String getResizeJavaScript() {				
 		StringBuilder sb = new StringBuilder();
 		sb.append("$(window).bind(\'resizeEnd\',function(){");
-		sb.append(getIndicatorCall());
+		sb.append(getNextChartJavascriptCall());
 		sb.append("});");
 		return sb.toString();
 	}
-	
-	/**
-	* Get #ffffff html hex number for a colour
-	*
-	* @see #toHexString(int)
-	* @param c  Color object whose html colour number you want as a string
-	* @return # followed by exactly 6 hex digits
-	*/
-	private String toString(Color c){
-	   String s = Integer.toHexString( c.getRGB() & 0xffffff );
-	   if ( s.length() < 6 ) { 
-  	      // pad on left with zeros
-	      s = "000000".substring( 0, 6 - s.length() ) + s;
-	   }
-	   return '#' + s;
-	}
-
+		
 }
