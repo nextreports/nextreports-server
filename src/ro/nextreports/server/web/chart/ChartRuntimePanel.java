@@ -16,6 +16,7 @@
  */
 package ro.nextreports.server.web.chart;
 
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
@@ -57,7 +58,39 @@ public class ChartRuntimePanel extends DynamicParameterRuntimePanel {
 
     @SuppressWarnings("unchecked")
     public void addWicketComponents() {
-        DropDownChoice exportChoice = new DropDownChoice("chartType", new PropertyModel(runtimeModel, "chartType"), ChartUtil.CHART_TYPES);
+    	
+    	ChoiceRenderer<String> typeRenderer = new ChoiceRenderer<String>() {
+        	
+        	@Override
+            public Object getDisplayValue(String chartType) {
+                if (chartType == null) {
+                	return ChartUtil.CHART_NONE;
+                } else if (chartType.equals(ChartUtil.CHART_BAR)) {
+                	return getString("chart.bar");
+                } else if (chartType.equals(ChartUtil.CHART_BAR_COMBO)) {
+                	return getString("chart.barcombo");	
+                } else if (chartType.equals(ChartUtil.CHART_HORIZONTAL_BAR)) {
+                	return getString("chart.horizontalbar");
+                } else if (chartType.equals(ChartUtil.CHART_STACKED_BAR)) {
+                	return getString("chart.stackedbar");
+                } else if (chartType.equals(ChartUtil.CHART_STACKED_BAR_COMBO)) {
+                	return getString("chart.stackedbarcombo");
+                } else if (chartType.equals(ChartUtil.CHART_HORIZONTAL_STACKED_BAR)) {
+                	return getString("chart.horizontalstackedbar");
+                } else if (chartType.equals(ChartUtil.CHART_PIE)) {
+                	return getString("chart.pie");
+                } else if (chartType.equals(ChartUtil.CHART_LINE)) {
+                	return getString("chart.line");
+                } else if (chartType.equals(ChartUtil.CHART_AREA)) {
+                	return getString("chart.area");	
+                } else {
+                	return ChartUtil.CHART_NONE;
+                }
+            }
+            
+        };
+    	
+        DropDownChoice exportChoice = new DropDownChoice("chartType", new PropertyModel(runtimeModel, "chartType"), ChartUtil.CHART_TYPES, typeRenderer);
         exportChoice.setRequired(true);
         add(exportChoice);
 
