@@ -74,10 +74,11 @@ public class ChartUtil {
     public static final String CHART_BAR_COMBO = "Bar Line";
     public static final String CHART_HORIZONTAL_BAR = "Horizontal Bar";
     public static final String CHART_STACKED_BAR = "Stacked Bar";
+    public static final String CHART_HORIZONTAL_STACKED_BAR = "Horizontal Stacked Bar";
     public static final String CHART_STACKED_BAR_COMBO = "Stacked Bar Line";
     public static final String CHART_PIE = "Pie";
     public static final String CHART_AREA = "Area";    
-    public static final List<String> CHART_TYPES = Arrays.asList(CHART_LINE, CHART_BAR, CHART_BAR_COMBO, CHART_HORIZONTAL_BAR, CHART_STACKED_BAR, CHART_STACKED_BAR_COMBO, CHART_PIE, CHART_AREA);
+    public static final List<String> CHART_TYPES = Arrays.asList(CHART_LINE, CHART_BAR, CHART_BAR_COMBO, CHART_HORIZONTAL_BAR, CHART_HORIZONTAL_STACKED_BAR, CHART_STACKED_BAR, CHART_STACKED_BAR_COMBO, CHART_PIE, CHART_AREA);
 
     public static WidgetRuntimeModel getStoredRuntimeModel(Settings settings, ChartWidget chartWidget, ReportService reportService,
                                                           DataSourceService dataSourceService) {
@@ -484,10 +485,16 @@ public class ChartUtil {
     public static byte getChartType(String type) {
         if (CHART_BAR.equals(type)) {
             return ChartType.BAR;
+        } else if (CHART_BAR_COMBO.equals(type)) {
+            return ChartType.BAR_COMBO;    
         }  else if (CHART_HORIZONTAL_BAR.equals(type)) {
             return ChartType.HORIZONTAL_BAR;
+        }  else if (CHART_HORIZONTAL_STACKED_BAR.equals(type)) {
+            return ChartType.HORIZONTAL_STACKED_BAR;    
         } else if (CHART_STACKED_BAR.equals(type)) {
             return ChartType.STACKED_BAR;
+        } else if (CHART_STACKED_BAR_COMBO.equals(type)) {
+            return ChartType.STACKED_BAR_COMBO;    
         } else if (CHART_PIE.equals(type)) {
             return ChartType.PIE;
         } else if (CHART_LINE.equals(type)) {
@@ -506,6 +513,8 @@ public class ChartUtil {
             return CHART_BAR_COMBO;
         }  else if (ChartType.HORIZONTAL_BAR == type) {
             return CHART_HORIZONTAL_BAR;
+        }  else if (ChartType.HORIZONTAL_STACKED_BAR == type) {
+            return CHART_HORIZONTAL_STACKED_BAR;    
         } else if (ChartType.STACKED_BAR == type) {
             return CHART_STACKED_BAR;
         } else if (ChartType.STACKED_BAR_COMBO == type) {

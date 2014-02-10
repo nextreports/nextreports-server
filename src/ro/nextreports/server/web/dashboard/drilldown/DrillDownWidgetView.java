@@ -148,7 +148,7 @@ public class DrillDownWidgetView extends WidgetView {
 		DrillDownWidgetView.this.replace(getCurrentRendererPanel());
 		// must remove dragbox-content-chart (with min-height) on children because we may have a table		
 		DrillDownWidgetView.this.add(AttributeModifier.replace("class", "dragbox-content zoom"));
-		target.add(this);
+		target.add(DrillDownWidgetView.this);		
 	}
 
 	private void onUp(AjaxRequestTarget target) {
@@ -176,7 +176,7 @@ public class DrillDownWidgetView extends WidgetView {
 			DrillDownWidgetView.this.add(AttributeAppender.append("class", "dragbox-content-chart zoom"));
 		}
 		
-		target.add(this);
+		target.add(DrillDownWidgetView.this);		
 	}
 	
 	private void onFirst(AjaxRequestTarget target) {
@@ -193,7 +193,7 @@ public class DrillDownWidgetView extends WidgetView {
 			// set back dragbox-content-chart class for first Chart
 			DrillDownWidgetView.this.add(AttributeAppender.append("class", "dragbox-content-chart zoom"));
 		}
-		target.add(this);
+		target.add(DrillDownWidgetView.this);		
 	}
 	
 	private Panel getFirstRendererPanel() {

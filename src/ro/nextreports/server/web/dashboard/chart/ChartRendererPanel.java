@@ -19,12 +19,23 @@ package ro.nextreports.server.web.dashboard.chart;
 import java.util.Map;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +44,7 @@ import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.DrillEntityContext;
 import ro.nextreports.server.service.ChartService;
+import ro.nextreports.server.web.dashboard.indicator.IndicatorHTML5Panel;
 
 /**
  * @author Mihai Dinca-Panaitescu
@@ -46,6 +58,18 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 	private OnClickChartAjaxBehavior onClickChartAjaxBehavior;
 	private DrillEntityContext drillContext;	
 	private Map<String,Object> urlQueryParameters;
+	
+	private String PARAM = "Param";
+	private String isHTML5String = "";
+	private WebMarkupContainer container;
+	private WebMarkupContainer error;
+	private IModel<Chart> model;
+	private ChartWidget widget;
+	private boolean zoom;
+	private String width;
+	private String height;
+		
+	private final ResourceReference INDICATOR_UTIL_JS = new JavaScriptResourceReference(IndicatorHTML5Panel.class, "indicator_util.js");
 	
 	@SpringBean
 	private ChartService chartService;
@@ -90,6 +114,11 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 		super(id, model);
 		this.drillContext = drillContext;		
 		this.urlQueryParameters = urlQueryParameters;
+		this.model = model;
+		this.widget = widget;
+		this.zoom = zoom;
+		this.width = width;
+		this.height = height;
 		if ((drillContext != null) && !drillContext.isLast()) {
 			onClickChartAjaxBehavior = new OnClickChartAjaxBehavior() {
 
@@ -105,65 +134,21 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 				}
 			};
 			add(onClickChartAjaxBehavior);
-		}
-		
-		boolean isHTML5 = false;
+		}				
+								
+		container = new WebMarkupContainer("chartContainer");
+		container.setOutputMarkupId(true);
+		container.add(new EmptyPanel("chart"));		
+		container.add(AttributeAppender.append("class", "dragbox-content-chart zoom"));
+		add(container);
 						
-		final ChartModel chartModel = new ChartModel(model, widget, isHTML5);
-
-		// see WidgetPanel to understand to prefech
-        //		chartModel.getObject();
+		error = new WebMarkupContainer("errorContainer");
+		error.setOutputMarkupId(true);
+		error.add(new EmptyPanel("error"));		
+		add(error);
 		
-		// TODO put width, height in settings
-		if (isHTML5) {
-			if (zoom) {
-				ChartHTML5Panel hp = new ChartHTML5Panel("chart", "100%", "100%", chartModel);
-				//hp.setDetachedPage(true);
-				add(hp);
-			} else {
-				if ((width == null) || (height == null)) {
-					width = "100%";
-					height = "300";
-				}
-				add(new ChartHTML5Panel("chart", width, height, chartModel));			
-			}
-		} else {
-			if (zoom) {
-				OpenFlashChart ofc = new OpenFlashChart("chart", "100%", "100%", chartModel);
-				ofc.setDetachedPage(true);
-				add(ofc);
-			} else {
-				if ((width == null) || (height == null)) {
-					width = "100%";
-					height = "300";
-				}
-				add(new OpenFlashChart("chart", width, height, chartModel));			
-			}
-		}
+		add(new HTML5Behavior());
 		
-		add(new Label("error", new Model<String>()) {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onInitialize() {
-				super.onInitialize();
-
-				if (chartModel.getObject() == null) {
-					if (chartModel.getError() instanceof NoDataFoundException) {
-						setDefaultModelObject("No Data Found");
-					} else {
-						setDefaultModelObject(ExceptionUtils.getRootCauseMessage(chartModel.getError()));
-					}
-				}
-			}
-
-			@Override
-			public boolean isVisible() {
-				return chartModel.hasError();
-			}
-			
-		});
 	}
 		
 	class ChartModel extends LoadableDetachableModel<String> {
@@ -197,10 +182,10 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 				String onClickJavaScript = null;
 				if (onClickChartAjaxBehavior != null) {
 					//onClickJavaScript = "alert('hello')";
-					onClickJavaScript = onClickChartAjaxBehavior.getOnClickJavaScript();
-				}
+					onClickJavaScript = onClickChartAjaxBehavior.getOnClickJavaScript(isHTML5);
+				}				
+				
 				LOG.debug("onClickJavaScript = " + onClickJavaScript);	
-
 				drillContext.setDrillLink(onClickJavaScript);
 
                 // get current chart
@@ -236,6 +221,116 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 			return error != null;
 		}
 	}
+	
+    private class HTML5Behavior extends AbstractDefaultAjaxBehavior {
+	    	
+	    	private static final long serialVersionUID = 1L;	    					    		    
+	    	    			
+			public HTML5Behavior() {
+				super();																
+			}
+
+			@Override
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+				super.updateAjaxAttributes(attributes);
+				
+				StringBuilder javaScript = new StringBuilder();
+				javaScript.append("var data = isCanvasEnabled();");
+				javaScript.append("console.log(data);");
+				javaScript.append("return { '" + PARAM + "': data }"); 
+				
+				attributes.getDynamicExtraParameters().add(javaScript);
+			}
+
+			@Override
+			public void renderHead(Component component, IHeaderResponse response) {			
+				super.renderHead(component, response);					
+				
+				//include js file
+		        response.render(JavaScriptHeaderItem.forReference(INDICATOR_UTIL_JS));
+		        
+		        response.render(OnLoadHeaderItem.forScript(getCallbackFunctionBody()));	
+			}
+
+			@Override
+			protected void respond(AjaxRequestTarget target) {
+				String param = getRequest().getRequestParameters().getParameterValue(PARAM).toString();					
+				//System.out.println("--->  "+param);	
+				// behavior is called on any refresh, we have to call it only once 
+				// (otherwise the panel will be replaced in the same time the old one is refreshed)
+				boolean isHTML5 = true;
+				if (isHTML5String.isEmpty()) {
+					isHTML5String = param;
+					isHTML5 = Boolean.parseBoolean(param);
+				}	
+				//System.out.println("***************** isHTML5="+isHTML5);
+				
+				final ChartModel chartModel = new ChartModel(model, widget, isHTML5);
+
+				// see WidgetPanel to understand to prefech
+		        //		chartModel.getObject();															
+				
+				// TODO put width, height in settings
+				if (isHTML5) {
+					if (zoom) {
+						ChartHTML5Panel hp = new ChartHTML5Panel("chart", "100%", "100%", chartModel);
+						//hp.setDetachedPage(true);
+						container.replace(hp);
+					} else {
+						if ((width == null) || (height == null)) {
+							width = "100%";
+							height = "300";
+						}
+						container.replace(new ChartHTML5Panel("chart", width, height, chartModel));			
+					}
+				} else {
+					if (zoom) {
+						OpenFlashChart ofc = new OpenFlashChart("chart", "100%", "100%", chartModel);
+						ofc.setDetachedPage(true);
+						container.replace(ofc);
+					} else {
+						if ((width == null) || (height == null)) {
+							width = "100%";
+							height = "300";
+						}
+						container.replace(new OpenFlashChart("chart", width, height, chartModel));			
+					}
+				}
+				target.add(container);		
+				
+				error.replace(new Label("error", new Model<String>()) {
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onInitialize() {
+						super.onInitialize();
+
+						if (chartModel.getObject() == null) {
+							if (chartModel.getError() instanceof NoDataFoundException) {
+								setDefaultModelObject("No Data Found");
+							} else {
+								setDefaultModelObject(ExceptionUtils.getRootCauseMessage(chartModel.getError()));
+							}
+						}
+					}
+
+					@Override
+					public boolean isVisible() {
+						return chartModel.hasError();
+					}
+					
+				});
+				target.add(error);
+				
+			}
+
+			@Override
+			public boolean getStatelessHint(Component component) {
+				return false;
+			}
+
+	    }	
 	
 	protected void onClickChart(AjaxRequestTarget target, String value) throws Exception {		
 	}

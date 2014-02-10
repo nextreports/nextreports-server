@@ -227,6 +227,7 @@ public class DashboardPanel extends GenericPanel<Dashboard> {
 				DashboardBrowserPanel browserPanel = findParent(DashboardBrowserPanel.class);
 				target.add(browserPanel.getDashboardNavigationPanel());
 				target.add(toggle);
+				target.add(DashboardPanel.this);
 			}
 
 			public JsStatement statement() {

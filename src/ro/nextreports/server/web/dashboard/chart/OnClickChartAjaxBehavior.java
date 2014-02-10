@@ -34,22 +34,33 @@ public class OnClickChartAjaxBehavior extends AbstractDefaultAjaxBehavior {
 		super();
 	}
 
-	public String getOnClickJavaScript() {
+	public String getOnClickJavaScript(boolean isHTML5) {		
 		StringBuilder javaScript = new StringBuilder();
-		javaScript.append("Wicket.Ajax.get({ u: '");
-		javaScript.append(getCallbackUrl());
-		javaScript.append("&");
-		javaScript.append(X_VALUE_PARAM_NAME);
-		javaScript.append("=");
-		javaScript.append(JsonExporter.X_VALUE);
-		javaScript.append("'})");
+		
+		if (!isHTML5) {
+			javaScript.append("Wicket.Ajax.get({ u: '");
+			javaScript.append(getCallbackUrl());
+			javaScript.append("&");
+			javaScript.append(X_VALUE_PARAM_NAME);
+			javaScript.append("=");
+			javaScript.append(JsonExporter.X_VALUE);
+			javaScript.append("'})");
+		} else {
+			javaScript.append("function doClick(myVal) {");
+			javaScript.append("Wicket.Ajax.get({ u: '");
+			javaScript.append(getCallbackUrl());			
+			javaScript.append("', ");
+			javaScript.append("dep: [function(attrs) { return { " + X_VALUE_PARAM_NAME + ": myVal }; }]");
+			javaScript.append("});");
+			javaScript.append("}");
+		}				
 		
 		return javaScript.toString();		
 	}
 	
 	@Override
 	protected void respond(AjaxRequestTarget target) {
-		String value = getComponent().getRequest().getRequestParameters().getParameterValue(X_VALUE_PARAM_NAME).toString();
+		String value = getComponent().getRequest().getRequestParameters().getParameterValue(X_VALUE_PARAM_NAME).toString();		
 		if (value != null) { // defensive
 			onClickChart(target, value);			
 		}		

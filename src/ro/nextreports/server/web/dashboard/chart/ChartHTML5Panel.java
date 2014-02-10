@@ -45,7 +45,7 @@ public class ChartHTML5Panel extends GenericPanel<String> {
 		WebMarkupContainer container = new WebMarkupContainer("chartCanvas");
 		container.setOutputMarkupId(true);		
 //		container.add(new AttributeAppender("width", width));
-//		container.add(new AttributeAppender("height", height));
+//		container.add(new AttributeAppender("height", height));		
 		zoom = "100%".equals(width) && "100%".equals(height);
 		add(container);
 		WebMarkupContainer tipContainer = new WebMarkupContainer("tipCanvas");
@@ -72,8 +72,7 @@ public class ChartHTML5Panel extends GenericPanel<String> {
     }
 	
 	// nextChart(data, canvas, tipCanvas, width, height)
-	private String getNextChartJavascriptCall() {	
-		System.out.println("**** width="+width + "   height=" + height + "  zoom="+zoom);
+	private String getNextChartJavascriptCall() {			
 		String data = getModel().getObject();
 		StringBuilder sb = new StringBuilder();		
 		sb.append("nextChart(").

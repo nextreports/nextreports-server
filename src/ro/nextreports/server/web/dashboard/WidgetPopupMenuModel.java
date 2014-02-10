@@ -316,7 +316,10 @@ public class WidgetPopupMenuModel extends LoadableDetachableModel<List<MenuItem>
 		if ((widget instanceof DrillDownWidget) || (widget instanceof PivotWidget)) {
 			widgetPanel.refresh(target);
 		} else {
-			target.add(widgetPanel);
+			//target.add(widgetPanel);	
+			// ChartRendererPanel uses container.replace("chart")
+			// we should add widgetView again instead of a simple target.add(widgetPanel), otherwise we will see two refreshes
+			widgetPanel.refresh(target);			
 		}
 	}
 
@@ -330,7 +333,10 @@ public class WidgetPopupMenuModel extends LoadableDetachableModel<List<MenuItem>
 				dashboardService.resetCache(widget.getId());
 				final WidgetPanel widgetPanel = component.findParent(WidgetPanel.class);
 				ModalWindow.closeCurrent(target);
-				target.add(widgetPanel);
+				//target.add(widgetPanel);
+				// ChartRendererPanel uses container.replace("chart")
+				// we should add widgetView again instead of a simple target.add(widgetPanel), otherwise we will see two refreshes
+				widgetPanel.refresh(target);	
 				return;
 			}
 		} catch (NotFoundException ex) {
@@ -370,7 +376,10 @@ public class WidgetPopupMenuModel extends LoadableDetachableModel<List<MenuItem>
 			} catch (NotFoundException e) {
 				// never happening
 			}
-			target.add(widgetPanel);
+			//target.add(widgetPanel);
+			// ChartRendererPanel uses container.replace("chart")
+			// we should add widgetView again instead of a simple target.add(widgetPanel), otherwise we will see two refreshes
+			widgetPanel.refresh(target);	
 		}		
 	}	
 	
