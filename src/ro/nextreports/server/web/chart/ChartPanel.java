@@ -19,9 +19,12 @@ package ro.nextreports.server.web.chart;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.web.core.EntityBrowserPanel;
+import ro.nextreports.server.web.dashboard.chart.ChartRendererPanel;
 import ro.nextreports.server.web.dashboard.chart.OpenFlashChart;
 
 
@@ -32,10 +35,10 @@ public class ChartPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
 
-	public ChartPanel(String id, String jsonData) {
+	public ChartPanel(String id, IModel<Chart> model) {
 		super(id);
 		
-		add(new OpenFlashChart("chart", "100%", "300", new Model<String>(jsonData)));
+		add(new ChartRendererPanel("chart", model, null, false));
         add(new AjaxLink<Void>("cancel") {
 
 			private static final long serialVersionUID = 1L;

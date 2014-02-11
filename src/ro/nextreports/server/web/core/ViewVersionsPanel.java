@@ -225,10 +225,9 @@ public class ViewVersionsPanel extends Panel {
                             ScheduleWizard wizard = new ScheduleWizard("work", reportVersion, true);
                             panel.forwardWorkspace(wizard, target);
                         } else {
-                            Chart chartVersion = (Chart) storageService.getVersion(chart.getId(), version.getName());
-                            String jsonData = chartService.getJsonData(chartVersion);
+                            Chart chartVersion = (Chart) storageService.getVersion(chart.getId(), version.getName());                            
                             EntityBrowserPanel panel = findParent(EntityBrowserPanel.class);
-                            ChartPanel chartPanel = new ChartPanel("work", jsonData);
+                            ChartPanel chartPanel = new ChartPanel("work", new Model<Chart>(chartVersion));
                             panel.forwardWorkspace(chartPanel, target);
                         }
                     } catch (Exception e) {

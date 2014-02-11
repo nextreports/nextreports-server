@@ -17,6 +17,7 @@
 package ro.nextreports.server.web.action.chart;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ro.nextreports.server.domain.Chart;
@@ -46,9 +47,8 @@ public class RunActionLink extends ActionAjaxLink {
         Entity entity = getActionContext().getEntity();
         EntityBrowserPanel panel = findParent(EntityBrowserPanel.class);
         try {
-            Chart chart = (Chart) entity;
-            String jsonData = chartService.getJsonData(chart);            
-            ChartPanel chartPanel = new ChartPanel("work", jsonData);
+            Chart chart = (Chart) entity;                        
+            ChartPanel chartPanel = new ChartPanel("work", new Model<Chart>(chart));
             panel.forwardWorkspace(chartPanel, target);
         } catch (Exception e) {
             e.printStackTrace();
