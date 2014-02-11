@@ -39,7 +39,6 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.response.filter.AjaxServerAndClientTimeFilter;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.encoding.UrlEncoder;
@@ -344,6 +343,37 @@ public class NextServerApplication extends WebApplication  {
 	public static void setMaintenance(boolean maintenance) {
 		NextServerApplication.maintenance = maintenance;
 	}		
+	
+	private void logSystemInfo() {
+		LOG.info("############ S Y S T E M    P R O P E R T I E S ############");
+		List<String> names =InfoUtil.getSystemProperties();
+		for (String name : names) {			
+			LOG.info(String.format("%-40s", name) + " : " + System.getProperty(name));
+		}
+		
+		LOG.info("############ J V M    A R G U M E N T S ############");		
+		List<String> arguments = InfoUtil.getJVMArguments();
+		for (String argument : arguments) {		
+			LOG.info(argument);
+		}
+		
+		LOG.info("############ G E N E R A L    J V M     I N F O ############");
+		List<Info> infos = InfoUtil.getGeneralJVMInfo();
+		for (Info info : infos) {
+			LOG.info(String.format("%-20s", info.getDisplayName()) + " : " + info.getValue());
+		}
+		
+		LOG.info("############ E N D     S Y S T E M     I N F O ############");
+	}
+	
+	private void logSettings(Settings settings) {
+		LOG.info("############ S E R V E R    S E T T I N G S ############");
+		List<Info> infos = InfoUtil.getServerSettings(settings);
+		for (Info info : infos) {
+			LOG.info(String.format("%-40s", info.getDisplayName()) + " : " + info.getValue());
+		}				
+		LOG.info("############ E N D    S E R V E R    S E T T I N G S ############");
+	}
 
 	private class ExceptionRequestCycleListener extends AbstractRequestCycleListener {
 				
@@ -418,46 +448,8 @@ public class NextServerApplication extends WebApplication  {
 				
 				throw new MaintenanceException();
 			}
-		}		
-	}
-
-	public static boolean isMaintenance() {
-		return maintenance;
-	}
-
-	public static void setMaintenance(boolean maintenance) {
-		NextServerApplication.maintenance = maintenance;
-	}		
-	
-	private void logSystemInfo() {
-		LOG.info("############ S Y S T E M    P R O P E R T I E S ############");
-		List<String> names =InfoUtil.getSystemProperties();
-		for (String name : names) {			
-			LOG.info(String.format("%-40s", name) + " : " + System.getProperty(name));
 		}
 		
-		LOG.info("############ J V M    A R G U M E N T S ############");		
-		List<String> arguments = InfoUtil.getJVMArguments();
-		for (String argument : arguments) {		
-			LOG.info(argument);
-		}
-		
-		LOG.info("############ G E N E R A L    J V M     I N F O ############");
-		List<Info> infos = InfoUtil.getGeneralJVMInfo();
-		for (Info info : infos) {
-			LOG.info(String.format("%-20s", info.getDisplayName()) + " : " + info.getValue());
-		}
-		
-		LOG.info("############ E N D     S Y S T E M     I N F O ############");
 	}
-	
-	private void logSettings(Settings settings) {
-		LOG.info("############ S E R V E R    S E T T I N G S ############");
-		List<Info> infos = InfoUtil.getServerSettings(settings);
-		for (Info info : infos) {
-			LOG.info(String.format("%-40s", info.getDisplayName()) + " : " + info.getValue());
-		}				
-		LOG.info("############ E N D    S E R V E R    S E T T I N G S ############");
-	}
-	
+		
 }
