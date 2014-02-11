@@ -44,6 +44,7 @@ import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.DrillEntityContext;
 import ro.nextreports.server.service.ChartService;
+import ro.nextreports.server.util.ChartUtil;
 import ro.nextreports.server.web.dashboard.indicator.IndicatorHTML5Panel;
 
 /**
@@ -139,6 +140,8 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 		container = new WebMarkupContainer("chartContainer");
 		container.setOutputMarkupId(true);
 		container.add(new EmptyPanel("chart"));		
+		// add this class to have the same height when we drill inside a chart
+		// remove it when an error occurs (see below)
 		container.add(AttributeAppender.append("class", "dragbox-content-chart zoom"));
 		add(container);
 						
@@ -168,8 +171,15 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 		
 		@Override
 		public String load() {				
-			error = null;			
+			error = null;								
+			
 			try {
+				
+				// test for unsupported flash types (implemented only with HTML5)
+				if ((!isHTML5) && ChartUtil.unsupportedFlashType(widget.getChartType())) {					
+					throw new Exception("Chart Type '" + widget.getChartType() + "' is not supported in flash mode. Please select a type that is not in the following: " + ChartUtil.FLASH_UNSUPPORTED);
+				}
+				
 				if (drillContext == null) {							
 					if (widget == null) {											
 						return chartService.getJsonData(model.getObject(), urlQueryParameters, isHTML5);						
@@ -207,6 +217,7 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 				
 				return jsonData;
 			} catch (Throwable t) {
+				container.add(AttributeAppender.remove("class"));
 				LOG.error(t.getMessage(), t);
 				error = t;
 				return null;
@@ -262,13 +273,9 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 				if (isHTML5String.isEmpty()) {
 					isHTML5String = param;
 					isHTML5 = Boolean.parseBoolean(param);
-				}	
-				//System.out.println("***************** isHTML5="+isHTML5);
+				}									
 				
-				final ChartModel chartModel = new ChartModel(model, widget, isHTML5);
-
-				// see WidgetPanel to understand to prefech
-		        //		chartModel.getObject();															
+				final ChartModel chartModel = new ChartModel(model, widget, isHTML5);														
 				
 				// TODO put width, height in settings
 				if (isHTML5) {

@@ -79,6 +79,7 @@ public class ChartUtil {
     public static final String CHART_PIE = "Pie";
     public static final String CHART_AREA = "Area";    
     public static final List<String> CHART_TYPES = Arrays.asList(CHART_LINE, CHART_BAR, CHART_BAR_COMBO, CHART_HORIZONTAL_BAR, CHART_HORIZONTAL_STACKED_BAR, CHART_STACKED_BAR, CHART_STACKED_BAR_COMBO, CHART_PIE, CHART_AREA);
+    public static final List<String> FLASH_UNSUPPORTED = Arrays.asList(CHART_BAR_COMBO, CHART_STACKED_BAR_COMBO, CHART_HORIZONTAL_STACKED_BAR);
 
     public static WidgetRuntimeModel getStoredRuntimeModel(Settings settings, ChartWidget chartWidget, ReportService reportService,
                                                           DataSourceService dataSourceService) {
@@ -596,6 +597,10 @@ public class ChartUtil {
 			}			
 			map.put(key.substring(3, key.length() - 1), obj);
 		}
+	}
+	
+	public static boolean unsupportedFlashType(String chartType) {		
+		return FLASH_UNSUPPORTED.contains(chartType);
 	}
 
 }
