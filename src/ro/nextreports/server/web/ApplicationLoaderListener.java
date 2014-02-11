@@ -59,6 +59,9 @@ public class ApplicationLoaderListener implements ServletContextListener {
 	}
 
 	private void config() {
+		
+		LOG.info("NextReports Server " + ReleaseInfo.getVersion() + " starting ... ");
+		
 		CompositeConfiguration config = new CompositeConfiguration();
 		config.addConfiguration(new SystemConfiguration());
 		try {
@@ -150,7 +153,7 @@ public class ApplicationLoaderListener implements ServletContextListener {
         FileUtil.unzip(zipInputStream, nextServerHome);
         
         // @todo replace demo path in JCR
-        //replaceUserHome(dataRoot + "/datasource.xml");
+        //replaceUserHome(dataRoot + "/datasource.xml");        
         
 	}
 	
@@ -158,18 +161,25 @@ public class ApplicationLoaderListener implements ServletContextListener {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Update storage...");
 		}
-		long t = System.currentTimeMillis();
+		try {
+			long t = System.currentTimeMillis();
 		
-		String[] paths = { UPDATE_CONTEXT_PATH };
-		AbstractApplicationContext updateContext = new ClassPathXmlApplicationContext(paths);
+			String[] paths = { UPDATE_CONTEXT_PATH };
+			AbstractApplicationContext updateContext = new ClassPathXmlApplicationContext(paths);
 		
-		updateContext.getBean("updater");
-		updateContext.close();
+			updateContext.getBean("updater");
+			updateContext.close();
+			
 		
-		t = System.currentTimeMillis() - t;
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Updated storage in " + t + " ms");
-		}
+			t = System.currentTimeMillis() - t;
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Updated storage in " + t + " ms");
+			}		
+			
+		} catch (Throwable tex) {
+			LOG.error(tex.getMessage(), tex);
+		}	
+		
 	}
 
 }
