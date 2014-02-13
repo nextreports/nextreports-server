@@ -874,9 +874,14 @@ public class DefaultDashboardService implements DashboardService {
         	// for embedded widgets in external html's we do not have any authorization object in session
             entities = storageService.getEntitiesByClassNameWithoutSecurity(StorageConstants.DASHBOARDS_ROOT, DashboardState.class.getName());
             for (Entity entity : entities) {            	 
-           	 DashboardState ds = (DashboardState)entity;
+           	 DashboardState ds = (DashboardState)entity;           	 
            	 if (widgetState.getPath().contains(ds.getPath())) {
-           		 return ds;
+           		 // we may have dashboards with same name + suffix (ex: Test, Test1)
+           		 // we have to test that following character in widgetState path is /
+           		 String followingPath = widgetState.getPath().substring(ds.getPath().length());           		 
+           		 if (followingPath.startsWith("/")) {
+           			 return ds;
+           		 }
            	 }
             }
             return null;
