@@ -190,7 +190,8 @@ public class NextServerAcl implements Acl {
                         return true;
                     }
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                	// group not found : was deleted after used in security permissions
+                	LOG.warn("Group " + aclEntry.getName() + "  was removed. Please contact administrator: " + e.getMessage(), e);
                 }
             }
 		}
