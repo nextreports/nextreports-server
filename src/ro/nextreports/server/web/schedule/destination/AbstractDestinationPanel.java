@@ -71,7 +71,7 @@ public abstract class AbstractDestinationPanel extends FormContentPanel {
 		
 		if (NextServerSession.get().isDemo()) {
 			error(getString("ActionContributor.Run.destination.demo"));
-			target.add(getFeadbackPanel());
+			target.add(getFeedbackPanel());
 			return;
 		}
 		
@@ -87,7 +87,7 @@ public abstract class AbstractDestinationPanel extends FormContentPanel {
             }
             if (d.getName().equals(destination.getName())) {                
                 error(getString("ActionContributor.Run.destination.unique") + " : '" + destination.getName() + "'");
-                target.add(getFeadbackPanel());
+                target.add(getFeedbackPanel());
                 return;
             }
         }
@@ -107,7 +107,7 @@ public abstract class AbstractDestinationPanel extends FormContentPanel {
 				error(getDisplayMessage(e));
 			}
 		}		
-		target.add(getFeadbackPanel());
+		target.add(getFeedbackPanel());
 	}
 
 	@Override

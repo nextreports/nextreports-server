@@ -324,11 +324,12 @@ public class DashboardPanel extends GenericPanel<Dashboard> {
 	                private static final long serialVersionUID = 1L;
 
 	                @Override
-	                public void onOk(AjaxRequestTarget target) {
-	                	if (getEntity() == null) {
-	                		error(getString("DashboardPanel.select"));
+	                public void onOk(AjaxRequestTarget target) {	                	
+	                	if (getEntity() == null) {	                		
+	                		error(getString("DashboardPanel.select"));	    
+	                		target.add(getFeedbackPanel());
 	            			return;
-	            		}
+	            		}	                	
 	                	
 	                	ModalWindow.closeCurrent(target);
 	                    

@@ -266,6 +266,7 @@ public class DestinationsPanel extends Panel {
 				protected void onSave(AjaxRequestTarget target) {
                     if (provider.size() == 0) {
                     	getForm().error("Mail destination must contain at least a mail address.");
+                    	target.add(getFeedbackPanel());
                     } else {
                         super.onSave(target);
                         addDestination(destination, target);
@@ -289,6 +290,7 @@ public class DestinationsPanel extends Panel {
 				protected void onSave(AjaxRequestTarget target) {
                     if (provider.size() == 0) {
                     	getForm().error("Mail destination must contain at least a mail address.");
+                    	target.add(getFeedbackPanel());
                     } else {
                         super.onSave(target);
                         addDestination(destination, target);

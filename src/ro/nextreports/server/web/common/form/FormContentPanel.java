@@ -62,7 +62,7 @@ public class FormContentPanel<T> extends GenericPanel<T> {
 		return findParent(FormPanel.class).getForm();
 	}
 
-	public FeedbackPanel getFeadbackPanel() {
+	public FeedbackPanel getFeedbackPanel() {
 		return findParent(FormPanel.class).getFeedbackPanel();
 	}
 

@@ -124,7 +124,7 @@ public class AddWidgetPanel extends FormContentPanel {
 					swapComponent = tree;					
 				}	
 				target.add(swapComponent);
-				target.add(getFeadbackPanel());
+				target.add(getFeedbackPanel());
 			}
 			
 		});
@@ -249,7 +249,7 @@ public class AddWidgetPanel extends FormContentPanel {
         	this.entity = null;
         }   
         
-        target.add(getFeadbackPanel());
+        target.add(getFeedbackPanel());
 	}				
 	
     private class EntityTree extends NestedTree<Entity> {
