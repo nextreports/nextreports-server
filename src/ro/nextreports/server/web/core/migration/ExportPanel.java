@@ -100,6 +100,7 @@ public class ExportPanel extends Panel {
 	                public void onOk(AjaxRequestTarget target) {
 	                	if (getEntity() == null) {
 	                		error(getString("Settings.migration.export.entity.select"));
+	                		target.add(getFeedbackPanel());
 	            			return;
 	            		}
 	                	String path = getEntity().getPath();
