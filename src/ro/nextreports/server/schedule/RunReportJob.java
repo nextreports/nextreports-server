@@ -342,6 +342,7 @@ public class RunReportJob implements Job {
                 try {
                     distributor.distribute(exportedFile, destination, distributionContext);
                 } catch (DistributionException e) {
+                	LOG.error(e.getMessage(), e);
                 	String s = bundle.getString("ActionContributor.Run.distributionFailed");
                     String failedMessage = MessageFormat.format(s, destination.getName());		
                     error = true;

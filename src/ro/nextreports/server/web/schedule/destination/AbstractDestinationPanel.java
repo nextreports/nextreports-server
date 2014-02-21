@@ -25,6 +25,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ro.nextreports.server.distribution.Destination;
 import ro.nextreports.server.distribution.DistributionException;
@@ -45,6 +47,8 @@ public abstract class AbstractDestinationPanel extends FormContentPanel {
 	private static final long serialVersionUID = 1L;
 	
 	protected Destination destination;    
+	
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractDestinationPanel.class);
 
     public AbstractDestinationPanel(String id, Destination destination) {
         super(id);
@@ -104,6 +108,7 @@ public abstract class AbstractDestinationPanel extends FormContentPanel {
 				testDestination(destination);
 				info(getString("ActionContributor.Run.destination.test"));
 			} catch (DistributionException e) {
+				LOG.error(e.getMessage(), e);
 				error(getDisplayMessage(e));
 			}
 		}		
