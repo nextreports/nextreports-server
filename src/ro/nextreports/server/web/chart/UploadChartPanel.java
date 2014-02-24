@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -36,8 +35,6 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
 import org.jcrom.JcrDataProviderImpl;
@@ -66,7 +63,9 @@ import ro.nextreports.server.web.core.validation.JcrNameValidator;
  */
 public class UploadChartPanel extends Panel {
 
-    private static final Logger LOG = LoggerFactory.getLogger(UploadChartPanel.class);
+    private static final long serialVersionUID = 1L;
+
+	private static final Logger LOG = LoggerFactory.getLogger(UploadChartPanel.class);
 
     private FileUploadField uploadField;
     public Chart chart;
@@ -113,7 +112,9 @@ public class UploadChartPanel extends Panel {
 
     private class UploadForm extends AdvancedForm<Chart> {
 
-        public UploadForm(String id, boolean create) {
+        private static final long serialVersionUID = 1L;
+
+		public UploadForm(String id, boolean create) {
             super(id);
 
             String title;
@@ -132,7 +133,9 @@ public class UploadChartPanel extends Panel {
 
             final TextField<String> name = new TextField<String>("name") {
             	
-                @Override
+                private static final long serialVersionUID = 1L;
+
+				@Override
 				public boolean isEnabled() {
 					return !update;
 				}
@@ -163,7 +166,9 @@ public class UploadChartPanel extends Panel {
             }
             ChoiceRenderer<DataSource> pathRenderer = new ChoiceRenderer<DataSource>("path") {
             	
-            	@Override
+            	private static final long serialVersionUID = 1L;
+
+				@Override
                 public Object getDisplayValue(DataSource dataSource) {
                     return dataSource.getPath().substring(StorageConstants.DATASOURCES_ROOT.length());
                 }
@@ -180,6 +185,7 @@ public class UploadChartPanel extends Panel {
             uploadField = new FileUploadField("file", new Model(new ArrayList<FileUpload>()));
             uploadField.setRequired(true);
             uploadField.setLabel(new Model<String>(getString("ActionContributor.UploadChart.file")));
+            /*
             uploadField.add(new AjaxEventBehavior("onchange") {
             	
                 private static final long serialVersionUID = 1L;
@@ -206,11 +212,14 @@ public class UploadChartPanel extends Panel {
 				}
 				
             });
+            */
             add(uploadField);
 
             add(new AjaxLink("cancel") {
 
-                @Override
+                private static final long serialVersionUID = 1L;
+
+				@Override
                 public void onClick(AjaxRequestTarget target) {
                     EntityBrowserPanel panel = findParent(EntityBrowserPanel.class);
                     panel.backwardWorkspace(target);
@@ -220,6 +229,7 @@ public class UploadChartPanel extends Panel {
 
             // add a button that can be used to submit the form via ajax
             AjaxButton submitButton = new AjaxButton("submit", this) {
+            	
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     upload(target);
@@ -232,6 +242,7 @@ public class UploadChartPanel extends Panel {
 //                    target.add(feedback);
                 	target.add(form);
                 }
+                
             };
             setDefaultButton(submitButton);
             add(submitButton);

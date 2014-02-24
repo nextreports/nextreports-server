@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -43,8 +42,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
@@ -127,8 +124,8 @@ public class UploadJasperReportPanel extends Panel {
     }
 
     private JasperContent getReportContent(FileUpload upload,
-                                           Collection<FileUpload> subreportsFileUpload, FileUpload paramUpload,
-                                           Collection<FileUpload> imgUpload) throws IOException, ReportEngineException {
+    		Collection<FileUpload> subreportsFileUpload, FileUpload paramUpload,
+    		Collection<FileUpload> imgUpload) throws IOException, ReportEngineException {
         JasperContent reportContent = new JasperContent();
         reportContent.setName("content");
         reportContent.setPath(StorageUtil.createPath(report.getPath(), "content"));
@@ -202,7 +199,9 @@ public class UploadJasperReportPanel extends Panel {
 
     private class UploadForm extends AdvancedForm<Report> {
 
-        private final List<FileUpload> subreportsUploads = new ArrayList<FileUpload>();
+        private static final long serialVersionUID = 1L;
+        
+		private final List<FileUpload> subreportsUploads = new ArrayList<FileUpload>();
         private final List<FileUpload> imagesUploads = new ArrayList<FileUpload>();
 
         @SuppressWarnings("unchecked")
@@ -224,10 +223,14 @@ public class UploadJasperReportPanel extends Panel {
             //add(new UploadProgressBar("progress", this));
 
             final TextField<String> name = new TextField<String>("name") {
-                @Override
+            	
+                private static final long serialVersionUID = 1L;
+
+				@Override
 				public boolean isEnabled() {
 					return !update;
 				}
+                
             };
             name.add(new JcrNameValidator());
             name.setRequired(true);
@@ -274,6 +277,7 @@ public class UploadJasperReportPanel extends Panel {
             masterUploadField = new FileUploadField("masterFile", new Model(new ArrayList<FileUpload>()));
             masterUploadField.setRequired(true);
             masterUploadField.setLabel(new Model<String>(getString("ActionContributor.UploadJasper.file")));
+            /*
             masterUploadField.add(new AjaxEventBehavior("onchange") {
             	
 				private static final long serialVersionUID = 1L;
@@ -301,6 +305,7 @@ public class UploadJasperReportPanel extends Panel {
                 }
 				
              });
+             */
             parametersUploadField = new FileUploadField("parameterFile", new Model(new ArrayList<FileUpload>()));
             imagesUploadField = new MultiFileUploadField("imageFile", new PropertyModel(this, "imagesUploads"), 3);
             add(masterUploadField);
