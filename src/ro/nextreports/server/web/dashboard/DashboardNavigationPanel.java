@@ -82,7 +82,7 @@ public class DashboardNavigationPanel extends Panel {
 
             @Override
             protected void populateItem(ListItem<Object> item) {
-                Tab tab = new Tab("dashboard", item.getModel());
+                Tab tab = new Tab("dashboard", item.getModel(), item.getIndex());
                 item.add(tab);
 
 //                item.add(new WiQueryEventBehavior(new Event(MouseEvent.MOUSEOVER) {
@@ -241,20 +241,20 @@ public class DashboardNavigationPanel extends Panel {
 
 		private static final long serialVersionUID = 1L;
 
-		public Tab(String id, final IModel<Object> model) {
+		public Tab(String id, final IModel<Object> model, int index) {
             super(id, "tab", DashboardNavigationPanel.this);
 
             setOutputMarkupId(true);
 
             final Object dashboard = model.getObject();
 
-            add(createTitleLink(dashboard));                            
+            add(createTitleLink(dashboard, index));                            
         }                    	         
     }
         
-    private AjaxLink createTitleLink(final Object object) {
+    private AjaxLink createTitleLink(final Object object, int index) {
     	final String dashboardId = getDashboardId(object);
-    	final String title = getTitle(object);
+    	String title = getTitle(object);
     	String owner;
 		try {
 			owner = dashboardService.getDashboardOwner(dashboardId);
@@ -301,6 +301,9 @@ public class DashboardNavigationPanel extends Panel {
         final ContextImage link = new ContextImage("titleImage", linkImageModel);
         titleLink.add(link);
 
+        if (index == 0) {
+        	title = getString("dashboard.my");
+        }
         titleLink.add(new Label("title", title));
         if (isLink(object)) {
             titleLink.add(new SimpleTooltipBehavior(getString("DashboardNavigationPanel.owner") + ": " + owner));
