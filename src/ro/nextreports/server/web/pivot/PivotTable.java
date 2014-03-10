@@ -158,8 +158,16 @@ public class PivotTable extends Panel {
 					}
 				}
 				for (PivotField dataField : dataFields) {
-					double grandTotalForRow = PivotUtils.getSummary(dataField, values.get(dataField)).doubleValue();
-					tmp = createGrandTotalLabel(value.newChildId(), grandTotalForRow, true);
+                    double grandTotalForRow = 0.0d;
+
+                    List<Object> items = values.get(dataField);
+                    for (Object item : items) {
+                        if (item != null) {
+                            grandTotalForRow += ((Number) item).doubleValue();
+                        }
+                    }
+
+                    tmp = createGrandTotalLabel(value.newChildId(), grandTotalForRow, true);
 					tmp.add(AttributeModifier.append("class", "grand-total"));
 					value.add(tmp);
 				}
@@ -185,7 +193,15 @@ public class PivotTable extends Panel {
 				}
 			}
 			for (PivotField dataField : dataFields) {
-				double grandTotalForColumn = PivotUtils.getSummary(dataField, values.get(dataField)).doubleValue();
+                double grandTotalForColumn = 0.0d;
+
+                List<Object> items = values.get(dataField);
+                for (Object item : items) {
+                    if (item != null) {
+                        grandTotalForColumn += ((Number) item).doubleValue();
+                    }
+                }
+
 				if (!grandTotal.containsKey(dataField)) {
 					grandTotal.put(dataField, grandTotalForColumn);
 				} else {
