@@ -142,7 +142,8 @@ public class HomePage extends BasePage {
 		if ("".equals(event.getReportUrl())) {
 			error = true;
 			sb.append(event.getResultMessage());
-		} else {
+		} else if (!event.getReportUrl().endsWith("/report")) {
+			// indicator and alarm schedule alerts do not have a resulting report (url ends with /report)
 			sb.append("<a href=\"").
 			   append(event.getReportUrl()).
 			   append("\" target=\"_blank\">").
