@@ -17,6 +17,7 @@
 package ro.nextreports.server.web;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -269,6 +270,16 @@ public class NextServerSession extends WebSession {
 		userPreferences.setPreferences(preferences);
 		storageService.addOrModifyEntity(userPreferences);
 	}
+    
+    public Date getPreferencesDate() {
+    	String username = getUsername();
+		try {
+			UserPreferences userPreferences = (UserPreferences) storageService.getEntity(UserPreferences.getPath(username));
+			return userPreferences.getCreatedDate();
+		} catch (NotFoundException e) {
+			return new Date();
+		}
+    }
 	
     public Profile getProfile() {
         String profileName = getUser().getProfile();

@@ -18,8 +18,10 @@ package ro.nextreports.server.web.core;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -35,12 +37,14 @@ import org.wicketstuff.push.IPushNode;
 import org.wicketstuff.push.IPushService;
 import org.wicketstuff.push.timer.TimerPushService;
 
+import ro.nextreports.engine.util.DateUtil;
 import ro.nextreports.server.domain.ReportResultEvent;
 import ro.nextreports.server.service.ReportListener;
 import ro.nextreports.server.service.ReportService;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.web.NextServerSession;
 import ro.nextreports.server.web.common.jgrowl.JGrowlAjaxBehavior;
+import ro.nextreports.server.web.common.util.PreferencesHelper;
 import ro.nextreports.server.web.core.section.SectionManager;
 import ro.nextreports.server.web.core.section.tab.ImageTabbedPanel;
 import ro.nextreports.server.web.core.section.tab.SectionTab;
@@ -104,6 +108,8 @@ public class HomePage extends BasePage {
 			}
 			
 		});
+    	
+    	initSurvey();
 	}
 
 	private void initPush() {
@@ -152,6 +158,22 @@ public class HomePage extends BasePage {
 		}		
 		return new Message(sb.toString(), error);
 	}
+	
+	private Message createSurveyMessage() {				
+		StringBuilder sb = new StringBuilder();						
+		Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
+		ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);
+		String url = "http://www.next-reports.com/survey1";
+		String s = bundle.getString("survey.message");										
+		sb.append(s);
+		sb.append("<br>").				
+		   append("<a class=\"go\" href=\"").
+		   append(url).
+		   append("\" target=\"_blank\">").
+		   append(bundle.getString("survey.go")).		
+		   append("</a>");		
+		return new Message(sb.toString(), false);
+	}
        
 	private class Message  {
 		
@@ -171,6 +193,24 @@ public class HomePage extends BasePage {
 			return error;
 		}
 		
+	}
+	
+	private void initSurvey() {
+		 Map<String, String> preferences = NextServerSession.get().getPreferences();
+         boolean surveyTaken = PreferencesHelper.getBoolean("survey.taken", preferences);
+         Date startDate = NextServerSession.get().getPreferencesDate();
+         int array[] = DateUtil.getElapsedTime(startDate, new Date());         
+         boolean showSurvey = !surveyTaken && ( (array != null) && array[0]>=10 );         
+         if (showSurvey) {
+	    	 if (pushService.isConnected(pushNode)) {
+					// forward the Message event via the push service 
+					// to the push event handler
+					Message message = createSurveyMessage();
+					pushService.publish(pushNode, message);					
+					preferences.put("survey.taken", "true");		 			
+			 }         	         	 			 			
+         }        
+		 NextServerSession.get().setPreferences(preferences);         
 	}
 	
 }
