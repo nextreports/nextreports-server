@@ -83,6 +83,8 @@ public class ChartRuntimePanel extends DynamicParameterRuntimePanel {
                 	return getString("chart.line");
                 } else if (chartType.equals(ChartUtil.CHART_AREA)) {
                 	return getString("chart.area");	
+                } else if (chartType.equals(ChartUtil.CHART_BUBBLE)) {
+                	return getString("chart.bubble");		
                 } else {
                 	return ChartUtil.CHART_NONE;
                 }

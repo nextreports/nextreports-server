@@ -78,8 +78,9 @@ public class ChartUtil {
     public static final String CHART_STACKED_BAR_COMBO = "Stacked Bar Line";
     public static final String CHART_PIE = "Pie";
     public static final String CHART_AREA = "Area";    
-    public static final List<String> CHART_TYPES = Arrays.asList(CHART_LINE, CHART_BAR, CHART_BAR_COMBO, CHART_HORIZONTAL_BAR, CHART_HORIZONTAL_STACKED_BAR, CHART_STACKED_BAR, CHART_STACKED_BAR_COMBO, CHART_PIE, CHART_AREA);
-    public static final List<String> FLASH_UNSUPPORTED = Arrays.asList(CHART_BAR_COMBO, CHART_STACKED_BAR_COMBO, CHART_HORIZONTAL_STACKED_BAR);
+    public static final String CHART_BUBBLE = "Bubble";
+    public static final List<String> CHART_TYPES = Arrays.asList(CHART_LINE, CHART_BAR, CHART_BAR_COMBO, CHART_HORIZONTAL_BAR, CHART_HORIZONTAL_STACKED_BAR, CHART_STACKED_BAR, CHART_STACKED_BAR_COMBO, CHART_PIE, CHART_AREA, CHART_BUBBLE);
+    public static final List<String> FLASH_UNSUPPORTED = Arrays.asList(CHART_BAR_COMBO, CHART_STACKED_BAR_COMBO, CHART_HORIZONTAL_STACKED_BAR, CHART_BUBBLE);
 
     public static WidgetRuntimeModel getStoredRuntimeModel(Settings settings, ChartWidget chartWidget, ReportService reportService,
                                                           DataSourceService dataSourceService) {
@@ -502,6 +503,8 @@ public class ChartUtil {
             return ChartType.LINE;
         } else if (CHART_AREA.equals(type)) {
             return ChartType.AREA;
+        } else if (CHART_BUBBLE.equals(type)) {
+            return ChartType.BUBBLE;    
         } else {
             return ChartType.NONE;
         }
@@ -526,6 +529,8 @@ public class ChartUtil {
             return CHART_LINE;
         } else if (ChartType.AREA == type) {
             return CHART_AREA;
+        } else if (ChartType.BUBBLE == type) {
+            return CHART_BUBBLE;    
         } else {
             return CHART_NONE;
         }
