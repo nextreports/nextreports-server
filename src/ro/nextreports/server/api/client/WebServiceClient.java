@@ -388,12 +388,12 @@ public class WebServiceClient {
 		}
 		
 		public X509Certificate[] getAcceptedIssuers() {
-			throw new UnsupportedOperationException();
+			return tm.getAcceptedIssuers();
 		}
 
 		public void checkClientTrusted(X509Certificate[] chain, String authType)
 				throws CertificateException {
-			throw new UnsupportedOperationException();
+			tm.checkClientTrusted(chain,authType );
 		}
 
 		public void checkServerTrusted(X509Certificate[] chain, String authType)
