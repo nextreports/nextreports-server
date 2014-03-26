@@ -47,25 +47,24 @@ public class JGrowlAjaxBehavior extends AbstractDefaultAjaxBehavior {
 	public static final int INFO_STICKY = 250;
 	public static final int ERROR_STICKY = 251;
 
+    private String afterOpenJavaScript;
+
 	@Override
 	public void renderHead(Component component, IHeaderResponse response) {
 		super.renderHead(component, response);
-		
-//		System.out.println("JGrowl render head");
+
 		response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(JGrowlAjaxBehavior.class, "jquery.jgrowl.js")));
         response.render(CssHeaderItem.forReference(new PackageResourceReference(JGrowlAjaxBehavior.class, "jquery.jgrowl.css")));
         response.render(CssHeaderItem.forReference(new PackageResourceReference(JGrowlAjaxBehavior.class, "jgrowl.css")));
 
 		String feedback = renderFeedback();
 		if (!StringUtils.isEmpty(feedback)) {
-//			System.out.println("rendering");
 			response.render(OnDomReadyHeaderItem.forScript(feedback));
 		}
 	}
 	
 	@Override
 	protected void respond(AjaxRequestTarget target) {
-//		System.out.println("JGrowl respond");
 		String feedback = renderFeedback();
 		if (!StringUtils.isEmpty(feedback)) {
 			target.appendJavaScript(feedback);
@@ -73,7 +72,15 @@ public class JGrowlAjaxBehavior extends AbstractDefaultAjaxBehavior {
 
 	}
 
-	private String renderFeedback() {
+    public String getAfterOpenJavaScript() {
+        return afterOpenJavaScript;
+    }
+
+    public void setAfterOpenJavaScript(String afterOpenJavaScript) {
+        this.afterOpenJavaScript = afterOpenJavaScript;
+    }
+
+    private String renderFeedback() {
 		//	this.getComponent().getFeedbackMessage();
 		FeedbackMessages fm = Session.get().getFeedbackMessages();
 		
@@ -82,7 +89,7 @@ public class JGrowlAjaxBehavior extends AbstractDefaultAjaxBehavior {
 		while (iter.hasNext()) {
 			FeedbackMessage message = iter.next();
 			if ((message.getReporter() != null) || message.isRendered()) {
-				// If a component-level message, don't show it
+				// if a component-level message, don't show it
 				continue;
 			}
 			
@@ -108,6 +115,11 @@ public class JGrowlAjaxBehavior extends AbstractDefaultAjaxBehavior {
 			sb.append(", {");
 			// set the css style, i.e. the theme
 			sb.append("theme: \'jgrowl-").append(cssClassSuffix).append("\'");
+            // set afterOpen
+            String afterOpen = getAfterOpenJavaScript();
+            if (StringUtils.isNotEmpty(afterOpen)) {
+                sb.append(", afterOpen: " + getAfterOpenJavaScript());
+            }
 			// set sticky
 			if (message.getLevel() > FeedbackMessage.INFO) {
 				sb.append(", sticky: true");
@@ -116,9 +128,9 @@ public class JGrowlAjaxBehavior extends AbstractDefaultAjaxBehavior {
 				sb.append(", life: 5000");
 			}
 
-			sb.append("}");
-			sb.append(");");
-			message.markRendered();
+			sb.append("});");
+
+            message.markRendered();
 		}
 		
 		return sb.toString();

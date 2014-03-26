@@ -16,27 +16,15 @@
  */
 package ro.nextreports.server.web.core;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
-
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.wicketstuff.push.AbstractPushEventHandler;
-import org.wicketstuff.push.IPushEventContext;
-import org.wicketstuff.push.IPushEventHandler;
-import org.wicketstuff.push.IPushNode;
-import org.wicketstuff.push.IPushService;
+import org.wicketstuff.push.*;
 import org.wicketstuff.push.timer.TimerPushService;
-
 import ro.nextreports.engine.util.DateUtil;
 import ro.nextreports.server.domain.ReportResultEvent;
 import ro.nextreports.server.service.ReportListener;
@@ -50,16 +38,20 @@ import ro.nextreports.server.web.core.section.tab.ImageTabbedPanel;
 import ro.nextreports.server.web.core.section.tab.SectionTab;
 import ro.nextreports.server.web.language.LanguageManager;
 
+import java.text.MessageFormat;
+import java.util.*;
+
 /**
  * @author Decebal Suiu
  */
 public class HomePage extends BasePage {
 
 	private static final long serialVersionUID = 1L;
-	
-	private transient IPushService pushService;
-	private IPushNode<Message> pushNode;
+
+    private static final String surveyUrl = "http://www.next-reports.com/survey1";
+
 	private Label growlLabel;
+    private JGrowlAjaxBehavior growlBehavior;
 	
 	@SpringBean
 	private SectionManager sectionManager;
@@ -84,57 +76,61 @@ public class HomePage extends BasePage {
     	
     	growlLabel = new Label("growl", "");
     	growlLabel.setOutputMarkupId(true);
-    	growlLabel.add(new JGrowlAjaxBehavior());
-    	add(growlLabel);    		    	    	
+        growlBehavior = new JGrowlAjaxBehavior();
+    	growlLabel.add(growlBehavior);
+    	add(growlLabel);
     }   
     
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		
-    	// push
-    	initPush();
-    	
-    	reportService.addReportListener(new ReportListener() {
-			
-			@Override
-			public void onFinishRun(ReportResultEvent result) {
-				if (pushService.isConnected(pushNode)) {
-					// forward the Message event via the push service 
-					// to the push event handler
-					Message message = createMessage(result);
-					pushService.publish(pushNode, message);
-				}
-			}
-			
-		});
-    	
-    	initSurvey();
+
+        // obtain a reference to a Push service implementation
+        final IPushService pushService = TimerPushService.get();;
+
+        // instantiate push event handler
+        IPushEventHandler<Message> handler = new AbstractPushEventHandler<Message>() {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onEvent(AjaxRequestTarget target, Message event, IPushNode<Message> node, IPushEventContext<Message> context) {
+                int messageType = event.isError() ?	JGrowlAjaxBehavior.ERROR_STICKY : JGrowlAjaxBehavior.INFO_STICKY;
+                getSession().getFeedbackMessages().add(new FeedbackMessage(null, event.getText(), messageType));
+                target.add(growlLabel);
+
+                String reportsUrl = storageService.getSettings().getReportsUrl();
+                if (StringUtils.contains(event.getText(), reportsUrl)) {
+                    growlBehavior.setAfterOpenJavaScript(getJGrowlAfterOpenJavaScript());
+                }
+            }
+
+        };
+
+        // install push node into this panel
+        final IPushNode<Message> pushNode = pushService.installNode(this, handler);
+
+        // push report result
+    	initPushReportResult(pushService, pushNode);
+
+        // push survey
+    	initPushSurvey(pushService, pushNode);
 	}
 
-	private void initPush() {
-	     // instantiate push event handler
-	    IPushEventHandler<Message> handler = new AbstractPushEventHandler<Message>() {
+	private void initPushReportResult(final IPushService pushService, final IPushNode<Message> pushNode) {
+        reportService.addReportListener(new ReportListener() {
 
-			private static final long serialVersionUID = 1L;
+            @Override
+            public void onFinishRun(ReportResultEvent result) {
+                if (pushService.isConnected(pushNode)) {
+                    pushService.publish(pushNode, createReportResultMessage(result));
+                }
+            }
 
-			@Override
-			public void onEvent(AjaxRequestTarget target, Message event, IPushNode<Message> node, IPushEventContext<Message> context) {
-				int messageType = event.isError() ?	JGrowlAjaxBehavior.ERROR_STICKY : JGrowlAjaxBehavior.INFO_STICKY;		
-				getSession().getFeedbackMessages().add(new FeedbackMessage(null, event.getText(), messageType));
-				target.add(growlLabel);
-			}
-			
-	    };
-
-	     // obtain a reference to a Push service implementation
-	    pushService = TimerPushService.get();
-
-		// install push node into this panel
-	    pushNode = pushService.installNode(this, handler);
+        });
 	}
-	
-	private Message createMessage(ReportResultEvent event) {				
+
+	private Message createReportResultMessage(ReportResultEvent event) {
 		StringBuilder sb = new StringBuilder();		
 				
 		Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
@@ -144,10 +140,10 @@ public class HomePage extends BasePage {
 				
 		sb.append(message);
 		sb.append("<br>");
-		boolean error = false;
+        boolean error = false;
 		if ("".equals(event.getReportUrl())) {
-			error = true;
 			sb.append(event.getResultMessage());
+            error = true;
 		} else if (!event.getReportUrl().endsWith("/report")) {
 			// indicator and alarm schedule alerts do not have a resulting report (url ends with /report)
 			sb.append("<a href=\"").
@@ -155,62 +151,76 @@ public class HomePage extends BasePage {
 			   append("\" target=\"_blank\">").
 			   append(bundle.getString("ActionContributor.Run.result")).		
 			   append("</a>");
-		}		
+		}
+
 		return new Message(sb.toString(), error);
 	}
-	
-	private Message createSurveyMessage() {				
-		StringBuilder sb = new StringBuilder();						
-		Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
-		ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);
-		String url = "http://www.next-reports.com/survey1";
-		String s = bundle.getString("survey.message");										
-		sb.append(s);
-		sb.append("<br>").				
-		   append("<a class=\"go\" href=\"").
-		   append(url).
-		   append("\" target=\"_blank\">").
-		   append(bundle.getString("survey.go")).		
-		   append("</a>");		
-		return new Message(sb.toString(), false);
-	}
-       
-	private class Message  {
-		
-		private String text;
-		private boolean error;
 
-		public Message(String text, boolean error) {
-			this.text = text;
-			this.error = error;
-		}
+    private String getJGrowlAfterOpenJavaScript() {
+        // programatically click on link
+        // http://stackoverflow.com/questions/1694595/can-i-call-jquery-click-to-follow-an-a-link-if-i-havent-bound-an-event-hand
+        StringBuilder javaScript = new StringBuilder();
+        javaScript.append("function(e,m,o) {");
+        javaScript.append("var link = e.find('a');");
+        javaScript.append("if (link.size() > 0) {");
+//        javaScript.append("window.open(link.attr('href'), '_blank');");
+        javaScript.append("link[0].click();");
+        javaScript.append("}");
+        javaScript.append("}");
 
-		public String getText() {
-			return text;
-		}
+        return javaScript.toString();
+    }
 
-		public boolean isError() {
-			return error;
-		}
-		
-	}
-	
-	private void initSurvey() {
-		 Map<String, String> preferences = NextServerSession.get().getPreferences();
-         boolean surveyTaken = PreferencesHelper.getBoolean("survey.taken", preferences);
-         Date startDate = NextServerSession.get().getPreferencesDate();
-         int array[] = DateUtil.getElapsedTime(startDate, new Date());         
-         boolean showSurvey = !surveyTaken && ( (array != null) && array[0]>=10 );         
-         if (showSurvey) {
-	    	 if (pushService.isConnected(pushNode)) {
-					// forward the Message event via the push service 
-					// to the push event handler
-					Message message = createSurveyMessage();
-					pushService.publish(pushNode, message);					
-					preferences.put("survey.taken", "true");		 			
-			 }         	         	 			 			
-         }        
-		 NextServerSession.get().setPreferences(preferences);         
-	}
-	
+	private void initPushSurvey(IPushService pushService, IPushNode<Message> pushNode) {
+        Map<String, String> preferences = NextServerSession.get().getPreferences();
+        boolean surveyTaken = PreferencesHelper.getBoolean("survey.taken", preferences);
+        Date startDate = NextServerSession.get().getPreferencesDate();
+        int array[] = DateUtil.getElapsedTime(startDate, new Date());
+        boolean showSurvey = !surveyTaken && ((array != null) && array[0] >= 10);
+        if (showSurvey) {
+            if (pushService.isConnected(pushNode)) {
+                pushService.publish(pushNode, createSurveyMessage());
+                preferences.put("survey.taken", "true");
+            }
+        }
+
+        NextServerSession.get().setPreferences(preferences);
+    }
+
+    private Message createSurveyMessage() {
+        StringBuilder sb = new StringBuilder();
+        Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
+        ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);
+        String s = bundle.getString("survey.message");
+        sb.append(s);
+        sb.append("<br>").
+            append("<a class=\"go\" href=\"").
+            append(surveyUrl).
+            append("\" target=\"_blank\">").
+            append(bundle.getString("survey.go")).
+            append("</a>");
+
+        return new Message(sb.toString(), false);
+    }
+
+    private class Message  {
+
+        private String text;
+        private boolean error;
+
+        public Message(String text, boolean error) {
+            this.text = text;
+            this.error = error;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public boolean isError() {
+            return error;
+        }
+
+    }
+
 }

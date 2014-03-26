@@ -22,8 +22,11 @@ import ro.nextreports.server.domain.Settings;
 import ro.nextreports.server.service.StorageService;
 
 public class SettingsBean {
-	
-	private StorageService storageService;	
+
+    public static final Integer DEFAULT_CLEAN_HISTORY_DAYS_TO_KEEP = -1; // disable clean history
+    public static final String DEFAULT_CLEAN_HISTORY_CRON_EXPRESSION = "0 0 2 * * ?";
+
+    private StorageService storageService;
 	
 	public Settings getSettings() {
 //		return storageService.getSettings();
@@ -115,5 +118,14 @@ public class SettingsBean {
 		}
 		return getSettings().getIntegration().getWhiteIp();
 	}
+
+    public String getCleanHistoryCronExpression() {
+        Settings settings = getSettings();
+        if (settings.getCleanHistory() == null) {
+            return DEFAULT_CLEAN_HISTORY_CRON_EXPRESSION;
+        }
+
+        return settings.getCleanHistory().getCronExpression();
+    }
 
 }

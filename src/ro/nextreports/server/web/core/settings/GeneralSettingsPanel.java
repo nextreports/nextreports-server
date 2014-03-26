@@ -22,6 +22,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -35,7 +36,6 @@ import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.web.NextServerApplication;
 import ro.nextreports.server.web.common.behavior.SimpleTooltipBehavior;
 import ro.nextreports.server.web.core.validation.MailServerValidator;
-
 
 /**
  * User: mihai.panaitescu
@@ -112,7 +112,10 @@ public class GeneralSettingsPanel extends AbstractSettingsPanel {
         ContextImage updateImage = new ContextImage("updateImage","images/information.png");        
         updateImage.add(new SimpleTooltipBehavior(getString("Settings.general.updateIntervalTooltip")));
         form.add(updateImage);
-        
+
+        final CheckBox autoOpenField = new CheckBox("autoOpen");
+        form.add(autoOpenField);
+
         Settings settings = storageService.getSettings();
         oldReportsHome = String.valueOf(settings.getReportsHome());
         oldMailPort = settings.getMailServer().getPort();

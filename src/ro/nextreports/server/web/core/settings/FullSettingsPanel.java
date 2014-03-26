@@ -30,6 +30,7 @@ public class FullSettingsPanel extends Panel {
 		add(new SchedulerSettingsPanel("schedulerSettings"));
 		add(new IFrameSettingsPanel("iframeSettings"));
 		add(new IntegrationSettingsPanel("integrationSettings"));
+//        add(new CleanHistorySettingsPanel("cleanHistorySettings"));
 	}
 
 }

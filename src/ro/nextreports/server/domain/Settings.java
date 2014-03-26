@@ -22,9 +22,8 @@ import org.jcrom.annotations.JcrFileNode;
 import org.jcrom.annotations.JcrFileNode.LoadType;
 import org.jcrom.annotations.JcrNode;
 import org.jcrom.annotations.JcrProperty;
-
+import ro.nextreports.server.settings.SettingsBean;
 import ro.nextreports.server.web.language.LanguageManager;
-
 
 @JcrNode (classNameProperty="className", mixinTypes = {"mix:referenceable"})
 public class Settings extends Entity {
@@ -59,7 +58,10 @@ public class Settings extends Entity {
 	private String colorTheme;	
 	
 	@JcrProperty
-	private String language;	
+	private String language;
+
+    @JcrProperty
+    private boolean autoOpen;
 	
 	@JcrChildNode(createContainerNode = false)
 	private JasperSettings jasper;
@@ -75,7 +77,10 @@ public class Settings extends Entity {
 	
 	@JcrChildNode(createContainerNode = false)
 	private IntegrationSettings integration;
-	
+
+    @JcrChildNode(createContainerNode = false)
+    private CleanHistorySettings cleanHistory;
+
 	public Settings() {
 		super();        
     }
@@ -187,11 +192,20 @@ public class Settings extends Entity {
 	public void setColorTheme(String colorTheme) {
 		this.colorTheme = colorTheme;
 	}
-				
-	public String getLanguage() {
+
+    public boolean isAutoOpen() {
+        return autoOpen;
+    }
+
+    public void setAutoOpen(boolean autoOpen) {
+        this.autoOpen = autoOpen;
+    }
+
+    public String getLanguage() {
 		if (language == null) {
 			return LanguageManager.PROPERTY_NAME_ENGLISH;
 		}
+
 		return language;
 	}
 
@@ -207,7 +221,21 @@ public class Settings extends Entity {
 		this.iframe = iframe;
 	}
 
-	@Override
+    public CleanHistorySettings getCleanHistory() {
+        if (cleanHistory == null) {
+            cleanHistory = new CleanHistorySettings();
+            cleanHistory.setDaysToKeep(SettingsBean.DEFAULT_CLEAN_HISTORY_DAYS_TO_KEEP);
+            cleanHistory.setCronExpression(SettingsBean.DEFAULT_CLEAN_HISTORY_CRON_EXPRESSION);
+        }
+
+        return cleanHistory;
+    }
+
+    public void setCleanHistory(CleanHistorySettings cleanHistory) {
+        this.cleanHistory = cleanHistory;
+    }
+
+    @Override
     public String toString() {
         return "Settings {" +
                 "\nbaseUrl='" + baseUrl + '\'' +
@@ -224,6 +252,7 @@ public class Settings extends Entity {
                 "\n" + (scheduler != null ? scheduler.toString() : "") +
                 "\n" + (iframe != null ? iframe.toString() : "") +
                 "\n" + (integration != null ? integration.toString() : "") +
+                "\n" + (cleanHistory != null ? cleanHistory.toString() : "") +
                 "\n}";
     }
 	

@@ -109,5 +109,21 @@
         <property name="jobDetail" ref="userSynchronizerJob"/>
         <property name="cronExpression" value="#{settings.getSynchronizerCronExpression()}"/>
     </bean>
-    
+
+    <bean name="cleanHistoryJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="name" value="cleanHistoryJob"/>
+        <property name="jobClass" value="ro.nextreports.server.schedule.CleanHistoryJob"/>
+        <property name="durability" value="true"/>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="storageService" value-ref="storageService"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="cleanHistoryTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="cleanHistoryJob"/>
+        <property name="cronExpression" value="#{settings.getCleanHistoryCronExpression()}"/>
+    </bean>
+
 </beans>
