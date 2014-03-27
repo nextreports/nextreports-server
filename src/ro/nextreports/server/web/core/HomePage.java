@@ -99,8 +99,9 @@ public class HomePage extends BasePage {
                 getSession().getFeedbackMessages().add(new FeedbackMessage(null, event.getText(), messageType));
                 target.add(growlLabel);
 
+                boolean autoOpen = storageService.getSettings().isAutoOpen();
                 String reportsUrl = storageService.getSettings().getReportsUrl();
-                if (StringUtils.contains(event.getText(), reportsUrl)) {
+                if (autoOpen && StringUtils.contains(event.getText(), reportsUrl)) {
                     growlBehavior.setAfterOpenJavaScript(getJGrowlAfterOpenJavaScript());
                 }
             }
