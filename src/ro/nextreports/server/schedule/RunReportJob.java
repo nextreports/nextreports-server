@@ -293,7 +293,7 @@ public class RunReportJob implements Job {
             message = e.getMessage();
             LOG.error(message, e);
             e.printStackTrace();
-        } catch (NoDataFoundException e) {
+        } catch (NoDataFoundException e) {        	
             error = false;
             message = bundle.getString("ActionContributor.Run.nodata");
         } catch (InterruptedException e) {
@@ -316,7 +316,7 @@ public class RunReportJob implements Job {
         		if (!error) {
         			String fName = url.substring(url.lastIndexOf("/") + 1);
                     dynamicUrl = reportService.getReportURL(fName);  
-        		}         		
+        		}        		
         		ReportResultEvent event = new ReportResultEvent(creator, report.getName(), dynamicUrl, eventMessage);
         		reportService.notifyReportListener(event);
         		integrationPost(storageService.getSettings(), event);
@@ -356,22 +356,24 @@ public class RunReportJob implements Job {
             }
         } else {
         	if (!report.isAlarmType() && !report.isIndicatorType()) {			
-				// error or 'No data'
+				// if 'No data' the email is not sent
 				// send error through mail
-				for (Destination destination : destinations) {
-					if (DestinationType.SMTP.toString().equals(destination.getType())) {
-						Distributor distributor = DistributorFactory.getDistributor(destination.getType());
-						distributors.add(distributor);
-						try {
-							distributor.distribute(null, destination, distributionContext);
-						} catch (DistributionException e) {
-							String s = bundle.getString("ActionContributor.Run.distributionFailed");
-							String failedMessage = MessageFormat.format(s, destination.getName());
-							error = true;
-							message += "\r\n" + failedMessage + " : " + e.getMessage();
+        		if (error) {
+					for (Destination destination : destinations) {
+						if (DestinationType.SMTP.toString().equals(destination.getType())) {
+							Distributor distributor = DistributorFactory.getDistributor(destination.getType());
+							distributors.add(distributor);
+							try {
+								distributor.distribute(null, destination, distributionContext);
+							} catch (DistributionException e) {
+								String s = bundle.getString("ActionContributor.Run.distributionFailed");
+								String failedMessage = MessageFormat.format(s, destination.getName());
+								error = true;
+								message += "\r\n" + failedMessage + " : " + e.getMessage();
+							}
 						}
 					}
-				}
+        		}
 			}
         }
 

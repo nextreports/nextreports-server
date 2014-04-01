@@ -141,7 +141,7 @@ public class HomePage extends BasePage {
 				
 		sb.append(message);
 		sb.append("<br>");
-        boolean error = false;
+        boolean error = false;        
 		if ("".equals(event.getReportUrl())) {
 			sb.append(event.getResultMessage());
             error = true;
@@ -152,6 +152,8 @@ public class HomePage extends BasePage {
 			   append("\" target=\"_blank\">").
 			   append(bundle.getString("ActionContributor.Run.result")).		
 			   append("</a>");
+		} else {
+			sb.append(event.getResultMessage());
 		}
 
 		return new Message(sb.toString(), error);
