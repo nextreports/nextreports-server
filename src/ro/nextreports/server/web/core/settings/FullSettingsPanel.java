@@ -18,6 +18,8 @@ package ro.nextreports.server.web.core.settings;
 
 import org.apache.wicket.markup.html.panel.Panel;
 
+//@todo remove next version (replaced with FullTabSettingsPanel)
+@Deprecated
 public class FullSettingsPanel extends Panel {
 
 	public FullSettingsPanel(String id) {
