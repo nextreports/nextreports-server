@@ -42,7 +42,7 @@ public class ImageTabbedPanel extends AjaxTabbedPanel {
 	
 	public ImageTabbedPanel(String id, List<ITab> tabs) {
 		super(id, tabs);
-		setSelectedTab(sectionManager.getSelectedSectionIndex());
+		afterInit();
 	}
 
 	@Override
@@ -81,5 +81,9 @@ public class ImageTabbedPanel extends AjaxTabbedPanel {
 		sectionManager.setSelectedSectionIndex(getSelectedTab());
 		NextServerSession.get().setSearchContext(null);
 	}
+    
+    protected void afterInit() {
+    	setSelectedTab(sectionManager.getSelectedSectionIndex());
+    }
 
 }

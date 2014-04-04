@@ -332,7 +332,7 @@ div.tab-row li a {
     color: ${link-color};
 }
 
-div.tab-row li a:hover {
+div.tab-row li a:hover, div.tab-row-settings li a:hover {
     color: ${link-hover-color};
     text-decoration: none;
 }
@@ -347,10 +347,60 @@ div.tab-row li.selected a {
 	background: #fafafa;
 }
 
-div.tab-row li.selected{
+div.tab-row li.selected {
 	border-top: 3px solid ${main-color};
 	margin-top: -3px;
 }
+
+div.tab-row-settings li.selected{
+	border-top: 3px solid ${main-color};	
+	background: #fafafa;
+}
+
+div.tab-row-settings li {          
+    background: #eaeaea;
+    margin-top: 10px;
+    padding: 5px;
+    border: 1px solid #CCCCCC;
+}
+
+div.tab-row-settings li a {
+    cursor: pointer;
+    display: block;
+    padding: 3px 10px 0px 0px;
+    margin-top: 0;
+    text-decoration: none;
+    font-size: 11px;
+    line-height: 20px;
+    background: #eaeaea;    
+    font-weight:  bold;
+    color: ${link-color};
+}
+
+div.tab-row-settings li.selected a {	
+    color: ${link-hover-color};
+    font-weight: bold;
+    line-height: 21px;
+    font-size: 11px;
+	text-transform: uppercase;
+	background: #fafafa;
+}	
+
+div.tab-row-settings {
+	width: 300px;
+	float: left;
+	margin-right: 20px;
+}
+
+div.tab-panel-settings {
+	float: right;
+}
+
+div.tabpanesettings {
+	display: inline-block;
+	margin-left: 10px;
+}
+
 img.left-image {    
     display: block;
     float: left;

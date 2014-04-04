@@ -19,7 +19,7 @@ package ro.nextreports.server.web.core.section;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import ro.nextreports.server.web.NextServerSession;
-import ro.nextreports.server.web.core.settings.FullSettingsPanel;
+import ro.nextreports.server.web.core.settings.FullTabSettingsPanel;
 
 
 public class SettingsSection implements Section {
@@ -43,7 +43,7 @@ public class SettingsSection implements Section {
 
 	@Override
 	public Panel createView(String viewId) {
-		return new FullSettingsPanel(viewId);
+		return new FullTabSettingsPanel(viewId);
 	}
 
 	@Override
