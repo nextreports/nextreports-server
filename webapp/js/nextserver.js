@@ -88,9 +88,17 @@ function onResize() {
 	$(".accordion-group").css({'height': $height});
 	$(".table-right-container").css({'height': $height});
     $(".wizardScheduler").css({'height': $height});
-    $(".dashboard").css({'height': $height + 65});
+    var url = window.location.href;
+    if (url.indexOf("dashboards") !== -1) {
+    	// dashboards integration url -> do not take header height
+    	$(".dashboard").css({'height': $height + 238});
+    	$(".dashboardNavigation").css({'height': $height + 205});
+    } else {
+    	$(".dashboard").css({'height': $height + 65});
+    	$(".dashboardNavigation").css({'height': $height + 32});
+    }
     $(".fieldset-panel-right").css({'height': $height - 20});
-    $(".dashboardNavigation").css({'height': $height + 32});
+    
 }
 
 function showPopup() {
