@@ -25,14 +25,14 @@ var getData = function(id, zoom) {
   var canWidth = can.width;
   var canHeight = can.height;
   var size = canHeight;
-  if (8*canWidth/11 <= canHeight) {
-    size = 8*canWidth/11;
+  if (8*canWidth/13 <= canHeight) {
+    size = 8*canWidth/13;
   }
   
-  var radix = 7*size/11;
+  var radix = 10*size/13;
   var arcWidth = (size/3) >> 0; // take integer value
   var x = canWidth/2;
-  var y = 8*size/11; 
+  var y = 11*size/13; 
   
   return new data(size, radix, arcWidth, x, y);
 }
@@ -51,13 +51,13 @@ var drawText = function(id, title, description, unit, min, max, value, showMinMa
   
   ctx.fillStyle = "gray";
   if (showMinMax == "true") {
-    ctx.font=d.size/11 + "px Arial";
+    ctx.font=d.size/10 + "px Arial";
     if (unit != "") {
       min = min + unit;
       max = max + unit;
     }
-    ctx.fillText(min,d.x-d.radix+d.arcWidth/2-ctx.measureText(min).width/2,d.y + d.size/11 );
-    ctx.fillText(max,d.x+d.radix-d.arcWidth/2-ctx.measureText(max).width/2,d.y + d.size/11 );
+    ctx.fillText(min,d.x-d.radix+d.arcWidth/2-ctx.measureText(min).width/2,d.y + d.size/10 );
+    ctx.fillText(max,d.x+d.radix-d.arcWidth/2-ctx.measureText(max).width/2,d.y + d.size/10 );
   }
   if (description != "") {
     ctx.font=d.size/12 + "px Arial";
@@ -68,7 +68,7 @@ var drawText = function(id, title, description, unit, min, max, value, showMinMa
     value = value + unit;
   }  
   ctx.fillStyle = "black";
-  ctx.font="bold " + d.size/7 + "px Arial";
+  ctx.font="bold " + d.size/6 + "px Arial";
   ctx.fillText(value,d.x-ctx.measureText(value).width/2,d.y );    
 }
 
