@@ -16,10 +16,10 @@
  */
 package ro.nextreports.server.util;
 
+import java.beans.PropertyVetoException;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -28,16 +28,17 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.jcr.RepositoryException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import ro.nextreports.server.domain.DataSource;
 import ro.nextreports.server.domain.KeyValue;
@@ -60,65 +61,116 @@ public class ConnectionUtil {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ConnectionUtil.class);
 	
-    public static Connection createConnection(StorageService storageService, final DataSource dataSource) throws RepositoryException {    	
+	private static final Map<String, ComboPooledDataSource>  pools = new ConcurrentHashMap<String, ComboPooledDataSource>(); 
+	
+    public static Connection createConnection(StorageService storageService, final DataSource dataSource) throws RepositoryException {
     	
-		final String driver = dataSource.getDriver();
+    	ComboPooledDataSource pool = pools.get(dataSource.getPath());
+    	if (pool == null) {
+    		pool = new ComboPooledDataSource();
+    		try {
+    			pool.setDriverClass(dataSource.getDriver());
+    			pool.setJdbcUrl(dataSource.getUrl());
+    			pool.setUser(dataSource.getUsername());
+    			pool.setPassword(dataSource.getPassword());
+    			
+    			final String driver = dataSource.getDriver();
+    			try {
+    				Class.forName(driver);
+    			} catch (Exception e) {
+    	            e.printStackTrace();
+    	            LOG.error(e.getMessage(), e);
+    	            throw new RepositoryException("Driver '" + driver + "' not found.", e);
+    			}
+    			
+    			if (driver.equals(CSVDialect.DRIVER_CLASS)) {
+    				pool.setProperties(convertListToProperties(dataSource.getProperties()));
+    			}	
 
-		try {
-			Class.forName(driver);
-		} catch (Exception e) {
-            e.printStackTrace();
-            LOG.error(e.getMessage(), e);
-            throw new RepositoryException("Driver '" + driver + "' not found.", e);
-		}
-
-		final String url = dataSource.getUrl();
-		final String username = dataSource.getUsername();
-		final String password = dataSource.getPassword();
-		Settings settings = storageService.getSettings();
-		int connectionTimeout = settings.getConnectionTimeout();				
-		
-		if (connectionTimeout <= 0) {
-			// wait as long as driver manager (not deterministic)
-			try {
-				if (driver.equals(CSVDialect.DRIVER_CLASS)) {
-					return DriverManager.getConnection(url, convertListToProperties(dataSource.getProperties()));
-				} else {
-					return DriverManager.getConnection(url, username, password);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				LOG.error(e.getMessage(), e);
-				Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
-				ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);			
-				throw new RepositoryException(bundle.getString("Connection.failed") + " '" + dataSource.getPath() + "'", e);
+    			Settings settings = storageService.getSettings();
+    			int connectionTimeout = settings.getConnectionTimeout();
+    			if (connectionTimeout > 0) {
+    				pool.setCheckoutTimeout(connectionTimeout*1000); // ms
+    			}
+    			pool.setMinPoolSize(3);
+    			pool.setAcquireIncrement(5);
+    			pool.setMaxPoolSize(30);
+    			pool.setMaxIdleTime(300);
+    			
+    			pools.put(dataSource.getPath(), pool);
+			} catch (PropertyVetoException e) {
+				throw new RepositoryException("DataSource '" + dataSource.getPath() + "' could not set C3PO driver class!");
 			}
-		} else {
-			// wait just the number of seconds configured (deterministic)
-			Connection connection;                
-	        FutureTask<Connection> createConnectionTask = null;
-	        try {
-	        	createConnectionTask = new FutureTask<Connection>(new Callable<Connection>() {
-	        		
-	        		public Connection call() throws Exception {   
-	        			if (driver.equals(CSVDialect.DRIVER_CLASS)) {
-	    					return DriverManager.getConnection(url, convertListToProperties(dataSource.getProperties()));
-	    				} else {
-	    					return DriverManager.getConnection(url, username, password);
-	    				}
-	        		}
-	        		
-	        	});
-	        	new Thread(createConnectionTask).start();
-	        	connection = createConnectionTask.get(connectionTimeout, TimeUnit.SECONDS);        	
-			} catch (Exception e) {
-				Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
-				ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);		
-				throw new RepositoryException(bundle.getString("Connection.failed") + " '" + dataSource.getPath() + "'", e);
-			}		
-			return connection;
+    	}
+    	
+    	Connection connection;
+		try {
+			connection = pool.getConnection();
+		} catch (SQLException e) {
+			Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
+			ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);		
+			throw new RepositoryException(bundle.getString("Connection.failed") + " '" + dataSource.getPath() + "'", e);
 		}
+    	    	
+//		Connection connection;
+//		final String driver = dataSource.getDriver();
+//
+//		try {
+//			Class.forName(driver);
+//		} catch (Exception e) {
+//            e.printStackTrace();
+//            LOG.error(e.getMessage(), e);
+//            throw new RepositoryException("Driver '" + driver + "' not found.", e);
+//		}
+//
+//		final String url = dataSource.getUrl();
+//		final String username = dataSource.getUsername();
+//		final String password = dataSource.getPassword();
+//		Settings settings = storageService.getSettings();
+//		int connectionTimeout = settings.getConnectionTimeout();				
+//		
+//		if (connectionTimeout <= 0) {
+//			// wait as long as driver manager (not deterministic)
+//			try {
+//				if (driver.equals(CSVDialect.DRIVER_CLASS)) {
+//					connection = DriverManager.getConnection(url, convertListToProperties(dataSource.getProperties()));
+//				} else {
+//					connection = DriverManager.getConnection(url, username, password);
+//				}
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//				LOG.error(e.getMessage(), e);
+//				Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
+//				ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);			
+//				throw new RepositoryException(bundle.getString("Connection.failed") + " '" + dataSource.getPath() + "'", e);
+//			}
+//		} else {
+//			// wait just the number of seconds configured (deterministic)
+//			               
+//	        FutureTask<Connection> createConnectionTask = null;
+//	        try {
+//	        	createConnectionTask = new FutureTask<Connection>(new Callable<Connection>() {
+//	        		
+//	        		public Connection call() throws Exception {   
+//	        			if (driver.equals(CSVDialect.DRIVER_CLASS)) {
+//	    					return DriverManager.getConnection(url, convertListToProperties(dataSource.getProperties()));
+//	    				} else {
+//	    					return DriverManager.getConnection(url, username, password);
+//	    				}
+//	        		}
+//	        		
+//	        	});
+//	        	new Thread(createConnectionTask).start();
+//	        	connection = createConnectionTask.get(connectionTimeout, TimeUnit.SECONDS);        	
+//			} catch (Exception e) {
+//				Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
+//				ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);		
+//				throw new RepositoryException(bundle.getString("Connection.failed") + " '" + dataSource.getPath() + "'", e);
+//			}			       				
+//		}	
+		return connection;    	
 	}
+        
 
     public static void closeConnection(Connection con) {
         if (con != null) {
