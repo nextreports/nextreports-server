@@ -244,8 +244,10 @@ public class ConnectionUtil {
                         s = rs.getString(1);
                         break;
                 }
-                // TODO resolve
-//                values.add(new IdName(s, rs.getString(2)));
+                IdName in = new IdName();
+                in.setId(s);
+                in.setName(rs.getString(2));
+                values.add(in);                
             }
         } finally {
             ConnectionUtil.closeResultSet(rs);

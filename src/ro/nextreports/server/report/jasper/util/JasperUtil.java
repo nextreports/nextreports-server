@@ -233,7 +233,11 @@ public class JasperUtil {
                 return null;
             }
         } else {
-            return parameterValue;
+        	if (parameterValue instanceof IdName) {
+        		return ((IdName)parameterValue).getId();
+        	} else {
+        		return parameterValue;
+        	}
         }
     }
 
@@ -245,10 +249,8 @@ public class JasperUtil {
                 for (JasperParameterSource parameterSource : params) {
                     if (parameterSource.getName().equals(paramName)) {
                         String type = parameterSource.getType();
-                        if (type.equals(JasperParameterSource.LIST)) {
-                            //System.out.println("*** param="+paramName + "  old="+parameterValues.get(paramName) + "  new="+JasperUtil.getRuntimeValue(type, parameterValues.get(paramName)));
-                            parameterValues.put(paramName, JasperUtil.getRuntimeValue(type, parameterValues.get(paramName)));
-                        }
+                        //System.out.println("*** param="+paramName + "  old="+parameterValues.get(paramName) + "  new="+JasperUtil.getRuntimeValue(type, parameterValues.get(paramName)));
+                        parameterValues.put(paramName, JasperUtil.getRuntimeValue(type, parameterValues.get(paramName)));
                     }
                 }
             }
