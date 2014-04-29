@@ -80,6 +80,7 @@ public class UploadNextReportPanel extends Panel {
     private boolean update;
     private FeedbackPanel feedback;
     private MultiFileUploadField imagesUploadField;
+    private FileUploadField templateUploadField;
 
     @SpringBean
     private StorageService storageService;
@@ -220,7 +221,11 @@ public class UploadNextReportPanel extends Panel {
 
             add(uploadField);
             imagesUploadField = new MultiFileUploadField("imageFile", new PropertyModel(this, "imagesUploads"), 3);
-            add(imagesUploadField);            
+            add(imagesUploadField);        
+            
+            templateUploadField = new FileUploadField("templateFile", new Model(new ArrayList<FileUpload>()));            
+            templateUploadField.setLabel(new Model<String>(getString("ActionContributor.UploadNext.template")));
+            add(templateUploadField);
 
             add(new AjaxLink("cancel") {
 
@@ -269,6 +274,7 @@ public class UploadNextReportPanel extends Panel {
             	LOG.info("*** UPLOAD: Report name = '" + report.getName() + "'");
                 report.setPath(StorageUtil.createPath(parentPath, report.getName()));
             }
+            FileUpload templateUpload = templateUploadField.getFileUpload(); 
             try {
             	NextContent reportContent = new NextContent();
             	reportContent.setName("content");
@@ -308,6 +314,17 @@ public class UploadNextReportPanel extends Panel {
                     imageFiles.add(imageFile);
                 }
                 reportContent.setImageFiles(imageFiles);
+                
+                if (templateUpload != null) {
+                	JcrFile templateFile = new JcrFile();
+                    templateFile.setName(FilenameUtils.getName(templateUpload.getClientFileName()));
+                    templateFile.setPath(StorageUtil.createPath(reportContent.getPath(), templateFile.getName()));
+                    LOG.info("*** UPLOAD: template file path = '" + templateFile.getPath() + "'");
+                    templateFile.setMimeType(templateUpload.getContentType());
+                    templateFile.setLastModified(Calendar.getInstance());
+                    templateFile.setDataProvider(new JcrDataProviderImpl(templateUpload.getBytes()));
+                    reportContent.setTemplateFile(templateFile);
+                }
 
                 report.setContent(reportContent);
                 report = NextUtil.renameImagesAsUnique(report);

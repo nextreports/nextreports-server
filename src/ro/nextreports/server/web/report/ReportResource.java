@@ -78,6 +78,10 @@ public class ReportResource extends ByteArrayResource {
                         contents.add(entry.getDataProvider().getBytes());
                     }
                 }
+				if (reportContent.getTemplateFile() != null) {
+					files.add(reportContent.getTemplateFile().getName());
+					contents.add(reportContent.getTemplateFile().getDataProvider().getBytes());
+				}
 
             } else {
                 report = JasperUtil.restoreImagesName(report);

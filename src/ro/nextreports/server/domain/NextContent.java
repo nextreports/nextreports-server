@@ -34,6 +34,9 @@ public class NextContent extends EntityFragment {
 
     @JcrFileNode(loadType = LoadType.BYTES)
 	private List<JcrFile> imageFiles;
+    
+    @JcrFileNode(loadType = LoadType.BYTES)
+	private JcrFile templateFile;
 
     public NextContent() {
 		super();
@@ -58,8 +61,16 @@ public class NextContent extends EntityFragment {
     public void setImageFiles(List<JcrFile> imageFiles) {
         this.imageFiles = imageFiles;
     }
+        
+    public JcrFile getTemplateFile() {
+		return templateFile;
+	}
 
-    public String getFileName() {
+	public void setTemplateFile(JcrFile templateFile) {
+		this.templateFile = templateFile;
+	}
+
+	public String getFileName() {
     	if (nextFile != null) {
     		return nextFile.getName();
     	} else {

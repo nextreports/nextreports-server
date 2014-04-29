@@ -28,7 +28,8 @@ public class ReportMetaData extends EntityMetaData {
 	private String description;
 	private String dataSourcePath;
 	private FileMetaData mainFile;
-    private List<FileMetaData> images;  
+    private List<FileMetaData> images;
+    private FileMetaData template;  
     private int specialType;
 
     public ReportMetaData() {
@@ -71,7 +72,15 @@ public class ReportMetaData extends EntityMetaData {
     public void setImages(List<FileMetaData> images) {
         this.images = images;
     }   
-		
+        		
+	public FileMetaData getTemplate() {
+		return template;
+	}
+
+	public void setTemplate(FileMetaData template) {
+		this.template = template;
+	}
+
 	public int getSpecialType() {
 		return specialType;
 	}

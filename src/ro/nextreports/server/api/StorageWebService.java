@@ -471,6 +471,18 @@ public class StorageWebService {
             }
         }
         reportContent.setImageFiles(imageFiles);
+        
+        if (reportMetaData.getTemplate() != null) {
+        	FileMetaData fmd = reportMetaData.getTemplate();
+        	JcrFile templateFile = new JcrFile();        	
+            templateFile.setName(fmd.getFileName());
+            templateFile.setPath(StorageUtil.createPath(reportContent.getPath(), templateFile.getName()));
+            String mimeType = MimeTypeUtil.getMimeType(fmd.getFileContent());
+            templateFile.setMimeType(mimeType);
+            templateFile.setLastModified(Calendar.getInstance());
+            templateFile.setDataProvider(new JcrDataProviderImpl(fmd.getFileContent()));
+            reportContent.setTemplateFile(templateFile);
+        }
 
         return reportContent;
 	}
@@ -543,6 +555,14 @@ public class StorageWebService {
                 imagesData.add(fmd);
             }
             reportMetaData.setImages(imagesData);
+        }
+        
+        JcrFile template = nextContent.getTemplateFile();
+        if (template != null) {
+        	FileMetaData fmd = new FileMetaData();
+            fmd.setFileName(template.getName());
+            fmd.setFileContent(template.getDataProvider().getBytes());
+            reportMetaData.setTemplate(fmd);
         }
 		
         return reportMetaData;

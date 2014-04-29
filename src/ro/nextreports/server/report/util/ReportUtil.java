@@ -29,6 +29,7 @@ import ro.nextreports.server.util.FileUtil;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -51,6 +52,14 @@ public class ReportUtil {
     public static final String FILE_SEPARATOR = "/";
     public static final String EXTENSION_SEPARATOR = ".";
     public static final String IMAGE_DELIM = "___";
+    
+    public static void copyTemplate(String directoryName, JcrFile template) throws Exception {
+    	if (template != null) {
+    		List<JcrFile> files = new ArrayList<JcrFile>();
+    		files.add(template);
+    		copyImages(directoryName, files);
+    	}
+    }
 
     public static void copyImages(String directoryName, List<JcrFile> images) throws Exception {
         if ((images == null) || (images.size() == 0)) {

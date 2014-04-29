@@ -61,7 +61,13 @@ public class NextUtil {
         } catch (Exception e) {
             e.printStackTrace();
             LOG.error(e.getMessage(), e);
-        }      
+        }  
+        try {
+            copyTemplate(settings, reportContent.getTemplateFile());
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
+        }  
         byte[] bytes = reportContent.getNextFile().getDataProvider().getBytes();       
         try {        
 			return ReportUtil.loadReport(new ByteArrayInputStream(bytes));
@@ -92,6 +98,10 @@ public class NextUtil {
 
     public static void copyImages(Settings settings, List<JcrFile> images) throws Exception {
         ro.nextreports.server.report.util.ReportUtil.copyImages(settings.getReportsHome(), images);
+    }
+    
+    public static void copyTemplate(Settings settings, JcrFile template) throws Exception {
+        ro.nextreports.server.report.util.ReportUtil.copyTemplate(settings.getReportsHome(), template);
     }
 
     // Rename images so that their name is unique
