@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.quartz.JobDetail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -277,6 +278,16 @@ public class DefaultReportService implements ReportService {
     public void runReport(SchedulerJob schedulerJob) {        
         try {
             quartzJobHandler.addJob(schedulerJob);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    
+    @Transactional(readOnly = true)
+    public void runMonitorReport(JobDetail jobDetail) {        
+        try {
+            quartzJobHandler.runMonitorJob(jobDetail);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

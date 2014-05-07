@@ -29,8 +29,8 @@ import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
+import org.quartz.Trigger.TriggerState;
 import org.quartz.TriggerBuilder;
-import org.quartz.Trigger.CompletedExecutionInstruction;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,8 +64,18 @@ public class QuartzJobHandler {
     private StorageService storageService;
     private SecurityService securityService;        
     private Auditor auditor;
-
+       
+    public void runMonitorJob(JobDetail jobDetail) throws Exception {
+    	SchedulerJob schedulerJob = (SchedulerJob) jobDetail.getJobDataMap().get(RunReportJob.SCHEDULER_JOB);
+    	schedulerJob.setRunNow(true);
+    	addJob(schedulerJob, jobDetail, false);    	
+    }
+    
     public void addJob(SchedulerJob job) throws Exception {
+    	addJob(job, null, false);
+    }
+
+    public void addJob(SchedulerJob job, JobDetail jobDetail, boolean synchronous) throws Exception {
         // TODO test for null/empty
         String key = UUID.randomUUID().toString();
         String jobName= null;
@@ -106,7 +116,7 @@ public class QuartzJobHandler {
     		LOG.debug("username = {}" + username);
     		runnerId = user.getId();
     		runnerType = RunReportHistory.USER;
-        }
+        }        
         jobData.put(RunReportJob.RUNNER_TYPE, runnerType);
         jobData.put(RunReportJob.RUNNER_ID, runnerId);
         jobData.put(RunReportJob.RUNNER_KEY,  key);
@@ -118,33 +128,59 @@ public class QuartzJobHandler {
         auditEvent.getContext().put("PATH", StorageUtil.getPathWithoutRoot(job.getReport().getPath()));
         jobData.put(RunReportJob.AUDIT_EVENT, auditEvent);
 
-        JobDetail jobDetail = JobBuilder.newJob(RunReportJob.class).
+        boolean existingJobDetail = true;
+        if (jobDetail == null) {
+        	existingJobDetail = false;        	
+        	jobDetail = JobBuilder.newJob(RunReportJob.class).
         		withIdentity(jobName, Scheduler.DEFAULT_GROUP).
         		usingJobData(jobData).
         		build();
+        } 
 
         Trigger trigger;
         SchedulerTime schedulerTime = job.getTime();
-        if ((schedulerTime != null) && (schedulerTime.getCronEntry() != null)) {
-        	trigger = TriggerBuilder.newTrigger().
-        	    	// ?! (many triggers for the same job)
-        			withIdentity(jobDetail.getKey().getName(), jobDetail.getKey().getGroup()).       			
-        			startAt(schedulerTime.getStartActivationDate()).
-        			endAt(schedulerTime.getEndActivationDate()).
-        	        // trigger.setMisfireInstruction(Trigger.INSTRUCTION_SET_TRIGGER_COMPLETE);
-        			withSchedule(CronScheduleBuilder.cronSchedule(schedulerTime.getCronEntry()).withMisfireHandlingInstructionDoNothing()).
-        			build();        	        	
-        } else {
-        	trigger = TriggerBuilder.newTrigger().
-        	    	// ?! (many triggers for the same job)
-        			withIdentity(jobDetail.getKey().getName(), jobDetail.getKey().getGroup()).
+        
+        if (existingJobDetail) {        	
+        	trigger = TriggerBuilder.newTrigger().                        	    	        		
+        			forJob(jobDetail).
         			startAt(new Date(System.currentTimeMillis() + 1000)).
-        	        // trigger.setMisfireInstruction(Trigger.INSTRUCTION_SET_TRIGGER_COMPLETE);
-//        			withSchedule(SimpleScheduleBuilder.simpleSchedule().withMisfireHandlingInstructionIgnoreMisfires()).
         			build();
+        	scheduler.scheduleJob(trigger);
+        	if (synchronous) {
+        		 try {
+     				// wait to finish
+     				TriggerState state = scheduler.getTriggerState(trigger.getKey());
+     				while (state == TriggerState.NORMAL) {									
+     					state = scheduler.getTriggerState(trigger.getKey());																
+     				}																		
+     			} catch (SchedulerException e) {
+     				// TODO Auto-generated catch block
+     				e.printStackTrace();
+     			}
+        	}
+        } else {
+        
+	        if ((schedulerTime != null) && (schedulerTime.getCronEntry() != null)) {	        	
+	        	trigger = TriggerBuilder.newTrigger().
+	        	    	// ?! (many triggers for the same job)
+	        			withIdentity(jobDetail.getKey().getName(), jobDetail.getKey().getGroup()).       			
+	        			startAt(schedulerTime.getStartActivationDate()).
+	        			endAt(schedulerTime.getEndActivationDate()).
+	        	        // trigger.setMisfireInstruction(Trigger.INSTRUCTION_SET_TRIGGER_COMPLETE);
+	        			withSchedule(CronScheduleBuilder.cronSchedule(schedulerTime.getCronEntry()).withMisfireHandlingInstructionDoNothing()).
+	        			build();        	        	
+	        } else {	        	
+	        	trigger = TriggerBuilder.newTrigger().
+	        	    	// ?! (many triggers for the same job)
+	        			withIdentity(jobDetail.getKey().getName(), jobDetail.getKey().getGroup()).
+	        			startAt(new Date(System.currentTimeMillis() + 1000)).
+	        	        // trigger.setMisfireInstruction(Trigger.INSTRUCTION_SET_TRIGGER_COMPLETE);
+	        			//withSchedule(SimpleScheduleBuilder.simpleSchedule().withMisfireHandlingInstructionIgnoreMisfires()).
+	        			build();
+	        }
+	
+			scheduler.scheduleJob(jobDetail, trigger);
         }
-
-		scheduler.scheduleJob(jobDetail, trigger);
 
         // FOR DEBUG ONLY !
 		listJobs(scheduler);

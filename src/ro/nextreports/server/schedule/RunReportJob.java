@@ -122,7 +122,7 @@ public class RunReportJob implements Job {
         Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
 		ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);			
         
-        String runnerType = dataMap.getString(RUNNER_TYPE);
+        String runnerType = dataMap.getString(RUNNER_TYPE);        
         String runnerId = dataMap.getString(RUNNER_ID);
         String creator = "";    	
         AclEntry[] granted = securityService.getGrantedById(report.getId());
@@ -213,7 +213,7 @@ public class RunReportJob implements Job {
 
 			String[] result = new String[2];
 			// for alarm alert there is no url
-			if (report.isAlarmType() || report.isIndicatorType()) {
+			if (report.isAlarmType() || report.isIndicatorType()) {				
 				ro.nextreports.engine.Report nextReport = NextUtil.getNextReport(storageService.getSettings(), (NextContent) report.getContent());
 				final ReportRunner reportRunner = new ReportRunner();
 				reportRunner.setParameterValues(schedulerJob.getReportRuntime().getParametersValues());
@@ -278,10 +278,10 @@ public class RunReportJob implements Job {
 				}
 				reportRunner.setAlerts(alerts);
 				reportRunner.run();   								
-			} else {
+			} else {				
 				result = reportService.reportToURL(report, schedulerJob.getReportRuntime(), key);
 				fileName = result[0];
-				url = result[1];
+				url = result[1];				
 			}
         } catch (ReportEngineException e) {
             error = true;

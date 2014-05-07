@@ -39,6 +39,7 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.quartz.JobDetail;
+import org.quartz.Scheduler;
 
 import ro.nextreports.server.StorageConstants;
 import ro.nextreports.server.domain.ReportJobInfo;
@@ -78,6 +79,9 @@ public class MonitorPanel extends Panel {
     
     @SpringBean
     private StorageService storageService;
+    
+    @SpringBean
+    private Scheduler scheduler;
 
     private DataTable<ReportJobInfo, String> jobsTable;
     private DataTable<SchedulerJob, String> schedulerJobsTable;
@@ -254,7 +258,13 @@ public class MonitorPanel extends Panel {
 			}
 
         });
-        columns.add(new BooleanImagePropertyColumn<SchedulerJob>(new Model<String>(getString("MonitorPanel.running")), "isRunning", "isRunning"));
+        columns.add(new BooleanImagePropertyColumn<SchedulerJob>(new Model<String>(getString("MonitorPanel.running")), "isRunning", "isRunning") {
+        	@Override
+            public void populateItem(Item<ICellPopulator<SchedulerJob>> item, String componentId, IModel<SchedulerJob> rowModel) {
+                super.populateItem(item, componentId, rowModel);
+                item.add(AttributeModifier.replace("width", "80px"));
+            }
+        });
         columns.add(new PropertyColumn<SchedulerJob, String>(new Model<String>(getString("MonitorPanel.runTime")), "runTime", "runTime") {
 
         	private static final long serialVersionUID = 1L;
@@ -280,6 +290,49 @@ public class MonitorPanel extends Panel {
         });
 
         columns.add(new NextRunDateColumn<SchedulerJob>());
+        
+        columns.add(new AbstractColumn<SchedulerJob, String>(new Model<String>(getString("MonitorPanel.runNow"))) {
+
+            public void populateItem(Item<ICellPopulator<SchedulerJob>> item, String componentId,
+                                     final IModel<SchedulerJob> rowModel) {
+
+            	item.add(AttributeModifier.replace("width", "80px"));
+                item.add(new AbstractImageAjaxLinkPanel(componentId) {
+
+                    @Override
+                    public String getDisplayString() {
+                        return "";
+                    }
+
+                    public boolean isVisible() {
+                        return !rowModel.getObject().isRunning();
+                    }
+
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        JobDetail job = schedulerService.getJobDetail(rowModel.getObject());
+                        if (job != null) {                        	
+                            reportService.runMonitorReport(job);                                                                                   
+                        }
+                    }
+
+                    @Override
+                    public String getImageName() {                        
+                        return "images/run.gif";                        
+                    }
+
+					@Override
+					protected Link getLink() {
+						Link link = super.getLink();
+						link.add(new ConfirmBehavior(new Model<String>(getString("MonitorPanel.runNowMessage"))));
+						return link;
+					}
+
+                });
+            }
+
+        });
+
 
         columns.add(new AbstractColumn<SchedulerJob, String>(new Model<String>(getString("MonitorPanel.stop"))) {
 
@@ -287,6 +340,7 @@ public class MonitorPanel extends Panel {
                                      final IModel<SchedulerJob> rowModel) {
 
 
+            	item.add(AttributeModifier.replace("width", "80px"));
                 item.add(new AbstractImageAjaxLinkPanel(componentId) {
 
                     @Override

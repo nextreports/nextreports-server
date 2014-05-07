@@ -20,6 +20,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import org.quartz.JobDetail;
+
 import ro.nextreports.server.domain.DateRange;
 import ro.nextreports.server.domain.Report;
 import ro.nextreports.server.domain.ReportResultEvent;
@@ -52,7 +54,9 @@ public interface ReportService {
     public String[] reportToURL(Report report, ReportRuntime reportRuntime, String key) throws ReportEngineException, 
     		FormatNotSupportedException, NoDataFoundException, InterruptedException;
 
-    public void runReport(SchedulerJob schedulerJob);    
+    public void runReport(SchedulerJob schedulerJob);   
+    
+    public void runMonitorReport(JobDetail jobDetail);   
     
     public Map<String, Serializable> getReportUserParameters(Report report,
             List<ExternalParameter> externalParameters) throws Exception;
