@@ -110,7 +110,8 @@ public class QuartzJobHandler {
                 
         String runnerId = job.getId();
         String runnerType = RunReportHistory.SCHEDULER;
-        if (runnerId == null) {
+        // jobDetail != null in case of runNow from monitor
+        if ((runnerId == null) || (jobDetail != null)) {
     		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     		String username = user.getUsername();
     		LOG.debug("username = {}" + username);
@@ -135,14 +136,15 @@ public class QuartzJobHandler {
         		withIdentity(jobName, Scheduler.DEFAULT_GROUP).
         		usingJobData(jobData).
         		build();
-        } 
+        }        	        	        	         
 
         Trigger trigger;
         SchedulerTime schedulerTime = job.getTime();
         
-        if (existingJobDetail) {        	
+        if (existingJobDetail) {        	        	
         	trigger = TriggerBuilder.newTrigger().                        	    	        		
         			forJob(jobDetail).
+        			usingJobData(jobData).
         			startAt(new Date(System.currentTimeMillis() + 1000)).
         			build();
         	scheduler.scheduleJob(trigger);
