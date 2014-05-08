@@ -31,7 +31,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
 
 import javax.jcr.RepositoryException;
 
@@ -66,6 +69,10 @@ public class ConnectionUtil {
     public static Connection createConnection(StorageService storageService, final DataSource dataSource) throws RepositoryException {
     	
     	ComboPooledDataSource pool = pools.get(dataSource.getPath());
+    	
+    	Settings settings = storageService.getSettings();
+		int connectionTimeout = settings.getConnectionTimeout();
+		
     	if (pool == null) {
     		pool = new ComboPooledDataSource();
     		try {
@@ -85,10 +92,7 @@ public class ConnectionUtil {
     			
     			if (driver.equals(CSVDialect.DRIVER_CLASS)) {
     				pool.setProperties(convertListToProperties(dataSource.getProperties()));
-    			}	
-
-    			Settings settings = storageService.getSettings();
-    			int connectionTimeout = settings.getConnectionTimeout();
+    			}	    			
     			if (connectionTimeout > 0) {
     				pool.setCheckoutTimeout(connectionTimeout*1000); // ms
     			}
@@ -103,71 +107,31 @@ public class ConnectionUtil {
 			}
     	}
     	
+    	
+    	final ComboPooledDataSource poolF = pool;
     	Connection connection;
-		try {
-			connection = pool.getConnection();
-		} catch (SQLException e) {
+    	try {	
+			if (connectionTimeout <= 0) {
+				// wait as long as driver manager (not deterministic)
+				connection = poolF.getConnection();
+			} else {
+				// wait just the number of seconds configured (deterministic)
+				FutureTask<Connection> createConnectionTask = null;
+				createConnectionTask = new FutureTask<Connection>(new Callable<Connection>() {
+					public Connection call() throws Exception {
+						return poolF.getConnection();
+					}
+				});
+				new Thread(createConnectionTask).start();
+				connection = createConnectionTask.get(connectionTimeout, TimeUnit.SECONDS);
+
+			}
+    	} catch (Exception e) {
 			Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
 			ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);		
 			throw new RepositoryException(bundle.getString("Connection.failed") + " '" + dataSource.getPath() + "'", e);
 		}
-    	    	
-//		Connection connection;
-//		final String driver = dataSource.getDriver();
-//
-//		try {
-//			Class.forName(driver);
-//		} catch (Exception e) {
-//            e.printStackTrace();
-//            LOG.error(e.getMessage(), e);
-//            throw new RepositoryException("Driver '" + driver + "' not found.", e);
-//		}
-//
-//		final String url = dataSource.getUrl();
-//		final String username = dataSource.getUsername();
-//		final String password = dataSource.getPassword();
-//		Settings settings = storageService.getSettings();
-//		int connectionTimeout = settings.getConnectionTimeout();				
-//		
-//		if (connectionTimeout <= 0) {
-//			// wait as long as driver manager (not deterministic)
-//			try {
-//				if (driver.equals(CSVDialect.DRIVER_CLASS)) {
-//					connection = DriverManager.getConnection(url, convertListToProperties(dataSource.getProperties()));
-//				} else {
-//					connection = DriverManager.getConnection(url, username, password);
-//				}
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//				LOG.error(e.getMessage(), e);
-//				Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
-//				ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);			
-//				throw new RepositoryException(bundle.getString("Connection.failed") + " '" + dataSource.getPath() + "'", e);
-//			}
-//		} else {
-//			// wait just the number of seconds configured (deterministic)
-//			               
-//	        FutureTask<Connection> createConnectionTask = null;
-//	        try {
-//	        	createConnectionTask = new FutureTask<Connection>(new Callable<Connection>() {
-//	        		
-//	        		public Connection call() throws Exception {   
-//	        			if (driver.equals(CSVDialect.DRIVER_CLASS)) {
-//	    					return DriverManager.getConnection(url, convertListToProperties(dataSource.getProperties()));
-//	    				} else {
-//	    					return DriverManager.getConnection(url, username, password);
-//	    				}
-//	        		}
-//	        		
-//	        	});
-//	        	new Thread(createConnectionTask).start();
-//	        	connection = createConnectionTask.get(connectionTimeout, TimeUnit.SECONDS);        	
-//			} catch (Exception e) {
-//				Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
-//				ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);		
-//				throw new RepositoryException(bundle.getString("Connection.failed") + " '" + dataSource.getPath() + "'", e);
-//			}			       				
-//		}	
+    	
 		return connection;    	
 	}
         
