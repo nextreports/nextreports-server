@@ -68,7 +68,11 @@ public class ConnectionUtil {
 	
     public static Connection createConnection(StorageService storageService, final DataSource dataSource) throws RepositoryException {
     	
-    	ComboPooledDataSource pool = pools.get(dataSource.getPath());
+    	ComboPooledDataSource pool = null;
+    	// when we first create a data source and we click test before save, path is null
+    	if (dataSource.getPath() != null) {
+    		pools.get(dataSource.getPath());
+    	}
     	
     	Settings settings = storageService.getSettings();
 		int connectionTimeout = settings.getConnectionTimeout();
@@ -101,7 +105,9 @@ public class ConnectionUtil {
     			pool.setMaxPoolSize(30);
     			pool.setMaxIdleTime(300);
     			
-    			pools.put(dataSource.getPath(), pool);
+    			if (dataSource.getPath() != null) {
+    				pools.put(dataSource.getPath(), pool);
+    			}
 			} catch (PropertyVetoException e) {
 				throw new RepositoryException("DataSource '" + dataSource.getPath() + "' could not set C3PO driver class!");
 			}
