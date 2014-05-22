@@ -29,7 +29,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
-import ro.nextreports.engine.chart.JsonExporter;
 import ro.nextreports.engine.exporter.util.IndicatorData;
 import ro.nextreports.server.web.dashboard.WidgetPopupMenuModel;
 import ro.nextreports.server.web.dashboard.chart.ChartHTML5Panel;

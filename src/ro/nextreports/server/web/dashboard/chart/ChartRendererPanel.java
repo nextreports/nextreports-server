@@ -45,7 +45,6 @@ import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.DrillEntityContext;
 import ro.nextreports.server.service.ChartService;
 import ro.nextreports.server.util.ChartUtil;
-import ro.nextreports.server.web.dashboard.indicator.IndicatorHTML5Panel;
 
 /**
  * @author Mihai Dinca-Panaitescu
