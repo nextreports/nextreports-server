@@ -70,7 +70,7 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 	private String width;
 	private String height;
 		
-	private final ResourceReference INDICATOR_UTIL_JS = new JavaScriptResourceReference(IndicatorHTML5Panel.class, "indicator_util.js");
+	private final ResourceReference INDICATOR_UTIL_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, "nextcharts-1.2.min.js");
 	
 	@SpringBean
 	private ChartService chartService;

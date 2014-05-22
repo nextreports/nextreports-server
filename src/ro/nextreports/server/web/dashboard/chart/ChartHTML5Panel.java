@@ -33,7 +33,7 @@ public class ChartHTML5Panel extends GenericPanel<String> {
 	
 	private static final long serialVersionUID = 1L;
 		
-	private final ResourceReference NEXTCHARTS_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, "nextcharts-1.1.min.js");
+	private final ResourceReference NEXTCHARTS_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, "nextcharts-1.2.min.js");
 	private boolean zoom = false;
 	private String width;
 	private String height;

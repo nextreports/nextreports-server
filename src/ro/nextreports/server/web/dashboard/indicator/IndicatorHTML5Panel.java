@@ -29,6 +29,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
 import ro.nextreports.engine.exporter.util.IndicatorData;
+import ro.nextreports.server.web.dashboard.chart.ChartHTML5Panel;
 
 /* 
  * @author Mihai Dinca-Panaitescu 
@@ -37,7 +38,7 @@ public class IndicatorHTML5Panel extends GenericPanel<IndicatorData> {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private final ResourceReference INDICATOR_JS = new JavaScriptResourceReference(IndicatorHTML5Panel.class, "indicator.js");
+	private final ResourceReference INDICATOR_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, "nextcharts-1.2.min.js");
 	private boolean zoom = false;
 
 	public IndicatorHTML5Panel(String id, String width, String height, IModel<IndicatorData> model) {
@@ -70,7 +71,7 @@ public class IndicatorHTML5Panel extends GenericPanel<IndicatorData> {
 	private String getIndicatorCall() {		 
 		IndicatorData data = getModel().getObject();
 		StringBuilder sb = new StringBuilder();		
-		sb.append("indicator(\"").
+		sb.append("indicatorP(\"").
 		   append(get("canvas").getMarkupId()).
 		   append("\",\"").append(toString(data.getColor())).
 		   append("\",\"").append(data.getTitle()).
@@ -79,9 +80,9 @@ public class IndicatorHTML5Panel extends GenericPanel<IndicatorData> {
 		   append("\",").append(data.getMin()).
 		   append(",").append(data.getMax()).
 		   append(",").append(data.getValue()).
-		   append(",\"").append(data.isShowMinMax()).
-		   append("\",\"").append(zoom).
-		   append("\");");			
+		   append(",").append(data.isShowMinMax()).
+		   append(",").append(zoom).
+		   append(");");			
 		return sb.toString();
 	}
 	
