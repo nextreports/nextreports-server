@@ -46,6 +46,7 @@ import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.web.dashboard.EntityWidget;
 import ro.nextreports.server.web.dashboard.Widget;
 import ro.nextreports.server.web.dashboard.alarm.AlarmWidget;
+import ro.nextreports.server.web.dashboard.display.DisplayWidget;
 import ro.nextreports.server.web.dashboard.drilldown.DrillDownWidget;
 import ro.nextreports.server.web.dashboard.indicator.IndicatorWidget;
 import ro.nextreports.server.web.dashboard.pivot.PivotWidget;
@@ -124,6 +125,8 @@ public class DashboardWebService {
 			widgetType = WidgetMetaData.TABLE_TYPE;
 		} else if (widgetClassName.equals(IndicatorWidget.class.getName())) {
 			widgetType = WidgetMetaData.INDICATOR_TYPE;
+		} else if (widgetClassName.equals(DisplayWidget.class.getName())) {
+			widgetType = WidgetMetaData.DISPLAY_TYPE;	
 		} else if (widgetClassName.equals(PivotWidget.class.getName())) {
 			widgetType = WidgetMetaData.PIVOT_TYPE;
 		} else if (widgetClassName.equals(DrillDownWidget.class.getName())) {

@@ -60,7 +60,7 @@ public class NextRuntimePanel extends DynamicParameterRuntimePanel {
         exportChoice.setRequired(true);
         add(exportChoice);
         
-        if (report.isAlarmType() || report.isIndicatorType()) {
+        if (report.isAlarmType() || report.isIndicatorType() || report.isDisplayType()) {
         	exportChoice.setEnabled(false);
         } else {
         	exportChoice.setRequired(true);

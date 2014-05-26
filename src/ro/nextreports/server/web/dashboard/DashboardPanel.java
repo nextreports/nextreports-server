@@ -66,6 +66,8 @@ import ro.nextreports.server.web.dashboard.alarm.AlarmWidget;
 import ro.nextreports.server.web.dashboard.alarm.AlarmWidgetDescriptor;
 import ro.nextreports.server.web.dashboard.chart.ChartWidget;
 import ro.nextreports.server.web.dashboard.chart.ChartWidgetDescriptor;
+import ro.nextreports.server.web.dashboard.display.DisplayWidget;
+import ro.nextreports.server.web.dashboard.display.DisplayWidgetDescriptor;
 import ro.nextreports.server.web.dashboard.drilldown.DrillDownWidget;
 import ro.nextreports.server.web.dashboard.drilldown.DrillDownWidgetDescriptor;
 import ro.nextreports.server.web.dashboard.indicator.IndicatorWidget;
@@ -359,7 +361,11 @@ public class DashboardPanel extends GenericPanel<Dashboard> {
 	                    	IndicatorWidget indicatorWidget = (IndicatorWidget) widgetFactory.createWidget(new IndicatorWidgetDescriptor());
 	                    	indicatorWidget.setEntity(getEntity());
 	                    	widget = indicatorWidget;
-	                    }                    
+	                    }  else if (isDisplay()) {
+	                    	DisplayWidget displayWidget = (DisplayWidget) widgetFactory.createWidget(new DisplayWidgetDescriptor());
+	                    	displayWidget.setEntity(getEntity());
+	                    	widget = displayWidget;
+	                    }                     
 	                    widget.setTitle(getUniqueWidgetTitle(widget.getTitle()));
 	                    widget.afterCreate(storageService);
 	                    Dashboard dashboard = getDashboard();

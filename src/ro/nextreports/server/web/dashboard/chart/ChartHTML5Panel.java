@@ -60,7 +60,7 @@ public class ChartHTML5Panel extends GenericPanel<String> {
 		response.render(OnLoadHeaderItem.forScript(getResizeEndDefinition()));
 		response.render(OnLoadHeaderItem.forScript(getResizeJavaScript()));
 	
-		// must call indicator onLoad instead of onDomReady to appear it in iframe
+		// must call chart onLoad instead of onDomReady to appear it in iframe
 		// $(document).ready in the iframe seems to be fired too soon and the iframe content isn't even loaded yet
 		response.render(OnLoadHeaderItem.forScript(getNextChartJavascriptCall()));
 		
@@ -74,7 +74,7 @@ public class ChartHTML5Panel extends GenericPanel<String> {
 	// nextChart(data, canvas, tipCanvas, width, height)
 	private String getNextChartJavascriptCall() {			
 		String data = getModel().getObject();
-		StringBuilder sb = new StringBuilder();		
+		StringBuilder sb = new StringBuilder();				
 		sb.append("nextChart(").
 		   append(data).
 		   append(",\"").append(get("chartCanvas").getMarkupId()).
@@ -82,6 +82,9 @@ public class ChartHTML5Panel extends GenericPanel<String> {
 		   append("\",\"").append(width).	
 		   append("\",\"").append(height).		   
 		   append("\");");			
+		System.out.println("$$$$$$$$$$$$$$$$$$$$$$");
+		System.out.println(sb.toString());
+		System.out.println("$$$$$$$$$$$$$$$$$$$$$$");
 		return sb.toString();
 	}
 	
@@ -98,7 +101,7 @@ public class ChartHTML5Panel extends GenericPanel<String> {
 	}
 	
 	// we want a redraw after browser resize
-	// indicator call will be made only when resize event finished!	
+	// chart call will be made only when resize event finished!	
 	private String getResizeJavaScript() {				
 		StringBuilder sb = new StringBuilder();
 		sb.append("$(window).bind(\'resizeEnd\',function(){");

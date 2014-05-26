@@ -28,6 +28,7 @@ public class WidgetMetaData  extends EntityMetaData {
 	public static final String TABLE_TYPE = "Table";
 	public static final String ALARM_TYPE = "Alarm"; 
 	public static final String INDICATOR_TYPE = "Indicator";
+	public static final String DISPLAY_TYPE = "Display";
 	public static final String PIVOT_TYPE = "Pivot";
 	public static final String DRILL_TYPE = "Drill"; 
 

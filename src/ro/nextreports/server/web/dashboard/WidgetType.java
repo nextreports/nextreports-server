@@ -22,6 +22,7 @@ public enum WidgetType {
     TABLE("Table"),
     ALARM("Alarm"),
     INDICATOR("Indicator"),
+    DISPLAY("Display"),
     PIVOT("Pivot");
     
     private final String name;

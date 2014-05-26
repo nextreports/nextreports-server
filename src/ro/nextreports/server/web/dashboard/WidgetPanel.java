@@ -30,6 +30,7 @@ import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.web.dashboard.alarm.AlarmWidget;
 import ro.nextreports.server.web.dashboard.chart.ChartWidget;
+import ro.nextreports.server.web.dashboard.display.DisplayWidget;
 import ro.nextreports.server.web.dashboard.drilldown.DrillDownWidget;
 import ro.nextreports.server.web.dashboard.indicator.IndicatorWidget;
 
@@ -106,6 +107,8 @@ public class WidgetPanel extends GenericPanel<Widget> {
 					cssClass = "dragbox-content-alarm";
 				} else if (getWidget() instanceof IndicatorWidget) {
 					cssClass = "dragbox-content-indicator";
+				} else if (getWidget() instanceof DisplayWidget) {
+					cssClass = "dragbox-content-display";	
 				} else if (getWidget() instanceof ChartWidget) {
 					cssClass = "dragbox-content-chart";
 				} else if (getWidget() instanceof DrillDownWidget) {

@@ -52,6 +52,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.search.AlarmSearchEntry;
 import ro.nextreports.server.search.DescriptionSearchEntry;
+import ro.nextreports.server.search.DisplaySearchEntry;
 import ro.nextreports.server.search.DrillDownSearchEntry;
 import ro.nextreports.server.search.IndicatorSearchEntry;
 import ro.nextreports.server.search.InvalidSqlSearchEntry;
@@ -116,6 +117,7 @@ public class SearchEntityPanel extends GenericPanel<Entity> implements AjaxUpdat
     private Boolean caseSensitive;
     private Integer alarm = -1;
     private Integer indicator = -1;
+    private Integer display = -1;
     private Integer table = -1;
     private Integer drill = -1;
     private Integer invalidSql = -1;
@@ -318,6 +320,13 @@ public class SearchEntityPanel extends GenericPanel<Entity> implements AjaxUpdat
             }
             
             if (ReportSection.ID.equals(sectionManager.getSelectedSectionId())) {
+            	DisplaySearchEntry de = new DisplaySearchEntry();
+            	de.setFromPath(path);
+            	de.setDisplay(Tristate.getTristate(display.intValue()));
+            	searchEntries.add(de);
+            }
+            
+            if (ReportSection.ID.equals(sectionManager.getSelectedSectionId())) {
             	TableSearchEntry te = new TableSearchEntry();
             	te.setFromPath(path);
             	te.setTable(Tristate.getTristate(table.intValue()));
@@ -448,6 +457,22 @@ public class SearchEntityPanel extends GenericPanel<Entity> implements AjaxUpdat
             indicatorChoice.setVisible(false);
             add(indicatorChoice);
             
+            Label displayLabel = new Label("display", getString("Display"));
+            displayLabel.setVisible(false);
+            add(displayLabel);
+            
+            List<Integer> displays = Arrays.asList(new Integer[] {-1, 0, 1});
+            final DropDownChoice<Integer> displayChoice = new DropDownChoice<Integer>("displays",
+                    new PropertyModel<Integer>(this, "display"), displays, new ChoiceRenderer<Integer>() {
+            	public Object getDisplayValue(Integer object) {
+            		return Tristate.getTristate(object).getName();
+            	}
+            });
+            displayChoice.setRequired(true);            
+            displayChoice.setLabel(new Model<String>(getString("Display")));
+            displayChoice.setVisible(false);
+            add(displayChoice);
+            
             Label tableLabel = new Label("table", getString("Table"));
             tableLabel.setVisible(false);
             add(tableLabel);
@@ -504,6 +529,8 @@ public class SearchEntityPanel extends GenericPanel<Entity> implements AjaxUpdat
                 makeSearchComponentVisible(alarmChoice, false);
                 makeSearchComponentVisible(indicatorLabel, true);
                 makeSearchComponentVisible(indicatorChoice, false);
+                makeSearchComponentVisible(displayLabel, true);
+                makeSearchComponentVisible(displayChoice, false);
                 makeSearchComponentVisible(tableLabel, true);
                 makeSearchComponentVisible(tableChoice, false);
                 makeSearchComponentVisible(drillLabel, true);
@@ -578,6 +605,10 @@ public class SearchEntityPanel extends GenericPanel<Entity> implements AjaxUpdat
         	return indicator;
         }
         
+        public Integer getDisplay() {
+        	return display;
+        }
+        
         public Integer getTable() {
         	return table;
         }
@@ -608,6 +639,10 @@ public class SearchEntityPanel extends GenericPanel<Entity> implements AjaxUpdat
         
         public void setIndicator(Integer indicator) {
         	SearchEntityPanel.this.indicator = indicator;
+        }
+        
+        public void setDisplay(Integer display) {
+        	SearchEntityPanel.this.display = display;
         }
         
         public void setTable(Integer table) {

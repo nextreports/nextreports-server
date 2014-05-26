@@ -111,6 +111,10 @@
 	min-height: 122px !important;	
 }
 
+.dragbox-content-display {
+	min-height: 122px !important;	
+}
+
 .dragbox-content-chart {
 	min-height: 300px !important;	
 }

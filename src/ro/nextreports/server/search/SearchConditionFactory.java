@@ -41,6 +41,8 @@ public class SearchConditionFactory {
             return new AlarmSearchCondition(storageDao, (AlarmSearchEntry)searchEntry);    
         } else if (searchEntry instanceof IndicatorSearchEntry) {
             return new IndicatorSearchCondition(storageDao, (IndicatorSearchEntry)searchEntry);    
+        } else if (searchEntry instanceof DisplaySearchEntry) {
+            return new DisplaySearchCondition(storageDao, (DisplaySearchEntry)searchEntry);        
         } else if (searchEntry instanceof TableSearchEntry) {
             return new TableSearchCondition(storageDao, (TableSearchEntry)searchEntry);    
         } else if (searchEntry instanceof DrillDownSearchEntry) {

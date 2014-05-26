@@ -29,6 +29,7 @@ public class DashboardStatistics implements Serializable {
 	private Integer drillDownNo;
 	private Integer pivotNo;
 	private Integer indicatorNo;
+	private Integer displayNo;
 	
 	public DashboardStatistics() {		
 	}
@@ -103,6 +104,14 @@ public class DashboardStatistics implements Serializable {
 
 	public void setIndicatorNo(Integer indicatorNo) {
 		this.indicatorNo = indicatorNo;
-	}				
-		
+	}
+
+	public Integer getDisplayNo() {
+		return displayNo;
+	}
+
+	public void setDisplayNo(Integer displayNo) {
+		this.displayNo = displayNo;
+	}	
+			
 }

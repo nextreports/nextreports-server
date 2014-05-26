@@ -11,6 +11,7 @@
                 <bean class="ro.nextreports.server.web.dashboard.table.TableWidgetDescriptor"/>
 				<bean class="ro.nextreports.server.web.dashboard.alarm.AlarmWidgetDescriptor"/>
 				<bean class="ro.nextreports.server.web.dashboard.indicator.IndicatorWidgetDescriptor"/>
+				<bean class="ro.nextreports.server.web.dashboard.display.DisplayWidgetDescriptor"/>
 		        <bean class="ro.nextreports.server.web.dashboard.pivot.PivotWidgetDescriptor"/>
             </list>
         </property>

@@ -136,6 +136,10 @@ public class Report extends VersionableEntity implements Cacheable {
 	public boolean isIndicatorType() {
 		return getSpecialType() == ResultExporter.INDICATOR_TYPE;
 	}
+	
+	public boolean isDisplayType() {
+		return getSpecialType() == ResultExporter.DISPLAY_TYPE;
+	}
 
     public int getExpirationTime() {
 		return expirationTime;

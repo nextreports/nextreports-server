@@ -117,6 +117,16 @@ public class NextUtil {
 				masterContent = masterContent.replaceAll(oldName, newName);
 				imageFile.setName(newName);
 			}
+			JcrFile templateFile = reportContent.getTemplateFile();
+			if (templateFile != null) {
+				String oldName = templateFile.getName();
+				int index = oldName.lastIndexOf(ro.nextreports.server.report.util.ReportUtil.EXTENSION_SEPARATOR);
+				String newName = oldName.substring(0, index) + ro.nextreports.server.report.util.ReportUtil.IMAGE_DELIM
+						+ UUID.randomUUID().toString() + oldName.substring(index);
+				masterContent = masterContent.replaceAll(oldName, newName);
+				templateFile.setName(newName);
+			}
+			
 			reportContent.getNextFile().setDataProvider(new JcrDataProviderImpl(masterContent.getBytes("UTF-8")));
 		} catch (UnsupportedEncodingException e) {
 			LOG.error("Error inside renameImagesAsUnique: " + e.getMessage(), e);
@@ -150,6 +160,23 @@ public class NextUtil {
 						LOG.debug("Image " + ": " + oldName + " > " + newName);
 						// LOG.debug("master = " + master);
 					}
+				}
+			}
+			if (reportContent.getTemplateFile() != null) {
+				String oldName = reportContent.getTemplateFile().getName();
+				int startIndex = oldName.indexOf(ro.nextreports.server.report.util.ReportUtil.IMAGE_DELIM);
+				int extIndex = oldName.lastIndexOf(ro.nextreports.server.report.util.ReportUtil.EXTENSION_SEPARATOR);
+				String newName;
+				if (startIndex < 0) {
+					newName = oldName;
+				} else {
+					newName = oldName.substring(0, startIndex) + oldName.substring(extIndex);
+				}
+				masterContent = masterContent.replaceAll(oldName, newName);
+				reportContent.getTemplateFile().setName(newName);
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Template " + ": " + oldName + " > " + newName);
+					// LOG.debug("master = " + master);
 				}
 			}
 			masterFile.setDataProvider(new JcrDataProviderImpl(masterContent.getBytes("UTF-8")));

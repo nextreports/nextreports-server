@@ -1,20 +1,4 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package ro.nextreports.server.web.dashboard.indicator;
+package ro.nextreports.server.web.dashboard.display;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -29,26 +13,26 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
-import ro.nextreports.engine.exporter.util.IndicatorData;
+import ro.nextreports.engine.exporter.util.DisplayData;
 import ro.nextreports.server.web.dashboard.WidgetPopupMenuModel;
 import ro.nextreports.server.web.dashboard.chart.ChartHTML5Panel;
 
-public class IndicatorImagePanel extends Panel {
+public class DisplayImagePanel extends Panel {
 	
 	private static final long serialVersionUID = 1L;
 
 	private final ResourceReference NEXT_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, "nextcharts-1.2.min.js");
 	
-	private IndicatorDynamicImageResource imageResource;
+	private DisplayDinamicImageResource imageResource;
 	private String width; 
 	private String height;
 	
-	public IndicatorImagePanel(String id, String w, String h, final IModel<IndicatorData> model) {
+	public DisplayImagePanel(String id, String w, String h, final IModel<DisplayData> model) {
 		super(id, model);
 		this.width = w;
 		this.height = h;
 
-		NonCachingImage image = new NonCachingImage("indImage", new PropertyModel(this, "imageResource")) {
+		NonCachingImage image = new NonCachingImage("displayImage", new PropertyModel(this, "imageResource")) {
 			
 			private static final long serialVersionUID = 1L;
 
@@ -64,7 +48,7 @@ public class IndicatorImagePanel extends Panel {
 					w = Integer.parseInt(width);
 					h = Integer.parseInt(height);
 				}
-				imageResource = new IndicatorDynamicImageResource(w, h, model.getObject());
+				imageResource = new DisplayDinamicImageResource(w, h, model.getObject());
 				super.onBeforeRender();
 			}
 		};

@@ -79,6 +79,7 @@ import ro.nextreports.server.web.dashboard.WidgetLocation;
 import ro.nextreports.server.web.dashboard.WidgetRegistry;
 import ro.nextreports.server.web.dashboard.alarm.AlarmWidget;
 import ro.nextreports.server.web.dashboard.chart.ChartWidget;
+import ro.nextreports.server.web.dashboard.display.DisplayWidget;
 import ro.nextreports.server.web.dashboard.drilldown.DrillDownWidget;
 import ro.nextreports.server.web.dashboard.indicator.IndicatorWidget;
 import ro.nextreports.server.web.dashboard.table.TableWidget;
@@ -88,6 +89,7 @@ import ro.nextreports.engine.ReportRunnerException;
 import ro.nextreports.engine.chart.ChartRunner;
 import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.engine.exporter.util.AlarmData;
+import ro.nextreports.engine.exporter.util.DisplayData;
 import ro.nextreports.engine.exporter.util.IndicatorData;
 import ro.nextreports.engine.exporter.util.TableData;
 import ro.nextreports.engine.querybuilder.sql.dialect.CSVDialect;
@@ -840,6 +842,103 @@ public class DefaultDashboardService implements DashboardService {
 	        	cache.put(cacheKey, indicatorData);	        	
             }
         	return indicatorData;
+		} catch (Exception e) {		
+			e.printStackTrace();
+			// ehcache uses BlockingCache which waits someone to put a value in cache if gets a null value
+			// so this put must be done to unblock the cache if a timeout or an exception occurs)!!
+			if (cacheable) {
+				cache.put(cacheKey, null);
+			}
+			if (e instanceof TimeoutException) {						        	
+				throw new TimeoutException("Timeout of " + timeout + " seconds ellapsed.");
+			} else {
+				throw new ReportRunnerException(e);
+			}
+		} finally {
+			ConnectionUtil.closeConnection(connection);
+		}		
+
+	}
+	
+	public DisplayData getDisplayData(String widgetId, Map<String, Object> urlQueryParameters) throws ReportRunnerException, NoDataFoundException, TimeoutException {
+		Entity entity = null;
+		Widget widget = null;
+		try {
+			widget = getWidgetById(widgetId);
+			if (widget instanceof DisplayWidget) {
+				entity = ((DisplayWidget) widget).getEntity();
+			}
+		} catch (NotFoundException e) {
+			throw new RuntimeException(e);
+		}
+
+		if (entity == null) {
+			throw new ReportRunnerException("Widget class unknown for display.");
+		}
+
+		Report report = (Report) entity;
+		
+        Map<String, Object> parameterValues = new HashMap<String, Object>();        
+		ChartUtil.initParameterSettings(parameterValues, widget.getQueryRuntime(), getUserWidgetParameters(widgetId));
+		
+        // parameters from embedded code
+		try {
+			ReportUtil.addUrlQueryParameters(storageService.getSettings(), entity, parameterValues, urlQueryParameters);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			LOG.error(e1.getMessage(), e1);
+		}
+		
+        Cache cache = null;
+        QueryCacheKey cacheKey = null;
+        boolean cacheable = report.getExpirationTime() > 0;
+        if (cacheable) {
+	        cache = cacheFactory.getCache(report.getId(), report.getExpirationTime());
+	        cacheKey = new QueryCacheKey(parameterValues);
+	        boolean hitCache = cache.hasElement(cacheKey);
+	        if (hitCache) {
+	        	DisplayData displayData = (DisplayData) cache.get(cacheKey);
+	        	if (LOG.isDebugEnabled()) {
+	        		LOG.debug("Get displayData for '" + StorageUtil.getPathWithoutRoot(report.getPath()) + "' from cache");
+	        	}	        	
+	        	return displayData;
+	        }
+        }
+              
+		ro.nextreports.engine.Report nextReport = NextUtil.getNextReport(storageService.getSettings(), (NextContent) report.getContent());
+		final ReportRunner reportRunner = new ReportRunner();
+		reportRunner.setParameterValues(parameterValues);
+		reportRunner.setReport(nextReport);
+		reportRunner.setFormat(ReportRunner.DISPLAY_FORMAT);
+		Connection connection;
+		try {
+			connection = ConnectionUtil.createConnection(storageService, report.getDataSource());
+		} catch (RepositoryException e) {
+			throw new ReportRunnerException("Cannot connect to database", e);
+		}
+		boolean csv = report.getDataSource().getDriver().equals(CSVDialect.DRIVER_CLASS);
+		reportRunner.setConnection(connection, csv);
+
+		int timeout = WidgetUtil.getTimeout(this, widget);
+		reportRunner.setQueryTimeout(timeout);
+		
+		FutureTask<DisplayData> runTask = null;
+        try {
+        	runTask = new FutureTask<DisplayData>(new Callable<DisplayData>() {        		
+        		public DisplayData call() throws Exception {        
+        			reportRunner.run();    
+        			return reportRunner.getDisplayData();       			    			        			
+        		}        		
+        	});
+        	new Thread(runTask).start();
+        	DisplayData displayData = runTask.get(timeout, TimeUnit.SECONDS);
+        	if (cacheable) {
+	        	if (LOG.isDebugEnabled()) {
+	        		LOG.debug("Put displayData for '" + StorageUtil.getPathWithoutRoot(report.getPath()) + "' in cache");
+	        	}	        		        		
+	        	cache.put(cacheKey, displayData);	        	
+            }
+        	return displayData;
 		} catch (Exception e) {		
 			e.printStackTrace();
 			// ehcache uses BlockingCache which waits someone to put a value in cache if gets a null value

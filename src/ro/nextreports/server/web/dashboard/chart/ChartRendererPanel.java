@@ -69,7 +69,7 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 	private String width;
 	private String height;
 		
-	private final ResourceReference INDICATOR_UTIL_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, "nextcharts-1.2.min.js");
+	private final ResourceReference NEXT_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, "nextcharts-1.2.min.js");
 	
 	@SpringBean
 	private ChartService chartService;
@@ -257,7 +257,7 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 				super.renderHead(component, response);					
 				
 				//include js file
-		        response.render(JavaScriptHeaderItem.forReference(INDICATOR_UTIL_JS));
+		        response.render(JavaScriptHeaderItem.forReference(NEXT_JS));
 		        
 		        response.render(OnLoadHeaderItem.forScript(getCallbackFunctionBody()));	
 			}

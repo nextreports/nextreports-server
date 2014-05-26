@@ -156,6 +156,10 @@ public class AddWidgetPanel extends FormContentPanel {
 		return WidgetType.INDICATOR.equals(type);
 	}
 	
+	public boolean isDisplay() {
+		return WidgetType.DISPLAY.equals(type);
+	}
+	
 	public boolean isPivot() {
 		return WidgetType.PIVOT.equals(type);
 	}
@@ -191,13 +195,16 @@ public class AddWidgetPanel extends FormContentPanel {
 					boolean isIndicatorReport = WidgetType.INDICATOR.equals(type) &&
 							report.getType().equals(ReportConstants.NEXT) &&
 							report.isIndicatorType();
+					boolean isDisplayReport = WidgetType.DISPLAY.equals(type) &&
+							report.getType().equals(ReportConstants.NEXT) &&
+							report.isDisplayType();
 					boolean isPivot = WidgetType.PIVOT.equals(type) &&
 									  report.getType().equals(ReportConstants.NEXT);
 
-					if (isTableReport || isAlarmReport || isIndicatorReport || isPivot) {					
+					if (isTableReport || isAlarmReport || isIndicatorReport || isPivot || isDisplayReport) {					
 						ro.nextreports.engine.Report nextReport = NextUtil.getNextReport(storageService.getSettings(), report);					
 						if (ParameterUtil.allParametersHaveDefaults(ParameterUtil.getUsedNotHiddenParametersMap(nextReport))) {
-							if (isAlarmReport || isIndicatorReport || (isTableReport && NextUtil.reportHasHeader(nextReport)) || isPivot) {
+							if (isAlarmReport || isIndicatorReport || isDisplayReport || (isTableReport && NextUtil.reportHasHeader(nextReport)) || isPivot) {
 								return true;
 							}
 						}					

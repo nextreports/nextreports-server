@@ -40,7 +40,7 @@ public class CacheActionContributor extends AbstractActionContributor {
 			} else {
 				if (entity instanceof Report) {
 					Report report = (Report) entity;
-					if (!report.isAlarmType() && !report.isTableType() && !report.isIndicatorType()) {
+					if (!report.isAlarmType() && !report.isTableType() && !report.isIndicatorType() && !report.isDisplayType()) {
 						return false;
 					}
 				}

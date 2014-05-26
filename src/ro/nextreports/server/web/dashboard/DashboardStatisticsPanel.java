@@ -36,6 +36,7 @@ public class DashboardStatisticsPanel extends GenericPanel<DashboardStatistics> 
 		add(new Label("chartNo", new PropertyModel(getModel(), "chartNo")));
 		add(new Label("alarmNo", new PropertyModel(getModel(), "alarmNo")));
 		add(new Label("indicatorNo", new PropertyModel(getModel(), "indicatorNo")));
+		add(new Label("displayNo", new PropertyModel(getModel(), "displayNo")));
 		add(new Label("drillDownNo", new PropertyModel(getModel(), "drillDownNo")));
 		add(new Label("pivotNo", new PropertyModel(getModel(), "pivotNo")));
 	 }

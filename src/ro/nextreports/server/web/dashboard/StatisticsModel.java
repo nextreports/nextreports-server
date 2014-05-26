@@ -32,6 +32,7 @@ import ro.nextreports.server.exception.NotFoundException;
 import ro.nextreports.server.service.DashboardService;
 import ro.nextreports.server.web.dashboard.alarm.AlarmWidget;
 import ro.nextreports.server.web.dashboard.chart.ChartWidget;
+import ro.nextreports.server.web.dashboard.display.DisplayWidget;
 import ro.nextreports.server.web.dashboard.drilldown.DrillDownWidget;
 import ro.nextreports.server.web.dashboard.indicator.IndicatorWidget;
 import ro.nextreports.server.web.dashboard.pivot.PivotWidget;
@@ -80,6 +81,7 @@ public class StatisticsModel extends LoadableDetachableModel<DashboardStatistics
 		int drillDownNo = 0;	
 		int pivotNo = 0;
 		int indicatorNo = 0;
+		int displayNo = 0;
 		for (DashboardStatistics ds : statistics) {
 			widgetNo += ds.getWidgetNo();
 			tableNo += ds.getTableNo();
@@ -88,6 +90,7 @@ public class StatisticsModel extends LoadableDetachableModel<DashboardStatistics
 			drillDownNo += ds.getDrillDownNo();
 			pivotNo += ds.getPivotNo();
 			indicatorNo += ds.getIndicatorNo();
+			displayNo += ds.getDisplayNo();
 		}
 		all.setWidgetNo(widgetNo);
 		all.setTableNo(tableNo);
@@ -96,6 +99,7 @@ public class StatisticsModel extends LoadableDetachableModel<DashboardStatistics
 		all.setDrillDownNo(drillDownNo);	
 		all.setPivotNo(pivotNo);
 		all.setIndicatorNo(indicatorNo);
+		all.setDisplayNo(displayNo);
 		return all;	
 	}
 	
@@ -107,6 +111,7 @@ public class StatisticsModel extends LoadableDetachableModel<DashboardStatistics
 		int drillDownNo = 0;		
 		int pivotNo = 0;
 		int indicatorNo = 0;
+		int displayNo = 0;
 		widgetNo = widgets.size();
 		for (Widget widget : widgets) {
 			if (widget instanceof TableWidget) {
@@ -125,6 +130,8 @@ public class StatisticsModel extends LoadableDetachableModel<DashboardStatistics
 				alarmNo++;
 			} else if (widget instanceof IndicatorWidget) {
 				indicatorNo++;	
+			} else if (widget instanceof DisplayWidget) {
+				displayNo++;		
 			} else if (widget instanceof PivotWidget) {
 				pivotNo++;
 			}
@@ -138,6 +145,7 @@ public class StatisticsModel extends LoadableDetachableModel<DashboardStatistics
 		result.setDrillDownNo(drillDownNo);	
 		result.setPivotNo(pivotNo);
 		result.setIndicatorNo(indicatorNo);
+		result.setDisplayNo(displayNo);
 		return result;
 	}
 

@@ -35,6 +35,7 @@ import ro.nextreports.engine.ReportRunnerException;
 import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.engine.exporter.util.AlarmData;
 import ro.nextreports.engine.exporter.util.IndicatorData;
+import ro.nextreports.engine.exporter.util.DisplayData;
 import ro.nextreports.engine.exporter.util.TableData;
 
 /**
@@ -93,6 +94,8 @@ public interface DashboardService {
     public AlarmData getAlarmData(String widgetId, Map<String, Object> urlQueryParameters) throws ReportRunnerException, NoDataFoundException, TimeoutException;
     
     public IndicatorData getIndicatorData(String widgetId, Map<String, Object> urlQueryParameters) throws ReportRunnerException, NoDataFoundException, TimeoutException;
+    
+    public DisplayData getDisplayData(String widgetId, Map<String, Object> urlQueryParameters) throws ReportRunnerException, NoDataFoundException, TimeoutException;
     
     public void resetCache(String entityId);
     

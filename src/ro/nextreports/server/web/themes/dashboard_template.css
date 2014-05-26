@@ -111,6 +111,11 @@
 	/*overflow-y: hidden !important;*/
 }
 
+.dragbox-content-display {
+	min-height: 122px !important;
+	/*overflow-y: hidden !important;*/
+}
+
 .dragbox-content-chart {
 	min-height: 300px !important;
 	/*overflow-y: hidden !important;*/
