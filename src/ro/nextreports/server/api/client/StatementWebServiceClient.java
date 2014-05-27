@@ -147,6 +147,10 @@ public class StatementWebServiceClient extends WebServiceClient {
 		setParameterType(id, parameterIndex, x, "setTimestamp");
 	}
 	
+	public void setObject(String id, int parameterIndex, Serializable x) throws WebServiceException {
+		setParameterType(id, parameterIndex, x, "setObject");
+	}
+	
 	private void setParameterType(String id, int parameterIndex, Serializable x, String methodName) throws WebServiceException {
 		PreparedStatementParameterDTO theData = new PreparedStatementParameterDTO();
 		theData.id = id;

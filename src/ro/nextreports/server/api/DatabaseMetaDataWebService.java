@@ -27,6 +27,7 @@ import ro.nextreports.server.api.client.KeyDTO;
 import ro.nextreports.server.api.client.ProcedureColumnDTO;
 import ro.nextreports.server.api.client.ProcedureDTO;
 import ro.nextreports.server.api.client.ResultSetDTO;
+import ro.nextreports.server.api.client.ResultSetTypeDTO;
 import ro.nextreports.server.api.client.TableDTO;
 
 
@@ -170,5 +171,18 @@ public class DatabaseMetaDataWebService {
 			return null;
 		}
     }
+    
+    @POST
+    @Path("supportsResultSetType")    
+    public boolean supportsResultSetType(ResultSetTypeDTO rstDTO)  {
+    	try {
+			boolean result = DatabaseMetaDataHolder.get().get(rstDTO.id).supportsResultSetType(rstDTO.type);
+			return result;
+		} catch (SQLException e) {
+			// TODO
+			e.printStackTrace();
+			return false;
+		}
+   	}
     
 }

@@ -18,6 +18,7 @@ package ro.nextreports.server.api.client.jdbc;
 
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Array;
@@ -152,6 +153,15 @@ public class PreparedStatement extends Statement implements java.sql.PreparedSta
 			e.printStackTrace();			
 		}
 	}
+	
+	public void setObject(int parameterIndex, Object x) throws SQLException {
+		try {
+			webServiceClient.setObject(id, parameterIndex, (Serializable)x);
+		} catch (WebServiceException e) {
+			// TODO
+			e.printStackTrace();			
+		}
+	}
 
 	public void setBytes(int parameterIndex, byte[] x) throws SQLException {
 		throw new NotImplementedException();
@@ -206,11 +216,7 @@ public class PreparedStatement extends Statement implements java.sql.PreparedSta
 	public void setObject(int parameterIndex, Object x, int targetSqlType)
 			throws SQLException {
 		throw new NotImplementedException();
-	}
-
-	public void setObject(int parameterIndex, Object x) throws SQLException {
-		throw new NotImplementedException();
-	}
+	}	
 
 	public boolean execute() throws SQLException {
 		throw new NotImplementedException();

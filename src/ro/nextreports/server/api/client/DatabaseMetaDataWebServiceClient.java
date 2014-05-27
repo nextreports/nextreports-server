@@ -99,6 +99,18 @@ public class DatabaseMetaDataWebServiceClient extends WebServiceClient {
 		ResultSetDTO theData = response.getEntity(ResultSetDTO.class);
 		return new ResultSet(theData);
 	}
+	
+	public boolean supportsResultSetType(String id, int type) throws WebServiceException {
+		ResultSetTypeDTO rstDTO = new ResultSetTypeDTO();
+		rstDTO.id = id;
+		rstDTO.type = type;
+		ClientResponse response = createRootResource().path("jdbc/databaseMetaData/supportsResultSetType")
+				.post(ClientResponse.class, rstDTO);
+
+		checkForException(response);
+
+		return response.getEntity(Boolean.class);
+	}
 
 	public ResultSet getTables(String id, String catalog, String schemaPattern, String tableNamePattern, String[] types) 
 			throws WebServiceException {

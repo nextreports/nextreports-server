@@ -829,7 +829,13 @@ public class DefaultDashboardService implements DashboardService {
         try {
         	runTask = new FutureTask<IndicatorData>(new Callable<IndicatorData>() {        		
         		public IndicatorData call() throws Exception {        
-        			reportRunner.run();    
+        			try {
+        				reportRunner.run();
+        			} catch (NoDataFoundException ex) {
+        				IndicatorData data = new IndicatorData();
+        				data.setTitle("No Data");
+        				return data;
+        			}
         			return reportRunner.getIndicatorData();       			    			        			
         		}        		
         	});
@@ -925,8 +931,14 @@ public class DefaultDashboardService implements DashboardService {
 		FutureTask<DisplayData> runTask = null;
         try {
         	runTask = new FutureTask<DisplayData>(new Callable<DisplayData>() {        		
-        		public DisplayData call() throws Exception {        
-        			reportRunner.run();    
+        		public DisplayData call() throws Exception {   
+        			try {
+        				reportRunner.run();
+        			} catch (NoDataFoundException ex) {
+        				DisplayData data = new DisplayData();
+        				data.setTitle("No Data");
+        				return data;
+        			}
         			return reportRunner.getDisplayData();       			    			        			
         		}        		
         	});
@@ -948,6 +960,8 @@ public class DefaultDashboardService implements DashboardService {
 			}
 			if (e instanceof TimeoutException) {						        	
 				throw new TimeoutException("Timeout of " + timeout + " seconds ellapsed.");
+			} else if (e instanceof NoDataFoundException) {		
+				throw (NoDataFoundException)e;
 			} else {
 				throw new ReportRunnerException(e);
 			}

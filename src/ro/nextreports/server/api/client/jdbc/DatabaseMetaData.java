@@ -681,7 +681,12 @@ public class DatabaseMetaData implements java.sql.DatabaseMetaData {
 	}
 
 	public boolean supportsResultSetType(int type) throws SQLException {
-		throw new NotImplementedException();
+		try {
+			return webServiceClient.supportsResultSetType(id, type);
+		} catch (WebServiceException e) {
+			e.printStackTrace();
+			return false;
+		}			
 	}
 
 	public boolean supportsResultSetConcurrency(int type, int concurrency)

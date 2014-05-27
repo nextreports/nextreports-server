@@ -228,6 +228,17 @@ public class StatementWebService {
     }
     
     @POST
+    @Path("setObject")    
+	public void setObject(PreparedStatementParameterDTO paramDTO) {
+		try {
+			((PreparedStatement)StatementHolder.get().get(paramDTO.id)).setObject(paramDTO.parameterIndex, paramDTO.value);			
+		} catch (SQLException e) {
+			// TODO
+			e.printStackTrace();			
+		}
+    }
+    
+    @POST
     @Path("setTime")    
 	public void setTime(PreparedStatementParameterDTO paramDTO) {
 		try {

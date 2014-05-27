@@ -300,7 +300,11 @@ public class ResultSet implements java.sql.ResultSet {
 	}
 
 	public boolean isBeforeFirst() throws SQLException {
-		throw new NotImplementedException();
+		return curRow == 0;
+	}
+	
+	public void beforeFirst() throws SQLException {
+		curRow = 0;
 	}
 
 	public boolean isAfterLast() throws SQLException {
@@ -313,11 +317,7 @@ public class ResultSet implements java.sql.ResultSet {
 
 	public boolean isLast() throws SQLException {
 		throw new NotImplementedException();
-	}
-
-	public void beforeFirst() throws SQLException {
-		throw new NotImplementedException();
-	}
+	}	
 
 	public void afterLast() throws SQLException {
 		throw new NotImplementedException();
