@@ -128,7 +128,7 @@ public class DestinationsPanel extends Panel {
         add(type);
 
         List<String> types = new ArrayList<String>();
-        boolean supportsAlert = schedulerJob.getReport().isAlarmType() || schedulerJob.getReport().isIndicatorType();
+        boolean supportsAlert = schedulerJob.getReport().isAlarmType() || schedulerJob.getReport().isIndicatorType() || schedulerJob.getReport().isDisplayType();
         if (supportsAlert) {
         	types.add(DestinationType.ALERT.toString());
         } else {

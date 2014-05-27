@@ -173,8 +173,8 @@ public class ScheduleWizard extends Wizard {
     @Override
     public void onFinish() {   
     	
-		// a scheduled alarm / indicator must have at least an alert
-		if (schedulerJob.getReport().isAlarmType() || schedulerJob.getReport().isIndicatorType()) {
+		// a scheduled alarm / indicator / display must have at least an alert
+		if (schedulerJob.getReport().isAlarmType() || schedulerJob.getReport().isIndicatorType() || schedulerJob.getReport().isDisplayType()) {
 			if (schedulerJob.getDestinations().isEmpty()) {
 				error(getString("ActionContributor.Run.destination.error.alert"));
 				return;

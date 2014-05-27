@@ -213,13 +213,15 @@ public class RunReportJob implements Job {
 
 			String[] result = new String[2];
 			// for alarm alert there is no url
-			if (report.isAlarmType() || report.isIndicatorType()) {				
+			if (report.isAlarmType() || report.isIndicatorType() || report.isDisplayType()) {				
 				ro.nextreports.engine.Report nextReport = NextUtil.getNextReport(storageService.getSettings(), (NextContent) report.getContent());
 				final ReportRunner reportRunner = new ReportRunner();
 				reportRunner.setParameterValues(schedulerJob.getReportRuntime().getParametersValues());
 				reportRunner.setReport(nextReport);
 				if (report.isAlarmType()) {
 					reportRunner.setFormat(ReportRunner.ALARM_FORMAT);
+				} else if (report.isDisplayType()) {
+					reportRunner.setFormat(ReportRunner.DISPLAY_FORMAT);
 				} else {
 					reportRunner.setFormat(ReportRunner.INDICATOR_FORMAT);
 				}
@@ -355,7 +357,7 @@ public class RunReportJob implements Job {
                 }
             }
         } else {
-        	if (!report.isAlarmType() && !report.isIndicatorType()) {			
+        	if (!report.isAlarmType() && !report.isIndicatorType() && !report.isDisplayType()) {			
 				// if 'No data' the email is not sent
 				// send error through mail
         		if (error) {
@@ -419,7 +421,7 @@ public class RunReportJob implements Job {
         }
         auditor.logEvent(auditEvent);
 
-		if (!report.isAlarmType() && !report.isIndicatorType()) {
+		if (!report.isAlarmType() && !report.isIndicatorType() && !report.isIndicatorType()) {
 			try {
 				storageService.addEntity(runHistory);
 			} catch (Exception e) {
