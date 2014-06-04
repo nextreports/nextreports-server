@@ -32,6 +32,8 @@ import ro.nextreports.server.web.report.ReportRuntimeModel;
 
 import ro.nextreports.engine.ReportRunner;
 import ro.nextreports.engine.exporter.ResultExporter;
+import ro.nextreports.engine.i18n.I18nLanguage;
+import ro.nextreports.engine.i18n.I18nUtil;
 
 public class NextRuntimePanel extends DynamicParameterRuntimePanel {
 
@@ -69,6 +71,10 @@ public class NextRuntimePanel extends DynamicParameterRuntimePanel {
 
     public ro.nextreports.engine.Report getNextReport() {
         return NextUtil.getNextReport(storageService.getSettings(), report);
+    }
+    
+    public I18nLanguage getLocaleLanguage() {
+    	return I18nUtil.getLocaleLanguage(getNextReport().getLayout());
     }
 
     public DataSource getDataSource() {

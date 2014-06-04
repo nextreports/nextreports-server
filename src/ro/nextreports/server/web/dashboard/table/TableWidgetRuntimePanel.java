@@ -17,6 +17,9 @@
 package ro.nextreports.server.web.dashboard.table;
 
 import ro.nextreports.engine.Report;
+import ro.nextreports.engine.i18n.I18nLanguage;
+import ro.nextreports.engine.i18n.I18nUtil;
+
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -73,6 +76,10 @@ public class TableWidgetRuntimePanel extends DynamicParameterRuntimePanel {
 
     public Report getNextReport() {
         return NextUtil.getNextReport(storageService.getSettings(), entity);
+    }
+    
+    public I18nLanguage getLocaleLanguage() {
+    	return I18nUtil.getLocaleLanguage(getNextReport().getLayout());
     }
 
     public DataSource getDataSource() {

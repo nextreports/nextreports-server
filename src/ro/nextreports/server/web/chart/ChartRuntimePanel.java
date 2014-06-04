@@ -34,6 +34,8 @@ import ro.nextreports.server.web.dashboard.WidgetRuntimeModel;
 import ro.nextreports.server.web.report.DynamicParameterRuntimePanel;
 
 import ro.nextreports.engine.Report;
+import ro.nextreports.engine.i18n.I18nLanguage;
+import ro.nextreports.engine.i18n.I18nUtil;
 
 /**
  * User: mihai.panaitescu
@@ -110,6 +112,10 @@ public class ChartRuntimePanel extends DynamicParameterRuntimePanel {
 
     public Report getNextReport() {
         return NextUtil.getNextReport(storageService.getSettings(), chart);
+    }
+    
+    public I18nLanguage getLocaleLanguage() {
+    	return I18nUtil.getLocaleLanguage(NextUtil.getNextChart(storageService.getSettings(), chart));
     }
 
     public DataSource getDataSource() {

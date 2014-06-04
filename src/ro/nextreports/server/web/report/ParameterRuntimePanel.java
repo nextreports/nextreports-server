@@ -53,10 +53,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ro.nextreports.engine.Report;
+import ro.nextreports.engine.i18n.I18nLanguage;
+import ro.nextreports.engine.i18n.I18nUtil;
 import ro.nextreports.engine.queryexec.IdName;
 import ro.nextreports.engine.queryexec.QueryParameter;
 import ro.nextreports.engine.util.DateUtil;
 import ro.nextreports.engine.util.ParameterUtil;
+import ro.nextreports.engine.util.StringUtil;
 import ro.nextreports.server.domain.DataSource;
 import ro.nextreports.server.domain.ReportRuntimeParameterModel;
 import ro.nextreports.server.report.next.NextRuntimeParameterModel;
@@ -123,6 +126,8 @@ public abstract class ParameterRuntimePanel extends Panel {
     public abstract void addWicketComponents();
 
     public abstract Report getNextReport();
+    
+    public abstract I18nLanguage getLocaleLanguage();
 
     public abstract DataSource getDataSource();
 
@@ -706,8 +711,9 @@ public abstract class ParameterRuntimePanel extends Panel {
         String name = parameter.getRuntimeName();
         if ((name == null) || name.trim().equals("")) {
             name = parameter.getName();
-        }
-
+        } else {
+        	name = StringUtil.getI18nString(name,getLocaleLanguage());  
+        }        
         return name;
     }    
         

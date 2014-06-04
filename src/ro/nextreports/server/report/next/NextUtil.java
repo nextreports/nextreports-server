@@ -81,6 +81,11 @@ public class NextUtil {
         ChartContent reportContent = chart.getContent();
         return getChart(reportContent).getReport();
     }
+    
+    public static Chart getNextChart(Settings settings, ro.nextreports.server.domain.Chart chart) {
+        ChartContent reportContent = chart.getContent();
+        return getChart(reportContent);
+    }
 
     public static Report getNextReport(Settings settings, Entity entity) {
         if (entity instanceof ro.nextreports.server.domain.Report) {

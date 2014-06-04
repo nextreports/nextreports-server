@@ -81,10 +81,7 @@ public class ChartHTML5Panel extends GenericPanel<String> {
 		   append("\",\"").append(get("tipCanvas").getMarkupId()).	
 		   append("\",\"").append(width).	
 		   append("\",\"").append(height).		   
-		   append("\");");			
-		System.out.println("$$$$$$$$$$$$$$$$$$$$$$");
-		System.out.println(sb.toString());
-		System.out.println("$$$$$$$$$$$$$$$$$$$$$$");
+		   append("\");");					
 		return sb.toString();
 	}
 	

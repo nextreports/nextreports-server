@@ -51,6 +51,8 @@ import ro.nextreports.engine.ReportRunnerException;
 import ro.nextreports.engine.chart.ChartRunner;
 import ro.nextreports.engine.chart.ChartType;
 import ro.nextreports.engine.exporter.exception.NoDataFoundException;
+import ro.nextreports.engine.i18n.I18nLanguage;
+import ro.nextreports.engine.i18n.I18nUtil;
 import ro.nextreports.engine.querybuilder.sql.dialect.CSVDialect;
 import ro.nextreports.engine.queryexec.QueryException;
 import ro.nextreports.engine.util.ParameterUtil;
@@ -297,6 +299,10 @@ public class DefaultChartService implements ChartService {
         }
         runner.setParameterValues(parameterValues);
         runner.setChart(nextChart);  
+        I18nLanguage language = I18nUtil.getLocaleLanguage(nextChart);
+		if (language != null) {
+			runner.setLanguage(language.getName());
+		}
         //connection was not created yet (all parameters have static default values)
         if (connection == null) {
         	try {

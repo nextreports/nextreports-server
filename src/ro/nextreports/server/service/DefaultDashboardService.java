@@ -92,6 +92,8 @@ import ro.nextreports.engine.exporter.util.AlarmData;
 import ro.nextreports.engine.exporter.util.DisplayData;
 import ro.nextreports.engine.exporter.util.IndicatorData;
 import ro.nextreports.engine.exporter.util.TableData;
+import ro.nextreports.engine.i18n.I18nLanguage;
+import ro.nextreports.engine.i18n.I18nUtil;
 import ro.nextreports.engine.querybuilder.sql.dialect.CSVDialect;
 
 /**
@@ -552,8 +554,13 @@ public class DefaultDashboardService implements DashboardService {
              
             final ChartRunner chartRunner = new ChartRunner();
             chartRunner.setParameterValues(parameterValues);
-            chartRunner.setChart(NextUtil.getChart(chart.getContent())); // nextChart
+            ro.nextreports.engine.chart.Chart nextChart = NextUtil.getChart(chart.getContent());
+            chartRunner.setChart(nextChart); // nextChart
             chartRunner.setFormat(ChartRunner.TABLE_FORMAT);
+            I18nLanguage language = I18nUtil.getLocaleLanguage(nextChart);
+    		if (language != null) {
+    			chartRunner.setLanguage(language.getName());
+    		}
     		Connection connection;
             try {
                 connection = ConnectionUtil.createConnection(storageService, chart.getDataSource());
@@ -615,10 +622,15 @@ public class DefaultDashboardService implements DashboardService {
     	        }
             }
            
+            ro.nextreports.engine.Report nextReport = NextUtil.getNextReport(storageService.getSettings(), (NextContent) report.getContent());
             final ReportRunner reportRunner = new ReportRunner();
             reportRunner.setParameterValues(parameterValues);
-            reportRunner.setReport(NextUtil.getNextReport(storageService.getSettings(), (NextContent) report.getContent())); // nextReport
+            reportRunner.setReport(nextReport); 
             reportRunner.setFormat(ReportRunner.TABLE_FORMAT);
+            I18nLanguage language = I18nUtil.getLocaleLanguage(nextReport.getLayout());
+    		if (language != null) {
+    			reportRunner.setLanguage(language.getName());
+    		}
     		Connection connection;
             try {
                 connection = ConnectionUtil.createConnection(storageService, report.getDataSource());
@@ -717,6 +729,10 @@ public class DefaultDashboardService implements DashboardService {
 		reportRunner.setParameterValues(parameterValues);
 		reportRunner.setReport(nextReport);
 		reportRunner.setFormat(ReportRunner.ALARM_FORMAT);
+		I18nLanguage language = I18nUtil.getLocaleLanguage(nextReport.getLayout());
+		if (language != null) {
+			reportRunner.setLanguage(language.getName());
+		}
 		Connection connection;
 		try {
 			connection = ConnectionUtil.createConnection(storageService, report.getDataSource());
@@ -813,6 +829,10 @@ public class DefaultDashboardService implements DashboardService {
 		reportRunner.setParameterValues(parameterValues);
 		reportRunner.setReport(nextReport);
 		reportRunner.setFormat(ReportRunner.INDICATOR_FORMAT);
+		I18nLanguage language = I18nUtil.getLocaleLanguage(nextReport.getLayout());
+		if (language != null) {
+			reportRunner.setLanguage(language.getName());
+		}
 		Connection connection;
 		try {
 			connection = ConnectionUtil.createConnection(storageService, report.getDataSource());
@@ -916,6 +936,10 @@ public class DefaultDashboardService implements DashboardService {
 		reportRunner.setParameterValues(parameterValues);
 		reportRunner.setReport(nextReport);
 		reportRunner.setFormat(ReportRunner.DISPLAY_FORMAT);
+		I18nLanguage language = I18nUtil.getLocaleLanguage(nextReport.getLayout());
+		if (language != null) {
+			reportRunner.setLanguage(language.getName());
+		}
 		Connection connection;
 		try {
 			connection = ConnectionUtil.createConnection(storageService, report.getDataSource());
