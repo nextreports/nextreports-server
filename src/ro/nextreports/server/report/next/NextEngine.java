@@ -42,6 +42,7 @@ import ro.nextreports.engine.Report;
 import ro.nextreports.engine.ReportRunner;
 import ro.nextreports.engine.FluentReportRunner;
 import ro.nextreports.engine.exporter.exception.NoDataFoundException;
+import ro.nextreports.engine.i18n.I18nLanguage;
 import ro.nextreports.engine.i18n.I18nUtil;
 import ro.nextreports.engine.querybuilder.sql.dialect.CSVDialect;
 import ro.nextreports.engine.queryexec.IdName;
@@ -140,8 +141,13 @@ public class NextEngine extends ReportEngineAdapter {
             } else {
             	runner = runner.connectTo(conn);
             }
-                        
-            runner.withLanguage(I18nUtil.getLocaleLanguage(report.getLayout()).getName()).
+                   
+            String lang = null;
+            I18nLanguage language = I18nUtil.getLocaleLanguage(report.getLayout());
+            if (language != null) {
+            	lang = language.getName();
+            }
+            runner.withLanguage(lang).
             		withQueryTimeout(settings.getQueryTimeout()).
                     withParameterValues(new HashMap<String, Object>(exportContext.getReportParameterValues())).
                     withChartImagePath(storageService.getSettings().getReportsHome()).
