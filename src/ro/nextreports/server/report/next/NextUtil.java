@@ -48,7 +48,12 @@ import ro.nextreports.server.util.ConnectionUtil;
  */
 public class NextUtil {
 
-    private static final Logger LOG = LoggerFactory.getLogger(NextUtil.class);    
+    private static final Logger LOG = LoggerFactory.getLogger(NextUtil.class);   
+    
+    public static byte[] getNextReportBytes(Settings settings, ro.nextreports.server.domain.Report report) {
+    	NextContent reportContent = (NextContent) report.getContent();
+        return getNextReportBytes(settings, reportContent);
+    }
 
     public static Report getNextReport(Settings settings, ro.nextreports.server.domain.Report report) {
         NextContent reportContent = (NextContent) report.getContent();
@@ -75,6 +80,10 @@ public class NextUtil {
 			LOG.error(e.getMessage(), e);
 		}
         return null;
+    }
+    
+    public static byte[]  getNextReportBytes(Settings settings, NextContent reportContent) {        
+        return reportContent.getNextFile().getDataProvider().getBytes();               
     }
 
     public static Report getNextReport(Settings settings, ro.nextreports.server.domain.Chart chart) {

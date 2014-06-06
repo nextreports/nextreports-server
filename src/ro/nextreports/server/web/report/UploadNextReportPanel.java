@@ -329,15 +329,15 @@ public class UploadNextReportPanel extends Panel {
                 report.setContent(reportContent);
                 report = NextUtil.renameImagesAsUnique(report);
                 
-                report.setSpecialType(NextUtil.getNextReport(storageService.getSettings(), report).getLayout().getReportType());
-                
-
-                byte status = ReportUtil.isValidReportVersion(NextUtil.getNextReport(storageService.getSettings(), report));
+                byte[] reportBytes = NextUtil.getNextReportBytes(storageService.getSettings(), report);                                               
+                byte status = ReportUtil.isValidReportVersion(reportBytes);
                 if (ReportUtil.REPORT_INVALID_OLDER == status) {
                     error("Cannot publish a report version older than 2.0.");
                 } else if (ReportUtil.REPORT_INVALID_NEWER == status) {
                     error("Cannot publish a report version newer than " + ReleaseInfoAdapter.getVersionNumber());
                 } else {
+                	ro.nextreports.engine.Report rep = NextUtil.getNextReport(storageService.getSettings(), report);
+                    report.setSpecialType(rep.getLayout().getReportType());                	
                     if (update) {
                         // IMPORTANT : see ReportModifiedAdvice
                         storageService.modifyEntity(report);                        
