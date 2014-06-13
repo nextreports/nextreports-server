@@ -1,4 +1,4 @@
-package ro.nextreports.server.web.dashboard.display;
+package ro.nextreports.server.web.dashboard.alarm;
 
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -10,22 +10,22 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
-import ro.nextreports.engine.exporter.util.DisplayData;
+import ro.nextreports.engine.exporter.util.AlarmData;
 import ro.nextreports.server.web.dashboard.chart.ChartHTML5Panel;
 
-public class DisplayHTML5Panel extends GenericPanel<DisplayData> {
+public class AlarmHTML5Panel extends GenericPanel<AlarmData> {
 	
 	private static final long serialVersionUID = 1L;
 	
 	private final ResourceReference NEXT_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, "nextcharts-1.2.min.js");
 	private boolean zoom = false;
 
-	public DisplayHTML5Panel(String id, String width, String height, IModel<DisplayData> model) {
+	public AlarmHTML5Panel(String id, String width, String height, IModel<AlarmData> model) {
 		super(id, model);
 		
-		WebMarkupContainer container = new WebMarkupContainer("displayCanvas");
+		WebMarkupContainer container = new WebMarkupContainer("alarmCanvas");
 		container.setOutputMarkupId(true);
-		container.add(new AttributeAppender("width", width));
+//		container.add(new AttributeAppender("width", width));
 		container.add(new AttributeAppender("height", height));
 		zoom = "100%".equals(width) || "100%".equals(height);
 		add(container);
@@ -36,9 +36,9 @@ public class DisplayHTML5Panel extends GenericPanel<DisplayData> {
 		response.render(OnLoadHeaderItem.forScript(getResizeEndDefinition()));
 		response.render(OnLoadHeaderItem.forScript(getResizeJavaScript()));
 	
-		// must call display onLoad instead of onDomReady to appear it in iframe
+		// must call alarm onLoad instead of onDomReady to appear it in iframe
 		// $(document).ready in the iframe seems to be fired too soon and the iframe content isn't even loaded yet
-		response.render(OnLoadHeaderItem.forScript(getDisplayCall()));
+		response.render(OnLoadHeaderItem.forScript(getAlarmCall()));
 		
 		//include js file
         response.render(JavaScriptHeaderItem.forReference(NEXT_JS));
@@ -47,14 +47,14 @@ public class DisplayHTML5Panel extends GenericPanel<DisplayData> {
         //response.renderJavaScript(getJavaScript(), null); 
     }
 	
-	private String getDisplayCall() {		
+	private String getAlarmCall() {		 
 		boolean useParentWidth = zoom ? false : true;
-		DisplayData data = getModel().getObject();
+		AlarmData data = getModel().getObject();
 		StringBuilder sb = new StringBuilder();		
-		sb.append("nextWidget(\"display\",").		   
+		sb.append("nextWidget(\"alarm\",").		   
 		   append(data.toJson()).append(",\"").
-		   append(get("displayCanvas").getMarkupId()).		   
-		   append("\",").append(zoom).
+		   append(get("alarmCanvas").getMarkupId()).		   
+		   append("\",").append(zoom).		   
 		   append(",").append(useParentWidth).
 		   append(");");				
 		return sb.toString();
@@ -73,11 +73,11 @@ public class DisplayHTML5Panel extends GenericPanel<DisplayData> {
 	}
 	
 	// we want a redraw after browser resize
-	// display call will be made only when resize event finished!	
+	// alarm call will be made only when resize event finished!	
 	private String getResizeJavaScript() {				
 		StringBuilder sb = new StringBuilder();
 		sb.append("$(window).bind(\'resizeEnd\',function(){");
-		sb.append(getDisplayCall());
+		sb.append(getAlarmCall());
 		sb.append("});");
 		return sb.toString();
 	}		

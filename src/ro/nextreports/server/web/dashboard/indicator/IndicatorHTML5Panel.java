@@ -68,7 +68,8 @@ public class IndicatorHTML5Panel extends GenericPanel<IndicatorData> {
         //response.renderJavaScript(getJavaScript(), null); 
     }
 	
-	private String getIndicatorCall() {		 
+	private String getIndicatorCall() {		
+		boolean useParentWidth = zoom ? false : true;
 		IndicatorData data = getModel().getObject();
 		StringBuilder sb = new StringBuilder();		
 		sb.append("indicatorP(\"").
@@ -81,7 +82,9 @@ public class IndicatorHTML5Panel extends GenericPanel<IndicatorData> {
 		   append(",").append(data.getMax()).
 		   append(",").append(data.getValue()).
 		   append(",").append(data.isShowMinMax()).
+		   append(",false").
 		   append(",").append(zoom).
+		   append(",").append(useParentWidth).
 		   append(");");			
 		return sb.toString();
 	}

@@ -36,9 +36,9 @@ public class AlarmDynamicImageResource extends RenderedDynamicImageResource {
 
 	private Ellipse2D.Double circle;
 	private Ellipse2D.Double border;
-	private Color color;
+	private String color;
 
-	public AlarmDynamicImageResource(int size, Color color) {
+	public AlarmDynamicImageResource(int size, String color) {
 		super(size, size);
 		
 		this.size = size;
@@ -60,7 +60,7 @@ public class AlarmDynamicImageResource extends RenderedDynamicImageResource {
 
 		if (color != null) {
 			graphics.setPaint(new GradientPaint(size / 4, size / 4, Color.WHITE,
-					size - 2 * x, size - 2 * x, color, false));
+					size - 2 * x, size - 2 * x,  Color.decode(color), false));
 		}
 		graphics.fill(circle);
 		graphics.setPaint(Color.GRAY);
