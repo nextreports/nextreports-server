@@ -219,10 +219,8 @@ public class DefaultChartService implements ChartService {
         			ParameterUtil.initNotHiddenDefaultParameterValues(connection, nextChart.getReport(), parameterValues);
         		} catch (RepositoryException e) {        			
         			throw new ReportRunnerException("Cannot connect to database", e);
-        		} catch (QueryException e) {
-        			if (connection != null) {
-        				ConnectionUtil.closeConnection(connection);
-        			}
+        		} catch (QueryException e) {        			
+        			ConnectionUtil.closeConnection(connection);        			
                     throw new ReportRunnerException(e);
                 } 
         	} else {
@@ -236,6 +234,7 @@ public class DefaultChartService implements ChartService {
             try {
                 ParameterUtil.initNotHiddenDefaultParameterValues(connection, nextChart.getReport(), parameterValues);
             } catch (QueryException e) {
+            	ConnectionUtil.closeConnection(connection);
                 throw new ReportRunnerException(e);
             }
             ChartUtil.initHiddenHardcodedParameters(parameterValues);
@@ -279,10 +278,8 @@ public class DefaultChartService implements ChartService {
 	        cache = cacheFactory.getCache(chart.getId(), chart.getExpirationTime());
 	        cacheKey = new ChartCacheKey(parameterValues, nextChart.getType().getType());
 	        boolean hitCache = cache.hasElement(cacheKey);
-	        if (hitCache) {
-	        	if (connection != null) {
-	        		ConnectionUtil.closeConnection(connection);
-	        	}
+	        if (hitCache) {	        	
+	        	ConnectionUtil.closeConnection(connection);	        	
 	        	
 	        	String jsonData = (String) cache.get(cacheKey);
 	        	if (LOG.isDebugEnabled()) {

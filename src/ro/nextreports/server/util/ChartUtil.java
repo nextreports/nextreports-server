@@ -471,7 +471,7 @@ public class ChartUtil {
 
     public static QueryRuntime createQueryRuntime(StorageService storageService, Chart chart) {
         QueryRuntime queryRuntime = new QueryRuntime();
-        Connection connection;
+        Connection connection = null;
         try {
 			connection = ConnectionUtil.createConnection(storageService, chart.getDataSource());
             Map<String, Object> map = new HashMap<String, Object>();
@@ -480,6 +480,8 @@ public class ChartUtil {
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
             e.printStackTrace();
+		} finally {
+			ConnectionUtil.closeConnection(connection);
 		}
         return queryRuntime;
     }

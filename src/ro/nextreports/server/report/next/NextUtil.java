@@ -204,7 +204,7 @@ public class NextUtil {
 
     public static QueryRuntime createQueryRuntime(StorageService storageService, ro.nextreports.server.domain.Report report) {
         QueryRuntime queryRuntime = new QueryRuntime();
-        Connection connection;
+        Connection connection = null;
         try {
             connection = ConnectionUtil.createConnection(storageService, report.getDataSource());
             Map<String, Object> map = new HashMap<String, Object>();
@@ -213,6 +213,8 @@ public class NextUtil {
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
             e.printStackTrace();
+        } finally {
+        	ConnectionUtil.closeConnection(connection);
         }
         return queryRuntime;
     }
