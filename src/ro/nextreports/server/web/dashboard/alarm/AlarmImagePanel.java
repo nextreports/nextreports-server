@@ -29,7 +29,7 @@ public class AlarmImagePanel extends Panel {
 	           
             @Override
             protected void onBeforeRender() {            	
-            	imageResource =  new AlarmDynamicImageResource(60, model.getObject().getColor());       
+            	imageResource =  new AlarmDynamicImageResource(80, model.getObject().getColor());       
                 super.onBeforeRender();
             }           
         }; 	                
