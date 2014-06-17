@@ -235,6 +235,7 @@ public class RunReportJob implements Job {
 				List<SmtpAlertDestination> alertDestinations = getAlertDestinations(destinations);								
 				if (alertDestinations.size() == 0) {
 					LOG.error("Alarm '" + report.getPath() + "' has no alert destination.");
+					ConnectionUtil.closeConnection(connection);
 					return;
 				}
 												
