@@ -82,7 +82,7 @@ public class IndicatorHTML5Panel extends GenericPanel<IndicatorData> {
 		   append(",").append(data.getMax()).
 		   append(",").append(data.getValue()).
 		   append(",").append(data.isShowMinMax()).
-		   append(",false").
+		   append(",").append(data.isShadow()).
 		   append(",").append(zoom).
 		   append(",").append(useParentWidth).
 		   append(");");			

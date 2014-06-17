@@ -16,6 +16,7 @@
  */
 package ro.nextreports.server.service;
 
+import java.awt.Color;
 import java.sql.Connection;
 import java.text.Collator;
 import java.util.ArrayList;
@@ -95,6 +96,7 @@ import ro.nextreports.engine.exporter.util.TableData;
 import ro.nextreports.engine.i18n.I18nLanguage;
 import ro.nextreports.engine.i18n.I18nUtil;
 import ro.nextreports.engine.querybuilder.sql.dialect.CSVDialect;
+import ro.nextreports.engine.util.ColorUtil;
 
 /**
  * @author Decebal Suiu
@@ -748,8 +750,12 @@ public class DefaultDashboardService implements DashboardService {
 		FutureTask<AlarmData> runTask = null;
         try {
         	runTask = new FutureTask<AlarmData>(new Callable<AlarmData>() {        		
-        		public AlarmData call() throws Exception {        
-        			reportRunner.run();        			
+        		public AlarmData call() throws Exception {     
+        			try {
+        				reportRunner.run();
+        			} catch (NoDataFoundException ex) {
+        				return new AlarmData(ColorUtil.getHexColor(Color.WHITE), "No Data");        				
+        			}	
         			return reportRunner.getAlarmData();        			    			        			
         		}        		
         	});
