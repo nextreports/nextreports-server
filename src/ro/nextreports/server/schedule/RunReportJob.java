@@ -335,8 +335,9 @@ public class RunReportJob implements Job {
         distributionContext.setMessage(message);
         distributionContext.setReportsPath(reportsPath);
         distributionContext.setUrl(url);
+        distributionContext.setReportName(report.getName());
                 
-        if (fileName != null) {
+        if (fileName != null) {        	
             int errors = 0;
             File exportedFile  = new File(reportsPath, fileName);
             for  (Destination destination : destinations) {

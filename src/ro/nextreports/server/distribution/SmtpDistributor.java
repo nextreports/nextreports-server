@@ -17,8 +17,11 @@
 package ro.nextreports.server.distribution;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -41,6 +44,15 @@ import javax.mail.internet.MimeMessage;
  * @author Decebal Suiu
  */
 public class SmtpDistributor implements Distributor {
+	
+	public static String DATE_TEMPLATE = "${date}";
+	private static String DATE_TEMPLATE_ESC = "\\$\\{date\\}";
+	
+	public static String TIME_TEMPLATE = "${time}";
+	private static String TIME_TEMPLATE_ESC = "\\$\\{time\\}";
+	
+	public static String REPORT_NAME_TEMPLATE = "${name}";
+	private static String REPORT_NAME_TEMPLATE_ESC = "\\$\\{name\\}";
 
     private List<String> users;
 
@@ -58,7 +70,9 @@ public class SmtpDistributor implements Distributor {
             body = body + "\r\n" + context.getMessage();
         } else if (!smtpDestination.isAttachFile()) {
             body = body + "\r\n" + context.getUrl().replaceAll("\\+", "%20");
-        }
+        }        
+        body = replaceTemplates(body, context);    	
+        
         try {
             List<String> groups = smtpDestination.getGroupRecipients();
             for (String groupName : groups) {
@@ -88,6 +102,13 @@ public class SmtpDistributor implements Distributor {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("Send mail to " + mails);
                     }
+                    
+                    String subject = smtpDestination.getMailSubject();
+                    if (subject == null) {
+                        subject = "NextServer";
+                    } else {                    	
+                        subject = replaceTemplates(subject, context);                    	
+                    }
 
                     if (smtpDestination.isAttachFile()) {
                         MimeMessage mailMessage = context.getMailSender().createMimeMessage();
@@ -95,11 +116,7 @@ public class SmtpDistributor implements Distributor {
                         MimeMessageHelper helper = new MimeMessageHelper(mailMessage, true);
                         helper.setFrom(context.getMailFrom());
 
-                        helper.setTo(mails.toArray(new String[mails.size()]));
-                        String subject = smtpDestination.getMailSubject();
-                        if (subject == null) {
-                            subject = "NextServer";
-                        }
+                        helper.setTo(mails.toArray(new String[mails.size()]));                        
                         helper.setSubject(subject);
                         helper.setText(body);
 
@@ -123,7 +140,7 @@ public class SmtpDistributor implements Distributor {
                         SimpleMailMessage mailMessage = new SimpleMailMessage();
                         mailMessage.setFrom(context.getMailFrom());
                         mailMessage.setTo(mails.toArray(new String[mails.size()]));
-                        mailMessage.setSubject(smtpDestination.getMailSubject());
+                        mailMessage.setSubject(subject);
                         mailMessage.setText(body);
 
                         context.getMailSender().send(mailMessage);
@@ -152,6 +169,24 @@ public class SmtpDistributor implements Distributor {
     }
 
 	public void test(Destination destination) throws DistributionException {
+	}
+	
+	private String replaceTemplates(String s, DistributionContext context) {
+		Date local = new Date();
+		if (s.contains(DATE_TEMPLATE)) {			
+			DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault());
+	    	String formattedDate = df.format(local);	    		    	
+	    	s = s.replaceAll(DATE_TEMPLATE_ESC, formattedDate);
+		}
+		if (s.contains(TIME_TEMPLATE)) {
+			DateFormat df = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
+	    	String formattedTime = df.format(local);
+	    	s = s.replaceAll(TIME_TEMPLATE_ESC, formattedTime);
+		}
+		if (s.contains(REPORT_NAME_TEMPLATE)) {
+			s = s.replaceAll(REPORT_NAME_TEMPLATE_ESC, context.getReportName());
+		}
+    	return s;
 	}
 
 }

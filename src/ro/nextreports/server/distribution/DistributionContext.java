@@ -34,6 +34,7 @@ public class DistributionContext {
     private String message;
     private String url;
     private String reportsPath;
+    private String reportName;
     private String alertMessage;
 
     public SecurityService getSecurityService() {
@@ -99,5 +100,13 @@ public class DistributionContext {
 	public void setAlertMessage(String alertMessage) {
 		this.alertMessage = alertMessage;
 	}
+
+	public String getReportName() {
+		return reportName;
+	}
+
+	public void setReportName(String reportName) {
+		this.reportName = reportName;
+	}		
         
 }
