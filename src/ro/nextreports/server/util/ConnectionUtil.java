@@ -71,13 +71,14 @@ public class ConnectionUtil {
     	ComboPooledDataSource pool = null;
     	// when we first create a data source and we click test before save, path is null
     	if (dataSource.getPath() != null) {
-    		pools.get(dataSource.getPath());
+    		pool = pools.get(dataSource.getPath());
     	}
     	
     	Settings settings = storageService.getSettings();
 		int connectionTimeout = settings.getConnectionTimeout();
 		
     	if (pool == null) {
+    		System.out.println("----> Create pool");
     		pool = new ComboPooledDataSource();
     		try {
     			pool.setDriverClass(dataSource.getDriver());
@@ -102,7 +103,7 @@ public class ConnectionUtil {
     			}
     			pool.setMinPoolSize(3);
     			pool.setAcquireIncrement(5);
-    			pool.setMaxPoolSize(30);
+    			pool.setMaxPoolSize(20);
     			pool.setMaxIdleTime(300);
     			
     			if (dataSource.getPath() != null) {
@@ -136,7 +137,7 @@ public class ConnectionUtil {
 			Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
 			ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);		
 			throw new RepositoryException(bundle.getString("Connection.failed") + " '" + dataSource.getPath() + "'", e);
-		}
+		}    	    	
     	
 		return connection;    	
 	}
