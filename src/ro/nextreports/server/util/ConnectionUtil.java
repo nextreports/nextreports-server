@@ -77,8 +77,7 @@ public class ConnectionUtil {
     	Settings settings = storageService.getSettings();
 		int connectionTimeout = settings.getConnectionTimeout();
 		
-    	if (pool == null) {
-    		System.out.println("----> Create pool");
+    	if (pool == null) {    		
     		pool = new ComboPooledDataSource();
     		try {
     			pool.setDriverClass(dataSource.getDriver());
