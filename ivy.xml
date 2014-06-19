@@ -8,11 +8,7 @@
         <conf name="runtime" extends="compile" description="Runtime dependencies"/>
     </configurations>
     
-    <dependencies>
-        <!-- Jdbc connection pool -->
-        <!--
-        <dependency org="c3p0" name="c3p0" rev="0.9.1.2"/>
-        -->
+    <dependencies>      
         
         <!-- NextReports Engine -->
         <dependency org="ro.nextreports" name="nextreports-engine" rev="${app.version}" changing="true"/>
@@ -85,7 +81,9 @@
         -->
         
         <!-- Quartz Scheduler -->
-        <dependency org="org.quartz-scheduler" name="quartz" rev="2.2.0"/>
+        <dependency org="org.quartz-scheduler" name="quartz" rev="2.2.0">
+            <exclude org="c3p0" module="c3p0"/>
+        </dependency>
 
         <!-- JasperReports -->
         <dependency org="net.sf.jasperreports" name="jasperreports" rev="5.1.0" >
