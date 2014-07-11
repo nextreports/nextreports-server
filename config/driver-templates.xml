@@ -29,6 +29,12 @@
         <defaultPort>5432</defaultPort>
       </driver>
       <driver>
+    	<type>Sybase9 (JConnect)</type>
+    	<className>com.sybase.jdbc4.jdbc.SybDriver</className>
+    	<urlTemplate>jdbc:sybase:Tds:&lt;host&gt;:&lt;port&gt;/&lt;database&gt;</urlTemplate>
+    	<defaultPort>5000</defaultPort>
+  	  </driver>
+      <driver>
         <type>MSSQL Server (jTDS)</type>
         <className>net.sourceforge.jtds.jdbc.Driver</className>
         <urlTemplate>jdbc:jtds:sqlserver://&lt;host&gt;:&lt;port&gt;/&lt;database&gt;</urlTemplate>
