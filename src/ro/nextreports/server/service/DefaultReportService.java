@@ -163,6 +163,7 @@ public class DefaultReportService implements ReportService {
     @Transactional(readOnly = true)
     public byte[] reportTo(Report report, ReportRuntime reportRuntime, String key)
             throws ReportEngineException, FormatNotSupportedException, NoDataFoundException, InterruptedException {
+    	    	
         try {
             report = (Report) storageDao.getEntityById(report.getId());
         } catch (Exception e) {
@@ -195,31 +196,38 @@ public class DefaultReportService implements ReportService {
         exportContext.setHeaderPerPage(reportRuntime.isHeaderPerPage());
 
         // export
-        byte[] result = null;
-        if (ReportConstants.CSV_FORMAT.equals(outputType)) {
-            result = engine.exportReportToCsv(exportContext);
-        } else if (ReportConstants.EXCEL_FORMAT.equals(outputType)) {
-            result = engine.exportReportToExcel(exportContext);
-        } else if (ReportConstants.HTML_FORMAT.equals(outputType)) {
-            result = engine.exportReportToHtml(exportContext);
-        } else if (ReportConstants.PDF_FORMAT.equals(outputType)) {
-            result = engine.exportReportToPdf(exportContext);
-        } else if (ReportConstants.RTF_FORMAT.equals(outputType)) {
-            result = engine.exportReportToRtf(exportContext);
-        } else if (ReportConstants.TSV_FORMAT.equals(outputType)) {
-            result = engine.exportReportToTsv(exportContext);
-        } else if (ReportConstants.TXT_FORMAT.equals(outputType)) {
-            result = engine.exportReportToTxt(exportContext);
-        } else if (ReportConstants.XML_FORMAT.equals(outputType)) {
-            result = engine.exportReportToXml(exportContext);
-        } else if (ReportConstants.TXT_FORMAT.equals(outputType)) {
-            result = engine.exportReportToTxt(exportContext);
-        }
-        
-        // parameters values may be computed at runtime so put them in reportRuntime to have them for history
-        reportRuntime.updateDynamicParameterValues(exportContext.getReportParameterValues());
+        try {
+	        byte[] result = null;
+	        if (ReportConstants.CSV_FORMAT.equals(outputType)) {
+	            result = engine.exportReportToCsv(exportContext);
+	        } else if (ReportConstants.EXCEL_FORMAT.equals(outputType)) {
+	            result = engine.exportReportToExcel(exportContext);
+	        } else if (ReportConstants.HTML_FORMAT.equals(outputType)) {
+	            result = engine.exportReportToHtml(exportContext);
+	        } else if (ReportConstants.PDF_FORMAT.equals(outputType)) {
+	            result = engine.exportReportToPdf(exportContext);
+	        } else if (ReportConstants.RTF_FORMAT.equals(outputType)) {
+	            result = engine.exportReportToRtf(exportContext);
+	        } else if (ReportConstants.TSV_FORMAT.equals(outputType)) {
+	            result = engine.exportReportToTsv(exportContext);
+	        } else if (ReportConstants.TXT_FORMAT.equals(outputType)) {
+	            result = engine.exportReportToTxt(exportContext);
+	        } else if (ReportConstants.XML_FORMAT.equals(outputType)) {
+	            result = engine.exportReportToXml(exportContext);
+	        } else if (ReportConstants.TXT_FORMAT.equals(outputType)) {
+	            result = engine.exportReportToTxt(exportContext);
+	        }	        	        
+	        
+	        // parameters values may be computed at runtime so put them in reportRuntime to have them for history
+	        reportRuntime.updateDynamicParameterValues(exportContext.getReportParameterValues());
                    
-        return result;
+	        return result;
+        } catch (NoDataFoundException ex) {
+        	
+        	// parameters values may be computed at runtime so put them in reportRuntime to have them for history
+	        reportRuntime.updateDynamicParameterValues(exportContext.getReportParameterValues());
+        	throw ex;
+        }
     }
 
     @Transactional(readOnly = true)

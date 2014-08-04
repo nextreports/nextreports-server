@@ -115,6 +115,7 @@ public class NextEngine extends ReportEngineAdapter {
 
         Connection conn = null;
         ByteArrayOutputStream output;
+        FluentReportRunner runner = null;
         try {
             conn = ConnectionUtil.createConnection(storageService, exportContext.getReportDataSource());
             output = new ByteArrayOutputStream();
@@ -129,7 +130,7 @@ public class NextEngine extends ReportEngineAdapter {
             Settings settings = storageService.getSettings();
                         
             Report report = NextUtil.getNextReport(storageService.getSettings(), (NextContent) exportContext.getReportContent());
-            FluentReportRunner runner = FluentReportRunner.report(report);
+            runner = FluentReportRunner.report(report);
             NextRunnerFactory.addRunner(exportContext.getKey(), runner);
             
             LOG.info("Export report '" + report.getName() + "' format="+format + 
@@ -161,6 +162,8 @@ public class NextEngine extends ReportEngineAdapter {
                 throw new InterruptedException("Running process was interrupted.");
             }
         } catch (NoDataFoundException e) {
+        	// put the new values : some may be computed at runtime
+            exportContext.setReportParameterValues(runner.getParameterValues());
             throw e;
         } catch (Exception e) {
             if (e instanceof InterruptedException) {
