@@ -60,6 +60,10 @@ public abstract class ReportEngineAdapter implements ReportEngine {
     public boolean supportRtfOutput() {
         return false;
     }
+    
+    public boolean supportDocxOutput() {
+        return false;
+    }
 
     public byte[] exportReportToPdf(ExportContext exportContext)
             throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException {
@@ -99,6 +103,11 @@ public abstract class ReportEngineAdapter implements ReportEngine {
     public byte[] exportReportToRtf(ExportContext exportContext)
             throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException  {
         throw new FormatNotSupportedException("Format Rtf not supported");
+    }
+    
+    public byte[] exportReportToDocx(ExportContext exportContext)
+            throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException  {
+        throw new FormatNotSupportedException("Format Docx not supported");
     }
 
     public void stopExport(String key) {

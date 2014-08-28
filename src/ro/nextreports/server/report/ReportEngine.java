@@ -49,6 +49,8 @@ public interface ReportEngine {
     public boolean supportTxtOutput();
 
     public boolean supportRtfOutput();
+    
+    public boolean supportDocxOutput();
 
     public byte[] exportReportToPdf(ExportContext exportContext)
             throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException;
@@ -73,6 +75,9 @@ public interface ReportEngine {
 
     public byte[] exportReportToRtf(ExportContext exportContext)
         throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException;
+    
+    public byte[] exportReportToDocx(ExportContext exportContext)
+            throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException;
 
     public void stopExport(String key);
 

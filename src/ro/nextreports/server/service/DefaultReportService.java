@@ -144,6 +144,9 @@ public class DefaultReportService implements ReportService {
         if (reportEngine.supportRtfOutput()) {
             supportedOutputs.add(ReportConstants.RTF_FORMAT);
         }
+        if (reportEngine.supportDocxOutput()) {
+            supportedOutputs.add(ReportConstants.DOCX_FORMAT);
+        }
         if (reportEngine.supportTsvOutput()) {
             supportedOutputs.add(ReportConstants.TSV_FORMAT);
         }
@@ -208,6 +211,8 @@ public class DefaultReportService implements ReportService {
 	            result = engine.exportReportToPdf(exportContext);
 	        } else if (ReportConstants.RTF_FORMAT.equals(outputType)) {
 	            result = engine.exportReportToRtf(exportContext);
+	        } else if (ReportConstants.DOCX_FORMAT.equals(outputType)) {
+	            result = engine.exportReportToDocx(exportContext);    
 	        } else if (ReportConstants.TSV_FORMAT.equals(outputType)) {
 	            result = engine.exportReportToTsv(exportContext);
 	        } else if (ReportConstants.TXT_FORMAT.equals(outputType)) {
@@ -335,6 +340,8 @@ public class DefaultReportService implements ReportService {
             return "pdf";
         } else if (ReportConstants.RTF_FORMAT.equals(format)) {
             return "rtf";
+        } else if (ReportConstants.DOCX_FORMAT.equals(format)) {
+            return "docx";    
         } else if (ReportConstants.TSV_FORMAT.equals(format)) {
             return "tsv";
         } else if (ReportConstants.TXT_FORMAT.equals(format)) {

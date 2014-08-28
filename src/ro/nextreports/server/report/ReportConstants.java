@@ -32,6 +32,7 @@ public class ReportConstants {
     // output
     public static final String PDF_FORMAT = "PDF";
     public static final String RTF_FORMAT = "RTF";
+    public static final String DOCX_FORMAT = "DOCX";
     public static final String EXCEL_FORMAT = "EXCEL";
     public static final String HTML_FORMAT = "HTML";
     public static final String CSV_FORMAT = "CSV";

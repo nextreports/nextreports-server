@@ -93,6 +93,11 @@ public class NextEngine extends ReportEngineAdapter {
     }
     
     @Override
+    public boolean supportDocxOutput() {
+        return true;
+    }
+    
+    @Override
     public boolean supportXmlOutput() {
         return true;
     }
@@ -213,6 +218,12 @@ public class NextEngine extends ReportEngineAdapter {
     public byte[] exportReportToRtf(ExportContext exportContext)
             throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException {
         return exportReport(exportContext, ReportRunner.RTF_FORMAT);
+    }
+    
+    @Override
+    public byte[] exportReportToDocx(ExportContext exportContext)
+            throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException {
+        return exportReport(exportContext, ReportRunner.DOCX_FORMAT);
     }
 
     @Override
