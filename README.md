@@ -9,7 +9,7 @@ How to build
 -------------------
 Requirements:
 - [Git](http://git-scm.com/)
-- JDK 1.7 (test with `java -version`)
+- JDK 7 (test with `java -version`)
 - [Apache Ant](http://ant.apache.org/) (test with `ant -version`)
 
 Steps:
