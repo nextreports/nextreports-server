@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,26 +32,27 @@ import java.sql.Statement;
 import java.sql.Struct;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Executor;
 
 import ro.nextreports.server.api.client.ConnectionWebServiceClient;
 import ro.nextreports.server.api.client.WebServiceClient;
 import ro.nextreports.server.api.client.WebServiceException;
 
-
 /**
  * @author Decebal Suiu
  */
-public class Connection implements java.sql.Connection{
+public class Connection implements java.sql.Connection {
 
 	private String id;
 	private ConnectionWebServiceClient webServiceClient;
-	
+
 	public Connection(String id, WebServiceClient webServiceClient) {
 		this.id = id;
 		this.webServiceClient = new ConnectionWebServiceClient(webServiceClient);
 	}
-	
-	public Statement createStatement() throws SQLException {
+
+	@Override
+    public Statement createStatement() throws SQLException {
 		try {
 			return webServiceClient.createStatement(id);
 		} catch (WebServiceException e) {
@@ -61,43 +62,53 @@ public class Connection implements java.sql.Connection{
 		}
 	}
 
-	public PreparedStatement prepareStatement(String sql) throws SQLException {
+	@Override
+    public PreparedStatement prepareStatement(String sql) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public CallableStatement prepareCall(String sql) throws SQLException {
+	@Override
+    public CallableStatement prepareCall(String sql) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public <T> T unwrap(Class<T> iface) throws SQLException {
+	@Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public boolean isWrapperFor(Class<?> iface) throws SQLException {
+	@Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public String nativeSQL(String sql) throws SQLException {
+	@Override
+    public String nativeSQL(String sql) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void setAutoCommit(boolean autoCommit) throws SQLException {
+	@Override
+    public void setAutoCommit(boolean autoCommit) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public boolean getAutoCommit() throws SQLException {
+	@Override
+    public boolean getAutoCommit() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void commit() throws SQLException {
+	@Override
+    public void commit() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void rollback() throws SQLException {
+	@Override
+    public void rollback() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void close() throws SQLException {
+	@Override
+    public void close() throws SQLException {
 		try {
 			webServiceClient.close(id);
 		} catch (WebServiceException e) {
@@ -106,11 +117,13 @@ public class Connection implements java.sql.Connection{
 		}
 	}
 
-	public boolean isClosed() throws SQLException {
+	@Override
+    public boolean isClosed() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public DatabaseMetaData getMetaData() throws SQLException {
+	@Override
+    public DatabaseMetaData getMetaData() throws SQLException {
 		try {
 			return webServiceClient.getMetaData(id);
 		} catch (WebServiceException e) {
@@ -120,7 +133,8 @@ public class Connection implements java.sql.Connection{
 		}
 	}
 
-	public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
+	@Override
+    public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
 		try {
 			return webServiceClient.prepareStatement(id, sql, resultSetType, resultSetConcurrency);
 		} catch (WebServiceException e) {
@@ -130,144 +144,204 @@ public class Connection implements java.sql.Connection{
 		}
 	}
 
-	public void setReadOnly(boolean readOnly) throws SQLException {
+	@Override
+    public void setReadOnly(boolean readOnly) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public boolean isReadOnly() throws SQLException {
+	@Override
+    public boolean isReadOnly() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void setCatalog(String catalog) throws SQLException {
+	@Override
+    public void setCatalog(String catalog) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public String getCatalog() throws SQLException {
+	@Override
+    public String getCatalog() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void setTransactionIsolation(int level) throws SQLException {
+	@Override
+    public void setTransactionIsolation(int level) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public int getTransactionIsolation() throws SQLException {
+	@Override
+    public int getTransactionIsolation() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public SQLWarning getWarnings() throws SQLException {
+	@Override
+    public SQLWarning getWarnings() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void clearWarnings() throws SQLException {
+	@Override
+    public void clearWarnings() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
+	@Override
+    public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
+	@Override
+    public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public Map<String, Class<?>> getTypeMap() throws SQLException {
+	@Override
+    public Map<String, Class<?>> getTypeMap() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
+	@Override
+    public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void setHoldability(int holdability) throws SQLException {
+	@Override
+    public void setHoldability(int holdability) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public int getHoldability() throws SQLException {
+	@Override
+    public int getHoldability() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public Savepoint setSavepoint() throws SQLException {
-		throw new NotImplementedException();
-	}
-	
-	public Savepoint setSavepoint(String name) throws SQLException {
+	@Override
+    public Savepoint setSavepoint() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void rollback(Savepoint savepoint) throws SQLException {
-		throw new NotImplementedException();
-	}
-	
-	public void releaseSavepoint(Savepoint savepoint) throws SQLException {
+	@Override
+    public Savepoint setSavepoint(String name) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+	@Override
+    public void rollback(Savepoint savepoint) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+	@Override
+    public void releaseSavepoint(Savepoint savepoint) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+	@Override
+    public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys) throws SQLException {
+	@Override
+    public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public PreparedStatement prepareStatement(String sql, int[] columnIndexes) throws SQLException {
+	@Override
+    public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public PreparedStatement prepareStatement(String sql, String[] columnNames) throws SQLException {
+	@Override
+    public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public Clob createClob() throws SQLException {
+	@Override
+    public PreparedStatement prepareStatement(String sql, int[] columnIndexes) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public Blob createBlob() throws SQLException {
+	@Override
+    public PreparedStatement prepareStatement(String sql, String[] columnNames) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public NClob createNClob() throws SQLException {
+	@Override
+    public Clob createClob() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public SQLXML createSQLXML() throws SQLException {
+	@Override
+    public Blob createBlob() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public boolean isValid(int timeout) throws SQLException {
+	@Override
+    public NClob createNClob() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void setClientInfo(String name, String value) throws SQLClientInfoException {
+	@Override
+    public SQLXML createSQLXML() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void setClientInfo(Properties properties) throws SQLClientInfoException {
+	@Override
+    public boolean isValid(int timeout) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public String getClientInfo(String name) throws SQLException {
+	@Override
+    public void setClientInfo(String name, String value) throws SQLClientInfoException {
 		throw new NotImplementedException();
 	}
 
-	public Properties getClientInfo() throws SQLException {
+	@Override
+    public void setClientInfo(Properties properties) throws SQLClientInfoException {
 		throw new NotImplementedException();
 	}
 
-	public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
+	@Override
+    public String getClientInfo(String name) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
+	@Override
+    public Properties getClientInfo() throws SQLException {
 		throw new NotImplementedException();
 	}
+
+	@Override
+    public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
+		throw new NotImplementedException();
+	}
+
+	@Override
+    public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
+		throw new NotImplementedException();
+	}
+
+    @Override
+    public void setSchema(String schema) throws SQLException {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public String getSchema() throws SQLException {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void abort(Executor executor) throws SQLException {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public int getNetworkTimeout() throws SQLException {
+        throw new NotImplementedException();
+    }
 
 }

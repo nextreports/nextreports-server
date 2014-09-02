@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,6 @@ import ro.nextreports.server.api.client.StatementWebServiceClient;
 import ro.nextreports.server.api.client.WebServiceClient;
 import ro.nextreports.server.api.client.WebServiceException;
 
-
 /**
  * @author Decebal Suiu
  */
@@ -38,8 +37,9 @@ public class Statement implements java.sql.Statement {
 		this.id = id;
 		this.webServiceClient = new StatementWebServiceClient(webServiceClient);
 	}
-	
-	public void close() throws SQLException {
+
+	@Override
+    public void close() throws SQLException {
 		try {
 			webServiceClient.close(id);
 		} catch (WebServiceException e) {
@@ -48,7 +48,8 @@ public class Statement implements java.sql.Statement {
 		}
 	}
 
-	public ResultSet executeQuery(String sql) throws SQLException {
+	@Override
+    public ResultSet executeQuery(String sql) throws SQLException {
 		try {
 			return webServiceClient.executeQuery(id, sql);
 		} catch (WebServiceException e) {
@@ -58,7 +59,8 @@ public class Statement implements java.sql.Statement {
 		}
 	}
 
-	public void setQueryTimeout(int seconds) throws SQLException {
+	@Override
+    public void setQueryTimeout(int seconds) throws SQLException {
 		try {
 			webServiceClient.setQueryTimeout(id, seconds);
 		} catch (WebServiceException e) {
@@ -67,7 +69,8 @@ public class Statement implements java.sql.Statement {
 		}
 	}
 
-	public void setMaxRows(int max) throws SQLException {
+	@Override
+    public void setMaxRows(int max) throws SQLException {
 		try {
 			webServiceClient.setMaxRows(id, max);
 		} catch (WebServiceException e) {
@@ -76,157 +79,205 @@ public class Statement implements java.sql.Statement {
 		}
 	}
 
-	public <T> T unwrap(Class<T> iface) throws SQLException {
+	@Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public boolean isWrapperFor(Class<?> iface) throws SQLException {
+	@Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public int executeUpdate(String sql) throws SQLException {
+	@Override
+    public int executeUpdate(String sql) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public int getMaxFieldSize() throws SQLException {
+	@Override
+    public int getMaxFieldSize() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void setMaxFieldSize(int max) throws SQLException {
+	@Override
+    public void setMaxFieldSize(int max) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public int getMaxRows() throws SQLException {
+	@Override
+    public int getMaxRows() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void setEscapeProcessing(boolean enable) throws SQLException {
+	@Override
+    public void setEscapeProcessing(boolean enable) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public int getQueryTimeout() throws SQLException {
+	@Override
+    public int getQueryTimeout() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void cancel() throws SQLException {
+	@Override
+    public void cancel() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public SQLWarning getWarnings() throws SQLException {
+	@Override
+    public SQLWarning getWarnings() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void clearWarnings() throws SQLException {
+	@Override
+    public void clearWarnings() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void setCursorName(String name) throws SQLException {
+	@Override
+    public void setCursorName(String name) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public boolean execute(String sql) throws SQLException {
+	@Override
+    public boolean execute(String sql) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public ResultSet getResultSet() throws SQLException {
+	@Override
+    public ResultSet getResultSet() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public int getUpdateCount() throws SQLException {
+	@Override
+    public int getUpdateCount() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public boolean getMoreResults() throws SQLException {
+	@Override
+    public boolean getMoreResults() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void setFetchDirection(int direction) throws SQLException {
+	@Override
+    public void setFetchDirection(int direction) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public int getFetchDirection() throws SQLException {
+	@Override
+    public int getFetchDirection() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void setFetchSize(int rows) throws SQLException {
+	@Override
+    public void setFetchSize(int rows) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public int getFetchSize() throws SQLException {
+	@Override
+    public int getFetchSize() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public int getResultSetConcurrency() throws SQLException {
+	@Override
+    public int getResultSetConcurrency() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public int getResultSetType() throws SQLException {
+	@Override
+    public int getResultSetType() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void addBatch(String sql) throws SQLException {
+	@Override
+    public void addBatch(String sql) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void clearBatch() throws SQLException {
+	@Override
+    public void clearBatch() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public int[] executeBatch() throws SQLException {
+	@Override
+    public int[] executeBatch() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public Connection getConnection() throws SQLException {
+	@Override
+    public Connection getConnection() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public boolean getMoreResults(int current) throws SQLException {
+	@Override
+    public boolean getMoreResults(int current) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public ResultSet getGeneratedKeys() throws SQLException {
+	@Override
+    public ResultSet getGeneratedKeys() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public int executeUpdate(String sql, int autoGeneratedKeys) throws SQLException {
+	@Override
+    public int executeUpdate(String sql, int autoGeneratedKeys) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public int executeUpdate(String sql, int[] columnIndexes) throws SQLException {
+	@Override
+    public int executeUpdate(String sql, int[] columnIndexes) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public int executeUpdate(String sql, String[] columnNames) throws SQLException {
+	@Override
+    public int executeUpdate(String sql, String[] columnNames) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public boolean execute(String sql, int autoGeneratedKeys) throws SQLException {
+	@Override
+    public boolean execute(String sql, int autoGeneratedKeys) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public boolean execute(String sql, int[] columnIndexes) throws SQLException {
+	@Override
+    public boolean execute(String sql, int[] columnIndexes) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public boolean execute(String sql, String[] columnNames)
+	@Override
+    public boolean execute(String sql, String[] columnNames)
 			throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public int getResultSetHoldability() throws SQLException {
+	@Override
+    public int getResultSetHoldability() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public boolean isClosed() throws SQLException {
+	@Override
+    public boolean isClosed() throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public void setPoolable(boolean poolable) throws SQLException {
+	@Override
+    public void setPoolable(boolean poolable) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public boolean isPoolable() throws SQLException {
+	@Override
+    public boolean isPoolable() throws SQLException {
 		throw new NotImplementedException();
 	}
+
+    @Override
+    public void closeOnCompletion() throws SQLException {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public boolean isCloseOnCompletion() throws SQLException {
+        throw new NotImplementedException();
+    }
 
 }

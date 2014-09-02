@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,6 @@ import java.sql.SQLException;
 
 import ro.nextreports.server.api.client.ResultSetMetaDataDTO;
 
-
 /**
  * @author Decebal Suiu
  */
@@ -32,87 +31,108 @@ public class ResultSetMetaData implements java.sql.ResultSetMetaData {
 		this.theData = theData;
 	}
 
-	public int getColumnCount() throws SQLException {
+	@Override
+    public int getColumnCount() throws SQLException {
 		return theData.getColumnCount();
 	}
 
-	public boolean isAutoIncrement(int column) throws SQLException {
+	@Override
+    public boolean isAutoIncrement(int column) throws SQLException {
 		return theData.getAutoIncrements()[column - 1];
 	}
 
-	public boolean isCaseSensitive(int column) throws SQLException {
+	@Override
+    public boolean isCaseSensitive(int column) throws SQLException {
 		return theData.getCaseSensitives()[column - 1];
 	}
 
-	public boolean isSearchable(int column) throws SQLException {
+	@Override
+    public boolean isSearchable(int column) throws SQLException {
 		return theData.getSearchables()[column - 1];
 	}
 
-	public boolean isCurrency(int column) throws SQLException {
+	@Override
+    public boolean isCurrency(int column) throws SQLException {
 		return theData.getCurrencies()[column - 1];
 	}
 
-	public int isNullable(int column) throws SQLException {
+	@Override
+    public int isNullable(int column) throws SQLException {
 		return theData.getNullables()[column - 1];
 	}
 
-	public boolean isSigned(int column) throws SQLException {
+	@Override
+    public boolean isSigned(int column) throws SQLException {
 		return theData.getSigneds()[column - 1];
 	}
 
-	public int getColumnDisplaySize(int column) throws SQLException {
+	@Override
+    public int getColumnDisplaySize(int column) throws SQLException {
 		return theData.getColumnDisplaySizes()[column - 1];
 	}
 
-	public String getColumnLabel(int column) throws SQLException {
+	@Override
+    public String getColumnLabel(int column) throws SQLException {
 		return theData.getColumnLabels()[column - 1];
 	}
 
-	public String getColumnName(int column) throws SQLException {
+	@Override
+    public String getColumnName(int column) throws SQLException {
 		return theData.getColumnNames()[column - 1];
 	}
 
-	public String getSchemaName(int column) throws SQLException {
+	@Override
+    public String getSchemaName(int column) throws SQLException {
 		return theData.getSchemaNames()[column - 1];
 	}
 
-	public int getPrecision(int column) throws SQLException {
+	@Override
+    public int getPrecision(int column) throws SQLException {
 		return theData.getPrecisions()[column - 1];
 	}
 
-	public int getScale(int column) throws SQLException {
+	@Override
+    public int getScale(int column) throws SQLException {
 		return theData.getScales()[column - 1];
 	}
 
-	public String getTableName(int column) throws SQLException {
+	@Override
+    public String getTableName(int column) throws SQLException {
 		return theData.getTableNames()[column - 1];
 	}
 
-	public String getCatalogName(int column) throws SQLException {
+	@Override
+    public String getCatalogName(int column) throws SQLException {
 		return theData.getCatalogNames()[column - 1];
 	}
 
-	public int getColumnType(int column) throws SQLException {
+	@Override
+    public int getColumnType(int column) throws SQLException {
 		return theData.getColumnTypes()[column - 1];
 	}
 
-	public String getColumnTypeName(int column) throws SQLException {
+	@Override
+    public String getColumnTypeName(int column) throws SQLException {
 		return theData.getColumnTypeNames()[column - 1];
 	}
 
-	public boolean isReadOnly(int column) throws SQLException {
+	@Override
+    public boolean isReadOnly(int column) throws SQLException {
 		return theData.getReadOnlys()[column - 1];
 	}
 
-	public boolean isWritable(int column) throws SQLException {
+	@Override
+    public boolean isWritable(int column) throws SQLException {
 		return theData.getWritables()[column - 1];
 	}
 
-	public boolean isDefinitelyWritable(int column) throws SQLException {
+	@Override
+    public boolean isDefinitelyWritable(int column) throws SQLException {
 		return theData.getDefinitelyWritables()[column - 1];
 	}
 
-	public String getColumnClassName(int column) throws SQLException {
+	@Override
+    public String getColumnClassName(int column) throws SQLException {
 		return theData.getColumnClassNames()[column - 1];
 	}
 
@@ -170,11 +190,13 @@ public class ResultSetMetaData implements java.sql.ResultSetMetaData {
 		}
 	}
 
-	public <T> T unwrap(Class<T> iface) throws SQLException {
+	@Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
 		throw new NotImplementedException();
 	}
 
-	public boolean isWrapperFor(Class<?> iface) throws SQLException {
+	@Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
 		throw new NotImplementedException();
 	}
 
