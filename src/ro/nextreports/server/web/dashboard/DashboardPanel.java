@@ -76,9 +76,9 @@ import ro.nextreports.server.web.dashboard.model.DashboardColumnModel;
 import ro.nextreports.server.web.dashboard.model.SelectedDashboardModel;
 import ro.nextreports.server.web.dashboard.pivot.PivotWidget;
 import ro.nextreports.server.web.dashboard.pivot.PivotWidgetDescriptor;
+import ro.nextreports.server.web.dashboard.table.GeneralWidgetRuntimePanel;
 import ro.nextreports.server.web.dashboard.table.TableWidget;
 import ro.nextreports.server.web.dashboard.table.TableWidgetDescriptor;
-import ro.nextreports.server.web.dashboard.table.TableWidgetRuntimePanel;
 import ro.nextreports.server.web.report.DynamicParameterRuntimePanel;
 import ro.nextreports.server.web.report.ParameterRuntimePanel;
 
@@ -438,7 +438,7 @@ public class DashboardPanel extends GenericPanel<Dashboard> {
 	            	 entity = ((EntityWidget)getDashboard().getWidgets().get(0)).getEntity();	            	
 	            }	            
 	            if (getDashboard().getWidgets().size() > 0) {
-	            	 final ParameterRuntimePanel paramRuntimePanel = new TableWidgetRuntimePanel("chartRuntimePanel", entity, runtimeModel, true);      
+	            	 final ParameterRuntimePanel paramRuntimePanel = new GeneralWidgetRuntimePanel("chartRuntimePanel", entity, runtimeModel, true);      
 	            	 
 	            	 boolean isDynamic = false;
 	 				if (paramRuntimePanel instanceof DynamicParameterRuntimePanel) {

@@ -22,6 +22,7 @@ import ro.nextreports.server.service.DashboardService;
 import ro.nextreports.server.web.dashboard.AbstractWidget;
 import ro.nextreports.server.web.dashboard.Widget;
 import ro.nextreports.server.web.dashboard.chart.ChartWidget;
+import ro.nextreports.server.web.dashboard.table.TableWidget;
 
 public class WidgetUtil {
 	
@@ -62,6 +63,19 @@ public class WidgetUtil {
         	timeout = Integer.parseInt(wp.getSettings().get(AbstractWidget.TIMEOUT));
         }
         return timeout;
+	}
+	
+	public static int getRowsPerPage(DashboardService dashboardService, Widget widget) {
+		int rowsPerPage = TableWidget.DEFAULT_ROWS_PER_PAGE;
+		if (widget == null) {
+			return rowsPerPage;
+		}
+		rowsPerPage = widget.getRowsPerPage();
+		UserWidgetParameters wp = dashboardService.getUserWidgetParameters(widget.getId());
+		if (wp != null) {
+			rowsPerPage = Integer.parseInt(wp.getSettings().get(TableWidget.ROWS_PER_PAGE));
+		}
+        return rowsPerPage;
 	}
 	
 	public static String getUserWidgetParametersPath(String user) {
