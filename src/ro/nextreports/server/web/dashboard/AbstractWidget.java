@@ -32,10 +32,13 @@ public abstract class AbstractWidget implements Widget {
 	private static final long serialVersionUID = 1L;
 	// default timeout for a dashboard widget in seconds
 	public static final int DEFAULT_TIMEOUT = 30;
+	// default rows per page for a table widget
+	public static final int DEFAULT_ROWS_PER_PAGE = 100;
 
 	public static final String COLLAPSED = "collapsed";
     public static final String REFRESH_TIME = "refreshTime";
     public static final String TIMEOUT = "timeout";
+    public static final String ROWS_PER_PAGE = "rowsPerPage";
 
     protected String id;
 	protected String title;
@@ -101,6 +104,19 @@ public abstract class AbstractWidget implements Widget {
 
     public void setTimeout(int timeout) {
         settings.put(TIMEOUT, Integer.toString(timeout));
+    }
+    
+    public int getRowsPerPage() {
+        String s = settings.get(ROWS_PER_PAGE);
+        if (s == null) {
+            return DEFAULT_ROWS_PER_PAGE;
+        } else {
+            return Integer.parseInt(s);
+        }
+    }
+
+    public void setRowsPerPage(int rowsPerPage) {
+        settings.put(ROWS_PER_PAGE, Integer.toString(rowsPerPage));
     }
 
     public void init() {

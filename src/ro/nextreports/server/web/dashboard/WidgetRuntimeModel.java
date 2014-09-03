@@ -29,6 +29,7 @@ public class WidgetRuntimeModel extends ParameterRuntimeModel {
     private String chartType;
     private int refreshTime;
     private int timeout;
+    private int rowsPerPage;
 
      public WidgetRuntimeModel() {
         super();
@@ -59,4 +60,13 @@ public class WidgetRuntimeModel extends ParameterRuntimeModel {
     public void setTimeout(int timeout) {
         this.timeout = timeout;
     }
+
+	public int getRowsPerPage() {
+		return rowsPerPage;
+	}
+
+	public void setRowsPerPage(int rowsPerPage) {
+		this.rowsPerPage = rowsPerPage;
+	}
+        
 }

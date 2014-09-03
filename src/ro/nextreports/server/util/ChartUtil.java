@@ -193,6 +193,15 @@ public class ChartUtil {
         	timeout = String.valueOf(ChartWidget.DEFAULT_TIMEOUT);
         }
         runtimeModel.setTimeout(Integer.parseInt(timeout));
+        
+        if ((widget instanceof TableWidget) || 
+        	((widget instanceof DrillDownWidget) && (((DrillDownWidget) widget).getEntity() instanceof Report))) {
+        	String rowsPerPage = widgetSettings.get(TableWidget.ROWS_PER_PAGE);        
+            if (rowsPerPage == null) {
+            	rowsPerPage = String.valueOf(TableWidget.DEFAULT_ROWS_PER_PAGE);
+            }
+            runtimeModel.setRowsPerPage(Integer.parseInt(rowsPerPage));
+        }
 
         runtimeModel.setEdit(true);
         runtimeModel.setParameters(new HashMap<String, ReportRuntimeParameterModel>());
@@ -379,18 +388,26 @@ public class ChartUtil {
     		updateDrillDownWidget((DrillDownWidget)widget, runtimeModel);
     	} else if (widget instanceof ChartWidget) {
             updateChartWidget((ChartWidget)widget, runtimeModel);
+    	} else if (widget instanceof TableWidget) {
+    		updateTableWidget((TableWidget)widget, runtimeModel);
         } else {
             updateBasicWidget(widget, runtimeModel, null);
         }
     }    
     
     private static void updateDrillDownWidget(DrillDownWidget widget, WidgetRuntimeModel runtimeModel) {
-        widget.setChartType(runtimeModel.getChartType());        
+        widget.setChartType(runtimeModel.getChartType()); 
+        widget.setRowsPerPage(runtimeModel.getRowsPerPage());    
         updateBasicWidget(widget, runtimeModel, null);
     }
 
     private static void updateChartWidget(ChartWidget widget, WidgetRuntimeModel runtimeModel) {
         widget.setChartType(runtimeModel.getChartType());        
+        updateBasicWidget(widget, runtimeModel, null);
+    }
+    
+    private static void updateTableWidget(TableWidget widget, WidgetRuntimeModel runtimeModel) {
+        widget.setRowsPerPage(runtimeModel.getRowsPerPage());        
         updateBasicWidget(widget, runtimeModel, null);
     }
 
@@ -437,6 +454,7 @@ public class ChartUtil {
     	}
     	settings.put(ChartWidget.REFRESH_TIME, String.valueOf(runtimeModel.getRefreshTime()));
     	settings.put(AbstractWidget.TIMEOUT, String.valueOf(runtimeModel.getTimeout()));
+    	settings.put(TableWidget.ROWS_PER_PAGE, String.valueOf(runtimeModel.getRowsPerPage()));
     	return settings;    	
     }
     

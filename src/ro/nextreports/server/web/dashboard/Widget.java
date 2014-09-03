@@ -88,4 +88,8 @@ public interface Widget extends Serializable {
 
     public void setTimeout(int timeout);
     
+    public int getRowsPerPage();
+    
+    public void setRowsPerPage(int rowsPerPage);
+    
 }

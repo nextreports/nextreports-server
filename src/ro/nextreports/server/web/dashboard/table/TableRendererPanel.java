@@ -30,6 +30,7 @@ import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,8 +38,12 @@ import ro.nextreports.engine.exporter.util.StyleFormatConstants;
 import ro.nextreports.engine.util.HtmlUtil;
 import ro.nextreports.server.domain.DrillEntityContext;
 import ro.nextreports.server.domain.Report;
+import ro.nextreports.server.exception.NotFoundException;
+import ro.nextreports.server.service.DashboardService;
+import ro.nextreports.server.util.WidgetUtil;
 import ro.nextreports.server.web.common.table.BaseTable;
 import ro.nextreports.server.web.common.table.LinkPropertyColumn;
+import ro.nextreports.server.web.dashboard.Widget;
 
 /**
  * @author Mihai Dinca-Panaitescu
@@ -52,6 +57,9 @@ public class TableRendererPanel extends GenericPanel<Report> {
 	private static final Logger LOG = LoggerFactory.getLogger(TableRendererPanel.class);
 	private DrillEntityContext drillContext;	
 	
+	@SpringBean
+	private DashboardService dashboardService;
+	
 	public TableRendererPanel(String id, IModel<Report> model, String widgetId, DrillEntityContext drillContext,  boolean zoom) {
 		this(id, model, widgetId, drillContext, zoom, null);
 	}
@@ -61,10 +69,10 @@ public class TableRendererPanel extends GenericPanel<Report> {
 		this.drillContext = drillContext;		
 						
 		TableDataProvider dataProvider = new TableDataProvider(widgetId, drillContext, urlQueryParameters);
-        add(getCurrentTable(dataProvider));        
+        add(getCurrentTable(dataProvider, widgetId));        
 	}	
 	
-	private BaseTable getCurrentTable(TableDataProvider dataProvider ) {    	        
+	private BaseTable getCurrentTable(TableDataProvider dataProvider, String widgetId ) {    	        
         List<String> tableHeader;
 		try {
 			tableHeader = dataProvider.getHeader();			
@@ -73,9 +81,12 @@ public class TableRendererPanel extends GenericPanel<Report> {
 			LOG.error(e.getMessage(), e);
 			throw new RuntimeException(ExceptionUtils.getRootCauseMessage(e));
 		}
-		int rowsPerPage = Integer.MAX_VALUE;
-		if (dataProvider.size() > MAX_PER_PAGE) {
-			rowsPerPage = MAX_PER_PAGE;
+		int rowsPerPage = Integer.MAX_VALUE;		
+		try {
+			Widget widget = dashboardService.getWidgetById(widgetId);
+			rowsPerPage = WidgetUtil.getRowsPerPage(dashboardService, widget);
+		} catch (NotFoundException e) {
+			LOG.error(e.getMessage(), e);
 		}
 		BaseTable<RowData> table = new BaseTable<RowData>("table", getPropertyColumns(tableHeader), dataProvider, rowsPerPage);		
         return table;

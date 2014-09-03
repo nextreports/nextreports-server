@@ -45,6 +45,7 @@ import org.jfree.util.Log;
 import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.domain.QueryRuntime;
+import ro.nextreports.server.domain.Report;
 import ro.nextreports.server.domain.UserWidgetParameters;
 import ro.nextreports.server.exception.DuplicationException;
 import ro.nextreports.server.exception.NotFoundException;
@@ -72,7 +73,9 @@ import ro.nextreports.server.web.dashboard.chart.ChartWidget;
 import ro.nextreports.server.web.dashboard.drilldown.DrillDownWidget;
 import ro.nextreports.server.web.dashboard.pivot.PivotResource;
 import ro.nextreports.server.web.dashboard.pivot.PivotWidget;
+import ro.nextreports.server.web.dashboard.table.GeneralWidgetRuntimePanel;
 import ro.nextreports.server.web.dashboard.table.TableResource;
+import ro.nextreports.server.web.dashboard.table.TableWidget;
 import ro.nextreports.server.web.dashboard.table.TableWidgetRuntimePanel;
 import ro.nextreports.server.web.report.DynamicParameterRuntimePanel;
 import ro.nextreports.server.web.report.ParameterRuntimePanel;
@@ -184,8 +187,11 @@ public class WidgetPopupMenuModel extends LoadableDetachableModel<List<MenuItem>
 					((widget instanceof DrillDownWidget) && (((DrillDownWidget) widget).getEntity() instanceof Chart))) {
 					Chart chart = (Chart) entityWidget.getEntity();
 					paramRuntimePanel = new ChartRuntimePanel("chartRuntimePanel", chart, runtimeModel);
-				} else {
+				} else if ((widget instanceof TableWidget) || 
+					((widget instanceof DrillDownWidget) && (((DrillDownWidget) widget).getEntity() instanceof Report))) {
 					paramRuntimePanel = new TableWidgetRuntimePanel("chartRuntimePanel", entityWidget.getEntity(), runtimeModel);
+				} else {
+					paramRuntimePanel = new GeneralWidgetRuntimePanel("chartRuntimePanel", entityWidget.getEntity(), runtimeModel);
 				}
 				
 				boolean isDynamic = false;
