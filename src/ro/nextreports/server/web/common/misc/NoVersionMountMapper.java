@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +16,7 @@
  */
 package ro.nextreports.server.web.common.misc;
 
+import org.apache.wicket.core.request.handler.BookmarkableListenerInterfaceRequestHandler;
 import org.apache.wicket.core.request.handler.ListenerInterfaceRequestHandler;
 import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.request.IRequestHandler;
@@ -29,23 +30,24 @@ import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
  * stateful page urls.
  */
 public class NoVersionMountMapper extends MountedMapper {
-	
+
     public NoVersionMountMapper(String path, Class<? extends IRequestablePage> pageClass) {
         super(path, pageClass, new PageParametersEncoder());
     }
 
-    @Override 
+    @Override
     protected void encodePageComponentInfo(Url url, PageComponentInfo info) {
         // do nothing so that component info does not get rendered in url
     }
 
-    @Override 
+    @Override
     public Url mapHandler(IRequestHandler requestHandler) {
-        if (requestHandler instanceof ListenerInterfaceRequestHandler) {
+        if (requestHandler instanceof ListenerInterfaceRequestHandler ||
+                requestHandler instanceof BookmarkableListenerInterfaceRequestHandler) {
             return null;
         }
-        
+
         return super.mapHandler(requestHandler);
     }
-    
-} 
+
+}
