@@ -75,4 +75,10 @@
 		<urlTemplate>jdbc:pervasive://&lt;host&gt;:&lt;port&gt;/&lt;database&gt;</urlTemplate>
 		<defaultPort>1583</defaultPort>	
   	</driver> 
+  	<driver>
+    	<type>Teradata</type>
+    	<className>com.teradata.jdbc.TeraDriver</className>
+    	<urlTemplate>jdbc:teradata://&lt;server&gt;/&lt;database=databasename&gt;</urlTemplate>
+    	<defaultPort>0</defaultPort>
+  	</driver>  
 </drivers>
