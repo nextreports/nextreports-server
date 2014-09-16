@@ -90,21 +90,13 @@ public class ExtendedPalette<T> extends Palette<T> {
                            IModel<? extends Collection<? extends T>> choicesModel,
                            IChoiceRenderer<T> choiceRenderer,
                            int rows, boolean allowOrder, boolean allowMoveAll) {
-        super(id, model, choicesModel, choiceRenderer, rows, allowOrder);
+        super(id, model, choicesModel, choiceRenderer, rows, allowOrder, allowMoveAll);
 
         this.choicesModel = choicesModel;
         this.choiceRenderer = choiceRenderer;
         this.rows = rows;
         this.allowOrder = allowOrder;
         this.allowMoveAll = allowMoveAll;
-    }
-
-    protected void onBeforeRender() {
-        if (get("recorder") == null) {
-            add(newAddAllComponent().setVisible(allowMoveAll));
-            add(newRemoveAllComponent().setVisible(allowMoveAll));
-        }
-        super.onBeforeRender();
     }
 
 

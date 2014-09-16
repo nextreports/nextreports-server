@@ -43,7 +43,7 @@ public class GeneralWidgetRuntimePanel extends DynamicParameterRuntimePanel {
     public void addWicketComponents() {
         TextField<Integer> refreshText = new TextField<Integer>("refreshTime", new PropertyModel(runtimeModel, "refreshTime"));
         refreshText.setRequired(true);
-        refreshText.add(new RangeValidator<Integer>(0, 3600));
+        refreshText.add(new RangeValidator<Integer>(10, 3600));
         add(refreshText);
         
         TextField<Integer> timeoutText = new TextField<Integer>("timeout", new PropertyModel(runtimeModel, "timeout"));
