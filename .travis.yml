@@ -1,4 +1,4 @@
 language: java
 jdk:
     - oraclejdk7
-script: ant -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true release
+script: ant release

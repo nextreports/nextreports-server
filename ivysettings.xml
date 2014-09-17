@@ -18,7 +18,10 @@
             <ibiblio name="public" root="http://repo1.maven.org/maven2" m2compatible="true"/>
             <ibiblio name="snapshots" root="https://oss.sonatype.org/content/repositories/snapshots" m2compatible="true"/> 
             <!-- Spring Framework Extensions - JCR -->
+            <!--
             <ibiblio name="se-jcr" root="https://src.springframework.org/svn/se-jcr/repo" m2compatible="true"/>
+            -->
+            <ibiblio name="nextreports" root="http://maven.nextreports.ro" m2compatible="true"/>
             <!-- Ftp4j -->
             <ibiblio name="ftp4j" root="http://repo.laubenberger.net/maven2" m2compatible="true"/>
         </chain>
