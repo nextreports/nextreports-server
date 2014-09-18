@@ -153,8 +153,8 @@
         <dependency org="javax.mail" name="mail" rev="1.4.1"/>
         
         <!-- AspectJ -->
-        <dependency org="org.aspectj" name="aspectjrt" rev="1.5.4"/>
-        <dependency org="org.aspectj" name="aspectjweaver" rev="1.5.4"/>
+        <dependency org="org.aspectj" name="aspectjrt" rev="1.7.4"/>
+        <dependency org="org.aspectj" name="aspectjweaver" rev="1.7.4"/>
         
         <!-- Astea nu stiu de ce trebuie -->
         <dependency org="org.jboss.spec.javax.annotation" name="jboss-annotations-api_1.1_spec" rev="1.0.0.Final"/>
@@ -165,6 +165,6 @@
         
         <!-- Force resolve a specific derby jdbc driver -->
         <dependency org="org.apache.derby" name="derby" rev="10.10.1.1"/>
-    </dependencies>           
+    </dependencies>
             
 </ivy-module>
