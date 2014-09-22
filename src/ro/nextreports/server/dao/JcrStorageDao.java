@@ -51,6 +51,7 @@ import org.springframework.beans.factory.annotation.Required;
 import ro.nextreports.server.StorageConstants;
 import ro.nextreports.server.cache.Cache;
 import ro.nextreports.server.cache.ehcache.EhCache;
+import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.DataSource;
 import ro.nextreports.server.domain.DateRange;
 import ro.nextreports.server.domain.Entity;
@@ -647,8 +648,17 @@ public class JcrStorageDao extends AbstractJcrDao implements StorageDao, Initial
 					entitiesCache.remove(nodes.nextNode().getIdentifier());
 				}
 			}
-			// @todo if entity is inside a drill down (is it necessary?) 
-			// //nextServer//drillDownEntities/*[@entity='3490f2a2-e2e7-4935-9020-e98a34202ece'] -> getParent()
+			// if entity is inside a drill down we have to clear the master report (with drillDown list) 
+			// first parent is 'drillDownEntities' node; second parent is the actual report/chart
+			if ((entity instanceof Report) || (entity instanceof Chart)) {
+				xpath = " //nextServer//drillDownEntities/*[@entity='" +  entity.getId() + "']";
+				if (xpath != null) {
+					NodeIterator nodes = getTemplate().query(xpath).getNodes();
+					while (nodes.hasNext()) {										
+						entitiesCache.remove(nodes.nextNode().getParent().getParent().getIdentifier());
+					}
+				}
+			}	
 		} catch (RepositoryException e) {
 			throw convertJcrAccessException(e);
 		}
