@@ -32,7 +32,7 @@ public class DateColumn<T> extends PropertyColumn<T, String> {
 	private static final long serialVersionUID = 6240590562722410222L;
 
 //    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
-	private static final DateFormat DATE_FORMAT= DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+	public static DateFormat DATE_FORMAT= DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
     
 	public DateColumn(IModel<String> displayModel, String sortProperty, String propertyExpression) {
 		super(displayModel, sortProperty, propertyExpression);
