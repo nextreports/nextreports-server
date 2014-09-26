@@ -26,6 +26,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
+import ro.nextreports.server.web.NextServerApplication;
+
 /* 
  * @author Mihai Dinca-Panaitescu 
  */
@@ -33,7 +35,7 @@ public class ChartHTML5Panel extends GenericPanel<String> {
 	
 	private static final long serialVersionUID = 1L;
 		
-	private final ResourceReference NEXTCHARTS_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, "nextcharts-1.2.min.js");
+	private final ResourceReference NEXTCHARTS_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, NextServerApplication.NEXT_CHARTS_JS);
 	private boolean zoom = false;
 	private String width;
 	private String height;

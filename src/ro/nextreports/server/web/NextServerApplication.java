@@ -91,6 +91,8 @@ import ro.nextreports.server.web.themes.ThemesManager;
  * @author Decebal Suiu
  */
 public class NextServerApplication extends WebApplication  {
+	
+	public final static String NEXT_CHARTS_JS = "nextcharts-1.3.min.js";
 
 	private static volatile boolean maintenance = false;
 	private static final Logger LOG = LoggerFactory.getLogger(NextServerApplication.class);			

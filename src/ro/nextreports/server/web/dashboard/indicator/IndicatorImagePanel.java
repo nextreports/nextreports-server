@@ -30,6 +30,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
 import ro.nextreports.engine.exporter.util.IndicatorData;
+import ro.nextreports.server.web.NextServerApplication;
 import ro.nextreports.server.web.dashboard.WidgetPopupMenuModel;
 import ro.nextreports.server.web.dashboard.chart.ChartHTML5Panel;
 
@@ -37,7 +38,7 @@ public class IndicatorImagePanel extends Panel {
 	
 	private static final long serialVersionUID = 1L;
 
-	private final ResourceReference NEXT_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, "nextcharts-1.2.min.js");
+	private final ResourceReference NEXT_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, NextServerApplication.NEXT_CHARTS_JS);
 	
 	private IndicatorDynamicImageResource imageResource;
 	private String width; 

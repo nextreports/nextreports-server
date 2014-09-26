@@ -45,6 +45,7 @@ import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.DrillEntityContext;
 import ro.nextreports.server.service.ChartService;
 import ro.nextreports.server.util.ChartUtil;
+import ro.nextreports.server.web.NextServerApplication;
 
 /**
  * @author Mihai Dinca-Panaitescu
@@ -69,7 +70,7 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 	private String width;
 	private String height;
 		
-	private final ResourceReference NEXT_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, "nextcharts-1.2.min.js");
+	private final ResourceReference NEXT_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, NextServerApplication.NEXT_CHARTS_JS);
 	
 	@SpringBean
 	private ChartService chartService;

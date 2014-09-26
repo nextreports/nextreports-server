@@ -43,6 +43,7 @@ import ro.nextreports.engine.ReportRunnerException;
 import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.engine.exporter.util.IndicatorData;
 import ro.nextreports.server.service.DashboardService;
+import ro.nextreports.server.web.NextServerApplication;
 import ro.nextreports.server.web.dashboard.WidgetView;
 import ro.nextreports.server.web.dashboard.chart.ChartHTML5Panel;
 import ro.nextreports.server.web.dashboard.model.WidgetModel;
@@ -51,7 +52,7 @@ public class IndicatorWidgetView  extends WidgetView  {
 	
 	private static final long serialVersionUID = 1L;
 
-	private final ResourceReference INDICATOR_UTIL_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, "nextcharts-1.2.min.js");
+	private final ResourceReference INDICATOR_UTIL_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, NextServerApplication.NEXT_CHARTS_JS);
 	
 	private String PARAM = "Param";
 	private String isHTML5 = "";

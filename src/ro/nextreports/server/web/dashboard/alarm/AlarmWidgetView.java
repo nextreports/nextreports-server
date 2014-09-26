@@ -42,10 +42,10 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ro.nextreports.server.service.DashboardService;
+import ro.nextreports.server.web.NextServerApplication;
 import ro.nextreports.server.web.dashboard.WidgetView;
 import ro.nextreports.server.web.dashboard.chart.ChartHTML5Panel;
 import ro.nextreports.server.web.dashboard.model.WidgetModel;
-
 import ro.nextreports.engine.ReportRunnerException;
 import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.engine.exporter.util.AlarmData;
@@ -55,7 +55,7 @@ public class AlarmWidgetView extends WidgetView {
 	
 	private static final long serialVersionUID = 1L;
 
-	private final ResourceReference NEXT_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, "nextcharts-1.2.min.js");
+	private final ResourceReference NEXT_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, NextServerApplication.NEXT_CHARTS_JS);
 	
 	private String PARAM = "Param";	
 	private String isHTML5 = "";
