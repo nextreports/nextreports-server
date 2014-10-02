@@ -89,6 +89,8 @@
 	   scrollbar is allways present for overflow=auto
 	   because we have a margin we put only 3 (5-2) to bottom margin */
 	padding-bottom: 2px;
+	padding-left: 1px;
+	padding-right: 1px;
 }
 
 .drill-dragbox-content {
@@ -99,6 +101,8 @@
 	/* padding-bottom is needed for IE otherwise the vertical 
 	   scrollbar is allways present for overflow=auto */
 	padding-bottom: 2px;
+	padding-left: 1px;
+	padding-right: 1px;
 }
 
 .dragbox-content-alarm {

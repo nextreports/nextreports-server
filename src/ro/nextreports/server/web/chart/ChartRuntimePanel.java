@@ -30,9 +30,9 @@ import ro.nextreports.server.domain.DataSource;
 import ro.nextreports.server.report.next.NextUtil;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.util.ChartUtil;
+import ro.nextreports.server.web.common.util.ZeroRangeValidator;
 import ro.nextreports.server.web.dashboard.WidgetRuntimeModel;
 import ro.nextreports.server.web.report.DynamicParameterRuntimePanel;
-
 import ro.nextreports.engine.Report;
 import ro.nextreports.engine.i18n.I18nLanguage;
 import ro.nextreports.engine.i18n.I18nUtil;
@@ -99,7 +99,7 @@ public class ChartRuntimePanel extends DynamicParameterRuntimePanel {
         add(exportChoice);
 
         TextField<Integer> refreshText = new TextField<Integer>("refreshTime", new PropertyModel(runtimeModel, "refreshTime"));
-        refreshText.add(new RangeValidator<Integer>(0, 3600));
+        refreshText.add(new ZeroRangeValidator(10, 3600));
         refreshText.setRequired(true);
         add(refreshText);
         

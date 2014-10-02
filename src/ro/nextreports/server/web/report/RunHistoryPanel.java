@@ -16,9 +16,12 @@
  */
 package ro.nextreports.server.web.report;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.wicket.AttributeModifier;
@@ -28,6 +31,7 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.datetime.PatternDateConverter;
+import org.apache.wicket.datetime.StyleDateConverter;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
@@ -93,6 +97,8 @@ import ro.nextreports.server.web.report.RunHistoryPanel.CheckBoxPanel;
 
 //
 public class RunHistoryPanel extends Panel {
+	
+	private static String localDatePattern = getShortLocaleDatePattern(); 
 
 	private static final long serialVersionUID = 1L;
 
@@ -184,7 +190,8 @@ public class RunHistoryPanel extends Panel {
         DateField timeField = new DateField("time", new PropertyModel(this, "time")) {
         	
             protected DateTextField newDateTextField(String s, PropertyModel propertyModel) {
-                final DateTextField dateField = DateTextField.withConverter(s, propertyModel,	new PatternDateConverter("MM/dd/yyyy", true));
+            	
+                final DateTextField dateField = DateTextField.withConverter(s, propertyModel,new StyleDateConverter("S-", false));
                 dateField.add(new AjaxFormComponentUpdatingBehavior("onchange") {
                     protected void onUpdate(AjaxRequestTarget target) {
                       // @todo wicket 1.5 does not update model for DateField and DateTimeField
@@ -221,10 +228,9 @@ public class RunHistoryPanel extends Panel {
         form.add(timeField);    
         
         tillTime = new Date();
-        tillTimeField = new DateField("tillTime", new PropertyModel(this, "tillTime")) {
-        	
+        tillTimeField = new DateField("tillTime", new PropertyModel(this, "tillTime")) {        	
             protected DateTextField newDateTextField(String s, PropertyModel propertyModel) {
-                final DateTextField dateField = DateTextField.withConverter(s, propertyModel, new PatternDateConverter("MM/dd/yyyy", true));
+                final DateTextField dateField = DateTextField.withConverter(s, propertyModel, new StyleDateConverter("S-", false));
                 dateField.add(new AjaxFormComponentUpdatingBehavior("onchange") {
                     protected void onUpdate(AjaxRequestTarget target) {
                       // @todo wicket 1.5 does not update model for DateField and DateTimeField
@@ -560,6 +566,13 @@ public class RunHistoryPanel extends Panel {
             add(selector);
         }
         
+    }
+    
+    private static String getShortLocaleDatePattern() {
+    	 DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+    	 SimpleDateFormat sf = (SimpleDateFormat) df;
+    	 System.out.println("*********** " + sf.toLocalizedPattern());
+    	 return sf.toLocalizedPattern();
     }
 
 }

@@ -11,13 +11,14 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
 import ro.nextreports.engine.exporter.util.DisplayData;
+import ro.nextreports.server.web.NextServerApplication;
 import ro.nextreports.server.web.dashboard.chart.ChartHTML5Panel;
 
 public class DisplayHTML5Panel extends GenericPanel<DisplayData> {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private final ResourceReference NEXT_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, "nextcharts-1.2.min.js");
+	private final ResourceReference NEXT_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, NextServerApplication.NEXT_CHARTS_JS);
 	private boolean zoom = false;
 
 	public DisplayHTML5Panel(String id, String width, String height, IModel<DisplayData> model) {

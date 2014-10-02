@@ -293,6 +293,12 @@ public class DefaultDashboardService implements DashboardService {
             	throw new RuntimeException(e);
             }
         }
+        Collections.sort(links, new Comparator<Link>() {
+			@Override
+			public int compare(Link o1, Link o2) {
+				return Collator.getInstance().compare(o1.getName(), o2.getName());
+			}        	
+        });
         
         return links;
     }

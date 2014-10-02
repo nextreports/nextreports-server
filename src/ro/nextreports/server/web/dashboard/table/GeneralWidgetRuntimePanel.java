@@ -15,6 +15,7 @@ import ro.nextreports.server.domain.DataSource;
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.report.next.NextUtil;
 import ro.nextreports.server.service.StorageService;
+import ro.nextreports.server.web.common.util.ZeroRangeValidator;
 import ro.nextreports.server.web.dashboard.WidgetRuntimeModel;
 import ro.nextreports.server.web.report.DynamicParameterRuntimePanel;
 
@@ -43,7 +44,7 @@ public class GeneralWidgetRuntimePanel extends DynamicParameterRuntimePanel {
     public void addWicketComponents() {
         TextField<Integer> refreshText = new TextField<Integer>("refreshTime", new PropertyModel(runtimeModel, "refreshTime"));
         refreshText.setRequired(true);
-        refreshText.add(new RangeValidator<Integer>(10, 3600));
+        refreshText.add(new ZeroRangeValidator(10, 3600));
         add(refreshText);
         
         TextField<Integer> timeoutText = new TextField<Integer>("timeout", new PropertyModel(runtimeModel, "timeout"));

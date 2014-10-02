@@ -9,11 +9,12 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
 import ro.nextreports.engine.exporter.util.AlarmData;
+import ro.nextreports.server.web.NextServerApplication;
 import ro.nextreports.server.web.dashboard.chart.ChartHTML5Panel;
 
 public class AlarmImagePanel extends Panel {
 	
-	private final ResourceReference NEXT_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, "nextcharts-1.2.min.js");
+	private final ResourceReference NEXT_JS = new JavaScriptResourceReference(ChartHTML5Panel.class, NextServerApplication.NEXT_CHARTS_JS);
 	
 	private AlarmDynamicImageResource imageResource;
 	private String width; 

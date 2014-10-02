@@ -16,6 +16,8 @@
  */
 package ro.nextreports.server.web.core.settings;
 
+import java.text.DateFormat;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.core.request.handler.PageProvider;
@@ -34,6 +36,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
 
 import ro.nextreports.server.service.StorageService;
+import ro.nextreports.server.web.common.table.DateColumn;
 import ro.nextreports.server.web.core.validation.ImageValidator;
 import ro.nextreports.server.web.language.LanguageManager;
 import ro.nextreports.server.web.themes.ThemesManager;
@@ -101,6 +104,7 @@ public class ChangeLogoPanel extends Panel {
 				try {
 					storageService.personalizeSettings(fileName, content, theme, language);
 					getSession().setLocale(LanguageManager.getInstance().getLocale(language));
+					DateColumn.DATE_FORMAT = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT); 
 					ThemesManager.getInstance().setTheme(theme);
 					ok = true;
 					getRequestCycle().scheduleRequestHandlerAfterCurrent(new RenderPageRequestHandler(new PageProvider(getPage())));
