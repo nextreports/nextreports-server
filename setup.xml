@@ -33,6 +33,12 @@
             <variable name="app.setup" value="${app.setup}-jre" mediafileid="39"/>
             <!-- Linux with JRE -->
             <variable name="app.setup" value="${app.setup}-jre" mediafileid="81"/>
+			<!-- Windows x86 -->
+	        <variable name="app.setup" value="${app.setup}-x86" mediafileid="1283"/>
+			<!-- Windows x86 with JRE -->
+			<variable name="app.setup" value="${app.setup}-x86-jre" mediafileid="1285"/>
+	        <!-- Linux x86 with JRE -->
+			<variable name="app.setup" value="${app.setup}-x86-jre" mediafileid="1287"/>
         </install4j>
         
         <!-- Delete some files -->
