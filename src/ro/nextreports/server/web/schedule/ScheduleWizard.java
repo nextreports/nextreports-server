@@ -76,12 +76,12 @@ import ro.nextreports.server.web.core.HomePage;
 import ro.nextreports.server.web.core.section.SectionManager;
 import ro.nextreports.server.web.core.validation.DuplicationEntityValidator;
 import ro.nextreports.server.web.core.validation.JcrNameValidator;
+import ro.nextreports.server.web.integration.ReportsPage;
 import ro.nextreports.server.web.report.NextRuntimePanel;
 import ro.nextreports.server.web.report.ReportRuntimeModel;
 import ro.nextreports.server.web.report.jasper.JasperRuntimePanel;
 import ro.nextreports.server.web.schedule.destination.DestinationsPanel;
 import ro.nextreports.server.web.schedule.time.JobPanel;
-
 import ro.nextreports.engine.queryexec.QueryParameter;
 
 public class ScheduleWizard extends Wizard {
@@ -277,8 +277,12 @@ public class ScheduleWizard extends Wizard {
         }
 
         // just put a feedback message to be shown by JGrowl
-        getSession().getFeedbackMessages().add(new FeedbackMessage(null, globalMessage, JGrowlAjaxBehavior.INFO_FADE));
-        setResponsePage(HomePage.class);        
+        getSession().getFeedbackMessages().add(new FeedbackMessage(null, globalMessage, JGrowlAjaxBehavior.INFO_FADE));        
+        if (getPage() instanceof ReportsPage) {
+        	setResponsePage(ReportsPage.class);
+        } else {
+        	setResponsePage(HomePage.class);
+        }
     }
 
     private final class ScheduleNameStep extends WizardStep {
