@@ -76,7 +76,9 @@ public class DefaultDataSourceService implements DataSourceService {
 
         Connection con = null;
         try {
-            con = ConnectionUtil.createConnection(storageService, dataSource);
+        	// this temporary connection is not taken from pool!
+        	// otherwise changing user , password in this panel and click test will have no effect!
+            con = ConnectionUtil.createTempConnection(storageService, dataSource);
 
             sb.append(new StringResourceModel("Connection.success", null).getString()).append("\r\n");
 
