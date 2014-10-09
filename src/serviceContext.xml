@@ -160,5 +160,9 @@
             <bean class="org.springframework.security.access.annotation.SecuredAnnotationSecurityMetadataSource"/>
         </property>
     </bean>
+    
+    <bean class="ro.nextreports.server.aop.DataSourceModifiedAdvice">
+        <property name="storageService" ref="storageService"/>        
+    </bean>
 
 </beans>
