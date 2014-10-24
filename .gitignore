@@ -15,3 +15,10 @@ artifacts/
 lib/
 logs/
 reports/
+.idea/
+.settings/
+jaspers/
+webapp/WEB-INF/classes/
+local.properties
+derby.log
+data*
