@@ -65,7 +65,7 @@ public abstract class AjaxConfirmLink<T> extends AjaxLink<T> {
 		
 		if (StringUtils.isNotEmpty(getMessage()) && showDialog()) {
 			String message = getMessage().replaceAll("'", "\"");
-			StringBuilder precondition = new StringBuilder("if(!confirm('").append(message).append("')) { return false; };");
+			StringBuilder precondition = new StringBuilder("if(!confirm('").append(message).append("')) { hideBusy(); return false; };");
 			
 			AjaxCallListener listener = new AjaxCallListener();
 			listener.onPrecondition(precondition);
