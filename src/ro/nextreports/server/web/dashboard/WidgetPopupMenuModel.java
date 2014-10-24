@@ -27,6 +27,7 @@ import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.ajax.attributes.AjaxCallListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.injection.Injector;
@@ -36,6 +37,7 @@ import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -142,7 +144,11 @@ public class WidgetPopupMenuModel extends LoadableDetachableModel<List<MenuItem>
 		} else {
 			download = new TableResource(model.getObject().getId());
 		}
-		return new ResourceLink<TableResource>(MenuPanel.LINK_ID, download);
+		ResourceLink resourceLink =  new ResourceLink<TableResource>(MenuPanel.LINK_ID, download);
+		// see busy-indicator.js
+		// we do not want a busy indicator in this situation
+		resourceLink.add(new AttributeAppender("class", new Model<String>("noBusyIndicator"), " "));
+		return resourceLink;
 	}
 	
 	private AjaxLink createEditLink(final IModel<Widget> model) {
@@ -477,6 +483,11 @@ public class WidgetPopupMenuModel extends LoadableDetachableModel<List<MenuItem>
 			}
 
 		};		
+		
+		// see busy-indicator.js
+		// we do not want a busy indicator in this situation
+		link.add(new AttributeAppender("class", new Model<String>("noBusyIndicator"), " "));
+		
 		PopupSettings popupSettings = new PopupSettings(PopupSettings.RESIZABLE | PopupSettings.SCROLLBARS);
 		popupSettings.setWidth(POPUP_WIDTH).setHeight(POPUP_HEIGHT);
 		link.setPopupSettings(popupSettings);
