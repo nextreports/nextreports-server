@@ -39,6 +39,7 @@ import org.apache.wicket.model.Model;
 
 import ro.nextreports.server.distribution.Destination;
 import ro.nextreports.server.distribution.DestinationType;
+import ro.nextreports.server.domain.CopyDestination;
 import ro.nextreports.server.domain.FtpDestination;
 import ro.nextreports.server.domain.SchedulerJob;
 import ro.nextreports.server.domain.SftpDestination;
@@ -374,7 +375,25 @@ public class DestinationsPanel extends Panel {
                 }
                 
             };
-            container.replace(new DestinationFormPanel("destinationPanel", webdavPanel, destination));            
+            container.replace(new DestinationFormPanel("destinationPanel", webdavPanel, destination));
+        } else if (DestinationType.COPY.toString().equals(type)) {
+            final CopyDestination destination = new CopyDestination();
+            setTemporaryDestinationPath(destination);
+            CopyPanel copyPanel = new CopyPanel(FormPanel.CONTENT_ID, destination) {
+            	
+				private static final long serialVersionUID = 1L;
+
+				protected void onSave(AjaxRequestTarget target) {
+                    super.onSave(target);
+                    addDestination(destination, target);
+                }
+
+                protected void onClose(AjaxRequestTarget target) {
+                    clearContainer(target);
+                }
+                
+            };
+            container.replace(new DestinationFormPanel("destinationPanel", copyPanel, destination));                        
         } else {
             container.replace(new EmptyPanel("destinationPanel"));
         }
@@ -500,6 +519,24 @@ public class DestinationsPanel extends Panel {
             };
             typeChoice.setModelObject(destination.getType());
             container.replace(new DestinationFormPanel("destinationPanel", webdavPanel, destination));            
+        } else if (DestinationType.COPY.toString().equals(destination.getType())) {
+            final CopyDestination copyDestination = (CopyDestination) destination;
+            CopyPanel copyPanel = new CopyPanel(FormPanel.CONTENT_ID, copyDestination) {
+            	
+				private static final long serialVersionUID = 1L;
+
+				protected void onSave(AjaxRequestTarget target) {
+                    super.onSave(target);                    
+                    editDestination(target);
+                }
+
+                protected void onClose(AjaxRequestTarget target) {
+                    clearContainer(target);
+                }
+                
+            };
+            typeChoice.setModelObject(destination.getType());
+            container.replace(new DestinationFormPanel("destinationPanel", copyPanel, destination));            
         }
         target.add(typeChoice);
         target.add(container);

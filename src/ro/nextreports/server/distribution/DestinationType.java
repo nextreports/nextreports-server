@@ -28,7 +28,8 @@ public enum DestinationType {
     SFTP("SSH"),
     Samba("Windows share"),
     WebDAV("WebDAV"),
-    ALERT("Alert");
+    ALERT("Alert"),
+    COPY("Copy");
 
     private final String name;
 

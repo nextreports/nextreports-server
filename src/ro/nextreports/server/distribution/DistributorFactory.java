@@ -36,6 +36,8 @@ public class DistributorFactory {
             return new SmtpAlertDistributor();    
         } else if (DestinationType.WebDAV.toString().equals(destinationType)) {
             return new WebdavDistributor();            
+        } else if (DestinationType.COPY.toString().equals(destinationType)) {
+            return new CopyDistributor();            
         }
 
         throw new IllegalArgumentException("Invalid destination type : " + destinationType);
