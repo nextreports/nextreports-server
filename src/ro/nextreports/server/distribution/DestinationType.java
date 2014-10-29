@@ -26,7 +26,7 @@ public enum DestinationType {
     SMTP("Mail"),
     FTP("FTP"),
     SFTP("SSH"),
-    Samba("Windows share"),
+    Samba("SMB"),
     WebDAV("WebDAV"),
     ALERT("Alert"),
     COPY("Copy");

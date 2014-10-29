@@ -30,7 +30,9 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
@@ -139,13 +141,21 @@ public class DestinationsPanel extends Panel {
         		}
         	}
         }
-        typeChoice = new DropDownChoice<String>("typeChoice", new Model<String>(), types) {
+        
+        IChoiceRenderer<String> typeRenderer = new ChoiceRenderer<String>() {
+			@Override
+			public Object getDisplayValue(String object) {
+				return getString("DestinationsPanel.type." + object);
+			}        	
+        };
+        
+        typeChoice = new DropDownChoice<String>("typeChoice", new Model<String>(), types, typeRenderer) {
         	
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected CharSequence getDefaultChoice(String selectedValue) {
-                return "<option value=\"\">Choose one</option>";
+                return "<option value=\"\">" + getString("nullValid") + "</option>";
 			}
             
         };
