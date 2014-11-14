@@ -16,8 +16,11 @@
  */
 package ro.nextreports.server.web.dashboard;
 
+import java.util.List;
+
 import org.apache.wicket.markup.html.panel.Panel;
 
+import ro.nextreports.server.web.core.action.ActionContributor;
 import ro.nextreports.server.web.core.section.AbstractSection;
 
 /**
@@ -26,6 +29,8 @@ import ro.nextreports.server.web.core.section.AbstractSection;
 public class DashboardSection extends AbstractSection {
 
 	public static final String ID = DashboardSection.class.getName();
+	
+	protected List<ActionContributor> popupContributors;
 		
 	public String getId() {
 		return ID;
@@ -42,5 +47,22 @@ public class DashboardSection extends AbstractSection {
 	public Panel createView(String viewId) {
 		return new DashboardBrowserPanel(viewId);
 	}
+	
+	public List<ActionContributor> getPopupContributors() {
+		return popupContributors;
+	}
+
+	public void setPopupContributors(List<ActionContributor> popupContributors) {
+		this.popupContributors = popupContributors;
+	}
+
+	public int getPopupContributorCount() {
+		if ((popupContributors == null) || (popupContributors.size() == 0)) {
+			return 0;
+		}
+		
+		return popupContributors.size();
+	}
+
 
 }

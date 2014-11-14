@@ -9,7 +9,16 @@
 
     <bean id="sectionManager" class="ro.nextreports.server.web.core.section.DefaultSectionManager"/>
 
-    <bean id="dashboardSection" class="ro.nextreports.server.web.dashboard.DashboardSection"/>        
+    <bean id="dashboardSection" class="ro.nextreports.server.web.dashboard.DashboardSection">
+         <property name="popupContributors">
+            <list>
+                <bean class="ro.nextreports.server.web.action.dashboard.SetDefaultActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.dashboard.ShareActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.dashboard.ModifyActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.dashboard.DeleteActionContributor"/>
+            </list>
+         </property>   
+    </bean>        
             
     <bean id="reportSection" class="ro.nextreports.server.web.report.ReportSection">
         <property name="menuContributors">
