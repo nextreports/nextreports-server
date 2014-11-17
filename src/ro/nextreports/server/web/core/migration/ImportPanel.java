@@ -176,13 +176,27 @@ public class ImportPanel extends Panel {
 		
 		// import drill down reports
 		for (Report report : mo.getReports()) {
-			for (DrillDownEntity dd : report.getDrillDownEntities()) {		
+			boolean hasDrill = false;
+			for (DrillDownEntity dd : report.getDrillDownEntities()) {								
+				DataSource ds = null; 								
+				hasDrill = true;
 				Entity entity = ObjectCloner.deepCopy(dd.getEntity());
 				if (entity instanceof Report) {
 					((Report)entity).setDrillDownEntities(new ArrayList<DrillDownEntity>());
+					ds = ((Report)entity).getDataSource();
 				} else if (entity instanceof Chart) {
 					((Chart)entity).setDrillDownEntities(new ArrayList<DrillDownEntity>());
+					ds = ((Chart)entity).getDataSource();
 				}
+				
+				// import the data source
+				Entity newDSEntity = importEntity(ds);
+				if (newDSEntity.getId() != null) {
+					ds.setId(newDSEntity.getId());
+					ds.setName(newDSEntity.getName());
+					ds.setPath(newDSEntity.getPath());
+				}
+				
 				Entity newEntity = importEntity(entity);
 				if (newEntity.getId() != null) {
 					dd.getEntity().setId(newEntity.getId());
@@ -191,27 +205,45 @@ public class ImportPanel extends Panel {
 				}
 			}
 			// save report with drill down relations
-			storageService.modifyEntity(report);
+			if (hasDrill) {
+				storageService.modifyEntity(report);
+			}
 		}
 
 		// import drill down charts
 		for (Chart chart : mo.getCharts()) {
-			for (DrillDownEntity dd : chart.getDrillDownEntities()) {	
-				Entity entity = ObjectCloner.deepCopy(dd.getEntity());
+			boolean hasDrill = false;
+			for (DrillDownEntity dd : chart.getDrillDownEntities()) {
+				DataSource ds = null; 			
+				hasDrill = true;
+				Entity entity = ObjectCloner.deepCopy(dd.getEntity());				
 				if (entity instanceof Report) {
 					((Report)entity).setDrillDownEntities(new ArrayList<DrillDownEntity>());
+					ds = ((Report)entity).getDataSource();
 				} else if (entity instanceof Chart) {
 					((Chart)entity).setDrillDownEntities(new ArrayList<DrillDownEntity>());
+					ds = ((Chart)entity).getDataSource();
 				}
+				
+				// import the data source
+				Entity newDSEntity = importEntity(ds);
+				if (newDSEntity.getId() != null) {
+					ds.setId(newDSEntity.getId());
+					ds.setName(newDSEntity.getName());
+					ds.setPath(newDSEntity.getPath());
+				}
+				
 				Entity newEntity = importEntity(entity);
 				if (newEntity.getId() != null) {
 					dd.getEntity().setId(newEntity.getId());
 					dd.getEntity().setName(newEntity.getName());
-					dd.getEntity().setPath(newEntity.getPath());
+					dd.getEntity().setPath(newEntity.getPath());					
 				}
 			}
 			// save chart with drill down relations
-			storageService.modifyEntity(chart);
+			if (hasDrill) {
+				storageService.modifyEntity(chart);
+			}
 		}
 	}
 	
