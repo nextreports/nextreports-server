@@ -331,11 +331,11 @@ public abstract class ParameterRuntimePanel extends Panel {
                         // for combo default value can be a simple value or selected for a source (is not an IdName so we make it)
                         // a default value from a manual source is an IdName
                         Object obj = generalModel.getObject();
-                        if (! (obj instanceof IdName) ) {
+                        if ((obj != null) && !(obj instanceof IdName) ) {
                             IdName in  = new IdName();
                             in.setId((Serializable)obj);
                             in.setName((Serializable)obj);
-                            generalModel.setObject(in);
+                            generalModel.setObject(in);                            
                         }
                         return runtimeModel.getParameters().get(parameter.getName()).getValues();
                     }
@@ -347,6 +347,10 @@ public abstract class ParameterRuntimePanel extends Panel {
                     }
                     downChoice.setLabel(new Model<String>(getParameterName(parameter)));
                     downChoice.setVisible(true);
+                }
+                // if parameter is not mandatory, even if we selected something by default, we should allow user to select null values
+                if (!parameter.isMandatory()) {                
+                	downChoice.setNullValid(true);
                 }
                 currentComponent = downChoice;
             } else {
