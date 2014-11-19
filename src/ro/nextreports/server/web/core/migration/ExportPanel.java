@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,15 +16,8 @@
  */
 package ro.nextreports.server.web.core.migration;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -37,7 +30,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-
 import ro.nextreports.server.StorageConstants;
 import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.DashboardState;
@@ -53,8 +45,14 @@ import ro.nextreports.server.web.common.form.FormPanel;
 import ro.nextreports.server.web.core.BasePage;
 import ro.nextreports.server.web.dashboard.EntityWidget;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 public class ExportPanel extends Panel {
 
@@ -74,41 +72,40 @@ public class ExportPanel extends Panel {
 
 		Form<Void> exportForm = new Form<Void>("exportForm");
 		add(exportForm);
-		
+
 		final Model<ArrayList<String>> choiceModel = new Model<ArrayList<String>>();
         final ListMultipleChoice listChoice = new ListMultipleChoice("listChoice", choiceModel, new PropertyModel<String>(this, "list"));
         listChoice.setMaxRows(10);
-        listChoice.setOutputMarkupId(true);        
+        listChoice.setOutputMarkupId(true);
         exportForm.add(listChoice);
-        
+
         AjaxLink addLink = new AjaxLink<Void>("addElement") {
 
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 	            ModalWindow dialog = findParent(BasePage.class).getDialog();
 	            dialog.setTitle(getString("Settings.migration.export.entity.add"));
 	            dialog.setInitialWidth(350);
 	            dialog.setUseInitialHeight(false);
-	            
+
 	            AddEntityPanel addEntityPanel = new AddEntityPanel() {
-	            	
+
 	                private static final long serialVersionUID = 1L;
 
 	                @Override
 	                public void onOk(AjaxRequestTarget target) {
-	                	if (getEntity() == null) {
-	                		error(getString("Settings.migration.export.entity.select"));
-	                		target.add(getFeedbackPanel());
-	            			return;
-	            		}
-	                	String path = getEntity().getPath();
-	                	path = path.substring(StorageConstants.NEXT_SERVER_ROOT.length() + 1);
-	                	if (!list.contains(path)) { 
-	                		list.add(path);
-	                	}
-	                	ModalWindow.closeCurrent(target);	                    	                    
+                        Iterator<Entity> entities = getEntities();
+                        while (entities.hasNext()) {
+                            Entity entity = entities.next();
+                            String path = entity.getPath();
+                            path = path.substring(StorageConstants.NEXT_SERVER_ROOT.length() + 1);
+                            if (!list.contains(path)) {
+                                list.add(path);
+                            }
+                        }
+	                	ModalWindow.closeCurrent(target);
 	                    target.add(listChoice);
 	                }
 
@@ -122,21 +119,21 @@ public class ExportPanel extends Panel {
 						super.onConfigure();
 						setOkButtonValue(getString("add"));
 					}
-	            	
+
 	            });
 	            dialog.show(target);
-			}						
-			
+			}
+
 		};
-		addLink.add(new SimpleTooltipBehavior(getString("Settings.migration.export.entity.add")));		
-		exportForm.add(addLink);        
+		addLink.add(new SimpleTooltipBehavior(getString("Settings.migration.export.entity.add")));
+		exportForm.add(addLink);
 
         AjaxSubmitLink removeLink = new AjaxSubmitLink("removeElement", exportForm) {
-        	
+
 			private static final long serialVersionUID = 1L;
 
 			@Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {						
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 for (String sel : choiceModel.getObject()) {
                     for (Iterator<?> it = list.iterator(); it.hasNext();) {
                         if  (sel.equals(it.next())) {
@@ -153,12 +150,12 @@ public class ExportPanel extends Panel {
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				target.add(form);
 			}
-			
+
         };
-        removeLink.add(new SimpleTooltipBehavior(getString("Settings.migration.export.entity.remove")));        
-        exportForm.add(removeLink);        
-		
-		TextField<String> exportField = new TextField<String>("exportPath", new PropertyModel<String>(this, "exportPath"));		
+        removeLink.add(new SimpleTooltipBehavior(getString("Settings.migration.export.entity.remove")));
+        exportForm.add(removeLink);
+
+		TextField<String> exportField = new TextField<String>("exportPath", new PropertyModel<String>(this, "exportPath"));
 		exportField.setLabel(new Model<String>(getString("Settings.migration.export.path")));
 		exportForm.add(exportField);
 
@@ -166,7 +163,7 @@ public class ExportPanel extends Panel {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				
+
 				// we do not use TextField validation with setRequired because we have a submit button (remove entity)
 				// which must work without validation
 				if ((exportPath == null) || "".endsWith(exportPath.trim())) {
@@ -174,7 +171,7 @@ public class ExportPanel extends Panel {
 					target.add(feedbackPanel);
 					return;
 				}
-				
+
 				NextServerApplication.setMaintenance(true);
 
 				MigrationObject mo = new MigrationObject();
@@ -190,15 +187,15 @@ public class ExportPanel extends Panel {
 
 				FileOutputStream fos = null;
 				try {
-					
+
 					if (list.size() == 0) {
 						error(getString("Settings.migration.export.entity.select"));
 					} else {
 
 						for (String pathM : list) {
 							populateLists(pathM, mo);
-						}						
-						
+						}
+
 						XStream xstream = new XStream(new DomDriver());
 						SimpleDateFormat sdf = new SimpleDateFormat("dd_MM_yyyy_hh_mm");
 						fos = new FileOutputStream(exportPath + File.separator + "migration-" + sdf.format(new Date()) + ".xml");
@@ -207,7 +204,7 @@ public class ExportPanel extends Panel {
 						info(getString("Settings.migration.export.info"));
 					}
 				} catch (Throwable t) {
-					error(t.getMessage());				
+					error(t.getMessage());
 				} finally {
 					NextServerApplication.setMaintenance(false);
 					if (fos != null) {
@@ -225,30 +222,30 @@ public class ExportPanel extends Panel {
 
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				target.add(feedbackPanel); 
+				target.add(feedbackPanel);
 			}
 
 		});
 	}
-	
+
 	private void populateLists(String pathM, MigrationObject mo) throws NotFoundException {
 		if (pathM.startsWith(StorageConstants.DATASOURCES_FOLDER_NAME)) {
 			DataSource ds = (DataSource) storageService.getEntity(StorageConstants.NEXT_SERVER_ROOT
-					+ StorageConstants.PATH_SEPARATOR + pathM);			
+					+ StorageConstants.PATH_SEPARATOR + pathM);
 			mo.getDataSources().add(ds);
 		} else if (pathM.startsWith(StorageConstants.REPORTS_FOLDER_NAME)) {
 			Report report = (Report) storageService.getEntity(StorageConstants.NEXT_SERVER_ROOT
-					+ StorageConstants.PATH_SEPARATOR + pathM);			
+					+ StorageConstants.PATH_SEPARATOR + pathM);
 			mo.getReports().add(report);
 		} else if (pathM.startsWith(StorageConstants.CHARTS_FOLDER_NAME)) {
 			Chart chart = (Chart) storageService.getEntity(StorageConstants.NEXT_SERVER_ROOT
-					+ StorageConstants.PATH_SEPARATOR + pathM);			
+					+ StorageConstants.PATH_SEPARATOR + pathM);
 			mo.getCharts().add(chart);
 		} else if (pathM.startsWith(StorageConstants.DASHBOARDS_FOLDER_NAME)) {
 			DashboardState dashboard = (DashboardState) storageService.getEntity(StorageConstants.NEXT_SERVER_ROOT
-					+ StorageConstants.PATH_SEPARATOR + pathM);			
+					+ StorageConstants.PATH_SEPARATOR + pathM);
 			mo.getDashboards().add(dashboard);
-			
+
 			for (WidgetState ws : dashboard.getWidgetStates()) {
 				String entityId = ws.getInternalSettings().get(EntityWidget.ENTITY_ID);
 				Entity entity = storageService.getEntityById(entityId);

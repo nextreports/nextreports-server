@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,11 +16,6 @@
  */
 package ro.nextreports.server.web.core.migration;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -28,6 +23,7 @@ import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
 import org.apache.wicket.extensions.markup.html.repeater.tree.content.Folder;
 import org.apache.wicket.extensions.markup.html.repeater.tree.theme.WindowsTheme;
+import org.apache.wicket.extensions.markup.html.repeater.util.ProviderSubset;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -36,11 +32,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-
 import ro.nextreports.server.StorageConstants;
-import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.Entity;
-import ro.nextreports.server.domain.Report;
 import ro.nextreports.server.exception.NotFoundException;
 import ro.nextreports.server.service.ReportService;
 import ro.nextreports.server.service.StorageService;
@@ -49,42 +42,48 @@ import ro.nextreports.server.web.common.form.FormContentPanel;
 import ro.nextreports.server.web.common.form.FormPanel;
 import ro.nextreports.server.web.core.tree.EntityTreeProvider;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * @author Mihai Dinca-Panaitescu
  * @date 18.04.2013
  */
-public class AddEntityPanel extends FormContentPanel {	
-	
+public class AddEntityPanel extends FormContentPanel {
+
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
 	private StorageService storageService;
-	
+
     @SpringBean
     private ReportService reportService;
 
 	private MigrationEntityType type;
-	private Entity entity;
-	
+//	private Entity entity;
+
 	private Component swapComponent;
 	private ITreeProvider<Entity> treeProvider;
 	private EntityTree tree;
-	
-	private IModel<Entity> selected;
-	
+
+	private ProviderSubset<Entity> selected;
+
 	public AddEntityPanel() {
-		super(FormPanel.CONTENT_ID);										
-		
+		super(FormPanel.CONTENT_ID);
+
 		final EmptyPanel emptyTree = new EmptyPanel("tree");
 		emptyTree.setOutputMarkupId(true);
 		swapComponent = emptyTree;
 		swapComponent.setOutputMarkupId(true);
-		add(swapComponent);		
-		
+		add(swapComponent);
+
 		List<MigrationEntityType> types = new ArrayList<MigrationEntityType>();
 		types.addAll(Arrays.asList(MigrationEntityType.values()));
 		IChoiceRenderer<MigrationEntityType> renderer = new ChoiceRenderer<MigrationEntityType> () {
-			
+
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -93,71 +92,45 @@ public class AddEntityPanel extends FormContentPanel {
 			}
 
 			@Override
-			public String getIdValue(MigrationEntityType object, int index) {    
+			public String getIdValue(MigrationEntityType object, int index) {
 				return object.toString();
 			}
-			
+
 	    };
-		DropDownChoice<MigrationEntityType> typeDropDownChoice = new DropDownChoice<MigrationEntityType>("type", 
+		DropDownChoice<MigrationEntityType> typeDropDownChoice = new DropDownChoice<MigrationEntityType>("type",
 				new PropertyModel<MigrationEntityType>(this, "type"), types, renderer);
 		typeDropDownChoice.setOutputMarkupPlaceholderTag(true);
-		add(typeDropDownChoice);						
-		
+		add(typeDropDownChoice);
+
 		typeDropDownChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 
 			private static final long serialVersionUID = 1L;
 
-			@Override			
-			protected void onUpdate(AjaxRequestTarget target) {				
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
 				if (type == null) {
 					if (tree != null) {
 						swapComponent.replaceWith(emptyTree);
 						swapComponent = emptyTree;
-						tree = null;						
-					}	
+						tree = null;
+					}
 				} else {
 					tree = createTree(getRootPath());
 					tree.setOutputMarkupId(true);
 					swapComponent.replaceWith(tree);
-					swapComponent = tree;					
-				}	
+					swapComponent = tree;
+				}
 				target.add(swapComponent);
 				target.add(getFeedbackPanel());
 			}
-			
+
 		});
 	}
-	
-	public boolean isDrillDownable() {
-		if (entity instanceof Chart) {
-			return ((Chart) entity).getDrillDownEntities().size() > 0;
-		} else if (entity instanceof Report) {
-			return ((Report) entity).getDrillDownEntities().size() > 0;
-		}
-		
-		return false;
+
+	public Iterator<Entity> getEntities() {
+		return selected.iterator();
 	}
 
-	public boolean isChart() {
-		return MigrationEntityType.CHART.equals(type);
-	}
-	
-	public boolean isReport() {
-		return MigrationEntityType.REPORT.equals(type);
-	}
-	
-	public boolean isDatasource() {
-		return MigrationEntityType.DATASOURCE.equals(type);
-	}
-	
-	public boolean isDashboard() {
-		return MigrationEntityType.DASHBOARD.equals(type);
-	}		
-	
-	public Entity getEntity() {
-		return entity;
-	}		
-	
 	protected EntityTree createTree(String rootPath) {
 		treeProvider = new EntityTreeProvider(rootPath) {
 
@@ -166,25 +139,31 @@ public class AddEntityPanel extends FormContentPanel {
 			@Override
 			protected List<Entity> getChildren(String id) throws NotFoundException {
 				// sort
-				List<Entity> children = super.getChildren(id);								
+				List<Entity> children = super.getChildren(id);
 				Collections.sort(children, new EntityComparator());
 
 				return children;
 			}
-			
+
 		};
+
+        selected = new ProviderSubset<Entity>(treeProvider, false);
 
 		return new EntityTree("tree", treeProvider);
 	}
-	
-    protected boolean isSelected(Entity entity) {
-        IModel<Entity> model = treeProvider.model(entity);
 
-        try {
-            return (selected != null) && selected.equals(model)  && !(selected.getObject() instanceof ro.nextreports.server.domain.Folder);
-        } finally {
-            model.detach();
+    protected boolean isSelected(Entity entity) {
+        return selected.contains(entity);
+    }
+
+    protected void toggle(Entity entity, AjaxRequestTarget target) {
+        if (isSelected(entity)) {
+            selected.remove(entity);
+        } else {
+            selected.add(entity);
         }
+
+        tree.updateNode(entity, target);
     }
 
 	private String getRootPath() {
@@ -198,27 +177,17 @@ public class AddEntityPanel extends FormContentPanel {
 		} else {
 			rootPath = StorageConstants.DASHBOARDS_ROOT;
 		}
-		
+
 		return rootPath;
 	}
-	
-	private void onNodeClicked(Entity entity, AjaxRequestTarget target) {
-        if (!(entity instanceof ro.nextreports.server.domain.Folder)) {
-        	this.entity = entity;
-        } else {
-        	this.entity = null;
-        }   
-        
-        target.add(getFeedbackPanel());
-	}				
-	
+
 	private class EntityTree extends NestedTree<Entity> {
 
     	private static final long serialVersionUID = 1L;
-    	
+
     	public EntityTree(String id, ITreeProvider<Entity> provider) {
 			super(id, provider);
-			
+
     		add(new WindowsTheme());
 		}
 
@@ -238,47 +207,36 @@ public class AddEntityPanel extends FormContentPanel {
                 	if (t instanceof ro.nextreports.server.domain.Folder) {
                 		return getClosedStyleClass();
                 	}
-                	
+
                 	return super.getOtherStyleClass(t);
 				}
 
     			@Override
-    			protected void onClick(AjaxRequestTarget target) {    				    				
-    				// I don't want the default behavior (collapse node if it's expanded)
-//    				super.onClick(target);
-    				Entity entity = getModelObject();
-    				if (tree.getState(entity) == State.COLLAPSED) {
-    					tree.expand(entity);
-    				} else {
-        	        	tree.updateNode(entity, target);    					
-    				}
-    				
-    				// refresh the old selected node
-    				if (selected != null) {
-    		            tree.updateNode(selected.getObject(), target);
+    			protected void onClick(AjaxRequestTarget target) {
+                    super.onClick(target);
 
-    		            selected.detach();
-    		            selected = null;
-    		        }
+                    if (getModelObject() instanceof ro.nextreports.server.domain.Folder) {
+                        return;
+                    }
 
-    		        selected = treeProvider.model(getModelObject());
-    				
-    				onNodeClicked(getModelObject(), target);
+                    AddEntityPanel.this.toggle(getModelObject(), target);
+
+                    target.add(getFeedbackPanel());
     			}
-    			
+
     			@Override
 				protected boolean isSelected() {
    	                return AddEntityPanel.this.isSelected(getModelObject());
 				}
-    			
+
     			@Override
     			protected IModel<?> newLabelModel(IModel<Entity> model) {
     				return Model.of(model.getObject().getName());
     			}
-    			
+
     		};
 		}
-		
+
 	}
 
 }
