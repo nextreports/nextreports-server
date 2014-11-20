@@ -128,6 +128,9 @@ public class AddEntityPanel extends FormContentPanel {
 	}
 
 	public Iterator<Entity> getEntities() {
+		if (selected == null) {
+			return Collections.emptyIterator();
+		}
 		return selected.iterator();
 	}
 

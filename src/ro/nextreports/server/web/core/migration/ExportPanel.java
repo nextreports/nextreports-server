@@ -97,6 +97,11 @@ public class ExportPanel extends Panel {
 	                @Override
 	                public void onOk(AjaxRequestTarget target) {
                         Iterator<Entity> entities = getEntities();
+                        if (!entities.hasNext()) {
+	                		error(getString("Settings.migration.export.entity.select"));
+	                		target.add(getFeedbackPanel());
+	            			return;
+	            		}
                         while (entities.hasNext()) {
                             Entity entity = entities.next();
                             String path = entity.getPath();
