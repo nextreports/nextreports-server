@@ -32,12 +32,12 @@ import ro.nextreports.server.domain.NextContent;
 import ro.nextreports.server.domain.Settings;
 import ro.nextreports.server.exception.FormatNotSupportedException;
 import ro.nextreports.server.exception.ReportEngineException;
+import ro.nextreports.server.report.ETLExporter;
 import ro.nextreports.server.report.ExportContext;
 import ro.nextreports.server.report.ExternalParameter;
 import ro.nextreports.server.report.ReportEngineAdapter;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.util.ConnectionUtil;
-
 import ro.nextreports.engine.Report;
 import ro.nextreports.engine.ReportRunner;
 import ro.nextreports.engine.FluentReportRunner;
@@ -105,6 +105,11 @@ public class NextEngine extends ReportEngineAdapter {
     @Override
     public boolean supportTxtOutput() {
         return true;
+    }
+    
+    @Override
+    public boolean supportETL() {
+    	return true;
     }
    
     public StorageService getStorageService() {
@@ -237,6 +242,14 @@ public class NextEngine extends ReportEngineAdapter {
             throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException {
         return exportReport(exportContext, ReportRunner.TXT_FORMAT);
     }
+    
+    @Override
+	public void exportReportToEtl(ExportContext exportContext) throws FormatNotSupportedException, ReportEngineException,
+			NoDataFoundException, InterruptedException {	
+    		ETLExporter etlExporter = new ETLExporter(exportContext); 	
+    		etlExporter.setStorageService(storageService);
+    		etlExporter.export();
+	}
 
 
     public void stopExport(String key) {
@@ -300,5 +313,7 @@ public class NextEngine extends ReportEngineAdapter {
         Report nextReport = NextUtil.getNextReport(storageService.getSettings(), report);
         return ReportUtil.getStaticImages(nextReport);
     }
+
+	
 
 }

@@ -212,8 +212,8 @@ public class RunReportJob implements Job {
 			}
 
 			String[] result = new String[2];
-			// for alarm alert there is no url
-			if (report.isAlarmType() || report.isIndicatorType() || report.isDisplayType()) {				
+			if (report.isAlarmType() || report.isIndicatorType() || report.isDisplayType()) {	
+				// for alarm alert there is no url
 				ro.nextreports.engine.Report nextReport = NextUtil.getNextReport(storageService.getSettings(), (NextContent) report.getContent());
 				final ReportRunner reportRunner = new ReportRunner();
 				reportRunner.setParameterValues(schedulerJob.getReportRuntime().getParametersValues());
@@ -283,8 +283,13 @@ public class RunReportJob implements Job {
 				reportRunner.run();   								
 			} else {				
 				result = reportService.reportToURL(report, schedulerJob.getReportRuntime(), key);
-				fileName = result[0];
-				url = result[1];				
+				if (result == null) {
+					fileName = "";
+					url = "";
+				} else {
+					fileName = result[0];
+					url = result[1];
+				}
 			}
         } catch (ReportEngineException e) {
             error = true;

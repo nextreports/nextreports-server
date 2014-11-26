@@ -51,6 +51,8 @@ public interface ReportEngine {
     public boolean supportRtfOutput();
     
     public boolean supportDocxOutput();
+    
+    public boolean supportETL();
 
     public byte[] exportReportToPdf(ExportContext exportContext)
             throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException;
@@ -77,6 +79,9 @@ public interface ReportEngine {
         throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException;
     
     public byte[] exportReportToDocx(ExportContext exportContext)
+            throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException;
+    
+    public void exportReportToEtl(ExportContext exportContext)
             throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException;
 
     public void stopExport(String key);

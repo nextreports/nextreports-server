@@ -39,6 +39,7 @@ public class ReportConstants {
     public static final String TSV_FORMAT = "TSV";
     public static final String XML_FORMAT = "XML";
     public static final String TXT_FORMAT = "TXT";
+    public static final String ETL_FORMAT = "ETL";
     /**
      * Next Report Type
      */

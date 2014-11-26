@@ -159,6 +159,9 @@ public class DefaultReportService implements ReportService {
         if (reportEngine.supportCsvOutput()) {
             supportedOutputs.add(ReportConstants.CSV_FORMAT);
         }
+        if (reportEngine.supportETL()) {
+            supportedOutputs.add(ReportConstants.ETL_FORMAT);
+        }
 
         return supportedOutputs;
     }
@@ -221,7 +224,10 @@ public class DefaultReportService implements ReportService {
 	            result = engine.exportReportToXml(exportContext);
 	        } else if (ReportConstants.TXT_FORMAT.equals(outputType)) {
 	            result = engine.exportReportToTxt(exportContext);
-	        }	        	        
+	        } else if (ReportConstants.ETL_FORMAT.equals(outputType)) {
+	            engine.exportReportToEtl(exportContext);
+	            result = null;
+	        }	 	        	        
 	        
 	        // parameters values may be computed at runtime so put them in reportRuntime to have them for history
 	        reportRuntime.updateDynamicParameterValues(exportContext.getReportParameterValues());

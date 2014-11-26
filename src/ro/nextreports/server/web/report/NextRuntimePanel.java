@@ -16,6 +16,7 @@
  */
 package ro.nextreports.server.web.report;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,10 +27,10 @@ import org.springframework.beans.factory.annotation.Required;
 
 import ro.nextreports.server.domain.DataSource;
 import ro.nextreports.server.domain.Report;
+import ro.nextreports.server.report.ReportConstants;
 import ro.nextreports.server.report.next.NextUtil;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.web.report.ReportRuntimeModel;
-
 import ro.nextreports.engine.ReportRunner;
 import ro.nextreports.engine.exporter.ResultExporter;
 import ro.nextreports.engine.i18n.I18nLanguage;
@@ -42,7 +43,7 @@ public class NextRuntimePanel extends DynamicParameterRuntimePanel {
     @SpringBean
     private StorageService storageService;
 
-    private static final List<String> typeList = Arrays.asList(ReportRunner.FORMATS);
+    private static final List<String> typeList = createTypeList();
 
     public NextRuntimePanel(String id, final Report report, ReportRuntimeModel runtimeModel, boolean runNow) {
         super(id, runNow);        
@@ -54,6 +55,13 @@ public class NextRuntimePanel extends DynamicParameterRuntimePanel {
             runtimeModel.setExportLayout(ResultExporter.PORTRAIT);
         }
         init(runtimeModel);        
+    }
+    
+    private static List<String> createTypeList() {
+    	List<String> result = new ArrayList<String>();
+    	result.addAll(Arrays.asList(ReportRunner.FORMATS));
+    	result.add(ReportConstants.ETL_FORMAT);
+    	return result;
     }
 
     @SuppressWarnings("unchecked")
