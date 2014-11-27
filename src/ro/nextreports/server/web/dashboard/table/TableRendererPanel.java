@@ -22,10 +22,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
@@ -69,7 +71,15 @@ public class TableRendererPanel extends GenericPanel<Report> {
 		this.drillContext = drillContext;		
 						
 		TableDataProvider dataProvider = new TableDataProvider(widgetId, drillContext, urlQueryParameters);
-        add(getCurrentTable(dataProvider, widgetId));        
+		WebMarkupContainer container = new WebMarkupContainer("tableContainer");
+		container.add(getCurrentTable(dataProvider, widgetId));
+		boolean single = dashboardService.isSingleWidget(widgetId);		
+		// table is the single widget in a dashboard with one column
+		// make the height 100%
+		if (single) {		
+			container.add(AttributeModifier.replace("class", "tableWidgetViewFull"));
+		}
+        add(container);        
 	}	
 	
 	private BaseTable getCurrentTable(TableDataProvider dataProvider, String widgetId ) {    	        
@@ -81,14 +91,14 @@ public class TableRendererPanel extends GenericPanel<Report> {
 			LOG.error(e.getMessage(), e);
 			throw new RuntimeException(ExceptionUtils.getRootCauseMessage(e));
 		}
-		int rowsPerPage = Integer.MAX_VALUE;		
+		int rowsPerPage = Integer.MAX_VALUE;				
 		try {
 			Widget widget = dashboardService.getWidgetById(widgetId);
-			rowsPerPage = WidgetUtil.getRowsPerPage(dashboardService, widget);
+			rowsPerPage = WidgetUtil.getRowsPerPage(dashboardService, widget);						
 		} catch (NotFoundException e) {
 			LOG.error(e.getMessage(), e);
 		}
-		BaseTable<RowData> table = new BaseTable<RowData>("table", getPropertyColumns(tableHeader), dataProvider, rowsPerPage);		
+		BaseTable<RowData> table = new BaseTable<RowData>("table", getPropertyColumns(tableHeader), dataProvider, rowsPerPage);					
         return table;
     }
 

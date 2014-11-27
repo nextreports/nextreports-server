@@ -159,3 +159,8 @@ table.actions-grid tr td.actions-col-hover {
 	border: 1px solid rgb(202, 202, 202); 
 	max-height: 300px;
 }
+
+.tableWidgetViewFull {
+	border: 1px solid rgb(202, 202, 202);
+	max-height: 100% !important;
+}
