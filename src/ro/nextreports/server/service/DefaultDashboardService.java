@@ -1049,6 +1049,23 @@ public class DefaultDashboardService implements DashboardService {
 		}
 	}
 	
+	// just a single widget in a dashboard with a single column
+	public boolean isSingleWidget(String widgetId) {
+		try {
+			WidgetState state = (WidgetState) storageService.getEntityById(widgetId);
+			DashboardState dState = getDashboardState(state);
+			if (dState.getColumnCount() > 1) {
+				return false;
+			}
+			if (dState.getWidgetStates().size() > 1) {
+				return false;
+			}
+			return true;
+		} catch (NotFoundException e) {
+			return false;
+		}
+	}
+	
 	public void removeUserDashboards(String userName) {
 		String dashboardsPath = StorageConstants.DASHBOARDS_ROOT + "/" + userName;
 		try {
