@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven">                 
-                 
-    <info organisation="ro.nextreports" module="nextreports-server" revision="${app.version}"/>    
-        
+<ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven">
+
+    <info organisation="ro.nextreports" module="nextreports-server" revision="${app.version}"/>
+
     <configurations defaultconfmapping="runtime->default">
         <conf name="compile" description="Maven compile dependencies"/>
         <conf name="runtime" extends="compile" description="Runtime dependencies"/>
     </configurations>
-    
-    <dependencies>      
-        
+
+    <dependencies>
+
         <!-- NextReports Engine -->
         <dependency org="ro.nextreports" name="nextreports-engine" rev="${app.version}" changing="true"/>
-    
+
         <!-- Logging -->
         <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.1"/>
-    
+
         <!-- Apache Commons -->
         <dependency org="commons-configuration" name="commons-configuration" rev="1.7"/>
-        
+
         <!-- Spring -->
         <dependency org="org.springframework" name="spring-core" rev="${spring.version}"/>
         <dependency org="org.springframework" name="spring-beans" rev="${spring.version}"/>
@@ -28,16 +28,16 @@
         <dependency org="org.springframework" name="spring-tx" rev="${spring.version}"/>
         <dependency org="org.springframework" name="spring-jdbc" rev="${spring.version}"/>
         <dependency org="org.springframework" name="spring-web" rev="${spring.version}"/>
-        
+
         <!-- Spring Security -->
         <dependency org="org.springframework.security" name="spring-security-core" rev="${spring-security.version}"/>
         <dependency org="org.springframework.security" name="spring-security-config" rev="${spring-security.version}"/>
         <dependency org="org.springframework.security" name="spring-security-acl" rev="${spring-security.version}"/>
         <dependency org="org.springframework.security" name="spring-security-cas-client" rev="${spring-security.version}"/>
-                        
+
         <!-- The JCR API -->
         <dependency org="javax.jcr" name="jcr" rev="2.0"/>
-                        
+
         <!-- Apache Jackrabbit -->
         <dependency org="org.apache.jackrabbit" name="jackrabbit-api" rev="${jackrabbit.version}"/>
         <dependency org="org.apache.jackrabbit" name="jackrabbit-core" rev="${jackrabbit.version}">
@@ -63,13 +63,13 @@
         <dependency org="org.apache.jackrabbit" name="jackrabbit-jcr-commons" rev="${jackrabbit.version}"/>
         <dependency org="org.apache.jackrabbit" name="jackrabbit-spi" rev="${jackrabbit.version}"/>
         <dependency org="org.apache.jackrabbit" name="jackrabbit-spi-commons" rev="${jackrabbit.version}"/>
-                        
+
         <!-- Wicket -->
         <dependency org="org.apache.wicket" name="wicket-core" rev="${wicket.version}"/>
-        <dependency org="org.apache.wicket" name="wicket-extensions" rev="${wicket.version}"/>       
+        <dependency org="org.apache.wicket" name="wicket-extensions" rev="${wicket.version}"/>
         <dependency org="org.apache.wicket" name="wicket-spring" rev="${wicket.version}"/>
         <dependency org="org.apache.wicket" name="wicket-datetime" rev="${wicket.version}"/>
-        <dependency org="org.apache.wicket" name="wicket-devutils" rev="${wicket.version}"/>   
+        <dependency org="org.apache.wicket" name="wicket-devutils" rev="${wicket.version}"/>
 
         <!-- Wicket push -->
         <!--
@@ -79,7 +79,7 @@
         <!--
         <dependency org="org.wicketstuff" name="push-cometd" rev="${wicket.version}"/>
         -->
-        
+
         <!-- Quartz Scheduler -->
         <dependency org="org.quartz-scheduler" name="quartz" rev="2.2.0">
             <exclude org="c3p0" module="c3p0"/>
@@ -105,7 +105,7 @@
             <exclude org="org.apache.jackrabbit" module="jackrabbit-jcr-rmi"/>
             <exclude org="geronimo-spec" module="geronimo-spec-jta"/>
             <exclude org="geronimo-spec" module="geronimo-spec-j2ee-connector"/>
-            <exclude org="javax.servlet" module="servlet-api"/>         
+            <exclude org="javax.servlet" module="servlet-api"/>
         </dependency>
 
         <!-- Java Transaction -->
@@ -114,10 +114,10 @@
         <!-- Sardine WebDav client (http://code.google.com/p/sardine/) -->
         <dependency org="com.googlecode.sardine" name="sardine" rev="129"/>
 
-        <!-- FTP4j FTP client -->        
+        <!-- FTP4j FTP client -->
         <dependency org="it.sauronsoftware" name="ftp4j" rev="1.6"/>
 
-        <!-- Wiquery -->        
+        <!-- Wiquery -->
         <dependency org="org.codehaus.jackson" name="jackson-mapper-asl" rev="1.9.4"/>
         <dependency org="org.odlabs.wiquery" name="wiquery-core" rev="${wiquery.version}"/>
         <dependency org="org.odlabs.wiquery" name="wiquery-jquery-ui" rev="${wiquery.version}"/>
@@ -136,35 +136,38 @@
         <dependency org="com.sun.jersey" name="jersey-client" rev="1.18"/>
         <dependency org="com.sun.jersey" name="jersey-servlet" rev="1.18"/>
         <dependency org="com.sun.jersey.contribs" name="jersey-spring" rev="1.18"/>
-        
+
         <!-- Ehcache -->
         <dependency org="net.sf.ehcache" name="ehcache-core" rev="2.2.0"/>
-        
+
         <!-- DataSource pooling -->
         <dependency org="com.mchange" name="c3p0" rev="0.9.2.1"/>
 
-        <!-- Gson json (http://code.google.com/p/google-gson/) -->        
+        <!-- Gson json (http://code.google.com/p/google-gson/) -->
         <dependency org="com.google.code.gson" name="gson" rev="1.4"/>
-        
+
         <!-- jMimeMagic -->
         <dependency org="jmimemagic" name="jmimemagic" rev="0.1.2"/>
 
-        <!-- Java Mail -->        
+        <!-- Java Mail -->
         <dependency org="javax.mail" name="mail" rev="1.4.1"/>
-        
+
         <!-- AspectJ -->
         <dependency org="org.aspectj" name="aspectjrt" rev="1.7.4"/>
         <dependency org="org.aspectj" name="aspectjweaver" rev="1.7.4"/>
-        
+
         <!-- Astea nu stiu de ce trebuie -->
         <dependency org="org.jboss.spec.javax.annotation" name="jboss-annotations-api_1.1_spec" rev="1.0.0.Final"/>
-        
+
         <!-- Jasypt : encryption -->
         <dependency org="org.jasypt" name="jasypt" rev="1.9.0"/>
         <dependency org="org.jasypt" name="jasypt-spring3" rev="1.9.0"/>
-        
+
         <!-- Force resolve a specific derby jdbc driver -->
         <dependency org="org.apache.derby" name="derby" rev="10.10.1.1"/>
+
+        <!-- OrientDb -->
+        <dependency org="com.orientechnologies" name="orientdb-jdbc" rev="1.7"/>
     </dependencies>
-            
+
 </ivy-module>
