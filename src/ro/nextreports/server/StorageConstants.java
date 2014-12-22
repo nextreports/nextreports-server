@@ -30,6 +30,7 @@ public interface StorageConstants {
     public static final String SCHEDULER_FOLDER_NAME = "scheduler";
     public static final String CHARTS_FOLDER_NAME = "charts";
     public static final String DASHBOARDS_FOLDER_NAME = "dashboards";
+    public static final String ANALYSIS_FOLDER_NAME = "analysis";
     public static final String SETTINGS_FOLDER_NAME = "settings";
     public static final String USERS_FOLDER_NAME = "users";
     public static final String GROUPS_FOLDER_NAME = "groups";
@@ -45,6 +46,7 @@ public interface StorageConstants {
     public static final String SCHEDULER_ROOT = NEXT_SERVER_ROOT + PATH_SEPARATOR + SCHEDULER_FOLDER_NAME;
     public static final String CHARTS_ROOT = NEXT_SERVER_ROOT + PATH_SEPARATOR + CHARTS_FOLDER_NAME;
     public static final String DASHBOARDS_ROOT = NEXT_SERVER_ROOT + PATH_SEPARATOR + DASHBOARDS_FOLDER_NAME;
+    public static final String ANALYSIS_ROOT = NEXT_SERVER_ROOT + PATH_SEPARATOR + ANALYSIS_FOLDER_NAME;
     public static final String SETTINGS_ROOT = NEXT_SERVER_ROOT + PATH_SEPARATOR + SETTINGS_FOLDER_NAME;
     public static final String USERS_ROOT = SECURITY_ROOT + PATH_SEPARATOR + USERS_FOLDER_NAME;
 	public static final String GROUPS_ROOT = SECURITY_ROOT + PATH_SEPARATOR + GROUPS_FOLDER_NAME;

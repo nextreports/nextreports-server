@@ -62,5 +62,9 @@ public interface ExportContext {
     public void setAlert(Alert alert);
     
     public Alert getAlert();
+    
+    public String getCreator();
+    
+    public void setCreator(String creator);  
 
 }

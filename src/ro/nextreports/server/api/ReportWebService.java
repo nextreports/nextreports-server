@@ -93,7 +93,10 @@ public class ReportWebService {
             }
             runtime.setParametersValues(runReportMetaData.getParametersValues(), null);
 
-            String[] result = reportService.reportToURL(report, runtime, UUID.randomUUID().toString());
+            String[] result = reportService.reportToURL(report, runtime, "webservice", UUID.randomUUID().toString());
+            if (result == null) {
+            	return "";
+            }
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("url = " + result[1]);

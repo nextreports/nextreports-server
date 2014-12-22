@@ -36,6 +36,10 @@ public abstract class ReportEngineAdapter implements ReportEngine {
     public boolean supportExcelOutput() {
         return false;
     }
+    
+    public boolean supportExcelXOutput() {
+        return false;
+    }
 
     public boolean supportHtmlOutput() {
         return false;
@@ -78,6 +82,12 @@ public abstract class ReportEngineAdapter implements ReportEngine {
             throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException {
         throw new FormatNotSupportedException("Format Excel not supported");
     }
+    
+    public byte[] exportReportToExcelX(ExportContext exportContext)
+            throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException {
+        throw new FormatNotSupportedException("Format ExcelX not supported");
+    }
+
 
     public byte[] exportReportToHtml(ExportContext exportContext)
             throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException {

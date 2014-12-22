@@ -136,6 +136,15 @@
         </property>
     </bean>
     
+    <bean id="analysisSection" class="ro.nextreports.server.web.analysis.AnalysisSection">
+         <property name="popupContributors">
+            <list>  
+                <bean class="ro.nextreports.server.web.action.analysis.ModifyActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.analysis.DeleteActionContributor"/>              
+            </list>
+         </property>   
+    </bean>       
+    
     <bean id="schedulerSection" class="ro.nextreports.server.web.schedule.SchedulerSection">
         <property name="menuContributors">
             <list>

@@ -69,6 +69,7 @@ import ro.nextreports.server.domain.ShortcutType;
 import ro.nextreports.server.domain.SmtpAlertDestination;
 import ro.nextreports.server.exception.FormatNotSupportedException;
 import ro.nextreports.server.exception.ReportEngineException;
+import ro.nextreports.server.report.ReportConstants;
 import ro.nextreports.server.report.next.NextUtil;
 import ro.nextreports.server.report.util.ReportUtil;
 import ro.nextreports.server.service.ReportService;
@@ -78,7 +79,6 @@ import ro.nextreports.server.util.ConnectionUtil;
 import ro.nextreports.server.util.PermissionUtil;
 import ro.nextreports.server.util.StorageUtil;
 import ro.nextreports.server.web.language.LanguageManager;
-
 import ro.nextreports.engine.ReportRunner;
 import ro.nextreports.engine.ReportRunnerException;
 import ro.nextreports.engine.condition.ConditionalExpression;
@@ -104,7 +104,7 @@ public class RunReportJob implements Job {
     public static final String RUNNER_KEY = "RUNNER_KEY";
     public static final String REPORT_TYPE = "REPORT_TYPE";
     public static final String AUDIT_EVENT = " AUDIT_EVENT";
-    public static final String AUDITOR = "AUDITOR";
+    public static final String AUDITOR = "AUDITOR";    
 
     public void execute(JobExecutionContext context) throws JobExecutionException {
         JobDataMap dataMap = context.getMergedJobDataMap();
@@ -282,10 +282,10 @@ public class RunReportJob implements Job {
 				reportRunner.setAlerts(alerts);
 				reportRunner.run();   								
 			} else {				
-				result = reportService.reportToURL(report, schedulerJob.getReportRuntime(), key);
+				result = reportService.reportToURL(report, schedulerJob.getReportRuntime(), schedulerJob.getCreator(), key);
 				if (result == null) {
 					fileName = "";
-					url = "";
+					url = ReportConstants.ETL_FORMAT;
 				} else {
 					fileName = result[0];
 					url = result[1];

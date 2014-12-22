@@ -36,6 +36,7 @@ import ro.nextreports.server.report.ETLExporter;
 import ro.nextreports.server.report.ExportContext;
 import ro.nextreports.server.report.ExternalParameter;
 import ro.nextreports.server.report.ReportEngineAdapter;
+import ro.nextreports.server.service.AnalysisService;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.util.ConnectionUtil;
 import ro.nextreports.engine.Report;
@@ -61,6 +62,7 @@ public class NextEngine extends ReportEngineAdapter {
     private static final Logger LOG = LoggerFactory.getLogger(NextEngine.class);
 
     private StorageService storageService;    
+    private AnalysisService analysisService;
 
     @Override
     public boolean supportCsvOutput() {
@@ -74,6 +76,11 @@ public class NextEngine extends ReportEngineAdapter {
 
     @Override
     public boolean supportExcelOutput() {
+        return true;
+    }
+    
+    @Override
+    public boolean supportExcelXOutput() {
         return true;
     }
 
@@ -118,6 +125,14 @@ public class NextEngine extends ReportEngineAdapter {
 
 	public void setStorageService(StorageService storageService) {
 		this.storageService = storageService;
+	}
+		
+	public AnalysisService getAnalysisService() {
+		return analysisService;
+	}
+
+	public void setAnalysisService(AnalysisService analysisService) {
+		this.analysisService = analysisService;
 	}
 
 	private byte[] exportReport(ExportContext exportContext, String format)
@@ -206,6 +221,12 @@ public class NextEngine extends ReportEngineAdapter {
             throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException {
         return exportReport(exportContext, ReportRunner.EXCEL_FORMAT);
     }
+    
+    @Override
+    public byte[] exportReportToExcelX(ExportContext exportContext)
+            throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException {
+        return exportReport(exportContext, ReportRunner.EXCEL_XLSX_FORMAT);
+    }
 
     @Override
     public byte[] exportReportToHtml(ExportContext exportContext)
@@ -248,6 +269,7 @@ public class NextEngine extends ReportEngineAdapter {
 			NoDataFoundException, InterruptedException {	
     		ETLExporter etlExporter = new ETLExporter(exportContext); 	
     		etlExporter.setStorageService(storageService);
+    		etlExporter.setAnalysisService(analysisService);
     		etlExporter.export();
 	}
 

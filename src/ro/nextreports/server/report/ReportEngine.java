@@ -37,6 +37,8 @@ public interface ReportEngine {
     public boolean supportPdfOutput();
 
     public boolean supportExcelOutput();
+    
+    public boolean supportExcelXOutput();
 
     public boolean supportHtmlOutput();
 
@@ -58,6 +60,9 @@ public interface ReportEngine {
             throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException;
 
     public byte[] exportReportToExcel(ExportContext exportContext)
+            throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException;
+    
+    public byte[] exportReportToExcelX(ExportContext exportContext)
             throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException;
 
     public byte[] exportReportToHtml(ExportContext exportContext)

@@ -20,7 +20,6 @@ import java.io.Serializable;
 import java.util.Map;
 
 import ro.nextreports.server.domain.DataSource;
-
 import ro.nextreports.engine.exporter.Alert;
 
 /**
@@ -39,6 +38,8 @@ public class DefaultExportContext implements ExportContext {
     private int layoutType;
     private boolean headerPerPage;
     private Alert alert;
+    private String creator;
+    private String analysisName;
 
     public String getId() {
         return id;
@@ -102,6 +103,14 @@ public class DefaultExportContext implements ExportContext {
 
 	public void setAlert(Alert alert) {
 		this.alert = alert;
-	}        
+	}      
+	
+	public String getCreator() {
+		return creator;
+	}
+    
+    public void setCreator(String creator) {
+    	this.creator = creator;
+    }
 
 }

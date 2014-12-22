@@ -96,7 +96,8 @@ public class JGrowlAjaxBehavior extends AbstractDefaultAjaxBehavior {
 			// if we are info stick set to info else set to message level
 			String cssClassSuffix = "";
 			switch (message.getLevel()) {
-				case INFO_STICKY: 
+				case INFO_STICKY:
+				case INFO_FADE:	
 					cssClassSuffix = "INFO";
 					break;
 				case ERROR_STICKY:

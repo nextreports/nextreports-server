@@ -109,6 +109,12 @@
         </property>
     </bean>
     
+     <bean id="analysisService" class="ro.nextreports.server.service.DefaultAnalysisService">
+        <property name="storageService">
+            <ref bean="storageService"/>
+        </property>        
+    </bean>
+    
     <!-- =================================== -->
     <!-- A D V I S O R S                     -->
     <!-- =================================== -->
@@ -164,5 +170,10 @@
     <bean class="ro.nextreports.server.aop.DataSourceModifiedAdvice">
         <property name="storageService" ref="storageService"/>        
     </bean>
+    
+    <bean id="analysisReader" class="ro.nextreports.server.web.analysis.DatabaseAnalysisReader">
+      <!-- <property name="dataSource" ref="dataSource"></property> -->
+      <property name="storageService" ref="storageService"></property>
+    </bean> 
 
 </beans>

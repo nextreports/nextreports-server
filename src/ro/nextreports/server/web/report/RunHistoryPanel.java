@@ -74,6 +74,7 @@ import ro.nextreports.server.domain.Report;
 import ro.nextreports.server.domain.RunReportHistory;
 import ro.nextreports.server.domain.User;
 import ro.nextreports.server.exception.NotFoundException;
+import ro.nextreports.server.report.ReportConstants;
 import ro.nextreports.server.service.ReportService;
 import ro.nextreports.server.service.SecurityService;
 import ro.nextreports.server.service.StorageService;
@@ -435,6 +436,9 @@ public class RunHistoryPanel extends Panel {
                 String url = rowModel.getObject().getUrl();
                 if ((url == null) || url.equals("")) {
                     item.add(new Label(componentId));
+                    return;
+                } else if (url.equals(ReportConstants.ETL_FORMAT)) {
+                	item.add(new Label(componentId, Model.of(url)));
                     return;
                 }
 

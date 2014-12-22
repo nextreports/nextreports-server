@@ -24,16 +24,25 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
+import ro.nextreports.server.web.common.misc.AjaxConfirmLink;
+
 public abstract class LinkPropertyColumn<T> extends PropertyColumn<T, String> {
-		
+	
 	private static final long serialVersionUID = 1L;
 	private IModel labelModel;
+	private IModel<String> confirmModel;
 
 	@SuppressWarnings("unchecked")
 	public LinkPropertyColumn(IModel displayModel, IModel labelModel) {
 		super(displayModel, null);
-		
 		this.labelModel = labelModel;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public LinkPropertyColumn(IModel displayModel, IModel labelModel, IModel<String> confirmModel) {
+		super(displayModel, null);
+		this.labelModel = labelModel;
+		this.confirmModel = confirmModel;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -62,22 +71,36 @@ public abstract class LinkPropertyColumn<T> extends PropertyColumn<T, String> {
 		public LinkPanel(final Item item, final String componentId,	final IModel model) {
 			super(componentId);
 
-			AjaxLink link = new AjaxLink("link") {
-								
-				private static final long serialVersionUID = 1L;
+			AjaxLink link;
+			if (confirmModel == null) {
+				link = new AjaxLink("link") {
 
-				@Override
-				public void onClick(AjaxRequestTarget ajaxRequestTarget) {
-					LinkPropertyColumn.this.onClick(item, componentId, model, ajaxRequestTarget);
-					
-				}
-			};			
+					private static final long serialVersionUID = 1L;
 
-			add(link);
+					@Override
+					public void onClick(AjaxRequestTarget ajaxRequestTarget) {
+						LinkPropertyColumn.this.onClick(item, componentId, model, ajaxRequestTarget);
+
+					}
+				};
+				add(link);
+			} else {
+			    link = new AjaxConfirmLink("link", confirmModel.getObject()) {
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick(AjaxRequestTarget ajaxRequestTarget) {
+						LinkPropertyColumn.this.onClick(item, componentId, model, ajaxRequestTarget);
+
+					}
+				};
+				add(link);
+			}
 
 			IModel tmpLabelModel = labelModel;
 			if (labelModel == null) {
-				tmpLabelModel = createLabelModel(model);
+				tmpLabelModel = getDataModel(model);
 			}
 
 			link.add(new Label("label", tmpLabelModel));

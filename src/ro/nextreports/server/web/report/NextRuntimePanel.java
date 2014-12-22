@@ -18,9 +18,13 @@ package ro.nextreports.server.web.report;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.beans.factory.annotation.Required;
@@ -41,7 +45,7 @@ public class NextRuntimePanel extends DynamicParameterRuntimePanel {
     private Report report;
     
     @SpringBean
-    private StorageService storageService;
+    private StorageService storageService;    
 
     private static final List<String> typeList = createTypeList();
 
@@ -65,8 +69,30 @@ public class NextRuntimePanel extends DynamicParameterRuntimePanel {
     }
 
     @SuppressWarnings("unchecked")
-    public void addWicketComponents() {
+    public void addWicketComponents() {    	    
+    	
+    	//@todo analysis remove (see html)
+//    	final AnalysisRuntimePanel analysisPanel = new AnalysisRuntimePanel("analysisPanel",  (ReportRuntimeModel)runtimeModel);
+//    	analysisPanel.setOutputMarkupPlaceholderTag(true);
+//    	analysisPanel.setVisible(false);
+//    	add(analysisPanel);
+    	
         final DropDownChoice exportChoice = new DropDownChoice("exportType", new PropertyModel(runtimeModel, "exportType"), typeList);
+        exportChoice.add(new AjaxFormComponentUpdatingBehavior("onChange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                String format = (String) getFormComponent().getConvertedInput();
+                if (ReportConstants.ETL_FORMAT.equals(format)) {
+					System.out.println("***** ETL selected");
+					//analysisPanel.setVisible(true);
+				} else {
+					System.out.println("***** " + format);
+					//analysisPanel.setVisible(false);
+				}
+                //target.add(analysisPanel);
+            }
+        });
+			
         exportChoice.setRequired(true);
         add(exportChoice);
         
@@ -75,6 +101,8 @@ public class NextRuntimePanel extends DynamicParameterRuntimePanel {
         } else {
         	exportChoice.setRequired(true);
         }
+        
+        
     }
 
     public ro.nextreports.engine.Report getNextReport() {

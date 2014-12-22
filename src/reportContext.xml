@@ -5,6 +5,7 @@
 
     <bean id="nextReportsEngine" class="ro.nextreports.server.report.next.NextEngine">
     	<property name="storageService" ref="storageService"/>       
+    	<property name="analysisService" ref="analysisService"/>
     </bean>
 
     <bean id="jasperReportsEngine" class="ro.nextreports.server.report.jasper.JasperEngine">

@@ -48,10 +48,10 @@ public interface ReportService {
 
     public void stopExport(String key, String exporterType);
 
-    public byte[] reportTo(Report report, ReportRuntime reportRuntime, String key) throws ReportEngineException, 
+    public byte[] reportTo(Report report, ReportRuntime reportRuntime, String creator, String key) throws ReportEngineException, 
     		FormatNotSupportedException, NoDataFoundException, InterruptedException;
 
-    public String[] reportToURL(Report report, ReportRuntime reportRuntime, String key) throws ReportEngineException, 
+    public String[] reportToURL(Report report, ReportRuntime reportRuntime, String creator, String key) throws ReportEngineException, 
     		FormatNotSupportedException, NoDataFoundException, InterruptedException;
 
     public void runReport(SchedulerJob schedulerJob);   

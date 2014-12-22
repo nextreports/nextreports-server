@@ -29,5 +29,6 @@ public interface SectionContextConstants {
     public static final String LOOK_FOR = "lookFor";
     
     public static final String SELECTED_DASHBOARD_ID = "selectedDashboardId";
+    public static final String SELECTED_ANALYSIS_ID = "selectedAnalysisId";
     
 }

@@ -1,0 +1,22 @@
+<wicket:panel>
+	<div class="toolbar">        
+        <img wicket:id="toggle" class="analysis-toggle"/>      
+        <span wicket:id="title" class="analysis-title"/>                                
+    </div>
+    <div class="form-container form-container-dialog analysisPanel">
+		<form wicket:id="submitForm">
+			<div class="analysisToolbar">                                      
+				<a wicket:id="createColumns" class="button" style="margin-right: 2px;"><img src="images/create_column.png"/><wicket:message key="CreatePanel.create">[]</wicket:message></a>
+        		<a wicket:id="selectColumns" class="button" style="margin-right: 2px;"><img src="images/select.png"/><wicket:message key="ColumnsPanel.select">[]</wicket:message></a>
+        		<a wicket:id="sortRows" class="button" style="margin-right: 2px;"><img src="images/sort.png"/><wicket:message key="SortPanel.sort">[]</wicket:message></a>
+        		<a wicket:id="filterRows" class="button" style="margin-right: 2px;"><img src="images/filter.png"/><wicket:message key="FilterPanel.filter">[]</wicket:message></a>
+        		<a wicket:id="groupRows" class="button" style="margin-right: 2px;"><img src="images/group_columns.png"/><wicket:message key="GroupPanel.group">[]</wicket:message></a>
+        		<a wicket:id="paginate" class="button" style="margin-right: 2px;"><img src="images/paginate.png"/><wicket:message key="PaginatePanel.paginate">[]</wicket:message></a>
+        		<!-- <a wicket:id="csvExport" class="button" style="margin-right: 2px; float:right !important"><img src="images/csv.gif"/><wicket:message key="Export.csv">[]</wicket:message></a> -->
+        		<a wicket:id="xlsExport" class="button" style="margin-right: 2px; float:right !important"><img src="images/excel.gif"/><wicket:message key="Export.xls">[]</wicket:message></a>
+        		<a wicket:id="save" class="button" style="margin-right: 2px; float:right !important"><img src="images/save_analysis.png"/><wicket:message key="save">[]</wicket:message></a>
+    		</div>    
+    		<div wicket:id="tablePanel"></div>    		   
+    	</form>        
+   </div>     
+</wicket:panel>

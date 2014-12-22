@@ -46,6 +46,7 @@ import org.odlabs.wiquery.core.events.WiQueryEventBehavior;
 import org.odlabs.wiquery.core.javascript.JsScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import ro.nextreports.server.StorageConstants;
 import ro.nextreports.server.distribution.Destination;
@@ -58,6 +59,7 @@ import ro.nextreports.server.domain.Settings;
 import ro.nextreports.server.domain.ShortcutType;
 import ro.nextreports.server.report.AbstractReportRuntimeParameterModel;
 import ro.nextreports.server.report.ReportConstants;
+import ro.nextreports.server.service.AnalysisService;
 import ro.nextreports.server.service.DataSourceService;
 import ro.nextreports.server.service.ReportService;
 import ro.nextreports.server.service.StorageService;
@@ -96,6 +98,9 @@ public class ScheduleWizard extends Wizard {
 
     @SpringBean
     protected ReportService reportService;
+    
+    @SpringBean
+    protected AnalysisService analysisService;
 
     @SpringBean
     protected SectionManager sectionManager;
@@ -171,7 +176,7 @@ public class ScheduleWizard extends Wizard {
     }
 
     @Override
-    public void onFinish() {   
+    public void onFinish() {       	    	
     	
 		// a scheduled alarm / indicator / display must have at least an alert
 		if (schedulerJob.getReport().isAlarmType() || schedulerJob.getReport().isIndicatorType() || schedulerJob.getReport().isDisplayType()) {
@@ -186,7 +191,14 @@ public class ScheduleWizard extends Wizard {
     		globalMessage = getString("ActionContributor.Run.running");
     	} else {
     		globalMessage = getString("ActionContributor.Run.schedule");
-    	}    	
+    	}   
+    	
+    	schedulerJob.setCreator(SecurityContextHolder.getContext().getAuthentication().getName());
+    	
+    	if (ReportConstants.ETL_FORMAT.equals(runtimeModel.getExportType())) {
+    		// test to create user node under analysis
+    		analysisService.checkAnalysisPath();
+    	}
     	
         schedulerJob.setRuntimeModel(runtimeModel);
         if (!runNow) {

@@ -1,7 +1,10 @@
 package ro.nextreports.server.report;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 import javax.jcr.RepositoryException;
 
@@ -12,10 +15,19 @@ import ro.nextreports.engine.FluentReportRunner;
 import ro.nextreports.engine.Report;
 import ro.nextreports.engine.ReportRunnerException;
 import ro.nextreports.engine.queryexec.QueryResult;
+import ro.nextreports.server.domain.Analysis;
 import ro.nextreports.server.domain.NextContent;
+import ro.nextreports.server.etl.DefaultProcessor;
+import ro.nextreports.server.etl.DocumentTransformer;
+import ro.nextreports.server.etl.Extractor;
+import ro.nextreports.server.etl.OrientDbLoader;
+import ro.nextreports.server.etl.Processor;
+import ro.nextreports.server.etl.ResultSetExtractor;
+import ro.nextreports.server.etl.Transformer;
 import ro.nextreports.server.exception.ReportEngineException;
 import ro.nextreports.server.report.next.NextRunnerFactory;
 import ro.nextreports.server.report.next.NextUtil;
+import ro.nextreports.server.service.AnalysisService;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.util.ConnectionUtil;
 
@@ -25,6 +37,7 @@ public class ETLExporter {
 	
 	private ExportContext exportContext;
 	private StorageService storageService;
+	private AnalysisService analysisService;
 
 	public ETLExporter(ExportContext exportContext) {		
 		this.exportContext = exportContext;
@@ -32,6 +45,10 @@ public class ETLExporter {
 	
 	public void setStorageService(StorageService storageService) {
 		this.storageService = storageService;
+	}	
+
+	public void setAnalysisService(AnalysisService analysisService) {
+		this.analysisService = analysisService;
 	}
 
 	private Connection createConnection() throws ReportEngineException {
@@ -57,7 +74,8 @@ public class ETLExporter {
 				                     
         try {        
         	QueryResult qr = runner.executeQuery();        	
-        	process(qr);
+        	String tableName = process(qr, report.getBaseName());
+        	createAnalysis(tableName);
         } catch (ReportRunnerException ex) {
         	throw new ReportEngineException(ex.getMessage(), ex);
         } finally {
@@ -67,8 +85,44 @@ public class ETLExporter {
 		
 	}
 	
-	private void process(QueryResult qr) {
+	private String process(QueryResult queryResult, String className) {
+				
+		System.out.println("className = " + className);
+		// create extractor
+		Extractor extractor = new ResultSetExtractor(queryResult.getResultSet());
+
+		// create loader
+		OrientDbLoader loader = new OrientDbLoader();
+		loader.setDbUrl("plocal:analytics-data");
+		loader.setDbAutoCreate(true);
+		loader.setClassName(className);
+
+		// create transformers
+		List<Transformer> transformers = new ArrayList<Transformer>();
+		transformers.add(new DocumentTransformer());
+
+		// create processor and go
+		Processor processor = new DefaultProcessor(extractor, transformers, loader);
+		long time = System.currentTimeMillis();
+		processor.init();
+		processor.process();
+		processor.destroy();
+		time = System.currentTimeMillis() - time;
+		LOG.info("Executed in {} ms", time);
 		
+		return className;
+	}
+	
+	private void createAnalysis(String tableName) {		
+		Analysis analysis = new Analysis();
+		//@todo analysis from UI
+		analysis.setName("Analysis " + UUID.randomUUID()); 
+		analysis.setTableName(tableName);
+		analysis.setReportId(exportContext.getId());
+		String path = analysisService.getAnalysisPath(analysis, exportContext.getCreator());
+		analysis.setPath(path);
+		analysis.setRowsPerPage(20);
+		analysisService.addAnalysis(analysis);
 	}
 
 }
