@@ -262,7 +262,11 @@ public class SchedulerTime extends EntityFragment {
                     d = "?";
                 }
                 
-                return createCron("0", String.valueOf(minute), hours, d, months, dow);
+                String m = String.valueOf(minute);
+                if (gap != 0) {
+                	m = "*/" + gap;
+                }
+                return createCron("0", m, hours, d, months, dow);
             }
         }
 
