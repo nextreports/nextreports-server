@@ -147,9 +147,12 @@ public class AnalysisDataProvider extends SortableDataProvider<AnalysisRow, Stri
 	}
 
 	@Override
-	public void detach() {
-		analysisReader.reset();
+	public void detach() {		
 	}	
+	
+	public void reset() {
+		analysisReader.reset();
+	}
 		
 
 }

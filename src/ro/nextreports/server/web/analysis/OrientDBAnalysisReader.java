@@ -40,6 +40,7 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 		initConnection();
 		List<String> columnNames = analysis.getColumns();
 		if ((columnNames == null) || columnNames.isEmpty()) {
+			long start = System.currentTimeMillis();
 			System.out.println("---------- getHeader");
 			Columns columns = getColumns(analysis);
 			columnNames = columns.getColumnNames();
@@ -51,6 +52,8 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 				selected.add(true);
 			}
 			analysis.setSelected(selected);
+			long end = System.currentTimeMillis();
+			System.out.println("*** getHeader  in " + (end-start) + " ms");
 		}
 		if (analysis.getSortProperty() == null) {
 			List<String> sortProperty = new ArrayList<String>();
@@ -71,6 +74,7 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 			return 0;
 		}
 		if (rowCount == -1) {
+			long start = System.currentTimeMillis();
 			System.out.println("---------- getRowCount");
 			String sql = analysis.toSql(false);
 			System.out.println("       sql=" + sql);
@@ -78,7 +82,8 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 			List<ODocument> list = db.query(new OSQLSynchQuery<ODocument>("SELECT COUNT(*) as count FROM ( " + sql + " )"));
 			int count = ((Long) list.get(0).field("count")).intValue();
 
-			System.out.println("*** count = " + count);
+			long end = System.currentTimeMillis();
+			System.out.println("*** count = " + count + "  in " + (end-start) + " ms");
 			rowCount = count;
 		}
 		return rowCount;
@@ -86,6 +91,7 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 
 	@Override
 	public Iterator<AnalysisRow> iterator(Analysis analysis, long first, long count) throws AnalysisException {
+		long start = System.currentTimeMillis();
 		System.out.println("---------- iterator");
 		List<AnalysisRow> list = new ArrayList<AnalysisRow>();
 		if (analysis == null) {
@@ -107,6 +113,9 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 			AnalysisRow row = new AnalysisRow(cellValues);
 			list.add(row);
 		}
+		
+		long end = System.currentTimeMillis();
+		System.out.println("*** iterator  in " + (end-start) + " ms");
 
 		return list.iterator();
 
@@ -146,6 +155,7 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 			OType type = resultset.get(0).fieldType(name);
 			columnNames.add(name);
 			columnTypes.put(name, DatabaseUtil.getJavaType(type));
+			System.out.println("************ NAME="+name + "  type="+type + "  javaType="+DatabaseUtil.getJavaType(type));
 		}
 		System.out.println("--->  columnTypes=" + columnTypes);
 

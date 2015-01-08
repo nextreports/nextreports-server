@@ -25,7 +25,7 @@ public abstract class ExportResource extends ByteArrayResource {
 		super(contentType);		
 		this.provider = provider;	
 		if (EXCEL_CONTENT_TYPE.equals(contentType)) {
-			extension = "xls";
+			extension = "xlsx";
 		} else if (CSV_CONTENT_TYPE.equals(contentType)) {
 			extension = "csv";
 		} else {

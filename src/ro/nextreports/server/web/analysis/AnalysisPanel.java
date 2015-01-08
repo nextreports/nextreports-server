@@ -38,6 +38,7 @@ import ro.nextreports.server.web.NextServerSession;
 import ro.nextreports.server.web.analysis.feature.create.CreatePanel;
 import ro.nextreports.server.web.analysis.feature.export.CsvResource;
 import ro.nextreports.server.web.analysis.feature.export.XlsResource;
+import ro.nextreports.server.web.analysis.feature.export.XlsxResource;
 import ro.nextreports.server.web.analysis.feature.filter.FilterPanel;
 import ro.nextreports.server.web.analysis.feature.group.GroupPanel;
 import ro.nextreports.server.web.analysis.feature.paging.PaginatePanel;
@@ -57,6 +58,7 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
 	private static final long serialVersionUID = 1L;
 	private AnalysisDataProvider dataProvider;
 	private XlsResource xlsResource;
+	private XlsxResource xlsxResource;
 	private CsvResource csvResource;
 	
 	@SpringBean
@@ -75,6 +77,7 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
 		
 		dataProvider = new AnalysisDataProvider(getModel());
 		xlsResource = new XlsResource(dataProvider);
+		xlsxResource = new XlsxResource(dataProvider);
 		csvResource = new CsvResource(dataProvider);
 		submitForm.add(createTablePanel(dataProvider));   
         
@@ -178,7 +181,9 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
     
     public void changeDataProvider(IModel<Analysis> model, AjaxRequestTarget target) {
     	dataProvider = new AnalysisDataProvider(model);
+    	dataProvider.reset();
 		xlsResource.setProvider(dataProvider);
+		xlsxResource.setProvider(dataProvider);
 		csvResource.setProvider(dataProvider);
 		AnalysisPanel.this.get("submitForm:tablePanel").replaceWith(createTablePanel(dataProvider));
         target.add(AnalysisPanel.this);
@@ -193,7 +198,8 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
     	submitForm.add(getPaginateLink());
     	
     	//submitForm.add(getCsvLink());
-    	submitForm.add(getXlsLink());
+    	//submitForm.add(getXlsLink());
+    	submitForm.add(getXlsxLink());
     	submitForm.add(getSaveLink());
     }
     
@@ -281,7 +287,7 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
 	                	ModalWindow.closeCurrent(target);	                    
 	                	Analysis analysis = AnalysisPanel.this.getModel().getObject();
 	                	analysis.setFilters(getFilters());
-	                	dataProvider.detach();	                  
+	                	dataProvider.reset();	                  
 	                    target.add(AnalysisPanel.this);
 	                }
 	            };
@@ -352,7 +358,8 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
 	                public void onOk(AjaxRequestTarget target) {	  	                		 
 	                	ModalWindow.closeCurrent(target);	                    
 	                	Analysis analysis = AnalysisPanel.this.getModel().getObject();	                	
-	                	analysis.setGroups(getGroups());	                		                  
+	                	analysis.setGroups(getGroups());
+	                	dataProvider.reset();
 	                    target.add(AnalysisPanel.this);
 	                }
 	            };
@@ -371,6 +378,15 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
     
     private ResourceLink<XlsResource> getXlsLink() {
     	return  new ResourceLink<XlsResource>("xlsExport", xlsResource) {
+    		@Override
+			public boolean isVisible() {				
+				return !dataProvider.isEmpty();
+			}	
+    	};
+    }
+    
+    private ResourceLink<XlsxResource> getXlsxLink() {
+    	return  new ResourceLink<XlsxResource>("xlsxExport", xlsxResource) {
     		@Override
 			public boolean isVisible() {				
 				return !dataProvider.isEmpty();

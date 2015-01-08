@@ -361,7 +361,8 @@ public class Analysis extends Entity {
 				if (columnTypes != null) {
 					needApos = "java.lang.String".equals(columnTypes.get(AnalysisUtil.getColumnFullName(columns, fo.getColumn())));
 					isDate = "java.util.Date".equals(columnTypes.get(AnalysisUtil.getColumnFullName(columns, fo.getColumn()))) ||
-							"java.sql.Timestamp".equals(columnTypes.get(AnalysisUtil.getColumnFullName(columns, fo.getColumn())));					
+							"java.sql.Timestamp".equals(columnTypes.get(AnalysisUtil.getColumnFullName(columns, fo.getColumn()))) ||
+							"java.sql.Time".equals(columnTypes.get(AnalysisUtil.getColumnFullName(columns, fo.getColumn())));					
 				}
 				if (in) {
 					sb.append("(");

@@ -45,6 +45,7 @@ public class DatabaseAnalysisReader implements AnalysisReader {
 		initConnection();
 		List<String> columnNames = analysis.getColumns();		
 		if ((columnNames == null) || columnNames.isEmpty()) {
+			long start = System.currentTimeMillis();
 			System.out.println("---------- getHeader");
 			Columns columns = getColumns(analysis);
 			columnNames = columns.getColumnNames();
@@ -56,6 +57,8 @@ public class DatabaseAnalysisReader implements AnalysisReader {
 				selected.add(true);
 			}
 			analysis.setSelected(selected);
+			long end = System.currentTimeMillis();
+			System.out.println("*** getHeader  in " + (end-start) + " ms");
 		} 
 		if (analysis.getSortProperty() == null) {
 			List<String> sortProperty = new ArrayList<String>();
@@ -76,6 +79,7 @@ public class DatabaseAnalysisReader implements AnalysisReader {
 			return 0;
 		}
 		if (rowCount == -1) {
+			long start = System.currentTimeMillis();
 			System.out.println("---------- getRowCount");
 			String sql = analysis.toSql(false);
 			System.out.println("       sql="+sql);
@@ -85,7 +89,7 @@ public class DatabaseAnalysisReader implements AnalysisReader {
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(sql);
-				count = rs.last() ? rs.getRow() : 0;
+				count = rs.last() ? rs.getRow()+1 : 0;
 				rs.beforeFirst();
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -96,8 +100,9 @@ public class DatabaseAnalysisReader implements AnalysisReader {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-			}
-			System.out.println("*** count = " + count);
+			}			
+			long end = System.currentTimeMillis();
+			System.out.println("*** count = " + count + "  in " + (end-start) + " ms");
 			rowCount = count;
 		}
 		return rowCount;
@@ -105,6 +110,7 @@ public class DatabaseAnalysisReader implements AnalysisReader {
 
 	@Override
 	public Iterator<AnalysisRow> iterator(Analysis analysis, long first, long count) throws AnalysisException {		
+		long start = System.currentTimeMillis();
 		System.out.println("---------- iterator  first="+first + " count="+count);
 		List<AnalysisRow> list = new ArrayList<AnalysisRow>();
 		if (analysis == null) {
@@ -123,7 +129,7 @@ public class DatabaseAnalysisReader implements AnalysisReader {
 			}
 			rs = stmt.executeQuery(sql);
 			if (first > 0) {
-				rs.absolute((int)first);
+				rs.absolute((int)first-1);
 			}
 			int no = 0;
 			while (rs.next()) {
@@ -149,6 +155,8 @@ public class DatabaseAnalysisReader implements AnalysisReader {
 				e.printStackTrace();
 			}
 		}
+		long end = System.currentTimeMillis();
+		System.out.println("*** iterator  in " + (end-start) + " ms");
 		return list.iterator();
 		
 	}
