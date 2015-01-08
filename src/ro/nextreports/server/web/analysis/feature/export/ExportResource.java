@@ -59,10 +59,13 @@ public abstract class ExportResource extends ByteArrayResource {
 		
         printHeader(provider.getHeader(), out);
         
+        
         int row = 1;
-        Pager pager = new Pager(provider.getRowsPerPage(), (int)provider.size());
+//        Pager pager = new Pager(provider.getRowsPerPage(), (int)provider.size());
+        Pager pager = new Pager(Integer.MAX_VALUE, (int)provider.size());
 		for (int i = 0; i < pager.pages(); i++) {			
-			Iterator<AnalysisRow> it = provider.iterator(pager.offset(i), provider.getRowsPerPage()-1);			
+//			Iterator<AnalysisRow> it = provider.iterator(pager.offset(i), provider.getRowsPerPage());			
+			Iterator<AnalysisRow> it = provider.iterator(pager.offset(i), Integer.MAX_VALUE);
 			while (it.hasNext()) {
 				createDetailRow(row);
 				int col = 0;

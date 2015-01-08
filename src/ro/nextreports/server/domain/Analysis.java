@@ -319,7 +319,7 @@ public class Analysis extends Entity {
 		List<AnalysisFilter> aggFilters = AnalysisUtil.getFilters(columns, filters, true);
 		if (!aggFilters.isEmpty()) {
 			// create a subselect because orient db does not support having
-			StringBuilder result = new StringBuilder("select ( ");
+			StringBuilder result = new StringBuilder("select from ( ");
 			result.append(sb.toString());
 			result.append(" ) where ");
 			appendFilters(aggFilters, result, true);

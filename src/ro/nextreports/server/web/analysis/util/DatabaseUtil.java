@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Iterator;
 
+import com.orientechnologies.orient.core.metadata.schema.OType;
+
 import ro.nextreports.server.domain.AnalysisFilter;
 
 
@@ -58,6 +60,25 @@ public class DatabaseUtil {
 			case Types.BINARY: return byte[].class.getName();
 			case Types.VARBINARY: return byte[].class.getName();
 			case Types.OTHER: return Object.class.getName();
+			default: return String.class.getName();							
+		}		    	
+	}
+	
+	public static String getJavaType(OType oType) {
+		switch (oType) {
+			case BOOLEAN: return Boolean.class.getName();	
+			case BYTE: return Byte.class.getName();
+			case SHORT: return Short.class.getName();
+			case STRING: return String.class.getName();
+			case DATE: return Date.class.getName();
+			case DATETIME: return Time.class.getName();			
+			case DOUBLE: return Double.class.getName();
+			case FLOAT: return Float.class.getName();
+			case INTEGER: return Integer.class.getName();
+			case LONG: return Long.class.getName();
+			case DECIMAL: return BigDecimal.class.getName();
+			case BINARY: return byte[].class.getName();			
+			case ANY: return Object.class.getName();
 			default: return String.class.getName();							
 		}		    	
 	}

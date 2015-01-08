@@ -17,9 +17,7 @@ import java.util.Properties;
 import org.springframework.beans.factory.annotation.Required;
 
 import ro.nextreports.server.domain.Analysis;
-import ro.nextreports.server.domain.Report;
 import ro.nextreports.server.service.StorageService;
-import ro.nextreports.server.util.ConnectionUtil;
 import ro.nextreports.server.web.analysis.util.AnalysisException;
 import ro.nextreports.server.web.analysis.util.DatabaseUtil;
 
@@ -107,7 +105,7 @@ public class DatabaseAnalysisReader implements AnalysisReader {
 
 	@Override
 	public Iterator<AnalysisRow> iterator(Analysis analysis, long first, long count) throws AnalysisException {		
-		System.out.println("---------- iterator");
+		System.out.println("---------- iterator  first="+first + " count="+count);
 		List<AnalysisRow> list = new ArrayList<AnalysisRow>();
 		if (analysis == null) {
 			return list.iterator();
