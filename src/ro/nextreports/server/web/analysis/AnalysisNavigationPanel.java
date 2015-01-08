@@ -118,19 +118,19 @@ public class AnalysisNavigationPanel extends Panel {
 
 		};
 
-		IModel<String> linkImageModel = new LoadableDetachableModel<String>() {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected String load() {
-				String imagePath = "images/analysis.png";
-				return imagePath;
-			}
-
-		};
-		final ContextImage link = new ContextImage("titleImage", linkImageModel);
-		titleLink.add(link);
+//		IModel<String> linkImageModel = new LoadableDetachableModel<String>() {
+//
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			protected String load() {
+//				String imagePath = "images/analysis.png";
+//				return imagePath;
+//			}
+//
+//		};
+//		final ContextImage link = new ContextImage("titleImage", linkImageModel);
+//		titleLink.add(link);
 
 		titleLink.add(new Label("title", title));
 		titleLink.add(new SimpleTooltipBehavior(analysis.getName()));
