@@ -22,6 +22,7 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.StringResourceModel;
 
 import ro.nextreports.server.domain.Chart;
+import ro.nextreports.server.domain.DataSource;
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.service.SecurityService;
 import ro.nextreports.server.util.PermissionUtil;
@@ -44,9 +45,11 @@ public class EditActionContributor extends SingleActionContributor {
     public boolean support(Entity entity) {
         if (entity instanceof Chart) {
             try {
-                if (securityService.hasPermissionsById(ServerUtil.getUsername(),
-                        PermissionUtil.getWrite(), entity.getId())) {
-                    return true;
+                if (securityService.hasPermissionsById(ServerUtil.getUsername(), PermissionUtil.getWrite(), entity.getId())) {
+                	DataSource ds = ((Chart)entity).getDataSource();
+                	if (securityService.hasPermissionsById(ServerUtil.getUsername(), PermissionUtil.getRead(), ds.getId())) {
+                		return true;
+                	}
                 }
             } catch (Exception e) {
                 e.printStackTrace();

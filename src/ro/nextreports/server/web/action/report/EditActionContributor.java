@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.StringResourceModel;
 
+import ro.nextreports.server.domain.DataSource;
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.domain.Report;
 import ro.nextreports.server.report.ReportConstants;
@@ -45,9 +46,11 @@ public class EditActionContributor extends SingleActionContributor {
     public boolean support(Entity entity) {
         if ((entity instanceof Report) && ((Report) entity).getType().equals(ReportConstants.NEXT)) {
             try {
-                if (securityService.hasPermissionsById(ServerUtil.getUsername(),
-                        PermissionUtil.getWrite(), entity.getId())) {
-                    return true;
+                if (securityService.hasPermissionsById(ServerUtil.getUsername(), PermissionUtil.getWrite(), entity.getId())) {
+                	DataSource ds = ((Report)entity).getDataSource();
+                	if (securityService.hasPermissionsById(ServerUtil.getUsername(), PermissionUtil.getRead(), ds.getId())) {
+                		return true;
+                	}
                 }
             } catch (Exception e) {
                 e.printStackTrace();
