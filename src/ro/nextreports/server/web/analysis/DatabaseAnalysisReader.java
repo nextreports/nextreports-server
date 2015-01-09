@@ -17,6 +17,7 @@ import java.util.Properties;
 import org.springframework.beans.factory.annotation.Required;
 
 import ro.nextreports.server.domain.Analysis;
+import ro.nextreports.server.service.AnalysisService;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.web.analysis.util.AnalysisException;
 import ro.nextreports.server.web.analysis.util.DatabaseUtil;
@@ -28,6 +29,7 @@ public class DatabaseAnalysisReader implements AnalysisReader {
 		
 	//private ComboPooledDataSource dataSource;
 	private StorageService storageService;
+	private AnalysisService analysisService;
 	
 	private Connection con = null;
 	private int rowCount = -1;	
@@ -172,6 +174,12 @@ public class DatabaseAnalysisReader implements AnalysisReader {
 		this.storageService = storageService;
 	}		
 	
+	@Required
+	public void setAnalysisService(AnalysisService analysisService) {
+		this.analysisService = analysisService;
+	}
+
+	
 	private void initConnection() {
 		if (con == null) {
 //			try {
@@ -193,7 +201,7 @@ public class DatabaseAnalysisReader implements AnalysisReader {
 
 		        try {
 		        	DriverManager.registerDriver(new OrientJdbcDriver());
-		        	con = DriverManager.getConnection("jdbc:orient:plocal:analytics-data", info);
+		        	con = DriverManager.getConnection("jdbc:orient:" + analysisService.getDatabasePath(), info);
 		        } catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

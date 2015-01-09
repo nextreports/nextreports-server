@@ -10,6 +10,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Required;
 
 import ro.nextreports.server.domain.Analysis;
+import ro.nextreports.server.service.AnalysisService;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.web.analysis.util.AnalysisException;
 import ro.nextreports.server.web.analysis.util.DatabaseUtil;
@@ -22,6 +23,7 @@ import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
 public class OrientDBAnalysisReader implements AnalysisReader {
 
 	private StorageService storageService;
+	private AnalysisService analysisService;
 
 	private ODatabaseDocumentTx db;
 
@@ -131,11 +133,16 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 	public void setStorageService(StorageService storageService) {
 		this.storageService = storageService;
 	}
+	
+	@Required
+	public void setAnalysisService(AnalysisService analysisService) {
+		this.analysisService = analysisService;
+	}
 
 	private void initConnection() {
 
 		if (db == null) {
-			db = new ODatabaseDocumentTx("plocal:analytics-data").open("admin", "admin");
+			db = new ODatabaseDocumentTx(analysisService.getDatabasePath()).open("admin", "admin");
 		}
 
 	}

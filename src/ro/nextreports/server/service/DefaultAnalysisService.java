@@ -61,6 +61,7 @@ public class DefaultAnalysisService implements AnalysisService {
     public List<Analysis> getMyAnalysis() {        		
         Entity[] entities;
         try {
+        	checkAnalysisPath();
             entities = storageService.getEntitiesByClassName(getMyAnalysisPath(), Analysis.class.getName());
             return getAnalysis(entities);
         } catch (NotFoundException e) {
@@ -120,6 +121,10 @@ public class DefaultAnalysisService implements AnalysisService {
 	@Transactional
 	public void modifyAnalysis(Analysis analysis) {
 		storageService.modifyEntity(analysis);
+	}
+	
+	public String getDatabasePath() {
+		return "plocal:analytics-data";
 	}
 		
 }

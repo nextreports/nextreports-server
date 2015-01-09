@@ -18,5 +18,7 @@ public interface AnalysisService {
 	public void removeAnalysis(String analysisId) throws NotFoundException;
 	
 	public void modifyAnalysis(Analysis analysis);
+	
+	public String getDatabasePath();
 
 }
