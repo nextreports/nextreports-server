@@ -23,6 +23,7 @@ import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OProperty;
 import com.orientechnologies.orient.core.metadata.schema.OType;
 import com.orientechnologies.orient.core.record.impl.ODocument;
+import com.orientechnologies.orient.core.sql.OCommandSQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,14 +37,16 @@ public class OrientDbLoader implements Loader {
     private String dbUrl;
     private String dbUser = "admin";
     private String dbPassword = "admin";
-    private boolean dbAutoCreate;
+    private boolean dbAutoCreate = true;
+    private boolean dbAutoDropIfExists;
+    private boolean dbAutoCreateProperties;
 
     private int batchCommit;
     private long batchCounter;
 
     private ODatabaseDocumentTx documentDatabase;
     private String className;
-//    private List<ODocument> classes;
+    private boolean autoDropClass;
 
     public String getDbUrl() {
         return dbUrl;
@@ -77,6 +80,22 @@ public class OrientDbLoader implements Loader {
         this.dbAutoCreate = dbAutoCreate;
     }
 
+    public boolean isDbAutoDropIfExists() {
+        return dbAutoDropIfExists;
+    }
+
+    public void setDbAutoDropIfExists(boolean dbAutoDropIfExists) {
+        this.dbAutoDropIfExists = dbAutoDropIfExists;
+    }
+
+    public boolean isDbAutoCreateProperties() {
+        return dbAutoCreateProperties;
+    }
+
+    public void setDbAutoCreateProperties(boolean dbAutoCreateProperties) {
+        this.dbAutoCreateProperties = dbAutoCreateProperties;
+    }
+
     public int getBatchCommit() {
         return batchCommit;
     }
@@ -93,14 +112,36 @@ public class OrientDbLoader implements Loader {
         this.className = className;
     }
 
+    public boolean isAutoDropClass() {
+        return autoDropClass;
+    }
+
+    public void setAutoDropClass(boolean autoDropClass) {
+        this.autoDropClass = autoDropClass;
+    }
+
     @Override
     public void init() {
         log.debug("Init loader");
         documentDatabase = new ODatabaseDocumentTx(dbUrl);
         String databaseName = documentDatabase.getName();
+
+        if (documentDatabase.exists() && dbAutoDropIfExists) {
+            log.debug("Dropping existent database '{}'", databaseName);
+            documentDatabase.open(dbUser, dbPassword).drop();
+        }
+
         if (documentDatabase.exists()) {
             log.debug("Open database '{}'", databaseName);
             documentDatabase.open(dbUser, dbPassword);
+
+            if ((className != null) && autoDropClass) {
+                log.debug("Dropping class '{}'", className);
+                String sql = "DROP CLASS " + className;
+//                documentDatabase.query(new OSQLSynchQuery<ODocument>(sql)); // doesn't work (no idempotent)
+                System.out.println(documentDatabase.command(new OCommandSQL(sql)));
+            }
+
         } else {
             long time = System.currentTimeMillis();
             log.debug("Create database '{}'", databaseName);
@@ -120,7 +161,7 @@ public class OrientDbLoader implements Loader {
 
         ODocument document = (ODocument) row.getPayload();
 
-        if (dbAutoCreate) {
+        if (dbAutoCreateProperties) {
             OClass clazz;
             if (className != null) {
                 clazz = getOrCreateClass(className);
@@ -145,13 +186,13 @@ public class OrientDbLoader implements Loader {
             }
         }
 
+        if (className != null) {
+            document.setClassName(className);
+        }
+
         if (!documentDatabase.getTransaction().isActive()) {
             // begin the transaction first
             documentDatabase.begin();
-        }
-
-        if (className != null) {
-            document.setClassName(className);
         }
 
 //        log.debug("Load document {}", document);

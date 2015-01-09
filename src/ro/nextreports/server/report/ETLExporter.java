@@ -32,20 +32,20 @@ import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.util.ConnectionUtil;
 
 public class ETLExporter {
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(ETLExporter.class);
-	
+
 	private ExportContext exportContext;
 	private StorageService storageService;
 	private AnalysisService analysisService;
 
-	public ETLExporter(ExportContext exportContext) {		
+	public ETLExporter(ExportContext exportContext) {
 		this.exportContext = exportContext;
 	}
-	
+
 	public void setStorageService(StorageService storageService) {
 		this.storageService = storageService;
-	}	
+	}
 
 	public void setAnalysisService(AnalysisService analysisService) {
 		this.analysisService = analysisService;
@@ -60,21 +60,21 @@ public class ETLExporter {
 			throw new ReportEngineException("Cannot connect to database", e);
 		}
 	}
-	
-	public void export() throws ReportEngineException, InterruptedException {		
+
+	public void export() throws ReportEngineException, InterruptedException {
 		Report report = NextUtil.getNextReport(storageService.getSettings(), (NextContent) exportContext.getReportContent());
-		LOG.info("Export report '" + report.getName() + "' format="+ReportConstants.ETL_FORMAT + 
+		LOG.info("Export report '" + report.getName() + "' format="+ReportConstants.ETL_FORMAT +
        		 " queryTimeout="+storageService.getSettings().getQueryTimeout());
 		FluentReportRunner runner = FluentReportRunner.report(report);
 		NextRunnerFactory.addRunner(exportContext.getKey(), runner);
 		Connection conn = createConnection();
-		runner = runner.connectTo(conn).                		
+		runner = runner.connectTo(conn).
         		withQueryTimeout(storageService.getSettings().getQueryTimeout()).
                 withParameterValues(new HashMap<String, Object>(exportContext.getReportParameterValues()));
-				                     
-        try {        
-        	QueryResult qr = runner.executeQuery();        	
-        	String tableName = process(qr, report.getBaseName());
+
+        try {
+			String tableName = getEtlTableName(exportContext.getCreator(), report);
+        	createEtl(runner.executeQuery(), tableName);
         	createAnalysis(tableName);
         } catch (ReportRunnerException ex) {
         	throw new ReportEngineException(ex.getMessage(), ex);
@@ -82,20 +82,22 @@ public class ETLExporter {
             NextRunnerFactory.removeRunner(exportContext.getKey());
             ConnectionUtil.closeConnection(conn);
         }
-		
+
 	}
-	
-	private String process(QueryResult queryResult, String className) {
-				
-		System.out.println("className = " + className);
+
+	private String getEtlTableName(String userName, Report report) {
+		return userName + "-" + report.getBaseName();
+	}
+
+	private void createEtl(QueryResult queryResult, String tableName) {
 		// create extractor
 		Extractor extractor = new ResultSetExtractor(queryResult.getResultSet());
 
 		// create loader
 		OrientDbLoader loader = new OrientDbLoader();
-		loader.setDbUrl("plocal:analytics-data");
-		loader.setDbAutoCreate(true);
-		loader.setClassName(className);
+		loader.setDbUrl(analysisService.getDatabasePath());
+		loader.setClassName(tableName);
+		loader.setAutoDropClass(true);
 
 		// create transformers
 		List<Transformer> transformers = new ArrayList<Transformer>();
@@ -109,14 +111,12 @@ public class ETLExporter {
 		processor.destroy();
 		time = System.currentTimeMillis() - time;
 		LOG.info("Executed in {} ms", time);
-		
-		return className;
 	}
-	
-	private void createAnalysis(String tableName) {		
+
+	private void createAnalysis(String tableName) {
 		Analysis analysis = new Analysis();
 		//@todo analysis from UI
-		analysis.setName("Analysis " + UUID.randomUUID()); 
+		analysis.setName("Analysis " + UUID.randomUUID());
 		analysis.setTableName(tableName);
 		analysis.setReportId(exportContext.getId());
 		String path = analysisService.getAnalysisPath(analysis, exportContext.getCreator());
