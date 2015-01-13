@@ -17,6 +17,7 @@
 package ro.nextreports.server.etl;
 
 import com.orientechnologies.orient.core.db.document.ODatabaseDocument;
+import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.metadata.schema.OClass;
 
 import java.util.ArrayList;
@@ -27,6 +28,10 @@ import java.util.List;
  * @author Decebal Suiu
  */
 public class OrientDbUtils {
+
+    public static ODatabaseDocument openDatabase(String url, String username, String password) {
+        return new ODatabaseDocumentTx(url).open(username, password);
+    }
 
     public static long getDatabaseSize(ODatabaseDocument database) {
         return database.getSize();
