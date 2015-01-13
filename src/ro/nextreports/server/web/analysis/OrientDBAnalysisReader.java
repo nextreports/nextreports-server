@@ -27,8 +27,7 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 
 	private ODatabaseDocumentTx db;
 
-	private int rowCount = -1;
-	private String reportId;
+	private int rowCount = -1;	
 
 	public OrientDBAnalysisReader() {
 	}
@@ -37,8 +36,7 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 	public List<String> getHeader(Analysis analysis) {
 		if (analysis == null) {
 			return new ArrayList<String>();
-		}
-		reportId = analysis.getReportId();
+		}		
 		initConnection();
 		List<String> columnNames = analysis.getColumns();
 		if ((columnNames == null) || columnNames.isEmpty()) {

@@ -2,11 +2,14 @@ package ro.nextreports.server.web.analysis;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow.CloseButtonCallback;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow.WindowClosedCallback;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -29,9 +32,11 @@ import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.web.NextServerSession;
 import ro.nextreports.server.web.analysis.model.AnalysisAndLinksModel;
 import ro.nextreports.server.web.common.behavior.SimpleTooltipBehavior;
+import ro.nextreports.server.web.common.form.FormPanel;
 import ro.nextreports.server.web.core.BasePage;
 import ro.nextreports.server.web.core.section.SectionContext;
 import ro.nextreports.server.web.core.section.SectionContextConstants;
+import ro.nextreports.server.web.security.SecurityUtil;
 
 public class AnalysisNavigationPanel extends Panel {
 
@@ -42,6 +47,8 @@ public class AnalysisNavigationPanel extends Panel {
 	
 	@SpringBean
 	private StorageService storageService;
+	
+	private boolean added = false;
 
 	public AnalysisNavigationPanel(String id) {
 		super(id);
@@ -100,36 +107,50 @@ public class AnalysisNavigationPanel extends Panel {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-                ModalWindow dialog = findParent(BasePage.class).getDialog();
+                final ModalWindow dialog = findParent(BasePage.class).getDialog();
                 dialog.setTitle(getString("AnalysisNavigationPanel.add"));
                 dialog.setInitialWidth(350);
-                dialog.setUseInitialHeight(false);
+                dialog.setUseInitialHeight(false);                
                 
-//                final AddDashboardPanel addDashboardPanel = new AddDashboardPanel(dialog.getContentId()) {
-//
-//					private static final long serialVersionUID = 1L;
-//
-//					@Override
-//                    public void onAdd(AjaxRequestTarget target) {
-//                        ModalWindow.closeCurrent(target);
-//                        String id;
-//                        String title = getTitle();                        
-//                        Dashboard dashboard = new DefaultDashboard(title, getColumnCount());
-//                        id = dashboardService.addDashboard(dashboard);
-//
-//                        SectionContext sectionContext = NextServerSession.get().getSectionContext(DashboardSection.ID);
-//                        sectionContext.getData().put(SectionContextConstants.SELECTED_DASHBOARD_ID, id);
-//                        
-//                        target.add(DashboardNavigationPanel.this.findParent(DashboardBrowserPanel.class));
-//                    }
-//
-//                    @Override
-//                    public void onCancel(AjaxRequestTarget target) {
-//                        ModalWindow.closeCurrent(target);
-//                    }
-//
-//                };
-//                dialog.setContent(addDashboardPanel);
+				final AddAnalysisPanel panel = new AddAnalysisPanel() {
+					@Override
+					public void onOk(AjaxRequestTarget target) {
+						System.out.println("**** selected=" + getSelectedTable());
+
+						Analysis analysis = new Analysis();
+						analysis.setName("Analysis " + UUID.randomUUID());
+						analysis.setTableName(SecurityUtil.getLoggedUsername()+"-"+getSelectedTable());
+						String path = analysisService.getAnalysisPath(analysis, SecurityUtil.getLoggedUsername());
+						analysis.setPath(path);
+						analysis.setRowsPerPage(20);
+						analysisService.addAnalysis(analysis);
+						added=true;
+						dialog.close(target);												
+					}
+				};
+                dialog.setContent(new FormPanel<Void>(dialog.getContentId(), panel, true) {
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onConfigure() {
+						super.onConfigure();
+						setOkButtonValue(getString("add"));
+					}
+	            	
+	            });
+                dialog.setWindowClosedCallback(new WindowClosedCallback() {					
+
+					@Override
+					public void onClose(AjaxRequestTarget target) {
+						if (added) {
+							System.out.println("*********88 CLOSE");
+							AnalysisBrowserPanel browserPanel = findParent(AnalysisBrowserPanel.class);
+							target.add(browserPanel);
+						}
+					}
+                	
+                });
                 dialog.show(target);
 			}
 			

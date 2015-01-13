@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 import javax.jcr.RepositoryException;
 
@@ -15,7 +14,6 @@ import ro.nextreports.engine.FluentReportRunner;
 import ro.nextreports.engine.Report;
 import ro.nextreports.engine.ReportRunnerException;
 import ro.nextreports.engine.queryexec.QueryResult;
-import ro.nextreports.server.domain.Analysis;
 import ro.nextreports.server.domain.NextContent;
 import ro.nextreports.server.etl.DefaultProcessor;
 import ro.nextreports.server.etl.DocumentTransformer;
@@ -75,7 +73,6 @@ public class ETLExporter {
         try {
 			String tableName = getEtlTableName(exportContext.getCreator(), report);
         	createEtl(runner.executeQuery(), tableName);
-        	createAnalysis(tableName);
         } catch (ReportRunnerException ex) {
         	throw new ReportEngineException(ex.getMessage(), ex);
         } finally {
@@ -111,18 +108,6 @@ public class ETLExporter {
 		processor.destroy();
 		time = System.currentTimeMillis() - time;
 		LOG.info("Executed in {} ms", time);
-	}
-
-	private void createAnalysis(String tableName) {
-		Analysis analysis = new Analysis();
-		//@todo analysis from UI
-		analysis.setName("Analysis " + UUID.randomUUID());
-		analysis.setTableName(tableName);
-		analysis.setReportId(exportContext.getId());
-		String path = analysisService.getAnalysisPath(analysis, exportContext.getCreator());
-		analysis.setPath(path);
-		analysis.setRowsPerPage(20);
-		analysisService.addAnalysis(analysis);
-	}
+	}	
 
 }

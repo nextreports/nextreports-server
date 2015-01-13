@@ -32,8 +32,7 @@ public class DatabaseAnalysisReader implements AnalysisReader {
 	private AnalysisService analysisService;
 	
 	private Connection con = null;
-	private int rowCount = -1;	
-	private String reportId;
+	private int rowCount = -1;		
 	
 	public DatabaseAnalysisReader() {				
 	}		
@@ -42,8 +41,7 @@ public class DatabaseAnalysisReader implements AnalysisReader {
 	public List<String> getHeader(Analysis analysis) {	
 		if (analysis == null) {
 			return new ArrayList<String>();
-		}
-		reportId = analysis.getReportId();
+		}		
 		initConnection();
 		List<String> columnNames = analysis.getColumns();		
 		if ((columnNames == null) || columnNames.isEmpty()) {
@@ -162,13 +160,7 @@ public class DatabaseAnalysisReader implements AnalysisReader {
 		return list.iterator();
 		
 	}
-	
-	//@todo analysis
-//	@Required
-//    public void setDataSource(ComboPooledDataSource dataSource) {
-//        this.dataSource = dataSource;
-//    }
-	
+		
 	@Required
 	public void setStorageService(StorageService storageService) {
 		this.storageService = storageService;
@@ -182,32 +174,21 @@ public class DatabaseAnalysisReader implements AnalysisReader {
 	
 	private void initConnection() {
 		if (con == null) {
-//			try {
-//				//con = dataSource.getConnection();
-//				Report report = (Report)storageService.getEntityById(reportId);
-//				con = ConnectionUtil.createConnection(storageService, report.getDataSource());
-//			} catch (Exception e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-			
-			
-		        Properties info = new Properties();
-		        info.put("user", "admin");
-		        info.put("password", "admin");
-//		        info.put("db.usePool", "true"); // USE THE POOL
-//		        info.put("db.pool.min", "3");   // MINIMUM POOL SIZE
-//		        info.put("db.pool.max", "30");  // MAXIMUM POOL SIZE
+			Properties info = new Properties();
+			info.put("user", "admin");
+			info.put("password", "admin");
+			// info.put("db.usePool", "true"); // USE THE POOL
+			// info.put("db.pool.min", "3"); // MINIMUM POOL SIZE
+			// info.put("db.pool.max", "30"); // MAXIMUM POOL SIZE
 
-		        try {
-		        	DriverManager.registerDriver(new OrientJdbcDriver());
-		        	con = DriverManager.getConnection("jdbc:orient:" + analysisService.getDatabasePath(), info);
-		        } catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}		        		    
-			
-		}		
+			try {
+				DriverManager.registerDriver(new OrientJdbcDriver());
+				con = DriverManager.getConnection("jdbc:orient:" + analysisService.getDatabasePath(), info);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	

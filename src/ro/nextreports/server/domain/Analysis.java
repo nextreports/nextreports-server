@@ -54,15 +54,7 @@ public class Analysis extends Entity {
 	private boolean changeFirstSortOrder;
 
 	public Analysis() {
-	}
-		
-	public String getReportId() {
-		return reportId;
-	}
-
-	public void setReportId(String reportId) {
-		this.reportId = reportId;
-	}
+	}			
 
 	public String getTableName() {
 		return tableName;
