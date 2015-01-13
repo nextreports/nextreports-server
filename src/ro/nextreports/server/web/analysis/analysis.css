@@ -76,7 +76,7 @@
 
 .analysis-toggle {
 	float: left;
-	margin: 3px 3px 3px 0px;    
+	margin: 7px 3px 3px 0px;    
     cursor: pointer;
 }
 
@@ -94,9 +94,10 @@
 
 .analysis-title {
 	display: block;
-	padding-top: 4px;
+	padding-top: 7px;
 	font-size: 14px;
 	font-weight: bold;
+	height: 1.8em;
 }
 
 /* for empty row cells*/

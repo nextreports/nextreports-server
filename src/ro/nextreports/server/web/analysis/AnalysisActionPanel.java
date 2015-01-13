@@ -9,7 +9,7 @@ public class AnalysisActionPanel extends Panel {
 	
 	private static final long serialVersionUID = 1L;
 
-    public AnalysisActionPanel(String id, final IModel<Analysis> model) {
+    public AnalysisActionPanel(String id, final IModel<Object> model) {
         super(id, model);
 
         //setRenderBodyOnly(true);

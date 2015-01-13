@@ -23,6 +23,7 @@ import ro.nextreports.server.web.analysis.util.AnalysisException;
 public class AnalysisDataProvider extends SortableDataProvider<AnalysisRow, String> {
 
 	private static final long serialVersionUID = 1L;
+	private static final int MAX_PAGINATION = 500;
 
 	private static final Logger LOG = LoggerFactory.getLogger(AnalysisDataProvider.class);
 
@@ -137,7 +138,7 @@ public class AnalysisDataProvider extends SortableDataProvider<AnalysisRow, Stri
 		}
 		int rows = analysis.getRowsPerPage();
 		if (rows == 0) {
-			rows = Integer.MAX_VALUE;
+			rows = MAX_PAGINATION;
 		}
 		return rows;
 	}

@@ -69,8 +69,7 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
 	public AnalysisPanel(String id) {
 		super(id, new SelectedAnalysisModel());				
 		setOutputMarkupId(true);    
-		addToolbar();
-        add(AttributeModifier.replace("class", "analysis"));            
+		addToolbar();            
 
 		Form<Void> submitForm = new Form<Void>("submitForm");
 		add(submitForm);

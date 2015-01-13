@@ -23,7 +23,7 @@ import ro.nextreports.server.web.core.section.SectionContextConstants;
 
 public class DeleteActionLink extends AjaxConfirmLink {
 	
-	private ActionContext actionContext;
+	private AnalysisActionContext actionContext;
 	
 	@SpringBean
     private AnalysisService analysisService;
@@ -32,7 +32,7 @@ public class DeleteActionLink extends AjaxConfirmLink {
         this.analysisService = analysisService;
     }        
 	
-	public DeleteActionLink(ActionContext actionContext) {
+	public DeleteActionLink(AnalysisActionContext actionContext) {
 		super(MenuPanel.LINK_ID, new StringResourceModel("AnalysisPopupMenuModel.deleteAsk", null, 
 					new Object[] { actionContext.getEntity().getName() }).getString());
 		this.actionContext = actionContext;
@@ -61,6 +61,14 @@ public class DeleteActionLink extends AjaxConfirmLink {
         panel.getAnalysisPanel().changeDataProvider(new SelectedAnalysisModel(), target);
         target.add(panel);   
 	}		
+	
+	@Override
+	public boolean isVisible() {
+		if (actionContext.isAnalysisLink()) {
+			return false;
+		}		
+		return true;
+	}
 	
 	@Override
 	public void onClick(AjaxRequestTarget target) {

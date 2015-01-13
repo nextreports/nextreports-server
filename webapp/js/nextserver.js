@@ -98,8 +98,8 @@ function onResize() {
     	$(".dashboardNavigation").css({'height': $height + 32});
     }
     $(".analysis").css({'height': $height + 65});
-	$(".analysisNavigation").css({'height': $height + 65});
-    $(".fieldset-panel-right").css({'height': $height - 20});
+	$(".analysisNavigation").css({'height': $height + 32});
+    $(".fieldset-panel-right").css({'height': $height + 32});
     
 }
 

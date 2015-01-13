@@ -20,7 +20,7 @@ import ro.nextreports.server.web.core.action.ActionContext;
 
 public class ModifyActionLink extends ActionAjaxLink {
 	
-	private ActionContext actionContext;
+	private AnalysisActionContext actionContext;
 	
 	@SpringBean
     private AnalysisService analysisService;
@@ -36,7 +36,7 @@ public class ModifyActionLink extends ActionAjaxLink {
 		this.storageService = storageService;
 	}
 
-	public ModifyActionLink(ActionContext actionContext) {
+	public ModifyActionLink(AnalysisActionContext actionContext) {
 		super(actionContext);
 		this.actionContext = actionContext;
 		Injector.get().inject(this);
@@ -84,6 +84,14 @@ public class ModifyActionLink extends ActionAjaxLink {
         
         dialog.setContent(modifyAnalysisPanel);
         dialog.show(target);         
+	}
+	
+	@Override
+	public boolean isVisible() {
+		if (actionContext.isAnalysisLink()) {
+			return false;
+		}		
+		return true;
 	}
 			
 }

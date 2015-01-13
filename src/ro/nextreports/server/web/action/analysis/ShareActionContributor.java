@@ -9,21 +9,22 @@ import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.web.core.action.AbstractActionContributor;
 import ro.nextreports.server.web.core.action.ActionContext;
 
-public class DeleteActionContributor extends AbstractActionContributor {
+public class ShareActionContributor extends AbstractActionContributor {
 
-	public static final String ID = DeleteActionContributor.class.getName();
+	public static final String ID = ShareActionContributor.class.getName();
 
-	// does not matter for analysis	
+	// does not matter for analysis 
+	// Analysis panel contains Analsysis and Link elements (which are not entities)
 	public boolean support(List<Entity> entities) {
 		return true;
 	}
 
 	public String getActionImage() {
-		return "images/delete.gif";
+		return "images/shield.png";
 	}
 
 	public String getActionName() {
-		return new StringResourceModel("DashboardPopupMenuModel.delete", null).getString();
+		return new StringResourceModel("DashboardPopupMenuModel.share", null).getString();
 	}
 
 	public String getId() {
@@ -31,7 +32,7 @@ public class DeleteActionContributor extends AbstractActionContributor {
 	}
 
 	public AbstractLink getLink(final ActionContext actionContext) {
-		return new DeleteActionLink((AnalysisActionContext)actionContext);
+		return new ShareActionLink(actionContext);
 	}
 
 }

@@ -112,6 +112,9 @@
      <bean id="analysisService" class="ro.nextreports.server.service.DefaultAnalysisService">
         <property name="storageService">
             <ref bean="storageService"/>
+        </property>   
+        <property name="securityService">
+            <ref bean="securityService"/>
         </property>        
     </bean>
     

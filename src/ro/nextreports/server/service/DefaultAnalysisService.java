@@ -16,18 +16,27 @@ import ro.nextreports.server.StorageConstants;
 import ro.nextreports.server.domain.Analysis;
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.domain.Folder;
+import ro.nextreports.server.domain.Link;
 import ro.nextreports.server.exception.DuplicationException;
 import ro.nextreports.server.exception.NotFoundException;
+import ro.nextreports.server.util.PermissionUtil;
+import ro.nextreports.server.util.ServerUtil;
 
 public class DefaultAnalysisService implements AnalysisService {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(DefaultAnalysisService.class); 
 	
 	private StorageService storageService;
+	private SecurityService securityService;
 	
 	@Required
     public void setStorageService(StorageService storageService) {
         this.storageService = storageService;
+    }
+	
+	@Required
+    public void setSecurityService(SecurityService securityService) {
+        this.securityService = securityService;
     }
 	
 	private String getUsername() {
@@ -63,12 +72,69 @@ public class DefaultAnalysisService implements AnalysisService {
         try {
         	checkAnalysisPath();
             entities = storageService.getEntitiesByClassName(getMyAnalysisPath(), Analysis.class.getName());
+            System.out.println("***** myAnalysis path = " +getMyAnalysisPath());
             return getAnalysis(entities);
         } catch (NotFoundException e) {
             // never happening
             throw new RuntimeException(e);
         }              
     }		
+	
+	public List<Link> getAnalysisLinks() {
+		return getAnalysisLinks(PermissionUtil.getRead(), ServerUtil.getUsername());
+	}
+	
+	public List<Link> getAnalysisLinks(String user) {
+		return getAnalysisLinks(PermissionUtil.getRead(), user);
+	}
+    
+    public List<Link> getWritableAnalysisLinks() {
+    	return getAnalysisLinks(PermissionUtil.getWrite(), ServerUtil.getUsername());
+    }
+    
+    private List<Link> getAnalysisLinks(int permission, String user) {
+        // TODO improve filtering
+        Entity[] entities;
+        try {
+            entities = storageService.getEntitiesByClassName(StorageConstants.ANALYSIS_ROOT, Analysis.class.getName());
+        } catch (NotFoundException e) {
+            // never happening
+            throw new RuntimeException(e);
+        }
+
+        List<Entity> tmp = new ArrayList<Entity>();
+        String analysisPath = StorageConstants.ANALYSIS_ROOT + "/" + user;
+        for (Entity entity : entities) {
+            if (!entity.getPath().startsWith(analysisPath)) {
+                tmp.add(entity);
+            }
+        }
+        entities = new Entity[tmp.size()];
+        entities = tmp.toArray(entities);
+
+        List<Link> links = new ArrayList<Link>();
+        for (Entity entity : entities) {
+            try {
+                boolean hasRead = securityService.hasPermissionsById(user, permission, entity.getId());
+                if (hasRead) {
+                	Link link = new Link(entity.getName(), entity.getPath());                	
+                	link.setReference(entity.getId());
+                    links.add(link);
+                }
+            } catch (NotFoundException e) {
+            	// never happening
+            	throw new RuntimeException(e);
+            }
+        }
+        Collections.sort(links, new Comparator<Link>() {
+			@Override
+			public int compare(Link o1, Link o2) {
+				return Collator.getInstance().compare(o1.getName(), o2.getName());
+			}        	
+        });
+        
+        return links;
+    }
 	
 	@Transactional
 	public String addAnalysis(Analysis analysis) {

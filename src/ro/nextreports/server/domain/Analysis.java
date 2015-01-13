@@ -423,6 +423,11 @@ public class Analysis extends Entity {
 			}
 		}
 	}
+	
+	@Override
+    public boolean allowPermissions() {
+        return true;
+    }
 
 	@Override
 	public String toString() {

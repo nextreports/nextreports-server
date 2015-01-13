@@ -30,7 +30,7 @@ public class ModifyActionContributor extends AbstractActionContributor {
 	}
 
 	public AbstractLink getLink(final ActionContext actionContext) {
-		return new ModifyActionLink(actionContext);
+		return new ModifyActionLink((AnalysisActionContext)actionContext);
 	}
 
 }

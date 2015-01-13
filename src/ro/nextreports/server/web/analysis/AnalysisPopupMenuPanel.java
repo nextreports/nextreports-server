@@ -10,7 +10,7 @@ public class AnalysisPopupMenuPanel extends MenuPanel {
 
 	private static final long serialVersionUID = 1L;
 	
-	public AnalysisPopupMenuPanel(String id, IModel<Analysis> model) {
+	public AnalysisPopupMenuPanel(String id, IModel<Object> model) {
 		super(id, new AnalysisPopupMenuModel(model));
 	}
 
