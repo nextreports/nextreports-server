@@ -8,7 +8,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow.CloseButtonCallback;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow.WindowClosedCallback;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -31,6 +30,7 @@ import ro.nextreports.server.service.AnalysisService;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.web.NextServerSession;
 import ro.nextreports.server.web.analysis.model.AnalysisAndLinksModel;
+import ro.nextreports.server.web.analysis.model.SelectedAnalysisModel;
 import ro.nextreports.server.web.common.behavior.SimpleTooltipBehavior;
 import ro.nextreports.server.web.common.form.FormPanel;
 import ro.nextreports.server.web.core.BasePage;
@@ -48,7 +48,7 @@ public class AnalysisNavigationPanel extends Panel {
 	@SpringBean
 	private StorageService storageService;
 	
-	private boolean added = false;
+	private String addedId = null;
 
 	public AnalysisNavigationPanel(String id) {
 		super(id);
@@ -123,8 +123,7 @@ public class AnalysisNavigationPanel extends Panel {
 						String path = analysisService.getAnalysisPath(analysis, SecurityUtil.getLoggedUsername());
 						analysis.setPath(path);
 						analysis.setRowsPerPage(20);
-						analysisService.addAnalysis(analysis);
-						added=true;
+						addedId = analysisService.addAnalysis(analysis);						
 						dialog.close(target);												
 					}
 				};
@@ -143,10 +142,13 @@ public class AnalysisNavigationPanel extends Panel {
 
 					@Override
 					public void onClose(AjaxRequestTarget target) {
-						if (added) {
-							System.out.println("*********88 CLOSE");
+						if (addedId != null) {														
 							AnalysisBrowserPanel browserPanel = findParent(AnalysisBrowserPanel.class);
+							SectionContext sectionContext = NextServerSession.get().getSectionContext(AnalysisSection.ID);
+							sectionContext.getData().put(SectionContextConstants.SELECTED_ANALYSIS_ID, addedId);
+							browserPanel.getAnalysisPanel().changeDataProvider(new SelectedAnalysisModel(), target);							
 							target.add(browserPanel);
+							addedId = null;
 						}
 					}
                 	
