@@ -140,8 +140,7 @@ public class OrientDbLoader implements Loader {
                 OSchema schema = documentDatabase.getMetadata().getSchema();
                 if (schema.existsClass(className)) {
                     log.debug("Dropping class '{}'", className);
-                    String sql = "DELETE FROM " + className;
-                    documentDatabase.command(new OCommandSQL(sql)).execute();
+                    documentDatabase.command(new OCommandSQL("DELETE FROM " + className)).execute();
                     schema.dropClass(className);
                 }
             }

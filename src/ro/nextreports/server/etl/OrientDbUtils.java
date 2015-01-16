@@ -19,6 +19,8 @@ package ro.nextreports.server.etl;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocument;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.metadata.schema.OClass;
+import com.orientechnologies.orient.core.metadata.schema.OSchema;
+import com.orientechnologies.orient.core.sql.OCommandSQL;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -59,6 +61,14 @@ public class OrientDbUtils {
         }
 
         return result;
+    }
+
+    public static void dropClass(ODatabaseDocument database, String className) {
+        OSchema schema = database.getMetadata().getSchema();
+        if (schema.existsClass(className)) {
+            database.command(new OCommandSQL("DELETE FROM " + className)).execute();
+            schema.dropClass(className);
+        }
     }
 
     public static class ClassMetadata {
