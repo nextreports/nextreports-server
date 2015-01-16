@@ -21,6 +21,7 @@ import com.orientechnologies.orient.core.exception.OSchemaException;
 import com.orientechnologies.orient.core.intent.OIntentMassiveInsert;
 import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OProperty;
+import com.orientechnologies.orient.core.metadata.schema.OSchema;
 import com.orientechnologies.orient.core.metadata.schema.OType;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.sql.OCommandSQL;
@@ -136,12 +137,14 @@ public class OrientDbLoader implements Loader {
             documentDatabase.open(dbUser, dbPassword);
 
             if ((className != null) && autoDropClass) {
-                log.debug("Dropping class '{}'", className);
-                String sql = "DROP CLASS " + className;
-//                documentDatabase.query(new OSQLSynchQuery<ODocument>(sql)); // doesn't work (no idempotent)
-                System.out.println(documentDatabase.command(new OCommandSQL(sql)));
+                OSchema schema = documentDatabase.getMetadata().getSchema();
+                if (schema.existsClass(className)) {
+                    log.debug("Dropping class '{}'", className);
+                    String sql = "DELETE FROM " + className;
+                    documentDatabase.command(new OCommandSQL(sql)).execute();
+                    schema.dropClass(className);
+                }
             }
-
         } else {
             long time = System.currentTimeMillis();
             log.debug("Create database '{}'", databaseName);
