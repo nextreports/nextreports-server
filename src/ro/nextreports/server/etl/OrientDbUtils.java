@@ -71,6 +71,20 @@ public class OrientDbUtils {
         }
     }
 
+    public static long duplicateClass(ODatabaseDocument database, String className, String newClassName) {
+        OSchema schema = database.getMetadata().getSchema();
+        if (!schema.existsClass(newClassName)) {
+            schema.createClass(newClassName);
+        }
+
+        String sql = "INSERT INTO " + newClassName + " FROM SELECT FROM " + className;
+        database.command(new OCommandSQL(sql)).execute();
+
+        long count = schema.getClass(newClassName).count();
+
+        return count;
+    }
+
     public static class ClassMetadata {
 
         private String name;
