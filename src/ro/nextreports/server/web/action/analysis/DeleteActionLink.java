@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.injection.Injector;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -17,7 +16,6 @@ import ro.nextreports.server.web.analysis.AnalysisSection;
 import ro.nextreports.server.web.analysis.model.SelectedAnalysisModel;
 import ro.nextreports.server.web.common.menu.MenuPanel;
 import ro.nextreports.server.web.common.misc.AjaxConfirmLink;
-import ro.nextreports.server.web.core.action.ActionContext;
 import ro.nextreports.server.web.core.section.SectionContext;
 import ro.nextreports.server.web.core.section.SectionContextConstants;
 

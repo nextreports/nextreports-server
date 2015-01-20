@@ -17,6 +17,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 
@@ -39,6 +41,8 @@ public class AddAnalysisPanel extends FormContentPanel {
 	private AnalysisService analysisService;
 
 	private String selectedTable;
+	
+	private static final Logger LOG = LoggerFactory.getLogger(AddAnalysisPanel.class);
 
 	public AddAnalysisPanel() {
 		super(FormPanel.CONTENT_ID);
@@ -64,12 +68,20 @@ public class AddAnalysisPanel extends FormContentPanel {
 			ODatabaseDocumentTx db = null;
 			try {
 				String prefix = SecurityUtil.getLoggedUsername() + "-";
-				db = new ODatabaseDocumentTx(analysisService.getDatabasePath()).open("admin", "admin");
-				List<ClassMetadata> result = OrientDbUtils.getDatabaseClasses(db, prefix);				
-				System.out.println("**** result size = " + result.size());
+				try {
+					db = new ODatabaseDocumentTx(analysisService.getDatabasePath(), false).open("admin", "admin");
+				} catch (Throwable t) {
+					// critical case					
+					t.printStackTrace();
+					LOG.error(t.getMessage(), t);
+					return new ArrayList<String>();
+				}
+				List<ClassMetadata> result = OrientDbUtils.getDatabaseClasses(db, prefix);								
 				List<String> names = new ArrayList<String>();
-				for (ClassMetadata c : result) {					
-					names.add(c.getName().substring(prefix.length()));
+				for (ClassMetadata c : result) {
+					if (!c.getName().contains(AnalysisSection.FREEZE_MARKUP)) {
+						names.add(c.getName().substring(prefix.length()));
+					}
 				}
 				return names;
 			} finally {

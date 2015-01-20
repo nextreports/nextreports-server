@@ -160,8 +160,7 @@ public class CreatePanel extends FormContentPanel<Analysis> {
  			} 
  			
  			@Override
- 			protected void onError(AjaxRequestTarget target, Form<?> form) {
- 				System.out.println("ERROR ********************");
+ 			protected void onError(AjaxRequestTarget target, Form<?> form) { 				
  				target.add(getFeedbackPanel());
  			}
  			

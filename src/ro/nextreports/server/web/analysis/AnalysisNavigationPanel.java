@@ -114,9 +114,7 @@ public class AnalysisNavigationPanel extends Panel {
                 
 				final AddAnalysisPanel panel = new AddAnalysisPanel() {
 					@Override
-					public void onOk(AjaxRequestTarget target) {
-						System.out.println("**** selected=" + getSelectedTable());
-
+					public void onOk(AjaxRequestTarget target) {						
 						Analysis analysis = new Analysis();
 						analysis.setName("Analysis " + UUID.randomUUID());
 						analysis.setTableName(SecurityUtil.getLoggedUsername()+"-"+getSelectedTable());
@@ -212,8 +210,10 @@ public class AnalysisNavigationPanel extends Panel {
 			@Override
 			protected String load() {
 				String imagePath = "images/analysis.png";
-				if (isLink(analysis)) {
+				if (isLink(analysis)) {					
                     imagePath = "images/analysis_link.png";
+                } else if (((Analysis)analysis).isFreezed()) {
+                	imagePath = "images/analysis_freeze.png";
                 }
 				return imagePath;
 			}

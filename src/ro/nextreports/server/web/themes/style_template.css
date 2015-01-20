@@ -202,7 +202,7 @@ body {
 }
 
 .big-container {
-    min-width: 980px;
+    min-width: 1024px;
     max-width: 1900px;
     width: expression( document . body . clientWidth < 980 ? "980px":
     document . body . clientWidth > 1900 ? "1900px":

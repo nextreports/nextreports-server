@@ -47,6 +47,10 @@ public class AnalysisTablePanel extends GenericPanel<Analysis> {
 				}
 			});
 		}		
+		// critical case when someone deleted the database folder
+		if (columns.size() == 0) {
+			columns.add(new PropertyColumn<AnalysisRow, String>(new Model<String>(""), ""));
+		}
 		return columns;
     }    
 	

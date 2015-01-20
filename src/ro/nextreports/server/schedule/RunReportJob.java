@@ -282,7 +282,13 @@ public class RunReportJob implements Job {
 				reportRunner.setAlerts(alerts);
 				reportRunner.run();   								
 			} else {				
-				result = reportService.reportToURL(report, schedulerJob.getReportRuntime(), schedulerJob.getCreator(), key);
+				// not null when run
+				String author = schedulerJob.getCreator();
+				if (author == null) {
+					// when schedule
+					author = schedulerJob.getCreatedBy();
+				}
+				result = reportService.reportToURL(report, schedulerJob.getReportRuntime(), author, key);
 				if (result == null) {
 					fileName = "";
 					url = ReportConstants.ETL_FORMAT;

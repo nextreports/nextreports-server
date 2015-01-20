@@ -29,7 +29,7 @@ public class ColumnsPanel extends FormContentPanel<Analysis> {
 	public ColumnsPanel(IModel<Analysis> model) {		
 		super(FormPanel.CONTENT_ID);
 		
-		System.out.println("@@@@@ " + model.getObject());
+		//System.out.println("@@@@@ " + model.getObject());
 		
 		setRenderBodyOnly(false);
 		setOutputMarkupId(true);
@@ -58,7 +58,7 @@ public class ColumnsPanel extends FormContentPanel<Analysis> {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				columns = new ArrayList<String>(choices);
-				System.out.println("*** select all = " + choices);				
+				//System.out.println("*** select all = " + choices);				
 				target.add(listChoice);
 			}
 	    });	

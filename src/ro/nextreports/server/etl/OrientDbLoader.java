@@ -124,7 +124,7 @@ public class OrientDbLoader implements Loader {
     @Override
     public void init() {
         log.debug("Init loader");
-        documentDatabase = new ODatabaseDocumentTx(dbUrl);
+        documentDatabase = new ODatabaseDocumentTx(dbUrl, false);
         String databaseName = documentDatabase.getName();
 
         if (documentDatabase.exists() && dbAutoDropIfExists) {

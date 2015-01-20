@@ -48,6 +48,9 @@ public class Analysis extends Entity {
 
 	@JcrProperty
 	private List<String> groups = new LinkedList<String>();
+	
+	@JcrProperty
+    private boolean freezed;
 
 	// business fields unimportant for current Analysis object's state
 	private boolean firstSortRemoved;
@@ -250,6 +253,14 @@ public class Analysis extends Entity {
 	public void setGroups(List<String> groups) {
 		this.groups = groups;
 	}
+		
+	public boolean isFreezed() {
+		return freezed;
+	}
+
+	public void setFreezed(boolean freezed) {
+		this.freezed = freezed;
+	}
 
 	public String toSql(boolean allColumns) {
 		StringBuilder sb = new StringBuilder("select ");
@@ -425,7 +436,7 @@ public class Analysis extends Entity {
 	public String toString() {
 		return "Analysis [" + super.toString() + " ,tableName=" + tableName + ", columns=" + columns + ", selected=" + selected + ", sortProperty="
 				+ sortProperty + ", ascending=" + ascending + ", filters=" + filters + ", declaredColumns=" + declaredColumns
-				+ ", groups=" + groups + ", rowsPerPage=" + rowsPerPage + "]";
+				+ ", groups=" + groups + ", rowsPerPage=" + rowsPerPage + ", freezed=" + freezed + "]";
 	}
 
 }

@@ -12,15 +12,19 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
+
 import ro.nextreports.server.StorageConstants;
 import ro.nextreports.server.domain.Analysis;
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.domain.Folder;
 import ro.nextreports.server.domain.Link;
+import ro.nextreports.server.etl.OrientDbUtils;
 import ro.nextreports.server.exception.DuplicationException;
 import ro.nextreports.server.exception.NotFoundException;
 import ro.nextreports.server.util.PermissionUtil;
 import ro.nextreports.server.util.ServerUtil;
+import ro.nextreports.server.web.security.SecurityUtil;
 
 public class DefaultAnalysisService implements AnalysisService {
 	
@@ -79,6 +83,19 @@ public class DefaultAnalysisService implements AnalysisService {
             throw new RuntimeException(e);
         }              
     }		
+	
+	@Transactional
+	public List<Analysis> getAnalysisByTable(String tableName) {
+		Entity[] entities;
+        try {
+        	checkAnalysisPath();
+            entities = storageService.getEntitiesByClassName(StorageConstants.ANALYSIS_ROOT, Analysis.class.getName());            
+            return getAnalysis(entities, tableName);
+        } catch (NotFoundException e) {
+            // never happening
+            throw new RuntimeException(e);
+        }       		
+	}
 	
 	public List<Link> getAnalysisLinks() {
 		return getAnalysisLinks(PermissionUtil.getRead(), ServerUtil.getUsername());
@@ -165,9 +182,20 @@ public class DefaultAnalysisService implements AnalysisService {
 	}
 	
 	private List<Analysis> getAnalysis(Entity[] entities) {       
+        return getAnalysis(entities, null);
+    }
+	
+	private List<Analysis> getAnalysis(Entity[] entities, String tableName) {       
         List<Analysis> analysis = new ArrayList<Analysis>();
-        for (Entity entity : entities) {            
-            analysis.add((Analysis)entity);
+        for (Entity entity : entities) {         
+        	Analysis a = (Analysis)entity;
+        	if (tableName != null) {
+        		if (a.getTableName().equals(tableName)) {
+        			analysis.add(a);
+        		}
+        	} else {
+        		analysis.add(a);
+        	}
         }
         Collections.sort(analysis, new Comparator<Analysis>() {
 
@@ -178,10 +206,32 @@ public class DefaultAnalysisService implements AnalysisService {
         return analysis;
     }
 	
+	
 	@Transactional
-	public void removeAnalysis(String analysisId) throws NotFoundException {		
-		storageService.removeEntityById(analysisId);				
-		//@todo analysis remove table
+	public void removeAnalysis(String analysisId) throws NotFoundException {	
+		Analysis a = (Analysis)storageService.getEntityById(analysisId);
+		List<Analysis> list = getAnalysisByTable(a.getTableName());
+		int no = list.size();
+		
+		storageService.removeEntityById(analysisId);		
+		
+		LOG.debug("**** For table " + a.getTableName() +"  there are " + no + " analysis");
+		if (no == 1) {
+			//last analysis deleted, delete also the table
+			ODatabaseDocumentTx db = null;
+			try {
+				LOG.debug("**** Delete table : " + a.getTableName());
+				String prefix = SecurityUtil.getLoggedUsername() + "-";
+				db = new ODatabaseDocumentTx(getDatabasePath(), false).open("admin", "admin");
+				OrientDbUtils.dropClass(db, a.getTableName());
+			} catch (Throwable t) {
+				LOG.error(t.getMessage(), t);
+			} finally {
+				if (db != null) {
+					db.close();
+				}
+			}
+		}		
 	}
 	
 	@Transactional
@@ -189,8 +239,8 @@ public class DefaultAnalysisService implements AnalysisService {
 		storageService.modifyEntity(analysis);
 	}
 	
-	public String getDatabasePath() {
-		return "plocal:analytics-data";
+	public String getDatabasePath() {		
+		return "plocal:" + System.getProperty("nextserver.home") + "/analytics-data";
 	}
 		
 }

@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import ro.nextreports.server.domain.Analysis;
@@ -29,6 +31,8 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 
 	private int rowCount = -1;	
 
+	private static final Logger LOG = LoggerFactory.getLogger(OrientDBAnalysisReader.class);	
+	
 	public OrientDBAnalysisReader() {
 	}
 
@@ -41,6 +45,9 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 		if ((columnNames == null) || columnNames.isEmpty()) {			
 			long start = System.currentTimeMillis();
 			initConnection();
+			if (db == null) {
+				return new ArrayList<String>();
+			}
 			System.out.println("---------- getHeader");
 			Columns columns = getColumns(analysis);
 			columnNames = columns.getColumnNames();
@@ -77,11 +84,24 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 		if (rowCount == -1) {			
 			long start = System.currentTimeMillis();
 			initConnection();
+			if (db == null) {
+				return 0;
+			}
 			System.out.println("---------- getRowCount");
 			String sql = analysis.toSql(false);
 			System.out.println("       sql=" + sql);
-
-			List<ODocument> list = db.query(new OSQLSynchQuery<ODocument>("SELECT COUNT(*) as count FROM ( " + sql + " )"));
+			
+			
+			List<ODocument> list = null;
+			try {
+				list = db.query(new OSQLSynchQuery<ODocument>("SELECT COUNT(*) as count FROM ( " + sql + " )"));
+			} catch (Throwable t) {
+				// critical case
+				// class (table) not found in database
+				t.printStackTrace();
+				LOG.error(t.getMessage(), t);
+				return 0;
+			}
 			int count = ((Long) list.get(0).field("count")).intValue();
 
 			closeConnection();
@@ -101,6 +121,9 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 			return list.iterator();
 		}
 		initConnection();
+		if (db == null) {
+			return list.iterator();
+		}
 		String sql = analysis.toSql(false);
 		System.out.println("*** SQL = " + sql);
 
@@ -124,13 +147,7 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 
 		return list.iterator();
 
-	}
-
-	// @todo analysis
-	// @Required
-	// public void setDataSource(ComboPooledDataSource dataSource) {
-	// this.dataSource = dataSource;
-	// }
+	}	
 
 	@Required
 	public void setStorageService(StorageService storageService) {
@@ -144,7 +161,13 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 
 	private void initConnection() {
 		if (db == null) {
-			db = new ODatabaseDocumentTx(analysisService.getDatabasePath()).open("admin", "admin");
+			try {
+				db = new ODatabaseDocumentTx(analysisService.getDatabasePath(), false).open("admin", "admin");
+			} catch (Throwable t) {
+				// critical case when someone deleted the database folder
+				t.printStackTrace();
+				LOG.error(t.getMessage(), t);
+			}
 		}
 	}
 	

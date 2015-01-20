@@ -3,6 +3,7 @@ package ro.nextreports.server.web.analysis;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -31,9 +32,15 @@ import org.odlabs.wiquery.ui.sortable.SortableJavaScriptResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
+
 import ro.nextreports.engine.util.ObjectCloner;
 import ro.nextreports.server.domain.Analysis;
+import ro.nextreports.server.etl.OrientDbUtils;
 import ro.nextreports.server.service.AnalysisService;
+import ro.nextreports.server.service.SecurityService;
+import ro.nextreports.server.util.PermissionUtil;
+import ro.nextreports.server.util.ServerUtil;
 import ro.nextreports.server.web.NextServerSession;
 import ro.nextreports.server.web.analysis.feature.create.CreatePanel;
 import ro.nextreports.server.web.analysis.feature.export.CsvResource;
@@ -63,6 +70,9 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
 	
 	@SpringBean
 	private AnalysisService analysisService;
+	
+	@SpringBean
+	private SecurityService securityService;
 			
 	private static final Logger LOG = LoggerFactory.getLogger(AnalysisPanel.class);	
 	
@@ -200,6 +210,7 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
     	//submitForm.add(getXlsLink());
     	submitForm.add(getXlsxLink());
     	submitForm.add(getSaveLink());
+    	submitForm.add(getFreezeLink());
     }
     
     private AjaxLink<Analysis> getSelectLink() {
@@ -310,7 +321,7 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
 	                	ModalWindow.closeCurrent(target);
 	                    
 	                	Analysis analysis = getAnalysis();	 
-	                	System.out.println("$$$$$$$$$$$$$$$$$  create analysis " + analysis);
+	                	
 	                	// header is modified
 	                	AnalysisPanel.this.getModel().setObject(analysis);
 	                	changeDataProvider(AnalysisPanel.this.getModel(), target);
@@ -393,13 +404,60 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
     	};
     }
     
+    private AjaxSubmitLink getFreezeLink() {
+    	return new AjaxSubmitLink("freeze") {
+
+    		@Override
+    		public void onSubmit(AjaxRequestTarget target, Form form) {
+    			Analysis analysis = AnalysisPanel.this.getModel().getObject();	
+    			ODatabaseDocumentTx db = null;
+    			try {    				
+    				String freezeClassName;
+    				try {
+    					db = new ODatabaseDocumentTx(analysisService.getDatabasePath(), false).open("admin", "admin");
+    					freezeClassName = analysis.getTableName() + AnalysisSection.FREEZE_MARKUP + UUID.randomUUID();
+        				OrientDbUtils.duplicateClass(db, analysis.getTableName(), freezeClassName);
+    				} catch (Throwable t) {
+    					// critical case					
+    					t.printStackTrace();
+    					LOG.error(t.getMessage(), t);
+    					getSession().getFeedbackMessages().add(new FeedbackMessage(null, t.getMessage(), JGrowlAjaxBehavior.ERROR_STICKY));
+    	    			setResponsePage(HomePage.class);
+    	    			return;
+    				}    				
+    				
+    				analysis.setFreezed(true);
+    				analysis.setTableName(freezeClassName);	    			
+        			analysisService.modifyAnalysis(analysis);
+        			getSession().getFeedbackMessages().add(new FeedbackMessage(null, getString("Analysis.freezed"), JGrowlAjaxBehavior.INFO_FADE));
+        			setResponsePage(HomePage.class);
+    			} finally {
+    				if (db != null) {
+    					db.close();
+    				}
+    			}    			    			    			
+    		}
+    		
+    		@Override
+			public boolean isVisible() {				
+				if (dataProvider.isEmpty() || AnalysisPanel.this.getModel().getObject().isFreezed()) {
+					return false;
+				}
+				if (!hasWritePermission()) {
+    				return false;
+    			}
+    			return true;
+			}	
+    		
+    	};
+    }
+    
     private AjaxSubmitLink getSaveLink() {
     	return new AjaxSubmitLink("save") {
 
     		@Override
     		public void onSubmit(AjaxRequestTarget target, Form form) {
-    			Analysis analysis = AnalysisPanel.this.getModel().getObject();	
-    			System.out.println(analysis);
+    			Analysis analysis = AnalysisPanel.this.getModel().getObject();	    			
     			analysisService.modifyAnalysis(analysis);
     			getSession().getFeedbackMessages().add(new FeedbackMessage(null, getString("Analysis.saved"), JGrowlAjaxBehavior.INFO_FADE));
     			setResponsePage(HomePage.class);
@@ -407,11 +465,41 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
     		
     		@Override
 			public boolean isVisible() {				
-				return !dataProvider.isEmpty();
+    			if (dataProvider.isEmpty()) {
+    				return false;
+    			}
+    			if (!hasWritePermission()) {
+    				return false;
+    			}
+    			return true;
 			}	
     		
     	};
+    }        
+    
+    private boolean hasWritePermission() {
+    	try {
+			if (!NextServerSession.get().isAdmin()) {    				
+				if (!securityService.hasPermissionsById(ServerUtil.getUsername(), PermissionUtil.getWrite(), getModelObject().getId())) {
+					return false;
+				}    				
+			} else {
+				String loggedRealm = NextServerSession.get().getUserRealm();
+				// for admins logged on realms we must see if analysis is from the same realm, otherwise if admins have rights to delete
+				// this is done in hasPermissionsById
+				if (!"".equals(loggedRealm)) {				    					
+					if (!securityService.hasPermissionsById(ServerUtil.getUsername(), PermissionUtil.getWrite(), getModelObject().getId())) {
+						return false;
+					}    					
+				}
+			}
+		} catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+		return true;
     }
+    
     
 	private abstract class ToolbarLink<T extends Analysis> extends AjaxLink<Analysis> {
 				
