@@ -59,6 +59,7 @@ import ro.nextreports.server.web.common.jgrowl.JGrowlAjaxBehavior;
 import ro.nextreports.server.web.common.util.PreferencesHelper;
 import ro.nextreports.server.web.core.BasePage;
 import ro.nextreports.server.web.core.HomePage;
+import ro.nextreports.server.web.security.SecurityUtil;
 
 public class AnalysisPanel extends GenericPanel<Analysis> {
 		
@@ -443,7 +444,7 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
 				if (dataProvider.isEmpty() || AnalysisPanel.this.getModel().getObject().isFreezed()) {
 					return false;
 				}
-				if (!hasWritePermission()) {
+				if (!SecurityUtil.hasPermission(securityService, PermissionUtil.getWrite(), getModelObject().getId())) {
     				return false;
     			}
     			return true;
@@ -468,37 +469,14 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
     			if (dataProvider.isEmpty()) {
     				return false;
     			}
-    			if (!hasWritePermission()) {
+    			if (!SecurityUtil.hasPermission(securityService, PermissionUtil.getWrite(), getModelObject().getId())) {
     				return false;
     			}
     			return true;
 			}	
     		
     	};
-    }        
-    
-    private boolean hasWritePermission() {
-    	try {
-			if (!NextServerSession.get().isAdmin()) {    				
-				if (!securityService.hasPermissionsById(ServerUtil.getUsername(), PermissionUtil.getWrite(), getModelObject().getId())) {
-					return false;
-				}    				
-			} else {
-				String loggedRealm = NextServerSession.get().getUserRealm();
-				// for admins logged on realms we must see if analysis is from the same realm, otherwise if admins have rights to delete
-				// this is done in hasPermissionsById
-				if (!"".equals(loggedRealm)) {				    					
-					if (!securityService.hasPermissionsById(ServerUtil.getUsername(), PermissionUtil.getWrite(), getModelObject().getId())) {
-						return false;
-					}    					
-				}
-			}
-		} catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-		return true;
-    }
+    }                
     
     
 	private abstract class ToolbarLink<T extends Analysis> extends AjaxLink<Analysis> {

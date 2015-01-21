@@ -179,6 +179,10 @@
 	padding-left: 1px;
 }
 
+.analysisToolbar a.button {
+	padding: 0 5px !important;
+}
+
 .analysisForm .feedbackPanelERROR {
 	float: left;
 }
