@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
+import org.apache.wicket.model.StringResourceModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -19,9 +21,11 @@ import ro.nextreports.server.domain.Analysis;
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.domain.Folder;
 import ro.nextreports.server.domain.Link;
+import ro.nextreports.server.domain.ReportResultEvent;
 import ro.nextreports.server.etl.OrientDbUtils;
 import ro.nextreports.server.exception.DuplicationException;
 import ro.nextreports.server.exception.NotFoundException;
+import ro.nextreports.server.util.AnalysisUtil;
 import ro.nextreports.server.util.PermissionUtil;
 import ro.nextreports.server.util.ServerUtil;
 import ro.nextreports.server.web.security.SecurityUtil;
@@ -32,6 +36,7 @@ public class DefaultAnalysisService implements AnalysisService {
 	
 	private StorageService storageService;
 	private SecurityService securityService;
+	private ReportService reportService;
 	
 	@Required
     public void setStorageService(StorageService storageService) {
@@ -41,6 +46,11 @@ public class DefaultAnalysisService implements AnalysisService {
 	@Required
     public void setSecurityService(SecurityService securityService) {
         this.securityService = securityService;
+    }
+	
+	@Required
+    public void setReportService(ReportService reportService) {
+        this.reportService = reportService;
     }
 	
 	private String getUsername() {
@@ -241,6 +251,49 @@ public class DefaultAnalysisService implements AnalysisService {
 	
 	public String getDatabasePath() {		
 		return "plocal:" + System.getProperty("nextserver.home") + "/analytics-data";
+	}
+	
+	@Transactional
+	public void freeze(final Analysis analysis) {
+		final String message = new StringResourceModel("Analysis.freezed", null, new Object[] {analysis.getName()}).getString();		
+		final ReportService service = reportService;
+		Runnable r = new Runnable() {
+			
+			@Override
+			public void run() {				
+				ODatabaseDocumentTx db = null;
+				ReportResultEvent event = null;
+				String freezeClassName;
+				try {
+					db = new ODatabaseDocumentTx(getDatabasePath(), false).open("admin", "admin");
+					freezeClassName = analysis.getTableName() + AnalysisUtil.FREEZE_MARKUP + UUID.randomUUID();
+					OrientDbUtils.duplicateClass(db, analysis.getTableName(), freezeClassName);
+
+					analysis.setFreezed(true);
+					analysis.setTableName(freezeClassName);
+					modifyAnalysis(analysis);
+					event = new ReportResultEvent(analysis.getCreatedBy(), analysis.getName(), AnalysisUtil.FREEZE_ACTION,
+							message);
+				} catch (Throwable t) {
+					// critical case
+					t.printStackTrace();
+					LOG.error(t.getMessage(), t);
+					// freezed unsuccessfull
+					analysis.setFreezed(false);
+					modifyAnalysis(analysis);
+					event = new ReportResultEvent(analysis.getCreatedBy(), analysis.getName(), AnalysisUtil.FREEZE_ACTION,
+							AnalysisUtil.FREEZE_FAILED + t.getMessage());
+				} finally {
+					if (db != null) {
+						db.close();
+						db = null;
+					}
+				}
+				service.notifyReportListener(event);														
+			}
+		};
+		new Thread(r).start();
+			   
 	}
 		
 }

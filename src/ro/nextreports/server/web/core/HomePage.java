@@ -32,6 +32,7 @@ import ro.nextreports.server.report.ReportConstants;
 import ro.nextreports.server.service.ReportListener;
 import ro.nextreports.server.service.ReportService;
 import ro.nextreports.server.service.StorageService;
+import ro.nextreports.server.util.AnalysisUtil;
 import ro.nextreports.server.web.NextServerSession;
 import ro.nextreports.server.web.common.jgrowl.JGrowlAjaxBehavior;
 import ro.nextreports.server.web.common.util.PreferencesHelper;
@@ -149,13 +150,22 @@ public class HomePage extends BasePage {
             error = true;
 		} else if (ReportConstants.ETL_FORMAT.equals(event.getReportUrl())) {
 			sb.append(event.getResultMessage());
+		} else if (AnalysisUtil.FREEZE_ACTION.equals(event.getReportUrl())) {
+			if (event.getResultMessage().startsWith(AnalysisUtil.FREEZE_FAILED)) {
+				error = true;
+				s = bundle.getString("Analysis.freezed.failed");		
+				message = MessageFormat.format(s, event.getReportName());		
+				sb = new StringBuilder(message + " " + event.getResultMessage().substring(AnalysisUtil.FREEZE_FAILED.length()));				
+			} else {
+				sb = new StringBuilder(event.getResultMessage());
+			}	
 		} else if (!event.getReportUrl().endsWith("/report")) {
 			// indicator and alarm schedule alerts do not have a resulting report (url ends with /report)
 			sb.append("<a href=\"").
 			   append(event.getReportUrl()).
 			   append("\" target=\"_blank\">").
 			   append(bundle.getString("ActionContributor.Run.result")).		
-			   append("</a>");
+			   append("</a>");		
 		} else {
 			sb.append(event.getResultMessage());
 		}

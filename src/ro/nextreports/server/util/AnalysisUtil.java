@@ -23,6 +23,10 @@ public class AnalysisUtil {
 	public static List<String> aggregates = Arrays.asList(COUNT, AVG, MIN, MAX, SUM);
 
 	public static final String AS = " as ";
+	
+	public static final String FREEZE_MARKUP = "-FREEZE-";
+	public static final String FREEZE_ACTION = "FREEZE";
+	public static final String FREEZE_FAILED = "FAILED:";
 
 	public static List<String> getJavaTypes() {
 		List<String> result = new ArrayList<String>();

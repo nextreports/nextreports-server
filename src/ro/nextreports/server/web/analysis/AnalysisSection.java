@@ -9,8 +9,7 @@ import ro.nextreports.server.web.core.section.AbstractSection;
 
 public class AnalysisSection extends AbstractSection {
 
-	public static final String ID = AnalysisSection.class.getName();
-	public static final String FREEZE_MARKUP = "-FREEZE-";
+	public static final String ID = AnalysisSection.class.getName();	
 	
 	protected List<ActionContributor> popupContributors;
 		

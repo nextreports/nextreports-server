@@ -115,6 +115,9 @@
         </property>   
         <property name="securityService">
             <ref bean="securityService"/>
+        </property>  
+        <property name="reportService">
+            <ref bean="reportService"/>
         </property>        
     </bean>
     

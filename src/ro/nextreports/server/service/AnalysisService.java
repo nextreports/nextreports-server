@@ -4,6 +4,7 @@ import java.util.List;
 
 import ro.nextreports.server.domain.Analysis;
 import ro.nextreports.server.domain.Link;
+import ro.nextreports.server.domain.ReportResultEvent;
 import ro.nextreports.server.exception.NotFoundException;
 
 public interface AnalysisService {
@@ -29,5 +30,7 @@ public interface AnalysisService {
 	public void modifyAnalysis(Analysis analysis);
 	
 	public String getDatabasePath();
+	
+	public void freeze(Analysis analysis);
 
 }

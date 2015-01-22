@@ -3,7 +3,6 @@ package ro.nextreports.server.web.analysis;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -23,6 +22,7 @@ import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.core.events.MouseEvent;
@@ -32,15 +32,11 @@ import org.odlabs.wiquery.ui.sortable.SortableJavaScriptResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
-
 import ro.nextreports.engine.util.ObjectCloner;
 import ro.nextreports.server.domain.Analysis;
-import ro.nextreports.server.etl.OrientDbUtils;
 import ro.nextreports.server.service.AnalysisService;
 import ro.nextreports.server.service.SecurityService;
 import ro.nextreports.server.util.PermissionUtil;
-import ro.nextreports.server.util.ServerUtil;
 import ro.nextreports.server.web.NextServerSession;
 import ro.nextreports.server.web.analysis.feature.create.CreatePanel;
 import ro.nextreports.server.web.analysis.feature.export.CsvResource;
@@ -411,32 +407,15 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
     		@Override
     		public void onSubmit(AjaxRequestTarget target, Form form) {
     			Analysis analysis = AnalysisPanel.this.getModel().getObject();	
-    			ODatabaseDocumentTx db = null;
-    			try {    				
-    				String freezeClassName;
-    				try {
-    					db = new ODatabaseDocumentTx(analysisService.getDatabasePath(), false).open("admin", "admin");
-    					freezeClassName = analysis.getTableName() + AnalysisSection.FREEZE_MARKUP + UUID.randomUUID();
-        				OrientDbUtils.duplicateClass(db, analysis.getTableName(), freezeClassName);
-    				} catch (Throwable t) {
-    					// critical case					
-    					t.printStackTrace();
-    					LOG.error(t.getMessage(), t);
-    					getSession().getFeedbackMessages().add(new FeedbackMessage(null, t.getMessage(), JGrowlAjaxBehavior.ERROR_STICKY));
-    	    			setResponsePage(HomePage.class);
-    	    			return;
-    				}    				
-    				
-    				analysis.setFreezed(true);
-    				analysis.setTableName(freezeClassName);	    			
-        			analysisService.modifyAnalysis(analysis);
-        			getSession().getFeedbackMessages().add(new FeedbackMessage(null, getString("Analysis.freezed"), JGrowlAjaxBehavior.INFO_FADE));
-        			setResponsePage(HomePage.class);
-    			} finally {
-    				if (db != null) {
-    					db.close();
-    				}
-    			}    			    			    			
+
+    			// modify analysis to freeze anyway to disable the button    			
+    			analysis.setFreezed(true);					    			
+    			analysisService.modifyAnalysis(analysis);
+    			    		
+    			getSession().getFeedbackMessages().add(new FeedbackMessage(null, getString("freeze.start"), JGrowlAjaxBehavior.INFO_FADE));    			
+    	        setResponsePage(HomePage.class);    	            	        
+    	        
+    	        analysisService.freeze(analysis);
     		}
     		
     		@Override
@@ -460,7 +439,7 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
     		public void onSubmit(AjaxRequestTarget target, Form form) {
     			Analysis analysis = AnalysisPanel.this.getModel().getObject();	    			
     			analysisService.modifyAnalysis(analysis);
-    			getSession().getFeedbackMessages().add(new FeedbackMessage(null, getString("Analysis.saved"), JGrowlAjaxBehavior.INFO_FADE));
+    			getSession().getFeedbackMessages().add(new FeedbackMessage(null, new StringResourceModel("Analysis.saved", null, new Object[] {analysis.getName()}).getString(), JGrowlAjaxBehavior.INFO_FADE));
     			setResponsePage(HomePage.class);
     		}
     		
