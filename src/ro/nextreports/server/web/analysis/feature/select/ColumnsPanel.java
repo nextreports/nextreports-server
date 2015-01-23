@@ -74,7 +74,7 @@ public class ColumnsPanel extends FormContentPanel<Analysis> {
 	    add(orderBehavior = new ColumnsOrderBehavior() {
 	        @Override
 	        public void onResponse(int oldIndex, int newIndex, AjaxRequestTarget target) {	            
-	            moveElement(choices, oldIndex, newIndex);	            
+	            moveElement(choices, oldIndex, newIndex);
 	            target.add(ColumnsPanel.this);
 	        }
 	    });

@@ -234,7 +234,7 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
 	                    
 	                	List<String> selectedColumns = getColumns();
 	                	List<Boolean> sel = new ArrayList<Boolean>();
-	                	for (String column : AnalysisPanel.this.getModel().getObject().getColumns()) {
+	                	for (String column : getChoices()) {
 	                		sel.add(selectedColumns.contains(column)); 
 	                	}	                	
 	                	AnalysisPanel.this.getModel().getObject().setSelected(sel);	  
