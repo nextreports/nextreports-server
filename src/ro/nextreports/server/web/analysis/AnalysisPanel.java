@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
@@ -427,7 +430,18 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
     				return false;
     			}
     			return true;
-			}	
+			}	 
+    		
+    		@Override
+    		protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+    		    super.updateAjaxAttributes(attributes);
+    		    attributes.getAjaxCallListeners().add(new AjaxCallListener() {
+    		        @Override
+    		        public CharSequence getBeforeHandler(Component cmpnt) {
+    		            return "$(\"#" + cmpnt.getMarkupId() + "\").hide()";    		        	
+    		        }
+    		    });   
+    		}
     		
     	};
     }
