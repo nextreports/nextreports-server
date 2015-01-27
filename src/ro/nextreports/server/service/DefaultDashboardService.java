@@ -654,8 +654,8 @@ public class DefaultDashboardService implements DashboardService {
             FutureTask<TableData> runTask = null;
 	        try {
 	        	runTask = new FutureTask<TableData>(new Callable<TableData>() {	        		
-	        		public TableData call() throws Exception {        
-	        			reportRunner.run();	        			
+	        		public TableData call() throws Exception {
+	        				reportRunner.run();
 	        			return reportRunner.getTableData();	        				        			        			
 	        		}	        		
 	        	});
@@ -676,6 +676,8 @@ public class DefaultDashboardService implements DashboardService {
 				}
 				if (e instanceof TimeoutException) {					
 					throw new TimeoutException("Timeout of " + timeout + " seconds ellapsed.");
+				} else if (e.getMessage().contains("NoDataFoundException")) {
+					throw new NoDataFoundException();
 				} else {
 					throw new ReportRunnerException(e);
 				}

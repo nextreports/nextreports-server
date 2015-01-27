@@ -36,6 +36,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.engine.exporter.util.StyleFormatConstants;
 import ro.nextreports.engine.util.HtmlUtil;
 import ro.nextreports.server.domain.DrillEntityContext;
@@ -62,11 +63,11 @@ public class TableRendererPanel extends GenericPanel<Report> {
 	@SpringBean
 	private DashboardService dashboardService;
 	
-	public TableRendererPanel(String id, IModel<Report> model, String widgetId, DrillEntityContext drillContext,  boolean zoom) {
+	public TableRendererPanel(String id, IModel<Report> model, String widgetId, DrillEntityContext drillContext,  boolean zoom) throws NoDataFoundException {
 		this(id, model, widgetId, drillContext, zoom, null);
 	}
 		
-	public TableRendererPanel(String id, IModel<Report> model, String widgetId, DrillEntityContext drillContext,  boolean zoom,  Map<String, Object> urlQueryParameters) {
+	public TableRendererPanel(String id, IModel<Report> model, String widgetId, DrillEntityContext drillContext,  boolean zoom,  Map<String, Object> urlQueryParameters) throws NoDataFoundException {
 		super(id, model);
 		this.drillContext = drillContext;		
 						
@@ -82,14 +83,18 @@ public class TableRendererPanel extends GenericPanel<Report> {
         add(container);        
 	}	
 	
-	private BaseTable getCurrentTable(TableDataProvider dataProvider, String widgetId ) {    	        
+	private BaseTable getCurrentTable(TableDataProvider dataProvider, String widgetId ) throws NoDataFoundException {    	        
         List<String> tableHeader;
 		try {
 			tableHeader = dataProvider.getHeader();			
 		} catch (Exception e) {		
 			e.printStackTrace();
 			LOG.error(e.getMessage(), e);
-			throw new RuntimeException(ExceptionUtils.getRootCauseMessage(e));
+			if (e instanceof NoDataFoundException) {
+				throw (NoDataFoundException)e;
+			} else {
+				throw new RuntimeException(ExceptionUtils.getRootCauseMessage(e));
+			}
 		}
 		int rowsPerPage = Integer.MAX_VALUE;				
 		try {
