@@ -3,6 +3,7 @@ package ro.nextreports.server.web.analysis;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -26,7 +27,16 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.request.IRequestCycle;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.handler.resource.ResourceRequestHandler;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.request.resource.ContentDisposition;
+import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.core.events.MouseEvent;
 import org.odlabs.wiquery.core.events.WiQueryAjaxEventBehavior;
@@ -40,11 +50,13 @@ import ro.nextreports.server.domain.Analysis;
 import ro.nextreports.server.service.AnalysisService;
 import ro.nextreports.server.service.SecurityService;
 import ro.nextreports.server.util.PermissionUtil;
+import ro.nextreports.server.web.NextServerApplication;
 import ro.nextreports.server.web.NextServerSession;
 import ro.nextreports.server.web.analysis.feature.create.CreatePanel;
 import ro.nextreports.server.web.analysis.feature.export.CsvResource;
 import ro.nextreports.server.web.analysis.feature.export.XlsResource;
 import ro.nextreports.server.web.analysis.feature.export.XlsxResource;
+import ro.nextreports.server.web.analysis.feature.export.XlsxResourceReference;
 import ro.nextreports.server.web.analysis.feature.filter.FilterPanel;
 import ro.nextreports.server.web.analysis.feature.group.GroupPanel;
 import ro.nextreports.server.web.analysis.feature.paging.PaginatePanel;
@@ -58,6 +70,8 @@ import ro.nextreports.server.web.common.jgrowl.JGrowlAjaxBehavior;
 import ro.nextreports.server.web.common.util.PreferencesHelper;
 import ro.nextreports.server.web.core.BasePage;
 import ro.nextreports.server.web.core.HomePage;
+import ro.nextreports.server.web.core.section.SectionContext;
+import ro.nextreports.server.web.core.section.SectionContextConstants;
 import ro.nextreports.server.web.security.SecurityUtil;
 
 public class AnalysisPanel extends GenericPanel<Analysis> {
@@ -402,23 +416,61 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
 				return !dataProvider.isEmpty();
 			}	
     	};
-    }
+    }	
+    
+//    private AjaxLink<Analysis> getXlsxLink() {
+//    	return new AjaxLink<Analysis>("xlsxExport") {    		    		
+//
+//			@Override
+//			public void onClick(AjaxRequestTarget target) {
+//								
+//				String fileName = AnalysisPanel.this.getModelObject().getName();
+//				xlsxResource.setFileName(fileName);
+//				ResourceReference ref = new XlsxResourceReference(xlsxResource, fileName);																
+//				String url = RequestCycle.get().urlFor(ref, null).toString(); 						
+//		        
+////		        url = url + (url.contains("?") ? "&" : "?");
+////		        url = url + "antiCache=" + System.currentTimeMillis();
+//		        
+//		        System.out.println("**** URL = " + url);
+//		        
+//		        // the timeout is needed to let Wicket release the channel
+//		        target.appendJavaScript("setTimeout(\"window.location.href='" + url + "'\", 100);");		        		     
+//
+//		        //ResourceRequestHandler handler = new ResourceRequestHandler(xlsxResource, null);		        
+//		        
+//		        //ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(xlsxResource., fileName);
+//		        //handler.setContentDisposition(ContentDisposition.ATTACHMENT);
+//
+//				//RequestCycle.get().scheduleRequestHandlerAfterCurrent(handler);				
+//			}			
+//    	};    	
+//    }
     
     private AjaxSubmitLink getFreezeLink() {
     	return new AjaxSubmitLink("freeze") {
 
     		@Override
     		public void onSubmit(AjaxRequestTarget target, Form form) {
-    			Analysis analysis = AnalysisPanel.this.getModel().getObject();	
-
-    			// modify analysis to freeze anyway to disable the button    			
-    			analysis.setFreezed(true);					    			
-    			analysisService.modifyAnalysis(analysis);
+    			Analysis analysis = AnalysisPanel.this.getModel().getObject();    			
+    			
+    			Analysis newAnalysis = ObjectCloner.silenceDeepCopy(analysis);
+    			newAnalysis.setName(analysis.getName() + " " + UUID.randomUUID());
+    			newAnalysis.setFreezed(true);
+    			String addedId = analysisService.addAnalysis(newAnalysis);    	
+    			
+    			AnalysisPanel.this.getModel().setObject(newAnalysis);
+    			
+    			AnalysisBrowserPanel browserPanel = findParent(AnalysisBrowserPanel.class);
+				SectionContext sectionContext = NextServerSession.get().getSectionContext(AnalysisSection.ID);
+				sectionContext.getData().put(SectionContextConstants.SELECTED_ANALYSIS_ID, addedId);
+				browserPanel.getAnalysisPanel().changeDataProvider(new SelectedAnalysisModel(), target);							
+				target.add(browserPanel);				
     			    		
     			getSession().getFeedbackMessages().add(new FeedbackMessage(null, getString("freeze.start"), JGrowlAjaxBehavior.INFO_FADE));    			
     	        setResponsePage(HomePage.class);    	            	        
     	        
-    	        analysisService.freeze(analysis);
+    	        analysisService.freeze(newAnalysis);
     		}
     		
     		@Override
