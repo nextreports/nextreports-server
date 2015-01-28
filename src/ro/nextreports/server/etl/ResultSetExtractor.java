@@ -81,7 +81,13 @@ public class ResultSetExtractor implements Extractor {
         ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
         columnCount = resultSetMetaData.getColumnCount();
         for (int i = 0; i < columnCount; i++) {
-            columnNames.add(resultSetMetaData.getColumnLabel(i + 1));
+            String columnName = resultSetMetaData.getColumnLabel(i + 1);
+            if (columnName.contains(" ")) {
+                log.debug("Column name '{}' contains space characters. Replace space characters with '_'.", columnName);
+                columnName = columnName.replace(' ', '_');
+            }
+            columnNames.add(columnName);
+
             try {
                 columnTypes.add(Class.forName(resultSetMetaData.getColumnClassName(i + 1)));
             } catch (ClassNotFoundException e) {
