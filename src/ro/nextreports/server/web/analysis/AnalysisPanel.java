@@ -267,7 +267,7 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
     }
     
     private AjaxLink<Analysis> getSortLink() {
-    	return new ToolbarLink<Analysis>("sortRows", "SortPanel.title", 400) {			
+    	return new ToolbarLink<Analysis>("sortRows", "SortPanel.title", 500) {			
 						
 			@Override
 			protected FormContentPanel<Analysis> createPanel() {
@@ -290,7 +290,8 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
 	                	analysis.setFirstSortRemoved(isFirstSortRemoved());
 	                	analysis.setChangeFirstSortOrder(isChangeFirstSortOrder());
 	                  
-	                    target.add(AnalysisPanel.this);
+	                	AnalysisPanel.this.getModel().setObject(analysis);
+	                	changeDataProvider(AnalysisPanel.this.getModel(), target);
 	                }
 	            };
 			}	
@@ -370,7 +371,7 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
     }
     
     private AjaxLink<Analysis> getGroupLink() {
-    	return new ToolbarLink<Analysis>("groupRows", "GroupPanel.title", 300) {
+    	return new ToolbarLink<Analysis>("groupRows", "GroupPanel.title", 400) {
 
 			@Override
 			protected FormContentPanel<Analysis> createPanel() {

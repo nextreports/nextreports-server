@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
@@ -18,12 +20,15 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 
 import ro.nextreports.server.domain.Analysis;
 import ro.nextreports.server.web.analysis.util.DatabaseUtil;
 import ro.nextreports.server.web.common.form.FormContentPanel;
 import ro.nextreports.server.web.common.form.FormPanel;
+import ro.nextreports.server.web.common.menu.MenuItem;
+import ro.nextreports.server.web.common.menu.MenuPanel;
 import ro.nextreports.server.web.common.table.BaseTable;
 import ro.nextreports.server.web.common.table.LinkPropertyColumn;
 
@@ -151,6 +156,45 @@ public class SortPanel extends FormContentPanel<Analysis> {
         
         columns.add(new AnalysisBooleanImagePropertyColumn<SortObject>(new StringResourceModel("SortPanel.order", null, null), "order"));
         
+        columns.add(new LinkPropertyColumn<SortObject>(new StringResourceModel("up", null, null), new StringResourceModel("up", null, null)) {
+			
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(Item item, String componentId, IModel model, AjaxRequestTarget target) {										
+				SortObject sortObject = (SortObject) model.getObject();	
+				int upIndex = sortProperty.indexOf(sortObject.getColumn());
+				if (upIndex > 0) {
+					sortProperty.remove(upIndex);
+					sortProperty.add(upIndex-1, sortObject.getColumn());					
+					ascending.remove(upIndex);
+					ascending.add(upIndex-1, sortObject.getOrder());		
+					if (upIndex == 1) {
+						changeFirstSortOrder = true;
+					}
+	                target.add(table);  
+				}								 
+			}
+		});
+        
+        columns.add(new LinkPropertyColumn<SortObject>(new StringResourceModel("down", null, null), new StringResourceModel("down", null, null)) {
+			
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(Item item, String componentId, IModel model, AjaxRequestTarget target) {										
+				SortObject sortObject = (SortObject) model.getObject();	
+				int upIndex = sortProperty.indexOf(sortObject.getColumn());
+				if (upIndex < sortProperty.size()-1) {
+					sortProperty.remove(upIndex);
+					sortProperty.add(upIndex+1, sortObject.getColumn());					
+					ascending.remove(upIndex);
+					ascending.add(upIndex+1, sortObject.getOrder());							
+	                target.add(table);  
+				}								 
+			}
+		});
+        
         columns.add(new LinkPropertyColumn<SortObject>(new StringResourceModel("edit", null, null), new StringResourceModel("edit", null, null)) {
 			
 			private static final long serialVersionUID = 1L;
@@ -182,7 +226,7 @@ public class SortPanel extends FormContentPanel<Analysis> {
 				ascending.remove(index);
                 target.add(table);     
 			}
-		});
+		});              
                
         provider =  new SortObjectDataProvider(new Model<ArrayList<String>>(sortProperty), new Model<ArrayList<Boolean>>(ascending));
         table = new BaseTable<SortObject>("table", columns, provider, 10);
@@ -204,7 +248,6 @@ public class SortPanel extends FormContentPanel<Analysis> {
 	
 	public boolean isChangeFirstSortOrder() {
 		return changeFirstSortOrder;
-	}		
-	
-
+	}	
+		
 }

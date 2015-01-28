@@ -115,7 +115,39 @@ public class GroupPanel extends FormContentPanel<Analysis> {
                 final String groupObject = rowModel.getObject();                
                 item.add(new Label(componentId, new Model<String>(groupObject)));
             }
-        });                  
+        });
+        
+        columns.add(new LinkPropertyColumn<String>(new StringResourceModel("up", null, null), new StringResourceModel("up", null, null)) {
+			
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(Item item, String componentId, IModel model, AjaxRequestTarget target) {										
+				String groupObject = (String) model.getObject();	
+				int upIndex = groups.indexOf(groupObject);
+				if (upIndex > 0) {
+					groups.remove(upIndex);
+					groups.add(upIndex-1, groupObject);																
+	                target.add(table);  
+				}								 
+			}
+		});
+        
+        columns.add(new LinkPropertyColumn<String>(new StringResourceModel("down", null, null), new StringResourceModel("down", null, null)) {
+			
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(Item item, String componentId, IModel model, AjaxRequestTarget target) {										
+				String groupObject = (String) model.getObject();	
+				int downIndex = groups.indexOf(groupObject);
+				if (downIndex < groups.size()-1) {
+					groups.remove(downIndex);
+					groups.add(downIndex+1, groupObject);													
+	                target.add(table);  
+				}								 
+			}
+		});
         
         columns.add(new LinkPropertyColumn<String>(new StringResourceModel("edit", null, null), new StringResourceModel("edit", null, null)) {
 			
