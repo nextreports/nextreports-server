@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.wicket.request.resource.ByteArrayResource;
+import org.apache.wicket.request.resource.ContentDisposition;
 
 import ro.nextreports.server.web.analysis.AnalysisDataProvider;
 import ro.nextreports.server.web.analysis.AnalysisRow;
@@ -53,8 +54,9 @@ public abstract class ExportResource extends ByteArrayResource {
 	}
 	
 	@Override
-	protected byte[] getData(Attributes attributes) {	
-	
+	protected byte[] getData(Attributes attributes) {
+		long start = System.currentTimeMillis();
+		System.out.println("**** GET DATA START");
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		
         printHeader(provider.getHeader(), out);
@@ -86,6 +88,8 @@ public abstract class ExportResource extends ByteArrayResource {
         write(out);
 								
 		provider.detach();
+		long end = System.currentTimeMillis();
+		System.out.println("**** GET DATA END " + (end-start) + " ms");
 		return out.toByteArray();
 	}
 
@@ -93,8 +97,9 @@ public abstract class ExportResource extends ByteArrayResource {
 	protected void setResponseHeaders(ResourceResponse data, Attributes attributes) {
 		data.disableCaching();
 		data.setFileName(getFileName()+"."+getExtension());
+		data.setContentDisposition(ContentDisposition.ATTACHMENT);
 		super.setResponseHeaders(data, attributes);		
-	}
+	}		
 	
 	protected abstract void printHeader(List<String> header, ByteArrayOutputStream out);
 	
