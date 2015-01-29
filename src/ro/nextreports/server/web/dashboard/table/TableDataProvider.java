@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import ro.nextreports.server.domain.DrillEntityContext;
 import ro.nextreports.server.service.DashboardService;
-
+import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.engine.exporter.util.TableData;
 
 /**
@@ -105,13 +105,13 @@ public class TableDataProvider extends SortableDataProvider<RowData, String> {
 		return widgetId;
 	}
 
-	public List<String> getHeader() throws Exception {
+	public List<String> getHeader() throws NoDataFoundException, Exception {
         getCache();
         
         return header;
     }
 	
-    private List<RowData> getCache() throws Exception {
+    private List<RowData> getCache() throws NoDataFoundException, Exception {
         if (cache == null) {
             if (widgetId != null) {
             	TableData tableData = dashboardService.getTableData(widgetId, drillContext, urlQueryParameters);

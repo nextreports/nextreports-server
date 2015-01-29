@@ -11,6 +11,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.springframework.beans.factory.annotation.Required;
 
+import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.DataSource;
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.report.next.NextUtil;
@@ -59,7 +60,12 @@ public class GeneralWidgetRuntimePanel extends DynamicParameterRuntimePanel {
     }
     
     public I18nLanguage getLocaleLanguage() {
-    	return I18nUtil.getLocaleLanguage(getNextReport().getLayout());
+    	if (entity instanceof ro.nextreports.server.domain.Report) {
+    		return I18nUtil.getLocaleLanguage(getNextReport().getLayout());
+    	} else if(entity instanceof ro.nextreports.server.domain.Chart) {
+    		return I18nUtil.getLocaleLanguage(NextUtil.getNextChart(storageService.getSettings(), (Chart)entity));
+    	}
+    	return null;
     }
 
     public DataSource getDataSource() {

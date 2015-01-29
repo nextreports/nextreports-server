@@ -97,7 +97,9 @@ function onResize() {
     	$(".dashboard").css({'height': $height + 65});
     	$(".dashboardNavigation").css({'height': $height + 32});
     }
-    $(".fieldset-panel-right").css({'height': $height - 20});
+    $(".analysis").css({'height': $height + 65});
+	$(".analysisNavigation").css({'height': $height + 32});
+    $(".fieldset-panel-right").css({'height': $height + 32});
     
 }
 
@@ -106,7 +108,7 @@ function showPopup() {
 //    var t = $(this).parents().filter("td.actions-col");
 //    x.css({ "left":  + t.position().left + "px" });
     
-    var table = $(this).parents().filter("div.table-right-container,div.table-container,div.dashboardNavigation,div.table-actions");
+    var table = $(this).parents().filter("div.table-right-container,div.table-container,div.dashboardNavigation,div.analysisNavigation,div.table-actions");
 	var tt = table.position().top;
 	var th = table.height();
 	var tb = tt + th;

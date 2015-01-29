@@ -57,7 +57,6 @@ import ro.nextreports.server.report.jasper.util.JasperUtil;
 import ro.nextreports.server.report.next.NextUtil;
 import ro.nextreports.server.schedule.QuartzJobHandler;
 import ro.nextreports.server.web.security.SecurityUtil;
-
 import ro.nextreports.engine.ReportRunner;
 import ro.nextreports.engine.exporter.XlsExporter;
 import ro.nextreports.engine.exporter.exception.NoDataFoundException;
@@ -135,6 +134,9 @@ public class DefaultReportService implements ReportService {
         if (reportEngine.supportExcelOutput()) {
             supportedOutputs.add(ReportConstants.EXCEL_FORMAT);
         }
+        if (reportEngine.supportExcelXOutput()) {
+            supportedOutputs.add(ReportConstants.EXCEL_XLSX_FORMAT);
+        }
         if (reportEngine.supportHtmlOutput()) {
             supportedOutputs.add(ReportConstants.HTML_FORMAT);
         }
@@ -159,12 +161,15 @@ public class DefaultReportService implements ReportService {
         if (reportEngine.supportCsvOutput()) {
             supportedOutputs.add(ReportConstants.CSV_FORMAT);
         }
+        if (reportEngine.supportETL()) {
+            supportedOutputs.add(ReportConstants.ETL_FORMAT);
+        }
 
         return supportedOutputs;
     }
 
     @Transactional(readOnly = true)
-    public byte[] reportTo(Report report, ReportRuntime reportRuntime, String key)
+    public byte[] reportTo(Report report, ReportRuntime reportRuntime, String creator, String key)
             throws ReportEngineException, FormatNotSupportedException, NoDataFoundException, InterruptedException {
     	    	
         try {
@@ -186,6 +191,7 @@ public class DefaultReportService implements ReportService {
         // create the context of the export
         ExportContext exportContext = new DefaultExportContext();
         exportContext.setId(report.getId());
+        exportContext.setCreator(creator);
         exportContext.setReportDataSource(report.getDataSource());
         exportContext.setReportContent(report.getContent());
         if (report.getType().equals(ReportConstants.JASPER)) {            
@@ -205,6 +211,8 @@ public class DefaultReportService implements ReportService {
 	            result = engine.exportReportToCsv(exportContext);
 	        } else if (ReportConstants.EXCEL_FORMAT.equals(outputType)) {
 	            result = engine.exportReportToExcel(exportContext);
+	        } else if (ReportConstants.EXCEL_XLSX_FORMAT.equals(outputType)) {
+	            result = engine.exportReportToExcelX(exportContext);    
 	        } else if (ReportConstants.HTML_FORMAT.equals(outputType)) {
 	            result = engine.exportReportToHtml(exportContext);
 	        } else if (ReportConstants.PDF_FORMAT.equals(outputType)) {
@@ -221,7 +229,10 @@ public class DefaultReportService implements ReportService {
 	            result = engine.exportReportToXml(exportContext);
 	        } else if (ReportConstants.TXT_FORMAT.equals(outputType)) {
 	            result = engine.exportReportToTxt(exportContext);
-	        }	        	        
+	        } else if (ReportConstants.ETL_FORMAT.equals(outputType)) {
+	            engine.exportReportToEtl(exportContext);
+	            result = null;
+	        }	 	        	        
 	        
 	        // parameters values may be computed at runtime so put them in reportRuntime to have them for history
 	        reportRuntime.updateDynamicParameterValues(exportContext.getReportParameterValues());
@@ -236,11 +247,11 @@ public class DefaultReportService implements ReportService {
     }
 
     @Transactional(readOnly = true)
-    public String[] reportToURL(Report report, ReportRuntime reportRuntime, String key)
+    public String[] reportToURL(Report report, ReportRuntime reportRuntime, String creator, String key)
             throws ReportEngineException, FormatNotSupportedException, NoDataFoundException, InterruptedException {
         LOG.debug("Run report : " + report.getPath());
 
-        byte[] bytes = reportTo(report, reportRuntime, key);
+        byte[] bytes = reportTo(report, reportRuntime, creator, key);
         if (bytes == null) {
             return null;
         }
@@ -324,16 +335,22 @@ public class DefaultReportService implements ReportService {
         buffer.append(System.currentTimeMillis());
         buffer.append(key);
         buffer.append('.');
-        buffer.append(getReportFileExtension(format));
+        buffer.append(getReportFileExtension(report, format));
 
         return buffer.toString();
     }
 
-    private String getReportFileExtension(String format) {
+    private String getReportFileExtension(Report report, String format) {
         if (ReportConstants.CSV_FORMAT.equals(format)) {
             return "csv";
         } else if (ReportConstants.EXCEL_FORMAT.equals(format)) {
             return "xls";
+        } else if (ReportConstants.EXCEL_XLSX_FORMAT.equals(format)) {
+        	if (NextUtil.hasMacroTemplate(storageDao.getSettings(), report)) {
+        		return "xlsm";
+        	} else {
+        		return "xlsx";
+        	}
         } else if (ReportConstants.HTML_FORMAT.equals(format)) {
             return "html";
         } else if (ReportConstants.PDF_FORMAT.equals(format)) {
@@ -374,6 +391,10 @@ public class DefaultReportService implements ReportService {
 
 	@Transactional(readOnly = true)
 	public String getReportURL(String reportFileName) {
+		if (ReportConstants.ETL_FORMAT.equals(reportFileName)) {
+			// not exactly a url, but shown inside RuntimeHistoryPanel
+			return reportFileName;
+		}
 		String encodedString = null;
 		try {
 			StringBuffer buffer = new StringBuffer(50);

@@ -195,14 +195,14 @@ body {
     /*background: #e4e4e4 url( ../images/tile-header.jpg ) repeat-x;*/
 	background: #e4e4e4 url( ../images/general_bg.png );
     font-size: 11px;
-    line-height: 18px;
+    line-height: 1.5em;
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
     color: #000;
 }
 
 .big-container {
-    min-width: 980px;
+    min-width: 1024px;
     max-width: 1900px;
     width: expression( document . body . clientWidth < 980 ? "980px":
     document . body . clientWidth > 1900 ? "1900px":
@@ -1562,4 +1562,80 @@ div.w_content {
 .errorMaintenanceLink {
 	display: block; 
 	margin-bottom: 60px; 
+}
+
+
+/* Navigator Pagination */
+
+.navigation td {
+	 border-left: none !important;
+}
+
+.navigator {
+	padding: 2px 2px 0px 1px;	
+	min-width: 650px;
+}
+
+.navigatorLabel {
+	float: right;
+    font-weight: bold;
+    padding: 3px;		
+}
+
+.navigator .first , .navigator .prev, .navigator .goto, .navigator .next, .navigator .last {	
+	font-size: 14px;				
+	display: inline-block;
+    font-size: 11px;
+    text-align: center;
+    min-width: 30px;        
+    border-collapse: collapse;    
+    border-spacing: 0;    
+    cursor: pointer;
+    
+    border: 1px solid ${btn-border-color};
+    color: ${btn-text-color};
+    border-radius: ${btn-radius} ${btn-radius} ${btn-radius} ${btn-radius};
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+	
+    background: -webkit-linear-gradient(${btn-top-color}, ${btn-bottom-color});        
+    background: -webkit-gradient(linear, left top, left bottom, ${btn-top-color}, ${btn-bottom-color});
+    background: -moz-linear-gradient(center top , ${btn-top-color}, ${btn-bottom-color});
+    background: -ms-linear-gradient(${btn-top-color} , ${btn-bottom-color}); 
+    background-color: ${btn-background};    
+}
+
+.navigator .prev, .navigator .last {
+	margin-left: -2px !important;
+}
+
+.navigator .first:hover , .navigator .prev:hover, .navigator .goto:hover, .navigator .next:hover, .navigator .last:hover {
+	text-decoration: none !important;	            
+    border: 1px solid ${btn-border-color-hover};
+    color: ${btn-text-color-hover};
+    border-radius: ${btn-radius} ${btn-radius} ${btn-radius} ${btn-radius};
+	
+    background: -webkit-linear-gradient(${btn-background-hover}, ${btn-top-color});        
+    background: -webkit-gradient(linear, left top, left bottom, ${btn-background-hover}, ${btn-top-color});
+    background: -moz-linear-gradient(center top , ${btn-background-hover}, ${btn-top-color});
+    background: -ms-linear-gradient(${btn-background-hover} , ${btn-top-color}); 
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='${btn-background-hover}', endColorstr='${btn-top-color}',GradientType=0 ); 
+    background-color: ${btn-background};	        
+}    
+
+.navigator .goto {
+	margin-left: 1px;
+}
+
+.navigator .goto a {
+	color: ${btn-text-color} !important;
+}
+
+.navigator .goto > span {
+	font-weight: bold;
+	color: ${btn-text-color} !important;
+	text-decoration: underline;
+}
+
+table.actions-grid tr.navigation td.actions-col a, .actions-grid .navigation a {
+    padding-top: 0px !important;
 }

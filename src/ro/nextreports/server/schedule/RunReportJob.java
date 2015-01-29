@@ -69,6 +69,7 @@ import ro.nextreports.server.domain.ShortcutType;
 import ro.nextreports.server.domain.SmtpAlertDestination;
 import ro.nextreports.server.exception.FormatNotSupportedException;
 import ro.nextreports.server.exception.ReportEngineException;
+import ro.nextreports.server.report.ReportConstants;
 import ro.nextreports.server.report.next.NextUtil;
 import ro.nextreports.server.report.util.ReportUtil;
 import ro.nextreports.server.service.ReportService;
@@ -78,7 +79,6 @@ import ro.nextreports.server.util.ConnectionUtil;
 import ro.nextreports.server.util.PermissionUtil;
 import ro.nextreports.server.util.StorageUtil;
 import ro.nextreports.server.web.language.LanguageManager;
-
 import ro.nextreports.engine.ReportRunner;
 import ro.nextreports.engine.ReportRunnerException;
 import ro.nextreports.engine.condition.ConditionalExpression;
@@ -104,7 +104,7 @@ public class RunReportJob implements Job {
     public static final String RUNNER_KEY = "RUNNER_KEY";
     public static final String REPORT_TYPE = "REPORT_TYPE";
     public static final String AUDIT_EVENT = " AUDIT_EVENT";
-    public static final String AUDITOR = "AUDITOR";
+    public static final String AUDITOR = "AUDITOR";    
 
     public void execute(JobExecutionContext context) throws JobExecutionException {
         JobDataMap dataMap = context.getMergedJobDataMap();
@@ -212,8 +212,8 @@ public class RunReportJob implements Job {
 			}
 
 			String[] result = new String[2];
-			// for alarm alert there is no url
-			if (report.isAlarmType() || report.isIndicatorType() || report.isDisplayType()) {				
+			if (report.isAlarmType() || report.isIndicatorType() || report.isDisplayType()) {	
+				// for alarm alert there is no url
 				ro.nextreports.engine.Report nextReport = NextUtil.getNextReport(storageService.getSettings(), (NextContent) report.getContent());
 				final ReportRunner reportRunner = new ReportRunner();
 				reportRunner.setParameterValues(schedulerJob.getReportRuntime().getParametersValues());
@@ -282,9 +282,20 @@ public class RunReportJob implements Job {
 				reportRunner.setAlerts(alerts);
 				reportRunner.run();   								
 			} else {				
-				result = reportService.reportToURL(report, schedulerJob.getReportRuntime(), key);
-				fileName = result[0];
-				url = result[1];				
+				// not null when run
+				String author = schedulerJob.getCreator();
+				if (author == null) {
+					// when schedule
+					author = schedulerJob.getCreatedBy();
+				}
+				result = reportService.reportToURL(report, schedulerJob.getReportRuntime(), author, key);
+				if (result == null) {
+					fileName = "";
+					url = ReportConstants.ETL_FORMAT;
+				} else {
+					fileName = result[0];
+					url = result[1];
+				}
 			}
         } catch (ReportEngineException e) {
             error = true;

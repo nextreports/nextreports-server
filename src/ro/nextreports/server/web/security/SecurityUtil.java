@@ -20,6 +20,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import ro.nextreports.server.domain.User;
+import ro.nextreports.server.service.SecurityService;
+import ro.nextreports.server.util.PermissionUtil;
+import ro.nextreports.server.util.ServerUtil;
+import ro.nextreports.server.web.NextServerSession;
 
 
 /**
@@ -40,5 +44,29 @@ public class SecurityUtil {
 		User user = getLoggedUser();
 		return (user != null) ? user.getUsername() : null;
 	}
+	
+	
+	public static boolean hasPermission(SecurityService securityService, int permission, String id) {
+    	try {
+			if (!NextServerSession.get().isAdmin()) {    				
+				if (!securityService.hasPermissionsById(ServerUtil.getUsername(), permission, id)) {
+					return false;
+				}    				
+			} else {
+				String loggedRealm = NextServerSession.get().getUserRealm();
+				// for admins logged on realms we must see if entity is from the same realm, 
+				// otherwise if admins have rights this is done in hasPermissionsById
+				if (!"".equals(loggedRealm)) {				    					
+					if (!securityService.hasPermissionsById(ServerUtil.getUsername(), permission, id)) {
+						return false;
+					}    					
+				}
+			}
+		} catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+		return true;
+    }
 
 }

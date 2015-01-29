@@ -16,6 +16,7 @@
  */
 package ro.nextreports.server.web.dashboard;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.basic.Label;
@@ -27,6 +28,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.RangeValidator;
+import org.jasypt.util.text.BasicTextEncryptor;
 
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.web.core.UrlUtil;
@@ -39,6 +41,7 @@ public class WidgetEmbedCodePanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private Integer width = 520;
 	private Integer height = 320; // it's a difference between alarm (80) and chart (320)
+	private String parameters = "";
 	private FeedbackPanel feedbackPanel;
 	private ErrorLoadableDetachableModel model;
 	
@@ -73,6 +76,8 @@ public class WidgetEmbedCodePanel extends Panel {
 		height.setRequired(true);
 		height.add(RangeValidator.minimum(100));
 		form.add(height);
+		TextField<String> parameters = new TextField<String>("parameters", new PropertyModel<String>(this, "parameters"));				
+		form.add(parameters);
 		
 		form.add(new AjaxSubmitLink("link") {
 
@@ -114,6 +119,19 @@ public class WidgetEmbedCodePanel extends Panel {
 		    toString();
 		sb.append(url);
 		
+		if (!"".equals(parameters.trim())) {
+			String password = storageService.getSettings().getIframe().getEncryptionKey();
+			if ((password != null) && !password.trim().equals("")) {
+				BasicTextEncryptor textEncryptor = new BasicTextEncryptor();				
+				textEncryptor.setPassword(password);
+				String myEncryptedText = textEncryptor.encrypt(parameters);
+				myEncryptedText = Base64.encodeBase64URLSafeString(myEncryptedText.getBytes());
+				sb.append("&P=").append(myEncryptedText);
+			} else {
+				sb.append("&").append(parameters);
+			}
+		}
+				
 		sb.append("\" ");
 		
 		sb.append("frameborder=0 ");

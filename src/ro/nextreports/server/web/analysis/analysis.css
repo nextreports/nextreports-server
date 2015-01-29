@@ -1,0 +1,188 @@
+ .analysis {
+    overflow: auto;
+    min-height: 353px;
+    border:1px solid #CACACA;    
+}
+
+.left {
+	float: left;
+}
+ 
+ .analysisLeft {
+ 	border-top: 1px solid #CACACA; 
+ 	border-left: 1px solid #CACACA;
+ 	border-bottom: 1px solid #CACACA;
+ 	padding-left: 5px; 
+ 	padding-right: 5px;
+ 	min-height: 353px;
+ 	min-width: 200px;	
+ 	overflow-x: hidden;	
+ }
+ 
+.analysisNavigation  {	
+	min-height: 320px;	
+	overflow-x: hidden;	
+	overflow-y: auto;	
+}
+
+.analysisNavigation table.actions-grid {
+	margin-top: 5px;
+}	
+
+.analysisNavigation table.actions-grid ul.subnav {
+    left: 38px !important;
+    top: 20px;    
+}
+
+.analysisNavigation table tr {		
+	border-bottom: 5px solid #f4f4f4;
+	white-space: nowrap;
+}
+
+.analysisNavigation tr.selected {
+    background-color: #d9e3b6;
+}
+
+.analysisNavigation tr.selected a{
+	color: #000000;
+    font-weight: bold;
+	text-transform: uppercase;
+}
+.analysisNavigation table.actions-grid tr td.actions-col {
+	width: 38px;
+	min-width: 38px;
+}	
+
+.analysisNavigation table.actions-grid tr td.actions-col ul.subnav {
+	width: 140px;		
+}	
+
+.analysisNavigation tr ul.subnav li a {
+    font-weight: normal;
+}
+
+.analysisNavigation table.actions-grid tr a {
+	width: 175px; /* chrome requires the most space */
+}	
+
+.analysisNavigation table tr.tr-hover {
+	background-color: #d9e3b6 ;	  
+}
+
+.analysisNavigation table.actions-grid tr td.actions-col-hover {
+	border-left: none;
+	border-bottom: none;
+}
+
+.analysis-toggle {
+	float: left;
+	margin: 7px 3px 3px 0px;    
+    cursor: pointer;
+}
+
+.toolbar {
+	width: 100%;
+	float: left;
+    font-weight: bold;		
+    border-bottom: 1px solid #CACACA;
+}
+
+.toolbar_nav {          		
+	height: 32px;	    
+	border-bottom: 1px solid #CACACA;
+}
+
+.analysis-title {
+	display: block;
+	padding-top: 7px;
+	font-size: 14px;
+	font-weight: bold;
+	height: 1.8em;
+}
+
+/* for empty row cells*/
+.analysis table.grid tbody td {
+	height: 21px !important;
+	white-space: nowrap;
+}	
+
+.analysisTableContainer table.grid {
+	border-right: 1px solid #CACACA;
+}
+
+.analysisInfo {	
+	color: #999;
+	font-size: 11px;	
+}
+
+.analysisSeparator {
+	border-bottom: 1px solid #ddd;
+    display: block;
+    margin-bottom: 5px;
+    margin-right: 10px;
+    padding-bottom: 5px;
+}
+
+.analysisChoice {
+	display: inline-block;
+    margin-right: 20px;
+    min-height: 15px;
+    min-width: 150px;
+    position: relative;
+}
+
+.analysisChoice label {
+	left: 20px;
+    position: absolute;
+    top: -2px;
+}
+
+.analysisChoice input {
+	left: 0;
+    padding-bottom: 5px;
+    position: absolute;
+    top: 0;
+}
+
+.analysisSelectToolbar {
+	display: inline-block;
+}
+
+.analysisTableContainer .padding {
+	padding-right: 5px;
+}
+
+.analysisTableContainer table td.index {
+	width: 20px !important;
+	text-align: right;
+}
+
+.analysisTableContainer table td.boolean {
+	width: 40px !important;
+	text-align: center;
+}
+
+.analysisTableContainer {	
+	margin-bottom: 5px;	
+	margin-right: 10px;
+}
+
+.analysis table thead tr.navigation {
+	background: none repeat scroll 0 0 transparent !important;
+}
+
+.analysisPanel {
+	padding-left: 0px !important;
+}
+
+.analysisToolbar {
+	padding-left: 1px;
+}
+
+.analysisToolbar a.button {
+	padding: 0 5px !important;
+}
+
+.analysisForm .feedbackPanelERROR {
+	float: left;
+}

@@ -9,6 +9,7 @@ ivy-report/
 # CVS legacy #
 CVS/
 stuff/
+analytics-data
 data/
 dist/
 artifacts/

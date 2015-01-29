@@ -110,5 +110,7 @@ public interface DashboardService {
     public String getDefaultDashboardId() throws NotFoundException;
     
     public UserWidgetParameters getUserWidgetParameters(String widgetId);        
+    
+    public boolean isSingleWidget(String widgetId);
 	
 }

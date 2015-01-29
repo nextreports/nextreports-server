@@ -82,6 +82,12 @@ public class NextUtil {
         return null;
     }
     
+    public static boolean hasMacroTemplate(Settings settings, ro.nextreports.server.domain.Report report) {
+    	Report rep = getNextReport(settings, report);
+    	String templateName = rep.getLayout().getTemplateName();
+    	return ((templateName != null) && templateName.endsWith(".xlsm"));
+    }
+    
     public static byte[]  getNextReportBytes(Settings settings, NextContent reportContent) {        
         return reportContent.getNextFile().getDataProvider().getBytes();               
     }

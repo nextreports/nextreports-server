@@ -18,9 +18,11 @@ package ro.nextreports.server.web.dashboard.table;
 
 import java.util.Map;
 
+import org.apache.wicket.markup.html.basic.Label;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.server.web.dashboard.WidgetView;
 import ro.nextreports.server.web.dashboard.model.WidgetModel;
 
@@ -41,7 +43,11 @@ public class TableWidgetView extends WidgetView {
 	public TableWidgetView(String id, WidgetModel model, boolean zoom, Map<String, Object> urlQueryParameters) {
 		super(id, model, zoom);
 		
-		add(new TableRendererPanel("renderer", null, ((TableWidget)model.getObject()).getId(), null, zoom, urlQueryParameters));
+		try {
+			add(new TableRendererPanel("renderer", null, ((TableWidget)model.getObject()).getId(), null, zoom, urlQueryParameters));
+		} catch (NoDataFoundException e) {
+			add(new Label("renderer", "No Data Found"));
+		}
 	}	
 	
 }

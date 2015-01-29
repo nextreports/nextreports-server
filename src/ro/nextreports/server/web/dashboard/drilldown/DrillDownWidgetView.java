@@ -44,7 +44,7 @@ import ro.nextreports.server.web.dashboard.WidgetView;
 import ro.nextreports.server.web.dashboard.chart.ChartRendererPanel;
 import ro.nextreports.server.web.dashboard.chart.ChartWidget;
 import ro.nextreports.server.web.dashboard.table.TableRendererPanel;
-
+import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.engine.queryexec.QueryParameter;
 import ro.nextreports.engine.util.ParameterUtil;
 
@@ -233,12 +233,16 @@ public class DrillDownWidgetView extends WidgetView {
 	    
 		} else if (entity instanceof Report) {
 	    	
-	    	return new TableRendererPanel("renderer", new Model<Report>((Report)entity), DrillDownWidgetView.this.getModelObject().getId(), drillContext, zoom, urlQueryParameters) {
-	    		@Override
-				protected void onClickLink(AjaxRequestTarget target, String value) throws Exception {
-					DrillDownWidgetView.this.onClick(target, value);
-				}
-	    	};
+	    	try {
+				return new TableRendererPanel("renderer", new Model<Report>((Report)entity), DrillDownWidgetView.this.getModelObject().getId(), drillContext, zoom, urlQueryParameters) {
+					@Override
+					protected void onClickLink(AjaxRequestTarget target, String value) throws Exception {
+						DrillDownWidgetView.this.onClick(target, value);
+					}
+				};
+			} catch (NoDataFoundException e) {
+				return new EmptyPanel("renderer");
+			}
 	    	
 	    } else {
 	    	//return new WidgetView(getId(), new WidgetModel(getWidget().getId()), false);

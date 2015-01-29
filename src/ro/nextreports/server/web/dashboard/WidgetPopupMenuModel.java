@@ -505,7 +505,7 @@ public class WidgetPopupMenuModel extends LoadableDetachableModel<List<MenuItem>
 				ModalWindow dialog = findParent(BasePage.class).getDialog();
 
 				dialog.setTitle(new StringResourceModel("WidgetPopupMenu.embeddedCode", null).getString());
-				dialog.setInitialWidth(350);
+				dialog.setInitialWidth(550);
 				dialog.setUseInitialHeight(false);
 
 				dialog.setContent(new WidgetEmbedCodePanel(dialog.getContentId(), widget.getId()));

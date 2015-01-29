@@ -1,0 +1,35 @@
+<wicket:panel>	
+	<table>     
+		 <tr>                	
+              <td class="td-label"><label wicket:id="name"/></td>
+              <td><input wicket:id="nameText" type="text" size="30"/></td>
+         </tr>         
+         <tr>                	
+              <td class="td-label"><label wicket:id="expression"/></td>
+              <td>              		              		 
+              		<select wicket:id="aggChoice"/>
+              		<select wicket:id="columnChoice"/> 
+              		<a wicket:id="addColumn" class="button2" style=" display: inline-block; padding-top: 0;">
+              			<wicket:message key="insert"/>
+              		</a>            		
+              </td>
+         </tr>           
+         <tr>                	
+              <td class="td-label"> </td>
+              <td><textarea wicket:id="expressionText" rows="4" cols="30"/></td>
+         </tr>     
+         <tr>                	
+              <td class="td-label"><label wicket:id="type"/></td>
+              <td><select wicket:id="typeChoice"/></td>
+         </tr>           
+         <tr>
+         	<td><a wicket:id="addLink" class="button"><label wicket:id="addMessage"/></a></td>
+         </tr>     
+    </table>   
+ 	
+    <div class="analysisTableContainer">
+       	<table wicket:id="table" class="grid actions-grid"></table>
+    </div>    
+           
+    <div class="analysisSeparator"/>
+</wicket:panel>

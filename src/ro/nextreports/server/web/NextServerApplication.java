@@ -246,7 +246,7 @@ public class NextServerApplication extends WebApplication  {
 
 			@Override
 			protected boolean isAuthorized() {
-				boolean b = NextServerSession.get().isSignedIn();
+				boolean b = NextServerSession.get().isSignedIn();				
 				if (!b) {
 					if (CasUtil.isCasUsed()) {
 						LOG.debug("Checking if context contains CAS authentication");
@@ -278,7 +278,7 @@ public class NextServerApplication extends WebApplication  {
 		SchedulerJob[] schedulerJobs = getSchedulerJobs();
     	QuartzJobHandler quartzJobHandler = (QuartzJobHandler) getSpringBean("quartzJobHandler");
         for (SchedulerJob schedulerJob : schedulerJobs) {
-			try {
+			try {				
 				quartzJobHandler.addJob(schedulerJob);
 			} catch (Exception e) {
 				// TODO

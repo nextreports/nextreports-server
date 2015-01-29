@@ -195,14 +195,14 @@ body {
     /*background: #e4e4e4 url( ../images/tile-header.jpg ) repeat-x;*/
 	background: #e4e4e4 url( ../images/general_bg.png );
     font-size: 11px;
-    line-height: 18px;
+    line-height: 1.5em;
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
     color: #000;
 }
 
 .big-container {
-    min-width: 980px;
+    min-width: 1024px;
     max-width: 1900px;
     width: expression( document . body . clientWidth < 980 ? "980px":
     document . body . clientWidth > 1900 ? "1900px":
@@ -332,7 +332,7 @@ div.tab-row li a {
     color: #202020;
 }
 
-div.tab-row li a:hover {
+div.tab-row li a:hover, div.tab-row-settings li a:hover {
     color: #789800;
     text-decoration: none;
 }
@@ -347,10 +347,60 @@ div.tab-row li.selected a {
 	background: #fafafa;
 }
 
-div.tab-row li.selected{
+div.tab-row li.selected {
 	border-top: 3px solid #8cb200;
 	margin-top: -3px;
 }
+
+div.tab-row-settings li.selected{
+	border-top: 3px solid #8cb200;	
+	background: #fafafa;
+}
+
+div.tab-row-settings li {          
+    background: #eaeaea;
+    margin-top: 10px;
+    padding: 5px;
+    border: 1px solid #CCCCCC;
+}
+
+div.tab-row-settings li a {
+    cursor: pointer;
+    display: block;
+    padding: 3px 10px 0px 0px;
+    margin-top: 0;
+    text-decoration: none;
+    font-size: 11px;
+    line-height: 20px;
+    background: #eaeaea;    
+    font-weight:  bold;
+    color: #202020;
+}
+
+div.tab-row-settings li.selected a {	
+    color: #789800;
+    font-weight: bold;
+    line-height: 21px;
+    font-size: 11px;
+	text-transform: uppercase;
+	background: #fafafa;
+}	
+
+div.tab-row-settings {
+	width: 300px;
+	float: left;
+	margin-right: 20px;
+}
+
+div.tab-panel-settings {
+	float: right;
+}
+
+div.tabpanesettings {
+	display: inline-block;
+	margin-left: 10px;
+}
+
 img.left-image {    
     display: block;
     float: left;
@@ -1051,7 +1101,7 @@ body#body-login {
 	padding: 2px 4px;
 }
 
-.accordion-group span.tree-content .selected span.tree-label {
+span.tree-content .selected span.tree-label {
     background-color: #8cb200 !important;
 	color: #ffffff;
 	padding: 2px 4px;
@@ -1512,4 +1562,80 @@ div.w_content {
 .errorMaintenanceLink {
 	display: block; 
 	margin-bottom: 60px; 
+}
+
+
+/* Navigator Pagination */
+
+.navigation td {
+	 border-left: none !important;
+}
+
+.navigator {
+	padding: 2px 2px 0px 1px;	
+	min-width: 650px;
+}
+
+.navigatorLabel {
+	float: right;
+    font-weight: bold;
+    padding: 3px;		
+}
+
+.navigator .first , .navigator .prev, .navigator .goto, .navigator .next, .navigator .last {	
+	font-size: 14px;				
+	display: inline-block;
+    font-size: 11px;
+    text-align: center;
+    min-width: 30px;        
+    border-collapse: collapse;    
+    border-spacing: 0;    
+    cursor: pointer;
+    
+    border: 1px solid #779800;
+    color: #ffffff;
+    border-radius: 4px 4px 4px 4px;
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+	
+    background: -webkit-linear-gradient(#8cb200, #789800);        
+    background: -webkit-gradient(linear, left top, left bottom, #8cb200, #789800);
+    background: -moz-linear-gradient(center top , #8cb200, #789800);
+    background: -ms-linear-gradient(#8cb200 , #789800); 
+    background-color: #8cb200;    
+}
+
+.navigator .prev, .navigator .last {
+	margin-left: -2px !important;
+}
+
+.navigator .first:hover , .navigator .prev:hover, .navigator .goto:hover, .navigator .next:hover, .navigator .last:hover {
+	text-decoration: none !important;	            
+    border: 1px solid #779800;
+    color: #ffffff;
+    border-radius: 4px 4px 4px 4px;
+	
+    background: -webkit-linear-gradient(#afc951, #8cb200);        
+    background: -webkit-gradient(linear, left top, left bottom, #afc951, #8cb200);
+    background: -moz-linear-gradient(center top , #afc951, #8cb200);
+    background: -ms-linear-gradient(#afc951 , #8cb200); 
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#afc951', endColorstr='#8cb200',GradientType=0 ); 
+    background-color: #8cb200;	        
+}    
+
+.navigator .goto {
+	margin-left: 1px;
+}
+
+.navigator .goto a {
+	color: #ffffff !important;
+}
+
+.navigator .goto > span {
+	font-weight: bold;
+	color: #ffffff !important;
+	text-decoration: underline;
+}
+
+table.actions-grid tr.navigation td.actions-col a, .actions-grid .navigation a {
+    padding-top: 0px !important;
 }

@@ -97,7 +97,8 @@ public class ThemesManager {
 	private void generateStyle() {
 		generateStyle("style_template.css", "/css/style.css");
 		generateStyle("table_template.css", "/css/table.css");	
-		generateStyle("dashboard_template.css", "/WEB-INF/classes/com/asf/nextserver/web/dashboard/dashboard.css");			
+		generateStyle("dashboard_template.css", "/WEB-INF/classes/ro/nextreports/server/web/dashboard/dashboard.css");			
+		generateStyle("analysis_template.css", "/WEB-INF/classes/ro/nextreports/server/web/analysis/analysis.css");
 	}
 	
 	private void generateStyle(String templateFile, String generatedFilePath) {

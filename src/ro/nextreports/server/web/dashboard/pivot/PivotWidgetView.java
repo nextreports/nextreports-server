@@ -18,6 +18,7 @@ package ro.nextreports.server.web.dashboard.pivot;
 
 import java.util.Map;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -64,7 +65,7 @@ public class PivotWidgetView extends WidgetView {
 			final PivotWidget widget = (PivotWidget)getWidget();						
 			NextPivotDataSource dataSource = new NextPivotDataSource(widget, urlQueryParameters);
 			
-			add(new PivotPanel("pivot", dataSource) {
+			PivotPanel panel = new PivotPanel("pivot", dataSource) {
 				
 				protected PivotModel createPivotModel(PivotDataSource pivotDataSource) {
 			    	PivotModel pivotModel = super.createPivotModel(pivotDataSource);			    	
@@ -82,7 +83,14 @@ public class PivotWidgetView extends WidgetView {
 						throw new RuntimeException(e);
 					}
 				}
-			});
+			};
+			boolean single = dashboardService.isSingleWidget(widget.getId());		
+			// pivot is the single widget in a dashboard with one column
+			// make the height 100%
+			if (single) {		
+				panel.add(AttributeModifier.replace("class", "pivotHeightFull"));
+			}
+			add(panel);
 		} catch (Throwable ex) {
 			ex.printStackTrace();
 			add(new Label("pivot", ex.getMessage()));

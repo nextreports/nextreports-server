@@ -22,10 +22,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
@@ -34,6 +36,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.engine.exporter.util.StyleFormatConstants;
 import ro.nextreports.engine.util.HtmlUtil;
 import ro.nextreports.server.domain.DrillEntityContext;
@@ -60,35 +63,47 @@ public class TableRendererPanel extends GenericPanel<Report> {
 	@SpringBean
 	private DashboardService dashboardService;
 	
-	public TableRendererPanel(String id, IModel<Report> model, String widgetId, DrillEntityContext drillContext,  boolean zoom) {
+	public TableRendererPanel(String id, IModel<Report> model, String widgetId, DrillEntityContext drillContext,  boolean zoom) throws NoDataFoundException {
 		this(id, model, widgetId, drillContext, zoom, null);
 	}
 		
-	public TableRendererPanel(String id, IModel<Report> model, String widgetId, DrillEntityContext drillContext,  boolean zoom,  Map<String, Object> urlQueryParameters) {
+	public TableRendererPanel(String id, IModel<Report> model, String widgetId, DrillEntityContext drillContext,  boolean zoom,  Map<String, Object> urlQueryParameters) throws NoDataFoundException {
 		super(id, model);
 		this.drillContext = drillContext;		
 						
 		TableDataProvider dataProvider = new TableDataProvider(widgetId, drillContext, urlQueryParameters);
-        add(getCurrentTable(dataProvider, widgetId));        
+		WebMarkupContainer container = new WebMarkupContainer("tableContainer");
+		container.add(getCurrentTable(dataProvider, widgetId));
+		boolean single = dashboardService.isSingleWidget(widgetId);		
+		// table is the single widget in a dashboard with one column
+		// make the height 100%
+		if (single) {		
+			container.add(AttributeModifier.replace("class", "tableWidgetViewFull"));
+		}
+        add(container);        
 	}	
 	
-	private BaseTable getCurrentTable(TableDataProvider dataProvider, String widgetId ) {    	        
+	private BaseTable getCurrentTable(TableDataProvider dataProvider, String widgetId ) throws NoDataFoundException {    	        
         List<String> tableHeader;
 		try {
 			tableHeader = dataProvider.getHeader();			
 		} catch (Exception e) {		
 			e.printStackTrace();
 			LOG.error(e.getMessage(), e);
-			throw new RuntimeException(ExceptionUtils.getRootCauseMessage(e));
+			if (e instanceof NoDataFoundException) {
+				throw (NoDataFoundException)e;
+			} else {
+				throw new RuntimeException(ExceptionUtils.getRootCauseMessage(e));
+			}
 		}
-		int rowsPerPage = Integer.MAX_VALUE;		
+		int rowsPerPage = Integer.MAX_VALUE;				
 		try {
 			Widget widget = dashboardService.getWidgetById(widgetId);
-			rowsPerPage = WidgetUtil.getRowsPerPage(dashboardService, widget);
+			rowsPerPage = WidgetUtil.getRowsPerPage(dashboardService, widget);						
 		} catch (NotFoundException e) {
 			LOG.error(e.getMessage(), e);
 		}
-		BaseTable<RowData> table = new BaseTable<RowData>("table", getPropertyColumns(tableHeader), dataProvider, rowsPerPage);		
+		BaseTable<RowData> table = new BaseTable<RowData>("table", getPropertyColumns(tableHeader), dataProvider, rowsPerPage);					
         return table;
     }
 

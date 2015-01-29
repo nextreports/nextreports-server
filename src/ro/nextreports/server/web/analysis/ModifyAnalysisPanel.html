@@ -1,0 +1,25 @@
+<wicket:panel>
+    <div class="form-container form-container-dialog">
+        <form wicket:id="form">
+            <table>   
+                <tr>
+                    <td class="td-label">
+                        <label class="small"><wicket:message key="name">[]</wicket:message><em>*</em></label>
+                    </td>
+                    <td>
+                        <input wicket:id="title" size="40"/>
+                    </td>
+                </tr>                             
+                <tr>
+                    <td colspan="2">
+                        <ul class="form-btns">
+                            <li><a wicket:id="cancel" href="#" class="secondary"><wicket:message key="cancel">Cancel</wicket:message></a></li>
+                            <li><input wicket:id="modify" type="submit" name="modify" wicket:message="value:modify" class="secondary"/></li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <span wicket:id="feedback" class="feedbackPanelERROR"/>
+    </div>
+</wicket:panel>

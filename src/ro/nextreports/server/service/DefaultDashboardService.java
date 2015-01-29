@@ -654,8 +654,8 @@ public class DefaultDashboardService implements DashboardService {
             FutureTask<TableData> runTask = null;
 	        try {
 	        	runTask = new FutureTask<TableData>(new Callable<TableData>() {	        		
-	        		public TableData call() throws Exception {        
-	        			reportRunner.run();	        			
+	        		public TableData call() throws Exception {
+	        				reportRunner.run();
 	        			return reportRunner.getTableData();	        				        			        			
 	        		}	        		
 	        	});
@@ -676,6 +676,8 @@ public class DefaultDashboardService implements DashboardService {
 				}
 				if (e instanceof TimeoutException) {					
 					throw new TimeoutException("Timeout of " + timeout + " seconds ellapsed.");
+				} else if (e.getMessage().contains("NoDataFoundException")) {
+					throw new NoDataFoundException();
 				} else {
 					throw new ReportRunnerException(e);
 				}
@@ -1046,6 +1048,23 @@ public class DefaultDashboardService implements DashboardService {
 			return state.getColumn();
 		} catch (NotFoundException e) {
 			return -1;
+		}
+	}
+	
+	// just a single widget in a dashboard with a single column
+	public boolean isSingleWidget(String widgetId) {
+		try {
+			WidgetState state = (WidgetState) storageService.getEntityById(widgetId);
+			DashboardState dState = getDashboardState(state);
+			if (dState.getColumnCount() > 1) {
+				return false;
+			}
+			if (dState.getWidgetStates().size() > 1) {
+				return false;
+			}
+			return true;
+		} catch (NotFoundException e) {
+			return false;
 		}
 	}
 	

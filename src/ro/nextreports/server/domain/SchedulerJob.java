@@ -63,6 +63,8 @@ public class SchedulerJob extends Entity {
 	
 	private boolean runNow; // true if we do Run, false for Schedule
 	
+	private String creator;
+	
     public SchedulerJob() {
         super();
         
@@ -118,6 +120,14 @@ public class SchedulerJob extends Entity {
 
 	public void setRunNow(boolean runNow) {
 		this.runNow = runNow;
+	}		
+
+	public String getCreator() {
+		return creator;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator;
 	}
 
 	@Override
