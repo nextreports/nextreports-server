@@ -184,16 +184,20 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 
 		List<String> columnNames = new LinkedList<String>();
 		Map<String, String> columnTypes = new HashMap<String, String>();
-		OSQLSynchQuery<ODocument> query = new OSQLSynchQuery<ODocument>(sql + " LIMIT 1");
-		List<ODocument> resultset = db.query(query);
-		String[] fieldNames = resultset.get(0).fieldNames();
-		int columnCount = fieldNames.length;
-		for (int i = 0; i < columnCount; i++) {
-			String name = fieldNames[i];
-			OType type = resultset.get(0).fieldType(name);
-			columnNames.add(name);
-			columnTypes.put(name, DatabaseUtil.getJavaType(type));
-			System.out.println("************ NAME="+name + "  type="+type + "  javaType="+DatabaseUtil.getJavaType(type));
+		try {
+			OSQLSynchQuery<ODocument> query = new OSQLSynchQuery<ODocument>(sql + " LIMIT 1");
+			List<ODocument> resultset = db.query(query);
+			String[] fieldNames = resultset.get(0).fieldNames();
+			int columnCount = fieldNames.length;
+			for (int i = 0; i < columnCount; i++) {
+				String name = fieldNames[i];
+				OType type = resultset.get(0).fieldType(name);
+				columnNames.add(name);
+				columnTypes.put(name, DatabaseUtil.getJavaType(type));
+				System.out.println("************ NAME="+name + "  type="+type + "  javaType="+DatabaseUtil.getJavaType(type));
+			}
+		} catch (Throwable t) {
+			LOG.error(t.getMessage(), t);
 		}
 		System.out.println("--->  columnTypes=" + columnTypes);
 
