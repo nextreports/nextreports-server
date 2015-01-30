@@ -30,6 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ro.nextreports.engine.Report;
+import ro.nextreports.engine.band.BandElement;
+import ro.nextreports.engine.band.ColumnBandElement;
 import ro.nextreports.engine.chart.Chart;
 import ro.nextreports.engine.util.LoadReportException;
 import ro.nextreports.engine.util.NextChartUtil;
@@ -92,12 +94,12 @@ public class NextUtil {
         return reportContent.getNextFile().getDataProvider().getBytes();               
     }
 
-    public static Report getNextReport(Settings settings, ro.nextreports.server.domain.Chart chart) {
+    public static Report getNextReport(ro.nextreports.server.domain.Chart chart) {
         ChartContent reportContent = chart.getContent();
         return getChart(reportContent).getReport();
     }
     
-    public static Chart getNextChart(Settings settings, ro.nextreports.server.domain.Chart chart) {
+    public static Chart getNextChart(ro.nextreports.server.domain.Chart chart) {
         ChartContent reportContent = chart.getContent();
         return getChart(reportContent);
     }
@@ -227,6 +229,14 @@ public class NextUtil {
 
     public static boolean reportHasHeader(Report report) {
         return (report.getLayout().getHeaderBand().getRowCount() > 0);
+    }
+    
+    public static String getDetailColumnPattern(Report report, int column) {
+    	BandElement be = report.getLayout().getDetailBand().getElementAt(0, column);
+    	if (be instanceof ColumnBandElement) {
+    		return ((ColumnBandElement)be).getPattern();
+    	}
+    	return null;
     }
 
 }

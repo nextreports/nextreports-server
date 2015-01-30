@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.DrillEntityContext;
+import ro.nextreports.server.report.next.NextUtil;
 import ro.nextreports.server.service.ChartService;
 import ro.nextreports.server.util.ChartUtil;
 import ro.nextreports.server.web.NextServerApplication;
@@ -111,7 +112,7 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 		this(id, model, widget, drillContext, zoom, null, null, null);
 	}	
 	
-	private ChartRendererPanel(String id, IModel<Chart> model, ChartWidget widget, final DrillEntityContext drillContext, boolean zoom, String width, String height, Map<String,Object> urlQueryParameters) {
+	private ChartRendererPanel(String id, final IModel<Chart> model, ChartWidget widget, final DrillEntityContext drillContext, boolean zoom, String width, String height, Map<String,Object> urlQueryParameters) {
 		super(id, model);
 		this.drillContext = drillContext;		
 		this.urlQueryParameters = urlQueryParameters;
@@ -128,7 +129,9 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 				@Override
 				public void onClickChart(AjaxRequestTarget target, String value) {
 					try {
-						ChartRendererPanel.this.onClickChart(target, value);
+						// x values pattern
+						String pattern = NextUtil.getNextChart(model.getObject()).getXPattern();						
+						ChartRendererPanel.this.onClickChart(target, value, pattern);
 					} catch (Exception e) {
 						LOG.error(e.getMessage(), e);
 					}
@@ -339,7 +342,7 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 
 	    }	
 	
-	protected void onClickChart(AjaxRequestTarget target, String value) throws Exception {		
+	protected void onClickChart(AjaxRequestTarget target, String value, String pattern) throws Exception {		
 	}
 
 }

@@ -42,7 +42,9 @@ import ro.nextreports.engine.util.HtmlUtil;
 import ro.nextreports.server.domain.DrillEntityContext;
 import ro.nextreports.server.domain.Report;
 import ro.nextreports.server.exception.NotFoundException;
+import ro.nextreports.server.report.next.NextUtil;
 import ro.nextreports.server.service.DashboardService;
+import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.util.WidgetUtil;
 import ro.nextreports.server.web.common.table.BaseTable;
 import ro.nextreports.server.web.common.table.LinkPropertyColumn;
@@ -59,9 +61,13 @@ public class TableRendererPanel extends GenericPanel<Report> {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(TableRendererPanel.class);
 	private DrillEntityContext drillContext;	
+	private String drillPattern;
 	
 	@SpringBean
 	private DashboardService dashboardService;
+	
+	@SpringBean
+	private StorageService storageService;
 	
 	public TableRendererPanel(String id, IModel<Report> model, String widgetId, DrillEntityContext drillContext,  boolean zoom) throws NoDataFoundException {
 		this(id, model, widgetId, drillContext, zoom, null);
@@ -69,7 +75,12 @@ public class TableRendererPanel extends GenericPanel<Report> {
 		
 	public TableRendererPanel(String id, IModel<Report> model, String widgetId, DrillEntityContext drillContext,  boolean zoom,  Map<String, Object> urlQueryParameters) throws NoDataFoundException {
 		super(id, model);
-		this.drillContext = drillContext;		
+		this.drillContext = drillContext;	
+		
+		if (drillContext.getColumn() > 0) {
+			ro.nextreports.engine.Report rep = NextUtil.getNextReport(storageService.getSettings(), model.getObject());
+			drillPattern = NextUtil.getDetailColumnPattern(rep, drillContext.getColumn()-1);			
+		}
 						
 		TableDataProvider dataProvider = new TableDataProvider(widgetId, drillContext, urlQueryParameters);
 		WebMarkupContainer container = new WebMarkupContainer("tableContainer");
@@ -136,7 +147,7 @@ public class TableRendererPanel extends GenericPanel<Report> {
 													
 							String clickedValue = ((RowData) model.getObject()).getCellValues().get(drillContext.getColumn() - 1).toString();																																
 							try {
-								onClickLink(target, clickedValue);
+								onClickLink(target, clickedValue, drillPattern);
 							} catch (Exception e) {
 								LOG.error(e.getMessage(), e);
 							}	
@@ -154,7 +165,7 @@ public class TableRendererPanel extends GenericPanel<Report> {
 		return columns;
     }    
     
-    protected void onClickLink(AjaxRequestTarget target, String value) throws Exception {		
+    protected void onClickLink(AjaxRequestTarget target, String value, String pattern) throws Exception {		
 	}
     
     private void setCellStyle(Item cellItem, IModel rowModel, int rowIndex) {

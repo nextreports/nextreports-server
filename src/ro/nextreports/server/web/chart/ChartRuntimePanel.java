@@ -115,7 +115,7 @@ public class ChartRuntimePanel extends DynamicParameterRuntimePanel {
     }
     
     public I18nLanguage getLocaleLanguage() {
-    	return I18nUtil.getLocaleLanguage(NextUtil.getNextChart(storageService.getSettings(), chart));
+    	return I18nUtil.getLocaleLanguage(NextUtil.getNextChart(chart));
     }
 
     public DataSource getDataSource() {

@@ -63,7 +63,7 @@ public class GeneralWidgetRuntimePanel extends DynamicParameterRuntimePanel {
     	if (entity instanceof ro.nextreports.server.domain.Report) {
     		return I18nUtil.getLocaleLanguage(getNextReport().getLayout());
     	} else if(entity instanceof ro.nextreports.server.domain.Chart) {
-    		return I18nUtil.getLocaleLanguage(NextUtil.getNextChart(storageService.getSettings(), (Chart)entity));
+    		return I18nUtil.getLocaleLanguage(NextUtil.getNextChart((Chart)entity));
     	}
     	return null;
     }

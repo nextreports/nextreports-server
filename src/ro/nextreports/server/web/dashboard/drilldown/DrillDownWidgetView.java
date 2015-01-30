@@ -115,7 +115,7 @@ public class DrillDownWidgetView extends WidgetView {
 	}	
 	
 		
-	private void onClick(AjaxRequestTarget target, String value) throws Exception {			
+	private void onClick(AjaxRequestTarget target, String value, String pattern) throws Exception {			
 		DrillDownEntity drillDownEntity = getNextDrillDownEntity();
 		
 		String url = drillDownEntity.getUrl();
@@ -131,7 +131,7 @@ public class DrillDownWidgetView extends WidgetView {
 		
 		Entity entity = drillDownEntity.getEntity();					
 		String parameterName = drillDownEntity.getLinkParameter();
-		Object parameterValue = getParameterValue(entity, drillDownEntity.getLinkParameter(), value);
+		Object parameterValue = getParameterValue(entity, drillDownEntity.getLinkParameter(), value, pattern);
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("add drill down parameter '" + parameterName + "' with value " + parameterValue);
 		}
@@ -218,15 +218,15 @@ public class DrillDownWidgetView extends WidgetView {
 			if (chartWidget == null) {
 				return new ChartRendererPanel("renderer", new Model<Chart>((Chart) entity), drillContext, zoom, width, height, urlQueryParameters) {
 					@Override
-					protected void onClickChart(AjaxRequestTarget target, String value) throws Exception {
-						DrillDownWidgetView.this.onClick(target, value);
+					protected void onClickChart(AjaxRequestTarget target, String value, String pattern) throws Exception {
+						DrillDownWidgetView.this.onClick(target, value, pattern);
 					}
 				};
 			} else {
 				return new ChartRendererPanel("renderer", chartWidget, drillContext, zoom, width, height, urlQueryParameters) {
 					@Override
-					protected void onClickChart(AjaxRequestTarget target, String value) throws Exception {
-						DrillDownWidgetView.this.onClick(target, value);
+					protected void onClickChart(AjaxRequestTarget target, String value, String pattern) throws Exception {
+						DrillDownWidgetView.this.onClick(target, value, pattern);
 					}
 				};
 			}
@@ -236,8 +236,8 @@ public class DrillDownWidgetView extends WidgetView {
 	    	try {
 				return new TableRendererPanel("renderer", new Model<Report>((Report)entity), DrillDownWidgetView.this.getModelObject().getId(), drillContext, zoom, urlQueryParameters) {
 					@Override
-					protected void onClickLink(AjaxRequestTarget target, String value) throws Exception {
-						DrillDownWidgetView.this.onClick(target, value);
+					protected void onClickLink(AjaxRequestTarget target, String value, String pattern) throws Exception {
+						DrillDownWidgetView.this.onClick(target, value, pattern);
 					}
 				};
 			} catch (NoDataFoundException e) {
@@ -332,7 +332,7 @@ public class DrillDownWidgetView extends WidgetView {
 		return result;
 	}
 	
-	private Object getParameterValue(Entity entity, String parameterName, String value) throws Exception {
+	private Object getParameterValue(Entity entity, String parameterName, String value, String pattern) throws Exception {
 		List<QueryParameter> queryParameters = new ArrayList<QueryParameter>();
 		if (entity instanceof Chart) {
 			ro.nextreports.engine.chart.Chart nextChart = NextUtil.getChart(((Chart)entity).getContent());
@@ -344,7 +344,7 @@ public class DrillDownWidgetView extends WidgetView {
 		        
         for (QueryParameter qp : queryParameters) {
             if (qp.getName().equals(parameterName)) {
-                Object obj = ParameterUtil.getParameterValueFromString(qp.getValueClassName(), value);
+                Object obj = ParameterUtil.getParameterValueFromStringWithPattern(qp.getValueClassName(), value, pattern);
                 if (QueryParameter.SINGLE_SELECTION.equals(qp.getSelection())) {
                 	return obj;
                 } else {
