@@ -22,10 +22,10 @@ public class Analysis extends Entity {
 	@JcrProperty
 	private String tableName;
 
-	@JcrProperty
+	@JcrProperty(converter = JcrListExpressionConverter.class)
 	private List<String> columns;
 
-	@JcrProperty
+	@JcrProperty(converter = JcrMapExpressionConverter.class)
 	private Map<String, String> columnTypes = new HashMap<String, String>();
 
 	@JcrProperty
@@ -434,7 +434,7 @@ public class Analysis extends Entity {
 
 	@Override
 	public String toString() {
-		return "Analysis [" + super.toString() + " ,tableName=" + tableName + ", columns=" + columns + ", selected=" + selected + ", sortProperty="
+		return "Analysis [" + super.toString() + " ,tableName=" + tableName + ", columns=" + columns + ", columnTypes=" + columnTypes + ", selected=" + selected + ", sortProperty="
 				+ sortProperty + ", ascending=" + ascending + ", filters=" + filters + ", declaredColumns=" + declaredColumns
 				+ ", groups=" + groups + ", rowsPerPage=" + rowsPerPage + ", freezed=" + freezed + "]";
 	}

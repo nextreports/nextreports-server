@@ -2,6 +2,8 @@ package ro.nextreports.server.domain;
 
 import org.jcrom.annotations.JcrProperty;
 
+import ro.nextreports.engine.util.ObjectCloner;
+
 public class AnalysisDeclaredColumn extends EntityFragment {
 	
 	private static final long serialVersionUID = 1L;
@@ -9,7 +11,7 @@ public class AnalysisDeclaredColumn extends EntityFragment {
 	@JcrProperty
 	private String columnName;
 	
-	@JcrProperty
+	@JcrProperty(converter = JcrExpressionConverter.class)
 	private String expression;
 	
 	@JcrProperty
@@ -43,13 +45,7 @@ public class AnalysisDeclaredColumn extends EntityFragment {
 	}	
 	
 	public AnalysisDeclaredColumn clone() {
-		AnalysisDeclaredColumn obj = new AnalysisDeclaredColumn();
-		obj.setColumnName(getColumnName());
-		obj.setExpression(getExpression());
-		obj.setType(getType());		
-		obj.setName(name);
-		obj.setPath(path);
-		return obj;
+		return ObjectCloner.silenceDeepCopy(this);
 	}
 
 	@Override

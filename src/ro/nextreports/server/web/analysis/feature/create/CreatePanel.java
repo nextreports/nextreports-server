@@ -98,7 +98,7 @@ public class CreatePanel extends FormContentPanel<Analysis> {
  		
  		add(new Label("expression", new StringResourceModel("CreatePanel.expression", this, null)));
 		expressionText = new TextArea<String>("expressionText", new PropertyModel<String>(this, "declaredColumnObject.expression"));
-		expressionText.add(new JcrNameValidator(getString("JcrNameValidator")));
+		//expressionText.add(new JcrNameValidator(getString("JcrNameValidator")));
 		expressionText.setOutputMarkupPlaceholderTag(true);			
  		add(expressionText); 
  		
