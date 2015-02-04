@@ -127,18 +127,29 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 		String sql = analysis.toSql(false);
 		System.out.println("*** SQL = " + sql);
 
-		OSQLSynchQuery<ODocument> query = new OSQLSynchQuery<ODocument>(sql + " SKIP " + first + " LIMIT " + count);
-		List<ODocument> resultset = db.query(query);
-
-		int cols = getHeader(analysis).size();
-		for (ODocument doc : resultset) {
-			String[] fieldNames = doc.fieldNames();
-			List<Object> cellValues = new ArrayList<Object>();
-			for (int i = 1; i <= cols; i++) {
-				cellValues.add(doc.field(fieldNames[i - 1]));
+		try {
+			OSQLSynchQuery<ODocument> query = new OSQLSynchQuery<ODocument>(sql + " SKIP " + first + " LIMIT " + count);
+			List<ODocument> resultset = db.query(query);
+				
+			int cols = getHeader(analysis).size();
+			for (ODocument doc : resultset) {				
+				String[] fieldNames = doc.fieldNames(); // this returns only not-null fields!				
+				List<Object> cellValues = new ArrayList<Object>();
+				for (int i = 1; i <= cols; i++) {
+					String col = analysis.getColumns().get(i-1);
+					int index = findIndex(fieldNames, col);
+					if (index == -1) {
+						cellValues.add(null);
+					} else {
+						cellValues.add(doc.field(fieldNames[index]));
+					}	
+				}
+				AnalysisRow row = new AnalysisRow(cellValues);
+				list.add(row);
 			}
-			AnalysisRow row = new AnalysisRow(cellValues);
-			list.add(row);
+		} catch (Throwable t) {
+			t.printStackTrace();
+			LOG.error(t.getMessage(), t);
 		}
 		
 		long end = System.currentTimeMillis();
@@ -187,14 +198,14 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 		try {
 			OSQLSynchQuery<ODocument> query = new OSQLSynchQuery<ODocument>(sql + " LIMIT 1");
 			List<ODocument> resultset = db.query(query);
-			String[] fieldNames = resultset.get(0).fieldNames();
+			String[] fieldNames = resultset.get(0).fieldNames();			
 			int columnCount = fieldNames.length;
 			for (int i = 0; i < columnCount; i++) {
 				String name = fieldNames[i];
 				OType type = resultset.get(0).fieldType(name);
 				columnNames.add(name);
-				columnTypes.put(name, DatabaseUtil.getJavaType(type));
-				System.out.println("************ NAME="+name + "  type="+type + "  javaType="+DatabaseUtil.getJavaType(type));
+				columnTypes.put(name, DatabaseUtil.getJavaType(name, type));
+				System.out.println("************ NAME="+name + "  type="+type + "  javaType="+DatabaseUtil.getJavaType(name, type));
 			}
 		} catch (Throwable t) {
 			LOG.error(t.getMessage(), t);
@@ -243,6 +254,19 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 			result.add(DatabaseUtil.getColumnAlias(name));
 		}
 		return result;
+	}
+	
+	private int findIndex(String[] elements, String element) {
+		if (elements == null) {
+			return -1;
+		} else {
+			for (int i=0, size=elements.length; i<size; i++) {
+				if (elements[i].equals(element)) {
+					return i;
+				}
+			}
+		}
+		return -1;
 	}
 
 }

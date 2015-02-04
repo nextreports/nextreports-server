@@ -11,6 +11,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Iterator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.orientechnologies.orient.core.metadata.schema.OType;
 
 import ro.nextreports.server.domain.AnalysisFilter;
@@ -26,6 +29,8 @@ public class DatabaseUtil {
 	public static List<String> aggregates = Arrays.asList(COUNT, AVG, MIN, MAX, SUM);
 	
 	public static final String AS = " as ";
+	
+	private static final Logger LOG = LoggerFactory.getLogger(DatabaseUtil.class);	
 	
 	public static List<String> getJavaTypes() {
 		List<String> result = new ArrayList<String>();
@@ -64,7 +69,11 @@ public class DatabaseUtil {
 		}		    	
 	}
 	
-	public static String getJavaType(OType oType) {
+	public static String getJavaType(String colName, OType oType) {
+		if (oType == null) {
+			LOG.error(colName + " has NULL type! We set it as String.");
+			return String.class.getName();	
+		}
 		switch (oType) {
 			case BOOLEAN: return Boolean.class.getName();	
 			case BYTE: return Byte.class.getName();
