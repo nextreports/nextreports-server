@@ -131,18 +131,29 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 			OSQLSynchQuery<ODocument> query = new OSQLSynchQuery<ODocument>(sql + " SKIP " + first + " LIMIT " + count);
 			List<ODocument> resultset = db.query(query);
 				
+//			int cols = getHeader(analysis).size();
+//			for (ODocument doc : resultset) {				
+//				String[] fieldNames = doc.fieldNames(); // this returns only not-null fields!				
+//				List<Object> cellValues = new ArrayList<Object>();
+//				for (int i = 1; i <= cols; i++) {
+//					String col = analysis.getSelectedColumns().get(i-1);					
+//					int index = findIndex(fieldNames, col);
+//					if (index == -1) {
+//						cellValues.add(null);
+//					} else {
+//						cellValues.add(doc.field(fieldNames[index]));
+//					}	
+//				}
+//				AnalysisRow row = new AnalysisRow(cellValues);
+//				list.add(row);
+//			}
+			
 			int cols = getHeader(analysis).size();
 			for (ODocument doc : resultset) {				
 				String[] fieldNames = doc.fieldNames(); // this returns only not-null fields!				
 				List<Object> cellValues = new ArrayList<Object>();
 				for (int i = 1; i <= cols; i++) {
-					String col = analysis.getColumns().get(i-1);
-					int index = findIndex(fieldNames, col);
-					if (index == -1) {
-						cellValues.add(null);
-					} else {
-						cellValues.add(doc.field(fieldNames[index]));
-					}	
+					cellValues.add(doc.field(fieldNames[i-1]));
 				}
 				AnalysisRow row = new AnalysisRow(cellValues);
 				list.add(row);
