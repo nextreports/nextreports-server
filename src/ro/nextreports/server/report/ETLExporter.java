@@ -95,6 +95,7 @@ public class ETLExporter {
 		loader.setDbUrl(analysisService.getDatabasePath());
 		loader.setClassName(tableName);
 		loader.setAutoDropClass(true);
+        loader.setDbAutoCreateProperties(true);
 
 		// create transformers
 		List<Transformer> transformers = new ArrayList<Transformer>();
@@ -108,6 +109,6 @@ public class ETLExporter {
 		processor.destroy();
 		time = System.currentTimeMillis() - time;
 		LOG.info("Executed in {} ms", time);
-	}	
+	}
 
 }

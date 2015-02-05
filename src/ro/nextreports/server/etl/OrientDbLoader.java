@@ -239,7 +239,7 @@ public class OrientDbLoader implements Loader {
                 log.error(e.getMessage(), e);
             }
 
-            log.debug("Created property [{}.{}] of type [{}]", clazz.getName(), name, type);
+            log.debug("Created property '{}' of type '{}'", name, type);
         }
     }
 
