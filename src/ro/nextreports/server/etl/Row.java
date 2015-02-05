@@ -16,10 +16,14 @@
  */
 package ro.nextreports.server.etl;
 
+import java.util.List;
+
 /**
  * @author Decebal Suiu
  */
 public interface Row {
+
+    public List<String> getFieldNames();
 
     public String getFieldName(int fieldIndex);
 
@@ -31,9 +35,7 @@ public interface Row {
 
     public long getRowNumber();
 
-    public Object getValue(int fieldIndex);
-
-    public Object[] getValues();
+    public Object getFieldValue(int fieldIndex);
 
     public Object getPayload();
 

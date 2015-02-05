@@ -43,13 +43,13 @@ public class DocumentTransformer implements Transformer {
     }
 
     protected ODocument createDocument(Row row) {
-        ODocument doc = new ODocument();
+        ODocument document = new ODocument();
         int fieldCount = row.getFieldCount();
         for (int i = 0; i < fieldCount; i++) {
-            doc.field(row.getFieldName(i), row.getValue(i));
+            document.field(row.getFieldName(i), row.getFieldValue(i));
         }
 
-        return doc;
+        return document;
     }
 
 }

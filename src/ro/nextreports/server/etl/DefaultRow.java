@@ -43,6 +43,11 @@ public class DefaultRow implements Row {
     }
 
     @Override
+    public List<String> getFieldNames() {
+        return fieldNames;
+    }
+
+    @Override
     public String getFieldName(int fieldIndex) {
         return fieldNames.get(fieldIndex);
     }
@@ -69,13 +74,8 @@ public class DefaultRow implements Row {
     }
 
     @Override
-    public Object getValue(int fieldIndex) {
+    public Object getFieldValue(int fieldIndex) {
         return values[fieldIndex];
-    }
-
-    @Override
-    public Object[] getValues() {
-        return values;
     }
 
     @Override

@@ -164,28 +164,7 @@ public class OrientDbLoader implements Loader {
         ODocument document = (ODocument) row.getPayload();
 
         if (dbAutoCreateProperties) {
-            OClass clazz;
-            if (className != null) {
-                clazz = getOrCreateClass(className);
-            } else {
-                clazz = document.getSchemaClass();
-            }
-
-            for (String fieldName : document.fieldNames()) {
-                String newName = transformFieldName(fieldName);
-                String name = newName != null ? newName : fieldName;
-
-                OProperty property = clazz.getProperty(name);
-                if (property == null) {
-                    Object value = document.field(fieldName);
-                    createProperty(clazz, name, value);
-                    if (newName != null) {
-                        // replace it
-                        document.removeField(fieldName);
-                        document.field(newName, value);
-                    }
-                }
-            }
+            createProperties(row);
         }
 
         if (className != null) {
@@ -219,37 +198,40 @@ public class OrientDbLoader implements Loader {
     protected OClass getOrCreateClass(String className) {
         OClass clazz;
 
-        if (documentDatabase.getMetadata().getSchema().existsClass(className)) {
-            clazz = documentDatabase.getMetadata().getSchema().getClass(className);
+        OSchema schema = documentDatabase.getMetadata().getSchema();
+        if (schema.existsClass(className)) {
+            clazz = schema.getClass(className);
         } else {
-            clazz = documentDatabase.getMetadata().getSchema().createClass(className);
+            clazz = schema.createClass(className);
             log.debug("Created class '{}'", className);
         }
 
         return clazz;
     }
 
-    protected void createProperty(OClass clazz, String name, Object value) {
-        if (value != null) {
-            OType type = OType.getTypeByClass(value.getClass());
+    protected void createProperties(Row row) {
+        OClass clazz;
+        if (className != null) {
+            clazz = getOrCreateClass(className);
+        } else {
+            clazz = ((ODocument) row.getPayload()).getSchemaClass();
+        }
 
-            try {
-                clazz.createProperty(name, type);
-            } catch (OSchemaException e) {
-                log.error(e.getMessage(), e);
+        int count = row.getFieldCount();
+        for (int i = 0; i < count; i++) {
+            String fieldName = row.getFieldName(i);
+            OProperty property = clazz.getProperty(fieldName);
+            if (property == null) {
+                OType type = OType.getTypeByClass(row.getFieldType(i));
+                try {
+                    clazz.createProperty(fieldName, type);
+                } catch (OSchemaException e) {
+                    log.error(e.getMessage(), e);
+                }
+
+                log.debug("Created property '{}' of type '{}'", fieldName, type);
             }
-
-            log.debug("Created property '{}' of type '{}'", name, type);
         }
-    }
-
-    private String transformFieldName(String fieldName) {
-        char first = fieldName.charAt(0);
-        if (!Character.isDigit(first)) {
-            return null;
-        }
-
-        return "field" + Character.toUpperCase(first) + (fieldName.length() > 1 ? fieldName.substring(1) : "");
     }
 
 }
