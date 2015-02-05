@@ -129,31 +129,15 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 
 		try {
 			OSQLSynchQuery<ODocument> query = new OSQLSynchQuery<ODocument>(sql + " SKIP " + first + " LIMIT " + count);
-			List<ODocument> resultset = db.query(query);
-				
-//			int cols = getHeader(analysis).size();
-//			for (ODocument doc : resultset) {				
-//				String[] fieldNames = doc.fieldNames(); // this returns only not-null fields!				
-//				List<Object> cellValues = new ArrayList<Object>();
-//				for (int i = 1; i <= cols; i++) {
-//					String col = analysis.getSelectedColumns().get(i-1);					
-//					int index = findIndex(fieldNames, col);
-//					if (index == -1) {
-//						cellValues.add(null);
-//					} else {
-//						cellValues.add(doc.field(fieldNames[index]));
-//					}	
-//				}
-//				AnalysisRow row = new AnalysisRow(cellValues);
-//				list.add(row);
-//			}
+			List<ODocument> resultset = db.query(query);				
 			
-			int cols = getHeader(analysis).size();
+			List<String> header = getHeader(analysis);
+			int cols = header.size();
 			for (ODocument doc : resultset) {				
-				String[] fieldNames = doc.fieldNames(); // this returns only not-null fields!				
+				//String[] fieldNames = doc.fieldNames(); // this returns only not-null fields!				
 				List<Object> cellValues = new ArrayList<Object>();
 				for (int i = 1; i <= cols; i++) {
-					cellValues.add(doc.field(fieldNames[i-1]));
+					cellValues.add(doc.field(header.get(i-1)));
 				}
 				AnalysisRow row = new AnalysisRow(cellValues);
 				list.add(row);
@@ -215,6 +199,7 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 				String name = fieldNames[i];
 				OType type = resultset.get(0).fieldType(name);
 				columnNames.add(name);
+				
 				columnTypes.put(name, DatabaseUtil.getJavaType(name, type));
 				System.out.println("************ NAME="+name + "  type="+type + "  javaType="+DatabaseUtil.getJavaType(name, type));
 			}
