@@ -27,6 +27,9 @@ public class AnalysisUtil {
 	public static final String FREEZE_MARKUP = "-FREEZE-";
 	public static final String FREEZE_ACTION = "FREEZE";
 	public static final String FREEZE_FAILED = "FAILED:";
+	
+	public static final String ANY_ACTION = "ACTION";
+	public static final String ANY_ACTION_FAILED = "FAILED:";
 
 	public static List<String> getJavaTypes() {
 		List<String> result = new ArrayList<String>();

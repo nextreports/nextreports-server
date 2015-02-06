@@ -12,8 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import ro.nextreports.server.domain.Analysis;
+import ro.nextreports.server.domain.ReportResultEvent;
 import ro.nextreports.server.service.AnalysisService;
+import ro.nextreports.server.service.ReportService;
 import ro.nextreports.server.service.StorageService;
+import ro.nextreports.server.util.AnalysisUtil;
 import ro.nextreports.server.web.analysis.util.AnalysisException;
 import ro.nextreports.server.web.analysis.util.DatabaseUtil;
 
@@ -26,6 +29,7 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 
 	private StorageService storageService;
 	private AnalysisService analysisService;
+	private ReportService reportService;
 
 	private ODatabaseDocumentTx db;
 
@@ -97,9 +101,8 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 				list = db.query(new OSQLSynchQuery<ODocument>("SELECT COUNT(*) as count FROM ( " + sql + " )"));
 			} catch (Throwable t) {
 				// critical case
-				// class (table) not found in database
-				t.printStackTrace();
-				LOG.error(t.getMessage(), t);
+				// class (table) not found in database				
+				recordError(analysis, t);
 				return 0;
 			}
 			int count = ((Long) list.get(0).field("count")).intValue();
@@ -142,9 +145,8 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 				AnalysisRow row = new AnalysisRow(cellValues);
 				list.add(row);
 			}
-		} catch (Throwable t) {
-			t.printStackTrace();
-			LOG.error(t.getMessage(), t);
+		} catch (Throwable t) {			
+			recordError(analysis, t);
 		}
 		
 		long end = System.currentTimeMillis();
@@ -163,6 +165,11 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 	@Required
 	public void setAnalysisService(AnalysisService analysisService) {
 		this.analysisService = analysisService;
+	}
+	
+	@Required
+	public void setReportService(ReportService reportService) {
+		this.reportService = reportService;
 	}
 
 	private void initConnection() {
@@ -202,8 +209,8 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 				columnTypes.put(name, DatabaseUtil.getJavaType(name, type));
 				System.out.println("************ NAME="+name + "  type="+type + "  javaType="+DatabaseUtil.getJavaType(name, type));
 			}
-		} catch (Throwable t) {
-			LOG.error(t.getMessage(), t);
+		} catch (Throwable t) {			
+			recordError(analysis, t);
 		}
 		System.out.println("--->  columnTypes=" + columnTypes);
 
@@ -262,6 +269,13 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 			}
 		}
 		return -1;
+	}
+	
+	private void recordError(Analysis analysis, Throwable t) {
+		LOG.error(t.getMessage(), t);
+		ReportResultEvent event = new ReportResultEvent(analysis.getCreatedBy(), analysis.getName(), AnalysisUtil.ANY_ACTION,
+				AnalysisUtil.ANY_ACTION_FAILED + t.getMessage());
+		reportService.notifyReportListener(event);			
 	}
 
 }

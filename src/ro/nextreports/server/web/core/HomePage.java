@@ -159,6 +159,12 @@ public class HomePage extends BasePage {
 			} else {
 				sb = new StringBuilder(event.getResultMessage());
 			}	
+		} else if (AnalysisUtil.ANY_ACTION.equals(event.getReportUrl())) {
+			if (event.getResultMessage().startsWith(AnalysisUtil.ANY_ACTION_FAILED)) {
+				error = true;
+				message = bundle.getString("Analysis.error");								
+				sb = new StringBuilder(message + " " + event.getResultMessage().substring(AnalysisUtil.ANY_ACTION_FAILED.length()));				
+			} 	
 		} else if (!event.getReportUrl().endsWith("/report")) {
 			// indicator and alarm schedule alerts do not have a resulting report (url ends with /report)
 			sb.append("<a href=\"").

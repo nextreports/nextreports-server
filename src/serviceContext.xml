@@ -177,10 +177,10 @@
         <property name="storageService" ref="storageService"/>        
     </bean>
     
-    <bean id="analysisReader" class="ro.nextreports.server.web.analysis.OrientDBAnalysisReader">
-      <!-- <property name="dataSource" ref="dataSource"></property> -->
+    <bean id="analysisReader" class="ro.nextreports.server.web.analysis.OrientDBAnalysisReader">      
       <property name="storageService" ref="storageService"></property>
       <property name="analysisService" ref="analysisService"></property>
+      <property name="reportService" ref="reportService"></property>
     </bean> 
 
 </beans>

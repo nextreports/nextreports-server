@@ -368,7 +368,7 @@ public class Analysis extends Entity {
 							"java.sql.Time".equals(columnTypes.get(AnalysisUtil.getColumnFullName(columns, fo.getColumn())));					
 				}
 				if (in) {
-					sb.append("(");
+					sb.append("[");
 					String[] values = fo.getValue().toString().split(";");
 					for (int j = 0, len = values.length; j < len; j++) {
 						if (needApos && !values[j].startsWith("'")) {
@@ -386,7 +386,7 @@ public class Analysis extends Entity {
 							sb.append(",");
 						}
 					}
-					sb.append(")");
+					sb.append("]");
 				} else if (Operator.BETWEEN.equals(operator)) {
 					String[] values = fo.getValue().toString().split(";");
 					for (int j = 0, len = values.length; j < len; j++) {
