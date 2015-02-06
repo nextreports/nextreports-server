@@ -34,6 +34,10 @@ public interface ExportContext {
     public String getId();
 
     public void setId(String id);    
+    
+    public void setServerReportName(String serverReportName);
+    
+    public String getServerReportName();
 
     public Serializable getReportContent();
 

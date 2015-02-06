@@ -196,10 +196,9 @@ public class OrientDBAnalysisReader implements AnalysisReader {
 			String[] fieldNames = resultset.get(0).fieldNames();			
 			int columnCount = fieldNames.length;
 			for (int i = 0; i < columnCount; i++) {
-				String name = fieldNames[i];
-				OType type = resultset.get(0).fieldType(name);
-				columnNames.add(name);
-				
+				String name = fieldNames[i];				
+				OType type = resultset.get(0).getSchemaClass().getProperty(name).getType();
+				columnNames.add(name);				
 				columnTypes.put(name, DatabaseUtil.getJavaType(name, type));
 				System.out.println("************ NAME="+name + "  type="+type + "  javaType="+DatabaseUtil.getJavaType(name, type));
 			}

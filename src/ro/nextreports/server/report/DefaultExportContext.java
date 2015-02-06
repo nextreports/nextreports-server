@@ -31,6 +31,8 @@ import ro.nextreports.engine.exporter.Alert;
 public class DefaultExportContext implements ExportContext {
 
     private String id;
+    // serverReportName can be different than the name taken from reportContent (report name inside designer)
+    private String serverReportName;
     private Serializable reportContent;
     private Map<String, Object> reportParameterValues;
     private transient DataSource reportDataSource;
@@ -49,6 +51,16 @@ public class DefaultExportContext implements ExportContext {
         this.id = id;
     }
   
+    @Override
+	public void setServerReportName(String serverReportName) {
+		this.serverReportName = serverReportName; 		
+	}
+
+	@Override
+	public String getServerReportName() {		
+		return serverReportName;
+	}
+    
     public Serializable getReportContent() {
         return reportContent;
     }
@@ -112,5 +124,5 @@ public class DefaultExportContext implements ExportContext {
     public void setCreator(String creator) {
     	this.creator = creator;
     }
-
+	
 }
