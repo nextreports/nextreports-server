@@ -71,7 +71,7 @@ public class ETLExporter {
                 withParameterValues(new HashMap<String, Object>(exportContext.getReportParameterValues()));
 
         try {
-			String tableName = getEtlTableName(exportContext.getCreator(), report);
+			String tableName = getEtlTableName(exportContext.getCreator(), exportContext.getServerReportName());
         	createEtl(runner.executeQuery(), tableName);
         } catch (ReportRunnerException ex) {
         	throw new ReportEngineException(ex.getMessage(), ex);
@@ -82,8 +82,8 @@ public class ETLExporter {
 
 	}
 
-	private String getEtlTableName(String userName, Report report) {
-		return userName + "-" + report.getBaseName();
+	private String getEtlTableName(String userName, String reportName) {
+		return userName + "-" + reportName;
 	}
 
 	private void createEtl(QueryResult queryResult, String tableName) {

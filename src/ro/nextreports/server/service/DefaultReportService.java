@@ -193,6 +193,7 @@ public class DefaultReportService implements ReportService {
         exportContext.setId(report.getId());
         exportContext.setCreator(creator);
         exportContext.setReportDataSource(report.getDataSource());
+        exportContext.setServerReportName(report.getName());
         exportContext.setReportContent(report.getContent());
         if (report.getType().equals(ReportConstants.JASPER)) {            
             reportRuntime.setParametersValues(
