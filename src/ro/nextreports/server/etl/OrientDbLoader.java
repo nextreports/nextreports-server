@@ -110,7 +110,12 @@ public class OrientDbLoader implements Loader {
     }
 
     public void setClassName(String className) {
-        this.className = className;
+        if (className.contains(" ")) {
+            log.debug("Class name '{}' contains space characters. Replace space characters with '_'", className);
+            this.className = className.replace(' ', '_');
+        } else {
+            this.className = className;
+        }
     }
 
     public boolean isAutoDropClass() {
