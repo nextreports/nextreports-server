@@ -401,7 +401,8 @@ public class ConnectionUtil {
     		pool = pools.get(dataSource.getPath());
     	}
     	if (pool != null) {
-    		pool.close();
+    		pools.remove(dataSource.getPath());
+    		pool.close();    		
     		pool = null;
     	}
     }
