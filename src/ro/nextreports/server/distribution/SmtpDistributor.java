@@ -60,6 +60,9 @@ public class SmtpDistributor implements Distributor {
 
     public void distribute(File exportedFile, Destination destination, DistributionContext context) throws DistributionException {
         SmtpDestination smtpDestination = (SmtpDestination) destination;
+        if (smtpDestination.getChangedFileName() != null) {				
+        	exportedFile = DistributorUtil.getFileCopy(exportedFile, smtpDestination.getChangedFileName());
+		}
 
         users = new ArrayList<String>(smtpDestination.getUserRecipients());
         String body = smtpDestination.getMailBody();

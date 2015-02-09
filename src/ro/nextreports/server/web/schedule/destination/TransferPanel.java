@@ -68,6 +68,14 @@ public class TransferPanel extends AbstractDestinationPanel {
         passwordField.setRequired(false);
         passwordField.setResetPassword(false);
         add(passwordField);
+        
+        add(new Label("changedFileName", getString("ActionContributor.Run.destination.changedFileName")));
+        TextField<String> fileNameField = new TextField<String>("changedFileNameField",
+                new PropertyModel<String>(destination, "changedFileName"));
+        fileNameField.setLabel(new Model<String>(getString("ActionContributor.Run.destination.changedFileName")));
+        fileNameField.setRequired(false);
+        fileNameField.add(new JcrNameValidator());
+        add(fileNameField);       
     }
 
 }

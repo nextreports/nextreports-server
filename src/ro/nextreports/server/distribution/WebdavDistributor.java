@@ -37,7 +37,11 @@ public class WebdavDistributor implements Distributor {
 		
 	public void distribute(File file, Destination destination, DistributionContext context) throws DistributionException {
 		WebdavDestination webdavDestination = (WebdavDestination) destination;
-		
+
+		if (webdavDestination.getChangedFileName() != null) {
+			file = DistributorUtil.getFileCopy(file, webdavDestination.getChangedFileName());
+		}
+
 		Sardine sardine = createSardine(webdavDestination);
 		InputStream input = null;
 		try {

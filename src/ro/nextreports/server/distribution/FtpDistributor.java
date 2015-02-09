@@ -20,6 +20,9 @@ import it.sauronsoftware.ftp4j.FTPClient;
 
 import java.io.File;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ro.nextreports.server.domain.FtpDestination;
 import ro.nextreports.server.domain.RunReportHistory;
 
@@ -31,6 +34,8 @@ public class FtpDistributor implements Distributor {
 
 	private boolean connected;
 	private FTPClient client;
+	
+	private static final Logger LOG = LoggerFactory.getLogger(FtpDistributor.class);
 	
 	public FtpDistributor() {
 		client = new FTPClient();
@@ -47,7 +52,11 @@ public class FtpDistributor implements Distributor {
 			if (folder != null) {
 				client.changeDirectory(folder);
 			}
-			client.upload(file);
+			File uploadFile = file;
+			if (ftpDestination.getChangedFileName() != null) {				
+				uploadFile = DistributorUtil.getFileCopy(file, ftpDestination.getChangedFileName());
+			}
+			client.upload(uploadFile);
 		} catch (Exception e) {
 			throw new DistributionException(e);
 		} finally {

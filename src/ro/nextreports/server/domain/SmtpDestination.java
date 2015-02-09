@@ -48,6 +48,9 @@ public class SmtpDestination extends Destination {
 
     @JcrProperty
     private boolean attachFile;
+    
+    @JcrProperty
+   	private String changedFileName;
 
     public SmtpDestination() {
     	super();
@@ -101,6 +104,14 @@ public class SmtpDestination extends Destination {
     public void setAttachFile(boolean attachFile) {
         this.attachFile = attachFile;
     }
+    
+    public String getChangedFileName() {
+		return changedFileName;
+	}
+
+	public void setChangedFileName(String changedFileName) {
+		this.changedFileName = changedFileName;
+	}
 
     @Override
     public String toString() {
@@ -114,6 +125,7 @@ public class SmtpDestination extends Destination {
     	buffer.append(" mailRecipients = ").append(mailRecipients);
     	buffer.append(" mailSubject = ").append(mailSubject);
     	buffer.append(" userRecipients = ").append(userRecipients);
+    	buffer.append(" changedFileName = ").append(changedFileName);
     	buffer.append("]");
 
     	return buffer.toString();

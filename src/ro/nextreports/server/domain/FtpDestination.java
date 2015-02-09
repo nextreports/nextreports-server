@@ -42,6 +42,9 @@ public class FtpDestination extends Destination {
 
     @JcrProperty
     private String folder;
+    
+    @JcrProperty
+	private String changedFileName;
 
     public FtpDestination() {
         super();
@@ -86,9 +89,17 @@ public class FtpDestination extends Destination {
 
 	public void setFolder(String folder) {
 		this.folder = folder;
+	}	
+
+    public String getChangedFileName() {
+		return changedFileName;
 	}
 
-    public String getType() {
+	public void setChangedFileName(String changedFileName) {
+		this.changedFileName = changedFileName;
+	}
+
+	public String getType() {
         return DestinationType.FTP.toString();
     }
 
@@ -100,6 +111,7 @@ public class FtpDestination extends Destination {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", folder='" + folder + '\'' +
+                ", changedFileName='" + changedFileName + '\'' +
                 '}';
     }
     

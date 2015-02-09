@@ -42,6 +42,9 @@ public class SftpDestination extends Destination {
 
     @JcrProperty
     private String folder;
+    
+    @JcrProperty
+	private String changedFileName;
 
     public SftpDestination() {
         super();
@@ -88,7 +91,15 @@ public class SftpDestination extends Destination {
 		this.folder = folder;
 	}
 
-    public String getType() {
+    public String getChangedFileName() {
+		return changedFileName;
+	}
+
+	public void setChangedFileName(String changedFileName) {
+		this.changedFileName = changedFileName;
+	}
+
+	public String getType() {
         return DestinationType.SFTP.toString();
     }
 
@@ -100,6 +111,7 @@ public class SftpDestination extends Destination {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", folder='" + folder + '\'' +
+                ", changedFileName='" + changedFileName + '\'' +
                 '}';
     }
     

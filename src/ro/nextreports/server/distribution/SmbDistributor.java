@@ -46,6 +46,9 @@ public class SmbDistributor implements Distributor {
 		OutputStream output = null;
 		InputStream input = null;
 		try {
+			if (smbDestination.getChangedFileName() != null) {				
+				file = DistributorUtil.getFileCopy(file, smbDestination.getChangedFileName());
+			}
 			SmbFile smbFile = toSmbFile(file.getName(), smbDestination);
 			output = new SmbFileOutputStream(smbFile);
 			input = new FileInputStream(file);

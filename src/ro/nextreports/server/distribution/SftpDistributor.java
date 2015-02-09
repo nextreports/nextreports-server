@@ -50,8 +50,12 @@ public class SftpDistributor implements Distributor {
 			connect(sftpDestination);
 		}
 		InputStream input = null;
-        try {
-        	input = new FileInputStream(file);
+        try {        	     	
+			if (sftpDestination.getChangedFileName() != null) {				
+				file = DistributorUtil.getFileCopy(file, sftpDestination.getChangedFileName());
+			}
+			input = new FileInputStream(file);   			
+        	
         	String folder = sftpDestination.getFolder();
 			if (folder != null) {
 				channelSftp.cd(folder);

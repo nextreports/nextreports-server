@@ -46,6 +46,9 @@ public class WebdavDestination extends Destination {
 
     @JcrProperty
     private boolean https;
+    
+    @JcrProperty
+	private String changedFileName;
 
     public WebdavDestination() {
         super();
@@ -99,6 +102,14 @@ public class WebdavDestination extends Destination {
 	public void setHttps(boolean https) {
 		this.https = https;
 	}
+	
+	public String getChangedFileName() {
+		return changedFileName;
+	}
+
+	public void setChangedFileName(String changedFileName) {
+		this.changedFileName = changedFileName;
+	}
 
 	public String getType() {
         return DestinationType.WebDAV.toString();
@@ -112,6 +123,7 @@ public class WebdavDestination extends Destination {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", https='" + https + '\'' +
+                ", changedFileName='" + changedFileName + '\'' +
                 '}';
     }
 

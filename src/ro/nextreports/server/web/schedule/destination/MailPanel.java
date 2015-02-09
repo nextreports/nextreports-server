@@ -33,6 +33,7 @@ import org.apache.wicket.model.PropertyModel;
 import ro.nextreports.server.domain.SmtpDestination;
 import ro.nextreports.server.web.common.form.FormPanel;
 import ro.nextreports.server.web.core.BasePage;
+import ro.nextreports.server.web.core.validation.JcrNameValidator;
 
 
 public class MailPanel extends AbstractDestinationPanel {
@@ -99,6 +100,14 @@ public class MailPanel extends AbstractDestinationPanel {
 		provider = new RecipientDataProvider((SmtpDestination) destination);
 		recipientsPanel = new RecipientsPanel("recipientsPanel", provider);
 		add(recipientsPanel);
+		
+		add(new Label("changedFileName", getString("ActionContributor.Run.destination.changedFileName")));
+		TextField<String> fileNameField = new TextField<String>("changedFileNameField", new PropertyModel<String>(destination,
+				"changedFileName"));
+		fileNameField.setLabel(new Model<String>(getString("ActionContributor.Run.destination.changedFileName")));
+		fileNameField.setRequired(false);
+		fileNameField.add(new JcrNameValidator());
+		add(fileNameField);
 	}
 
 	public String getMailSubject() {

@@ -45,6 +45,9 @@ public class SmbDestination extends Destination {
 
     @JcrProperty
     private String folder;
+    
+    @JcrProperty
+	private String changedFileName;
 
     public SmbDestination() {
         super();
@@ -98,6 +101,14 @@ public class SmbDestination extends Destination {
     public void setFolder(String folder) {
         this.folder = folder;
     }
+    
+    public String getChangedFileName() {
+		return changedFileName;
+	}
+
+	public void setChangedFileName(String changedFileName) {
+		this.changedFileName = changedFileName;
+	}
 
     public String getType() {
         return DestinationType.Samba.toString();
@@ -112,6 +123,7 @@ public class SmbDestination extends Destination {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", folder='" + folder + '\'' +
+                ", changedFileName='" + changedFileName + '\'' +
                 '}';
     }
 }
