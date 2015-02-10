@@ -19,6 +19,7 @@ package ro.nextreports.server.distribution;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 
 import ro.nextreports.server.domain.RunReportHistory;
 import ro.nextreports.server.domain.WebdavDestination;
@@ -48,8 +49,13 @@ public class WebdavDistributor implements Distributor {
 			input = new FileInputStream(file);
 			String webdav = toWebdav(file.getName(), webdavDestination);
 			sardine.put(webdav, input);
+			if (webdavDestination.getChangedFileName() != null) {	
+				Files.delete(file.toPath());
+			}
 		} catch (Exception e) {
 			throw new DistributionException(e);
+		} finally {
+			DistributorUtil.deleteFileCopy(webdavDestination.getChangedFileName(), file);
 		}
 	}
 

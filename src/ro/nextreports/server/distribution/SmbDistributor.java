@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
 
 import jcifs.smb.NtlmPasswordAuthentication;
 import jcifs.smb.SmbFile;
@@ -53,12 +54,13 @@ public class SmbDistributor implements Distributor {
 			output = new SmbFileOutputStream(smbFile);
 			input = new FileInputStream(file);
 			IOUtils.copy(input, output);
-//			IOUtils.copyLarge(input, output); // file over 2GB
+//			IOUtils.copyLarge(input, output); // file over 2GB		
 		} catch (Exception e) {
 			throw new DistributionException(e);
 		} finally {
 			IOUtils.closeQuietly(output);
 			IOUtils.closeQuietly(input);
+			DistributorUtil.deleteFileCopy(smbDestination.getChangedFileName(), file);
 		}
 	}
 

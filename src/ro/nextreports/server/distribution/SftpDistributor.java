@@ -60,12 +60,13 @@ public class SftpDistributor implements Distributor {
 			if (folder != null) {
 				channelSftp.cd(folder);
 			}
-        	channelSftp.put(input, file.getName(), ChannelSftp.OVERWRITE);
+        	channelSftp.put(input, file.getName(), ChannelSftp.OVERWRITE);        	
         } catch (Exception e) {
             throw new DistributionException(e);
         } finally {
         	IOUtils.closeQuietly(input);
         	disconnect();
+        	DistributorUtil.deleteFileCopy(sftpDestination.getChangedFileName(), file);
         }
 	}
 

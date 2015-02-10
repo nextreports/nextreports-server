@@ -17,6 +17,7 @@
 package ro.nextreports.server.distribution;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
@@ -149,10 +150,12 @@ public class SmtpDistributor implements Distributor {
                         context.getMailSender().send(mailMessage);
                     }
                 }
-            }
+            }           
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
             throw new DistributionException(e.getMessage());
+        } finally {
+        	DistributorUtil.deleteFileCopy(smtpDestination.getChangedFileName(), exportedFile);
         }
     }
 

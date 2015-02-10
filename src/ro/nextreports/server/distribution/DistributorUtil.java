@@ -32,5 +32,15 @@ public class DistributorUtil {
 			return null;
 		}
 	}
+	
+	public static void deleteFileCopy(String changedFileName, File file) {
+		if (changedFileName != null) {	
+			try {
+				java.nio.file.Files.delete(file.toPath());
+			} catch (IOException e) {				
+				e.printStackTrace();
+			}
+		}
+	}
 
 }

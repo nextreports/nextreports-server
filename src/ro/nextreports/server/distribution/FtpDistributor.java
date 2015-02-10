@@ -19,6 +19,7 @@ package ro.nextreports.server.distribution;
 import it.sauronsoftware.ftp4j.FTPClient;
 
 import java.io.File;
+import java.nio.file.Files;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,20 +48,21 @@ public class FtpDistributor implements Distributor {
 		if (!isConnected()) {
 			connect(ftpDestination);
 		}
+		File uploadFile = file;
 		try {
 			String folder = ftpDestination.getFolder();
 			if (folder != null) {
 				client.changeDirectory(folder);
-			}
-			File uploadFile = file;
+			}			
 			if (ftpDestination.getChangedFileName() != null) {				
 				uploadFile = DistributorUtil.getFileCopy(file, ftpDestination.getChangedFileName());
 			}
-			client.upload(uploadFile);
+			client.upload(uploadFile);						
 		} catch (Exception e) {
 			throw new DistributionException(e);
 		} finally {
 			disconnect();
+			DistributorUtil.deleteFileCopy(ftpDestination.getChangedFileName(), uploadFile);
 		}
 	}
 
