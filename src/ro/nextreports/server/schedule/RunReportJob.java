@@ -47,6 +47,7 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import ro.nextreports.server.StorageConstants;
 import ro.nextreports.server.audit.AuditEvent;
@@ -115,7 +116,17 @@ public class RunReportJob implements Job {
         ReportService reportService = (ReportService) dataMap.get(REPORT_SERVICE);
         StorageService storageService = (StorageService) dataMap.get(STORAGE_SERVICE);
         final SecurityService securityService = (SecurityService) dataMap.get(SECURITY_SERVICE);
-        final JavaMailSender mailSender = (JavaMailSender) dataMap.get(MAIL_SENDER);
+        final JavaMailSenderImpl mailSender = (JavaMailSenderImpl) dataMap.get(MAIL_SENDER);
+        
+        if (storageService.getSettings().getMailServer().getUsername() != null) {        	
+        	mailSender.setUsername(storageService.getSettings().getMailServer().getUsername());
+        	mailSender.setPassword(storageService.getSettings().getMailServer().getPassword());        	        	            	
+        	mailSender.getJavaMailProperties().put("mail.smtp.auth", true);            
+        } else if (mailSender.getUsername() == null) {
+        	// username password are not set inside configuration xml file
+        	mailSender.getJavaMailProperties().put("mail.smtp.auth", false);      
+        }
+        
         Auditor auditor = (Auditor) dataMap.get(AUDITOR);
         AuditEvent auditEvent = (AuditEvent) dataMap.get(AUDIT_EVENT);
         

@@ -24,6 +24,7 @@ import java.net.URLClassLoader;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -50,6 +51,8 @@ public class GeneralSettingsPanel extends AbstractSettingsPanel {
 	private String oldReportsHome;
 	private String oldMailIp;
 	private Integer oldMailPort;
+	private String oldMailUsername;
+	private String oldMailPassword;
 		
     public GeneralSettingsPanel(String id) {
         super(id);                
@@ -90,6 +93,12 @@ public class GeneralSettingsPanel extends AbstractSettingsPanel {
         form.add(mailServerPortField);
         final TextField<String> mailServerSenderField = new TextField<String>("mailServer.from");
         form.add(mailServerSenderField);
+        final TextField<String> mailServerUsernameField = new TextField<String>("mailServer.username");
+        form.add(mailServerUsernameField);
+        final PasswordTextField mailServerPasswordField = new PasswordTextField("mailServer.password");
+        mailServerPasswordField.setResetPassword(false);
+        mailServerPasswordField.setRequired(false);
+        form.add(mailServerPasswordField);
         form.add(new MailServerValidator(new FormComponent[] {mailServerIpField, mailServerPortField, mailServerSenderField}));
         
         final TextField<Integer> conTimeoutField = new TextField<Integer>("connectionTimeout");
@@ -120,6 +129,8 @@ public class GeneralSettingsPanel extends AbstractSettingsPanel {
         oldReportsHome = String.valueOf(settings.getReportsHome());
         oldMailPort = settings.getMailServer().getPort();
         oldMailIp = settings.getMailServer().getIp();
+        oldMailUsername = settings.getMailServer().getUsername();
+        oldMailPassword = settings.getMailServer().getPassword();
     }   
     
     protected void beforeChange(Form form, AjaxRequestTarget target) {	
@@ -143,7 +154,7 @@ public class GeneralSettingsPanel extends AbstractSettingsPanel {
     		!oldMailPort.equals(settings.getMailServer().getPort())) {
     		JavaMailSenderImpl mailSender = (JavaMailSenderImpl) NextServerApplication.get().getSpringBean("mailSender");
             mailSender.setHost(settings.getMailServer().getIp());
-            mailSender.setPort(settings.getMailServer().getPort());    
+            mailSender.setPort(settings.getMailServer().getPort());                
     	}
 	}
 

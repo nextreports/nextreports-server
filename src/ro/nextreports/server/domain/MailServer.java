@@ -31,6 +31,12 @@ public class MailServer extends EntityFragment {
 	@JcrProperty
 	private String from;
 	
+	@JcrProperty
+	private String username;
+	
+	@JcrProperty
+	private String password;		
+	
 	public MailServer() {
 		super();        
     }
@@ -62,12 +68,30 @@ public class MailServer extends EntityFragment {
 	public void setFrom(String from) {
 		this.from = from;
 	}
-	
+			
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	@Override
     public String toString() {
         return "MailServer [" +
                 "ip='" + ip + '\'' +
                 ", port=" + port +                
+                ", username=" + username +
+                ", password=" + password +
                 ", from=" + from +
                 "]";
     }
