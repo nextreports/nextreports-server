@@ -73,6 +73,7 @@ public class GroupPanel extends FormContentPanel<Analysis> {
 	 				groups.add(groupObject);	 				
 	 			}
  				target.add(table);
+ 				target.add(getFeedbackPanel());
  			} 
  			
  	    };

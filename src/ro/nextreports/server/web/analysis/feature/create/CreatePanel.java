@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
@@ -30,8 +29,7 @@ import ro.nextreports.server.web.common.form.FormContentPanel;
 import ro.nextreports.server.web.common.form.FormPanel;
 import ro.nextreports.server.web.common.table.BaseTable;
 import ro.nextreports.server.web.common.table.LinkPropertyColumn;
-import ro.nextreports.server.web.core.validation.JcrNameValidator;
-
+import ro.nextreports.server.web.core.validation.AnalysisNameValidator;
 
 public class CreatePanel extends FormContentPanel<Analysis> {
 
@@ -64,7 +62,7 @@ public class CreatePanel extends FormContentPanel<Analysis> {
 						
 		add(new Label("name",  new StringResourceModel("CreatePanel.name", this, null)));
 		nameText = new TextField<String>("nameText", new PropertyModel<String>(this, "declaredColumnObject.columnName"));
-		nameText.add(new JcrNameValidator(getString("JcrNameValidator")));
+		nameText.add(new AnalysisNameValidator(getString("JcrNameValidator")));
 		nameText.setOutputMarkupPlaceholderTag(true);
  		add(nameText);
  		
@@ -132,7 +130,7 @@ public class CreatePanel extends FormContentPanel<Analysis> {
         			return;
  				}
  				if (editIndex != -1) {
- 					int index = CreatePanel.this.model.getObject().getDeclaredColumns().indexOf(declaredColumnObject); 					
+ 					int index =  findDeclaredColumnByName(CreatePanel.this.model.getObject().getDeclaredColumns(), declaredColumnObject.getColumnName()); 					
  					if ( (index != -1) && (index != editIndex) ) {
  						error(getString("CreatePanel.duplicateColumn"));	    
 	            		target.add(getFeedbackPanel());
@@ -147,8 +145,9 @@ public class CreatePanel extends FormContentPanel<Analysis> {
  					oldSortIndex = -1;
  					oldGroupIndex = -1;
  					target.add(label);
- 				} else { 	 					
-	 				if (CreatePanel.this.model.getObject().getDeclaredColumns().contains(declaredColumnObject)) {
+ 				} else { 	
+ 					int index = findDeclaredColumnByName(CreatePanel.this.model.getObject().getDeclaredColumns(), declaredColumnObject.getColumnName());
+	 				if (index != -1) {
 	 					error(getString("CreatePanel.duplicateColumn"));	    
 	            		target.add(getFeedbackPanel());
 	        			return;
@@ -270,6 +269,15 @@ public class CreatePanel extends FormContentPanel<Analysis> {
 	}
 	
 	public void onDelete(Analysis analysis, AjaxRequestTarget target) {		
+	}
+	
+	private int findDeclaredColumnByName(List<AnalysisDeclaredColumn> list, String columnName) {
+		for (int i=0, size=list.size(); i<size; i++) {
+			if (list.get(i).getColumnName().equals(columnName)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 }

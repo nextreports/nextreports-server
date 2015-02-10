@@ -110,6 +110,7 @@ public class SortPanel extends FormContentPanel<Analysis> {
 	 				ascending.add(sortObject.getOrder());
 	 			}
  				target.add(table);
+ 				target.add(getFeedbackPanel());
  			} 
  			
  	    };
