@@ -97,9 +97,7 @@ public class SortPanel extends FormContentPanel<Analysis> {
  					}
  					sortProperty.set(editIndex, sortObject.getColumn());
  					ascending.set(editIndex, sortObject.getOrder()); 	
- 					addTextModel.setObject(getString("add")); 					
- 					editIndex = -1;
- 					target.add(label);
+ 					resetEdit(target);
  				} else {
 	 				if (sortProperty.contains(sortObject.getColumn())) {
 	 					error(getString("SortPanel.duplicateColumn"));	    
@@ -129,6 +127,12 @@ public class SortPanel extends FormContentPanel<Analysis> {
 		super.onConfigure();
 		addTextModel.setObject(getString("add"));
     }
+	
+	private void resetEdit(AjaxRequestTarget target) {
+		addTextModel.setObject(getString("add")); 					
+		editIndex = -1;
+		target.add(label);
+	}	
 	
 	private void addTable() {
         List<IColumn<SortObject, String>> columns = new ArrayList<IColumn<SortObject, String>>();
@@ -173,6 +177,7 @@ public class SortPanel extends FormContentPanel<Analysis> {
 					if (upIndex == 1) {
 						changeFirstSortOrder = true;
 					}
+					resetEdit(target);
 	                target.add(table);  
 				}								 
 			}
@@ -190,7 +195,8 @@ public class SortPanel extends FormContentPanel<Analysis> {
 					sortProperty.remove(upIndex);
 					sortProperty.add(upIndex+1, sortObject.getColumn());					
 					ascending.remove(upIndex);
-					ascending.add(upIndex+1, sortObject.getOrder());							
+					ascending.add(upIndex+1, sortObject.getOrder());	
+					resetEdit(target);
 	                target.add(table);  
 				}								 
 			}
@@ -225,6 +231,7 @@ public class SortPanel extends FormContentPanel<Analysis> {
 				}
 				sortProperty.remove(index);
 				ascending.remove(index);
+				resetEdit(target);
                 target.add(table);     
 			}
 		});              

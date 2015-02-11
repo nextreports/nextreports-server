@@ -138,13 +138,7 @@ public class CreatePanel extends FormContentPanel<Analysis> {
  					}
  					 					
  					CreatePanel.this.model.getObject().editDeclaredColumn(editIndex, oldColumnIndex, oldFilterIndex, oldSortIndex, oldGroupIndex, declaredColumnObject);
- 					addTextModel.setObject(getString("add")); 					
- 					editIndex = -1;
- 					oldColumnIndex = -1;
- 					oldFilterIndex = -1;
- 					oldSortIndex = -1;
- 					oldGroupIndex = -1;
- 					target.add(label);
+ 					resetEdit(target);
  				} else { 	
  					int index = findDeclaredColumnByName(CreatePanel.this.model.getObject().getDeclaredColumns(), declaredColumnObject.getColumnName());
 	 				if (index != -1) {
@@ -178,6 +172,16 @@ public class CreatePanel extends FormContentPanel<Analysis> {
 		super.onConfigure();
 		addTextModel.setObject(getString("add"));
     }
+	
+	private void resetEdit(AjaxRequestTarget target) {
+		addTextModel.setObject(getString("add"));
+		editIndex = -1;
+		oldColumnIndex = -1;
+		oldFilterIndex = -1;
+		oldSortIndex = -1;
+		oldGroupIndex = -1;
+		target.add(label);
+	}
 	
 	private void addTable() {
         List<IColumn<AnalysisDeclaredColumn, String>> columns = new ArrayList<IColumn<AnalysisDeclaredColumn, String>>();
@@ -249,6 +253,7 @@ public class CreatePanel extends FormContentPanel<Analysis> {
 			public void onClick(Item item, String componentId, IModel model, AjaxRequestTarget target) {										
 				AnalysisDeclaredColumn declaredColumnObject = (AnalysisDeclaredColumn) model.getObject();																																								
 				CreatePanel.this.model.getObject().deleteDeclaredColumn(declaredColumnObject);
+				resetEdit(target);
 				target.add(table);
 				onDelete(getAnalysis(), target);                
 			}

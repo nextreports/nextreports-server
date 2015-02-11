@@ -31,6 +31,7 @@ import ro.nextreports.server.web.common.form.FormContentPanel;
 import ro.nextreports.server.web.common.form.FormPanel;
 import ro.nextreports.server.web.common.table.BaseTable;
 import ro.nextreports.server.web.common.table.LinkPropertyColumn;
+import ro.nextreports.server.web.core.validation.AnalysisFilterValidator;
 
 public class FilterPanel extends FormContentPanel<Analysis> {
 	
@@ -83,13 +84,19 @@ public class FilterPanel extends FormContentPanel<Analysis> {
  		add(operatorChoice); 
  		
  		add(new Label("value", new StringResourceModel("FilterPanel.value", this, null)));
- 		valueText = new TextField<String>("valueText", new PropertyModel<String>(this, "filterObject.value"));
+ 		valueText = new TextField<String>("valueText", new PropertyModel<String>(this, "filterObject.value")); 		
  		valueText.setOutputMarkupPlaceholderTag(true);
  		add(valueText);
  		
  		AjaxSubmitLink addLink = new AjaxSubmitLink("addLink") {						
  			@Override
- 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) { 				
+ 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) { 	
+ 				if (nullNotAllowed()) {
+ 					error(getString("AnalysisFilterValidator"));	    
+            		target.add(getFeedbackPanel());
+        			return;
+ 				}
+ 				
  				if (editIndex != -1) {
  					int index = filters.indexOf(filterObject); 					
  					if ( (index != -1) && (index != editIndex) ) {
@@ -99,9 +106,7 @@ public class FilterPanel extends FormContentPanel<Analysis> {
  					}
  					
  					filters.set(editIndex, filterObject); 					 	
- 					addTextModel.setObject(getString("add")); 					
- 					editIndex = -1;
- 					target.add(label);
+ 					resetEdit(target);
  				} else { 	 					
 	 				if (filters.contains(filterObject)) {
 	 					error(getString("FilterPanel.duplicateFilter"));	    
@@ -111,6 +116,7 @@ public class FilterPanel extends FormContentPanel<Analysis> {
 	 				filters.add(filterObject.clone());	
 	 			}
  				target.add(table);
+ 				target.add(getFeedbackPanel());
  			} 
  			
  	    };
@@ -128,6 +134,20 @@ public class FilterPanel extends FormContentPanel<Analysis> {
 		super.onConfigure();
 		addTextModel.setObject(getString("add"));
     }
+	
+	private void resetEdit(AjaxRequestTarget target) {
+		addTextModel.setObject(getString("add")); 					
+		editIndex = -1;
+		target.add(label);
+	}
+	
+	private boolean nullNotAllowed() {
+		if (!Operator.isUnar(filterObject.getOperator())) {
+			return (filterObject.getValue() == null);				
+		} else {
+			return false;
+		}
+	}
 	
 	private void addTable() {
         List<IColumn<AnalysisFilter, String>> columns = new ArrayList<IColumn<AnalysisFilter, String>>();
@@ -195,7 +215,9 @@ public class FilterPanel extends FormContentPanel<Analysis> {
 			public void onClick(Item item, String componentId, IModel model, AjaxRequestTarget target) {										
 				AnalysisFilter filterObject = (AnalysisFilter) model.getObject();																																
 				int index = filters.indexOf(filterObject);				
-				filters.remove(index);				
+				filters.remove(index);	
+				// if we are in edit mode, clear
+				resetEdit(target);
                 target.add(table);     
 			}
 		});

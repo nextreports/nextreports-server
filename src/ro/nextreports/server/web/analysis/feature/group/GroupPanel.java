@@ -61,9 +61,7 @@ public class GroupPanel extends FormContentPanel<Analysis> {
 	        			return;
  					} 					
  					groups.set(editIndex, groupObject); 					 	
- 					addTextModel.setObject(getString("add")); 					
- 					editIndex = -1;
- 					target.add(label);
+ 					resetEdit(target);
  				} else {
 	 				if (groups.contains(groupObject)) {
 	 					error(getString("GroupPanel.duplicateGroup"));	    
@@ -92,6 +90,12 @@ public class GroupPanel extends FormContentPanel<Analysis> {
 		super.onConfigure();
 		addTextModel.setObject(getString("add"));
     }
+	
+	private void resetEdit(AjaxRequestTarget target) {
+		addTextModel.setObject(getString("add")); 					
+		editIndex = -1;
+		target.add(label);
+	}
 	
 	private void addTable() {
         List<IColumn<String, String>> columns = new ArrayList<IColumn<String, String>>();
@@ -128,7 +132,8 @@ public class GroupPanel extends FormContentPanel<Analysis> {
 				int upIndex = groups.indexOf(groupObject);
 				if (upIndex > 0) {
 					groups.remove(upIndex);
-					groups.add(upIndex-1, groupObject);																
+					groups.add(upIndex-1, groupObject);	
+					resetEdit(target);
 	                target.add(table);  
 				}								 
 			}
@@ -144,7 +149,8 @@ public class GroupPanel extends FormContentPanel<Analysis> {
 				int downIndex = groups.indexOf(groupObject);
 				if (downIndex < groups.size()-1) {
 					groups.remove(downIndex);
-					groups.add(downIndex+1, groupObject);													
+					groups.add(downIndex+1, groupObject);
+					resetEdit(target);
 	                target.add(table);  
 				}								 
 			}
@@ -173,7 +179,8 @@ public class GroupPanel extends FormContentPanel<Analysis> {
 			public void onClick(Item item, String componentId, IModel model, AjaxRequestTarget target) {										
 				String groupObject = (String) model.getObject();																																
 				int index = groups.indexOf(groupObject);				
-				groups.remove(index);				
+				groups.remove(index);	
+				resetEdit(target);
                 target.add(table);     
 			}
 		});
