@@ -54,7 +54,6 @@ import org.slf4j.LoggerFactory;
 
 import ro.nextreports.engine.Report;
 import ro.nextreports.engine.i18n.I18nLanguage;
-import ro.nextreports.engine.i18n.I18nUtil;
 import ro.nextreports.engine.queryexec.IdName;
 import ro.nextreports.engine.queryexec.QueryParameter;
 import ro.nextreports.engine.util.DateUtil;
@@ -95,6 +94,7 @@ public abstract class ParameterRuntimePanel extends Panel {
     private Map<QueryParameter, Component> paramComponentsMap;
 
     protected boolean runNow;    
+    private String errorMessage;
 
     // In Next, for source parameters default values are not the entire objects (id, name), but only the ids
     // so we will have to look at selection if the default values can be found in the list of the parameter values
@@ -183,7 +183,7 @@ public abstract class ParameterRuntimePanel extends Panel {
 			}
 		}
         
-        if (!runtimeModel.isEdit()) {
+        if (!runtimeModel.isEdit() && (errorMessage == null)) {
             // if some parameters initialized have default values, their dependent parameters
             // have to be initialized too
             for (QueryParameter qp : depParameters) {
@@ -205,6 +205,10 @@ public abstract class ParameterRuntimePanel extends Panel {
         add(listView);
 
         addWicketComponents();
+        
+        if (errorMessage != null) {
+        	error(errorMessage);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -458,19 +462,22 @@ public abstract class ParameterRuntimePanel extends Panel {
 
         List<IdName> values = new ArrayList<IdName>();
         // set in the model only the values for parameters which are not dependent
-        if ((parameter.getSource() != null) && (parameter.getSource().trim().length() > 0)
+        if ((errorMessage == null) && (parameter.getSource() != null) && (parameter.getSource().trim().length() > 0)
                 && !parameter.isDependent()) {
             try {
                 values = dataSourceService.getParameterValues(getDataSource(), parameter);
             } catch (Exception e) {
                 e.printStackTrace();
-                LOG.error("Get parameter values for : " + parameter.getName() + "  > " + e.getMessage(), e);
+                errorMessage = "Get parameter values for : " + parameter.getName() + "  > " + e.getMessage();
+                LOG.error(errorMessage, e);
                 error(e.getMessage());                
             }
         }
         runtimeModel.setParameterValues(values);                
 
-        initDefaultValues(runtimeModel, parameter, values);
+        if (errorMessage == null) {
+        	initDefaultValues(runtimeModel, parameter, values);
+        }
 
         return runtimeModel;
     }
@@ -485,7 +492,8 @@ public abstract class ParameterRuntimePanel extends Panel {
                 defaultValues = dataSourceService.getDefaultSourceValues(getDataSource(), parameter);
             } catch (Exception e) {
                 e.printStackTrace();
-                LOG.error("Get default source values for parameter : " + parameter.getName() + "  > " + e.getMessage(), e);
+                errorMessage = "Get default source values for parameter : " + parameter.getName() + "  > " + e.getMessage();
+                LOG.error(errorMessage, e);
                 error(e.getMessage());
             }
         }
