@@ -57,9 +57,8 @@ public class ColumnsPanel extends FormContentPanel<Analysis> {
 	    add(new AjaxLink<Analysis>("selectAll") {						
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				columns = new ArrayList<String>(choices);
-				//System.out.println("*** select all = " + choices);				
-				target.add(listChoice);
+				columns = new ArrayList<String>(choices);				
+				target.add(ColumnsPanel.this);
 			}
 	    });	
 	    
@@ -67,7 +66,7 @@ public class ColumnsPanel extends FormContentPanel<Analysis> {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				columns = new ArrayList<String>();								
-				target.add(listChoice);
+				target.add(ColumnsPanel.this);
 			}
 	    });	
 	    
