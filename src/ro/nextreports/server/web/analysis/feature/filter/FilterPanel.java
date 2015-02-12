@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
@@ -31,7 +32,6 @@ import ro.nextreports.server.web.common.form.FormContentPanel;
 import ro.nextreports.server.web.common.form.FormPanel;
 import ro.nextreports.server.web.common.table.BaseTable;
 import ro.nextreports.server.web.common.table.LinkPropertyColumn;
-import ro.nextreports.server.web.core.validation.AnalysisFilterValidator;
 
 public class FilterPanel extends FormContentPanel<Analysis> {
 	
@@ -43,6 +43,7 @@ public class FilterPanel extends FormContentPanel<Analysis> {
 	private FilterObjectDataProvider provider;
 	private DropDownChoice<String> columnChoice;
 	private DropDownChoice<String> operatorChoice;
+	private Label valueLabel ;
 	private TextField valueText;
 	private int editIndex = -1;
 	private IModel<String> addTextModel;
@@ -80,13 +81,23 @@ public class FilterPanel extends FormContentPanel<Analysis> {
 		operatorChoice = new DropDownChoice<String>("operatorChoice", 
 				new PropertyModel<String>(this, "filterObject.operator"), Arrays.asList(Operator.operators));
 		operatorChoice.setOutputMarkupPlaceholderTag(true);
-		operatorChoice.setRequired(true);
+		operatorChoice.setRequired(true);		
  		add(operatorChoice); 
  		
- 		add(new Label("value", new StringResourceModel("FilterPanel.value", this, null)));
+ 		valueLabel = new Label("value", new StringResourceModel("FilterPanel.value", this, null));
+ 		valueLabel.setOutputMarkupPlaceholderTag(true);
+ 		add(valueLabel);
  		valueText = new TextField<String>("valueText", new PropertyModel<String>(this, "filterObject.value")); 		
  		valueText.setOutputMarkupPlaceholderTag(true);
  		add(valueText);
+ 		
+ 		operatorChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+			
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {			
+				setValueVisibility(target);
+			}
+		});
  		
  		AjaxSubmitLink addLink = new AjaxSubmitLink("addLink") {						
  			@Override
@@ -139,6 +150,14 @@ public class FilterPanel extends FormContentPanel<Analysis> {
 		addTextModel.setObject(getString("add")); 					
 		editIndex = -1;
 		target.add(label);
+	}
+	
+	private void setValueVisibility(AjaxRequestTarget target) {
+		boolean visible = !Operator.isUnar(filterObject.getOperator());
+		valueLabel.setVisible(visible);
+		valueText.setVisible(visible);			
+		target.add(valueLabel);
+		target.add(valueText);
 	}
 	
 	private boolean nullNotAllowed() {
@@ -200,6 +219,7 @@ public class FilterPanel extends FormContentPanel<Analysis> {
 				editIndex = filters.indexOf(filterObject);
 				FilterPanel.this.filterObject = filterObject;	
 				addTextModel.setObject(getString("edit"));
+				setValueVisibility(target);
 				target.add(columnChoice);
 				target.add(operatorChoice);
 				target.add(valueText);
