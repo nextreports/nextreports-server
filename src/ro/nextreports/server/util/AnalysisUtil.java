@@ -10,8 +10,16 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Iterator;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
+import org.apache.wicket.model.StringResourceModel;
+
+import ro.nextreports.server.domain.Analysis;
+import ro.nextreports.server.domain.AnalysisDeclaredColumn;
 import ro.nextreports.server.domain.AnalysisFilter;
+import ro.nextreports.server.domain.Settings;
+import ro.nextreports.server.web.language.LanguageManager;
 
 public class AnalysisUtil {
 
@@ -233,6 +241,93 @@ public class AnalysisUtil {
 			}
 		}
 		return result;
+	}
+	
+	public static String getAnalysisInfo(Analysis analysis, int restrictionNo, Settings settings) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(getString("CreatePanel.create", settings));
+		sb.append(": ");
+		for (int i=0, size=analysis.getDeclaredColumns().size(); i<size; i++) {
+			AnalysisDeclaredColumn col = analysis.getDeclaredColumns().get(i);
+			sb.append(col.getColumnName());
+			if (i<size-1) {
+				sb.append(",");
+				if (restrictionNo-1 == i) {
+					sb.append("...");
+					break;
+				}
+			}			
+		}
+		
+		
+		sb.append("\n");
+		sb.append(getString("ColumnsPanel.select", settings));
+		sb.append(": ");
+		for (int i=0, size=analysis.getSelectedColumns().size(); i<size; i++) {			
+			sb.append(analysis.getSelectedColumns().get(i));
+			if (i<size-1) {
+				sb.append(",");
+				if (restrictionNo-1 == i) {
+					sb.append("...");
+					break;
+				}
+			}
+		}
+		
+		sb.append("\n");
+		sb.append(getString("SortPanel.sort",settings));
+		sb.append(": ");
+		for (int i=0, size=analysis.getSortProperty().size(); i<size; i++) {			
+			sb.append(analysis.getSortProperty().get(i));
+			if (i<size-1) {
+				sb.append(",");
+				if (restrictionNo-1 == i) {
+					sb.append("...");
+					break;
+				}
+			}
+		}
+		
+		sb.append("\n");
+		sb.append(getString("FilterPanel.filter", settings));
+		sb.append(": ");
+		for (int i=0, size=analysis.getFilters().size(); i<size; i++) {
+			AnalysisFilter filter = analysis.getFilters().get(i);
+			sb.append(filter.getColumn());
+			sb.append(" ");
+			sb.append(filter.getOperator());
+			sb.append(" ");
+			sb.append(filter.getValue());
+			if (i<size-1) {
+				sb.append(",");
+				if (restrictionNo-1 == i) {
+					sb.append("...");
+					break;
+				}
+			}
+		}
+		
+		sb.append("\n");
+		sb.append(getString("GroupPanel.group", settings));
+		sb.append(": ");
+		for (int i=0, size=analysis.getGroups().size(); i<size; i++) {			
+			sb.append(analysis.getGroups().get(i));
+			if (i<size-1) {
+				sb.append(",");
+				if (restrictionNo-1 == i) {
+					sb.append("...");
+					break;
+				}
+			}
+		}
+		
+		return sb.toString();
+	}
+	
+	private static String getString(String key, Settings settings) {
+		Locale locale = LanguageManager.getInstance().getLocale(settings.getLanguage());
+		ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);
+		return bundle.getString(key);
 	}
 
 }

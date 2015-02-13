@@ -20,11 +20,16 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ro.nextreports.server.domain.Analysis;
+import ro.nextreports.server.service.StorageService;
+import ro.nextreports.server.util.AnalysisUtil;
 import ro.nextreports.server.web.analysis.util.DatabaseUtil;
+import ro.nextreports.server.web.common.behavior.SimpleTooltipBehavior;
 import ro.nextreports.server.web.common.form.FormContentPanel;
 import ro.nextreports.server.web.common.form.FormPanel;
 import ro.nextreports.server.web.common.menu.MenuItem;
@@ -48,6 +53,9 @@ public class SortPanel extends FormContentPanel<Analysis> {
 	private int editIndex = -1;
 	private IModel<String> addTextModel;
 	
+	@SpringBean
+    private StorageService storageService;   
+	
 	public SortPanel(IModel<Analysis> model) {		
 		super(FormPanel.CONTENT_ID);				
 		
@@ -56,7 +64,11 @@ public class SortPanel extends FormContentPanel<Analysis> {
 		
 		sortObject = new SortObject();
 		sortObject.setColumn(model.getObject().getSimpleColumns().get(0));
-		sortObject.setOrder(Boolean.TRUE);					 
+		sortObject.setOrder(Boolean.TRUE);		
+		
+		ContextImage urlImage = new ContextImage("infoImage","images/information.png");        
+        urlImage.add(new SimpleTooltipBehavior(AnalysisUtil.getAnalysisInfo(model.getObject(), 5, storageService.getSettings())));
+        add(urlImage);
 		
 		add(new Label("column", new StringResourceModel("SortPanel.column", null, null)));
 		columnChoice = new DropDownChoice<String>("columnChoice", 

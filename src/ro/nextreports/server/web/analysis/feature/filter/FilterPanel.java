@@ -22,12 +22,17 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ro.nextreports.engine.querybuilder.sql.Operator;
 import ro.nextreports.server.domain.Analysis;
 import ro.nextreports.server.domain.AnalysisFilter;
+import ro.nextreports.server.service.StorageService;
+import ro.nextreports.server.util.AnalysisUtil;
 import ro.nextreports.server.web.analysis.util.DatabaseUtil;
+import ro.nextreports.server.web.common.behavior.SimpleTooltipBehavior;
 import ro.nextreports.server.web.common.form.FormContentPanel;
 import ro.nextreports.server.web.common.form.FormPanel;
 import ro.nextreports.server.web.common.table.BaseTable;
@@ -47,6 +52,9 @@ public class FilterPanel extends FormContentPanel<Analysis> {
 	private TextField valueText;
 	private int editIndex = -1;
 	private IModel<String> addTextModel;
+	
+	@SpringBean
+    private StorageService storageService;   
 		
 	public FilterPanel(IModel<Analysis> model) {		
 		super(FormPanel.CONTENT_ID);	
@@ -59,6 +67,10 @@ public class FilterPanel extends FormContentPanel<Analysis> {
 		
 		filters = new ArrayList<AnalysisFilter>();
 		filters.addAll(model.getObject().getFilters());
+		
+		ContextImage urlImage = new ContextImage("infoImage","images/information.png");        
+        urlImage.add(new SimpleTooltipBehavior(AnalysisUtil.getAnalysisInfo(model.getObject(), 5, storageService.getSettings())));
+        add(urlImage);
 		
 		add(new Label("info", new StringResourceModel("FilterPanel.info", this, null)));
 		

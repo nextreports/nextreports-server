@@ -11,12 +11,17 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ro.nextreports.server.domain.Analysis;
+import ro.nextreports.server.service.StorageService;
+import ro.nextreports.server.util.AnalysisUtil;
 import ro.nextreports.server.web.analysis.util.DatabaseUtil;
+import ro.nextreports.server.web.common.behavior.SimpleTooltipBehavior;
 import ro.nextreports.server.web.common.form.FormContentPanel;
 import ro.nextreports.server.web.common.form.FormPanel;
 
@@ -25,6 +30,9 @@ public class ColumnsPanel extends FormContentPanel<Analysis> {
 	private List<String> choices;
 	public ArrayList<String> columns = new ArrayList<String>();
 	private ColumnsOrderBehavior orderBehavior;
+	
+	@SpringBean
+    private StorageService storageService;   
 		
 	public ColumnsPanel(IModel<Analysis> model) {		
 		super(FormPanel.CONTENT_ID);
@@ -33,6 +41,10 @@ public class ColumnsPanel extends FormContentPanel<Analysis> {
 		
 		setRenderBodyOnly(false);
 		setOutputMarkupId(true);
+		
+		ContextImage urlImage = new ContextImage("infoImage","images/information.png");        
+        urlImage.add(new SimpleTooltipBehavior(AnalysisUtil.getAnalysisInfo(model.getObject(), 5, storageService.getSettings())));
+        add(urlImage);
 	 
 		columns = model.getObject().getSelectedColumns();
 		choices = new LinkedList<String>();				

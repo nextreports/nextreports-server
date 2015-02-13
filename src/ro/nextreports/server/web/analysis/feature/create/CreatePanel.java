@@ -22,11 +22,16 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ro.nextreports.server.domain.Analysis;
 import ro.nextreports.server.domain.AnalysisDeclaredColumn;
+import ro.nextreports.server.service.StorageService;
+import ro.nextreports.server.util.AnalysisUtil;
 import ro.nextreports.server.web.analysis.util.DatabaseUtil;
+import ro.nextreports.server.web.common.behavior.SimpleTooltipBehavior;
 import ro.nextreports.server.web.common.form.FormContentPanel;
 import ro.nextreports.server.web.common.form.FormPanel;
 import ro.nextreports.server.web.common.table.BaseTable;
@@ -52,10 +57,17 @@ public class CreatePanel extends FormContentPanel<Analysis> {
 	private int oldSortIndex = -1;
 	private int oldGroupIndex = -1;
 	private IModel<String> addTextModel;
+	
+	@SpringBean
+    private StorageService storageService;   
 		
 	public CreatePanel(IModel<Analysis> model) {		
 		super(FormPanel.CONTENT_ID);	
 		this.model = model;		
+				
+		ContextImage urlImage = new ContextImage("infoImage","images/information.png");        
+        urlImage.add(new SimpleTooltipBehavior(AnalysisUtil.getAnalysisInfo(model.getObject(), 5, storageService.getSettings())));
+        add(urlImage);
 		
 		declaredColumnObject = new AnalysisDeclaredColumn();
 		declaredColumnObject.setType("java.lang.String");	
