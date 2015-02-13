@@ -66,7 +66,7 @@ public class AnalysisDataProvider extends SortableDataProvider<AnalysisRow, Stri
 					}
 					// if sort property was deleted/edited we do not add it again!
 					// and we set the column sort to first sort from sortProperty list
-					if (!analysis.isFirstSortRemoved()) {
+					if (!analysis.isFirstSortRemoved() || (sortProperty.size() == 0)) {
 						if (property != null) {
 							sortProperty.add(0, property);
 							if (analysis.isChangeFirstSortOrder()) {
