@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
@@ -71,25 +73,32 @@ public class CreatePanel extends FormContentPanel<Analysis> {
 		columnChoice.setNullValid(false);		
  		add(columnChoice); 
  		
- 		DropDownChoice<String> aggChoice = new DropDownChoice<String>("aggChoice", new PropertyModel<String>(this, "selectedAgg"), DatabaseUtil.aggregates);
+ 		final DropDownChoice<String> aggChoice = new DropDownChoice<String>("aggChoice", new PropertyModel<String>(this, "selectedAgg"), DatabaseUtil.aggregates);
  		aggChoice.setOutputMarkupPlaceholderTag(true);
- 		aggChoice.setNullValid(true);		
+ 		aggChoice.setNullValid(true);	
+ 		// needed for addColumn AjaxLink
+ 		aggChoice.add(new AjaxFormComponentUpdatingBehavior("onChange") {
+ 		      @Override
+ 		      protected void onUpdate(AjaxRequestTarget target) {
+ 		    	 selectedAgg = (String) getFormComponent().getConvertedInput();
+ 		      }
+ 		 });
  		add(aggChoice); 
  		
- 		AjaxSubmitLink addColumn = new AjaxSubmitLink("addColumn") {
+ 		AjaxLink addColumn = new AjaxLink("addColumn") {			
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {				
+			public void onClick(AjaxRequestTarget target) {
 				String newText = declaredColumnObject.getExpression();
 				if (newText == null) {
 					newText = "";
-				}						
+				}							
 				if (selectedAgg == null) {
 					newText = newText + " " + selectedColumn;
 				} else {
 					newText = newText + " " + selectedAgg + "(" + selectedColumn + ")";
 				}				
 				declaredColumnObject.setExpression(newText);	
-				target.add(expressionText);
+				target.add(expressionText);				
 			} 			
  		};
  		add(addColumn);
