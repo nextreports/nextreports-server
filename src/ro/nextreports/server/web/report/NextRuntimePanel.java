@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
@@ -69,15 +70,19 @@ public class NextRuntimePanel extends DynamicParameterRuntimePanel {
     }
 
     @SuppressWarnings("unchecked")
-    public void addWicketComponents() {    	    
+    public void addWicketComponents() {    	        	    	
     	
-    	//@todo analysis remove (see html)
-//    	final AnalysisRuntimePanel analysisPanel = new AnalysisRuntimePanel("analysisPanel",  (ReportRuntimeModel)runtimeModel);
-//    	analysisPanel.setOutputMarkupPlaceholderTag(true);
-//    	analysisPanel.setVisible(false);
-//    	add(analysisPanel);
-    	
-        final DropDownChoice exportChoice = new DropDownChoice("exportType", new PropertyModel(runtimeModel, "exportType"), typeList);
+        final DropDownChoice<String> exportChoice = new DropDownChoice<String>("exportType", new PropertyModel<String>(runtimeModel, "exportType"), typeList,
+        		new ChoiceRenderer<String>() {
+					@Override
+					public Object getDisplayValue(String name) {
+						if (name.equals(ReportConstants.ETL_FORMAT)) {
+							return getString("Analysis.source");
+						} else {
+							return name;
+						}
+					}
+		});
         exportChoice.add(new AjaxFormComponentUpdatingBehavior("onChange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
