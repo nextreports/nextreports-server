@@ -49,6 +49,7 @@ import ro.nextreports.engine.util.ObjectCloner;
 import ro.nextreports.server.domain.Analysis;
 import ro.nextreports.server.service.AnalysisService;
 import ro.nextreports.server.service.SecurityService;
+import ro.nextreports.server.util.AnalysisUtil;
 import ro.nextreports.server.util.PermissionUtil;
 import ro.nextreports.server.web.NextServerSession;
 import ro.nextreports.server.web.analysis.feature.create.CreatePanel;
@@ -382,8 +383,21 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
 	                	ModalWindow.closeCurrent(target);	                    
 	                	Analysis analysis = AnalysisPanel.this.getModel().getObject();	                	
 	                	analysis.setGroups(getGroups());
-	                	dataProvider.reset();
-	                    target.add(AnalysisPanel.this);
+	                	
+	                	// keep as selected only columns from groups and created columns with aggregate functions
+	                	List<String> keptColumns = new ArrayList<String>();
+	                	for (String col : analysis.getColumns()) {
+	                		if (getGroups().contains(col) || AnalysisUtil.isAggregateColumn(col)) {
+	                			keptColumns.add(col);
+	                		}	                		
+	                	}	                	
+	                	List<Boolean> sel = new ArrayList<Boolean>();
+	                	for (String column : analysis.getColumns()) {
+	                		sel.add(keptColumns.contains(column)); 
+	                	}		                	
+	                	analysis.setSelected(sel);
+	                		                	
+	                	changeDataProvider(AnalysisPanel.this.getModel(), target);	    
 	                }
 	            };
 			}			
