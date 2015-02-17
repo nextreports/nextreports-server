@@ -77,7 +77,7 @@ public class TableRendererPanel extends GenericPanel<Report> {
 		super(id, model);
 		this.drillContext = drillContext;	
 		
-		if (drillContext.getColumn() > 0) {
+		if ((drillContext != null) && (drillContext.getColumn() > 0)) {
 			ro.nextreports.engine.Report rep = NextUtil.getNextReport(storageService.getSettings(), model.getObject());
 			drillPattern = NextUtil.getDetailColumnPattern(rep, drillContext.getColumn()-1);			
 		}
