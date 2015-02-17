@@ -61,6 +61,11 @@ public class NextUtil {
         NextContent reportContent = (NextContent) report.getContent();
         return getNextReport(settings, reportContent);
     }
+    
+    public static Report getNextReport(Settings settings, ro.nextreports.server.domain.Chart chart) {
+        ChartContent reportContent = (ChartContent) chart.getContent();
+        return getChart(reportContent).getReport();
+    }
 
     public static Report getNextReport(Settings settings, NextContent reportContent) {
         try {
