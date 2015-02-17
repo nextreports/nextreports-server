@@ -3,10 +3,14 @@
         <img wicket:id="toggle" class="dashboard-toggle"/>                      
         <a wicket:id="addWidget" class="button" style="margin-right: 2px;"><wicket:message key="DashboardPanel.add">Add widget</wicket:message></a>
         <a wicket:id="refresh" class="button" style="margin-right: 2px;"><wicket:message key="DashboardPanel.refresh">Refresh</wicket:message></a> 
-        <a wicket:id="globalSettings" class="button"><wicket:message key="DashboardPanel.global">Global settings</wicket:message></a>        
+        <a wicket:id="globalSettings" class="button" style="margin-right: 2px;"><wicket:message key="DashboardPanel.global">Global settings</wicket:message></a>        
+        <a wicket:id="pdf" class="button"><wicket:message key="DashboardPanel.pdf">Pdf</wicket:message></a>
     </div>
-    <div wicket:id="columns">
-        <div wicket:id="column"></div>
+    <!-- needed for pdf generation -->
+    <div id="dashboardCapture">
+    	<div wicket:id="columns">
+        	<div wicket:id="column"></div>
+    	</div>
     </div>
 </wicket:panel>
     
