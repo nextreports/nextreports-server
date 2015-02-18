@@ -92,9 +92,11 @@ function onResize() {
     if (url.indexOf("dashboards") !== -1) {
     	// dashboards integration url -> do not take header height
     	$(".dashboard").css({'height': $height + 238});
+    	$(".dashboardCapture").css({'height': $height + 205});
     	$(".dashboardNavigation").css({'height': $height + 205});
     } else {
     	$(".dashboard").css({'height': $height + 65});
+    	$(".dashboardCapture").css({'height': $height + 32});
     	$(".dashboardNavigation").css({'height': $height + 32});
     }
     $(".analysis").css({'height': $height + 65});

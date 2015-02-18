@@ -527,7 +527,7 @@ public class DashboardPanel extends GenericPanel<Dashboard> {
 				sb.append("var doc = new jsPDF('l', 'mm');"); 		
 				//sb.append("var list = $('li[id^=\"widget\"]');");
 				//sb.append("pdfSettings.position = 1;");
-				sb.append("var list = $('div[class=\"dashboard\"]');");
+				sb.append("var list = $('div[class=\"dashboardCapture\"]');");
 				sb.append("var pdfSettings = new Object();");
 				sb.append("pdfSettings.doc = doc;");
 				sb.append("pdfSettings.elements = list;");		

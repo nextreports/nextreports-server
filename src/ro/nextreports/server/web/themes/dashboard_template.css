@@ -7,6 +7,12 @@
     padding-right:5px;
 }
 
+.dashboardCapture {
+	display: inline-block;
+	width: 100%;
+	overflow: auto;
+}
+
 .left {
 	float: left;
 }
