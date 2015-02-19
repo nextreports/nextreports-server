@@ -1630,10 +1630,15 @@ div.w_content {
 	color: ${btn-text-color} !important;
 }
 
+.navigator .goto a span {
+	display: block;
+}
+
 .navigator .goto > span {
 	font-weight: bold;
 	color: ${btn-text-color} !important;
 	text-decoration: underline;
+	display: block;	
 }
 
 table.actions-grid tr.navigation td.actions-col a, .actions-grid .navigation a {

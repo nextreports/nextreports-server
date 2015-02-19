@@ -1627,13 +1627,18 @@ div.w_content {
 }
 
 .navigator .goto a {
-	color: #ffffff !important;
+	color: #ffffff !important;	
+}
+
+.navigator .goto a span {
+	display: block;
 }
 
 .navigator .goto > span {
 	font-weight: bold;
 	color: #ffffff !important;
 	text-decoration: underline;
+	display: block;	
 }
 
 table.actions-grid tr.navigation td.actions-col a, .actions-grid .navigation a {
