@@ -82,7 +82,13 @@ public class CreatePanel extends FormContentPanel<Analysis> {
  		
  		DropDownChoice<String> columnChoice = new DropDownChoice<String>("columnChoice", new PropertyModel<String>(this, "selectedColumn"), model.getObject().getColumns());
 		columnChoice.setOutputMarkupPlaceholderTag(true);
-		columnChoice.setNullValid(false);		
+		columnChoice.setNullValid(false);	
+		columnChoice.add(new AjaxFormComponentUpdatingBehavior("onChange") {
+		      @Override
+		      protected void onUpdate(AjaxRequestTarget target) {
+		    	  selectedColumn = (String) getFormComponent().getConvertedInput();
+		      }
+		 });
  		add(columnChoice); 
  		
  		final DropDownChoice<String> aggChoice = new DropDownChoice<String>("aggChoice", new PropertyModel<String>(this, "selectedAgg"), DatabaseUtil.aggregates);
