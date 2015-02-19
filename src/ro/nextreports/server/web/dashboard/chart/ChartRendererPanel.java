@@ -37,14 +37,17 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.DrillEntityContext;
+import ro.nextreports.server.exception.NotFoundException;
 import ro.nextreports.server.report.next.NextUtil;
 import ro.nextreports.server.service.ChartService;
+import ro.nextreports.server.service.DashboardService;
 import ro.nextreports.server.util.ChartUtil;
 import ro.nextreports.server.web.NextServerApplication;
 
@@ -75,6 +78,9 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 	
 	@SpringBean
 	private ChartService chartService;
+	
+	@SpringBean
+	private DashboardService dashboardService;
 		
 	public ChartRendererPanel(String id, ChartWidget widget, DrillEntityContext drillContext, boolean zoom) {
 		this(id, new Model<Chart>((Chart)widget.getEntity()), widget, drillContext, zoom, null, null, null);
@@ -88,7 +94,7 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 		this(id, new Model<Chart>((Chart)widget.getEntity()), widget, drillContext, zoom, width, height, null);
 	}
 	
-	public ChartRendererPanel(String id, ChartWidget widget, DrillEntityContext drillContext, boolean zoom, String width, String height, Map<String,Object> urlQueryParameters) {
+	public ChartRendererPanel(String id, ChartWidget widget, DrillEntityContext drillContext, boolean zoom, String width, String height, Map<String,Object> urlQueryParameters) {		
 		this(id, new Model<Chart>((Chart)widget.getEntity()), widget, drillContext, zoom, width, height, urlQueryParameters);
 	}
 	
@@ -168,7 +174,7 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 		
 		public ChartModel(IModel<Chart> model, ChartWidget widget, boolean isHTML5) {
 			this.model = model;
-			this.widget = widget;	
+			this.widget = widget;
 			this.isHTML5 = isHTML5;
 		}
 		
@@ -186,7 +192,7 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 				if (drillContext == null) {							
 					if (widget == null) {											
 						return chartService.getJsonData(model.getObject(), urlQueryParameters, isHTML5);						
-					} else {										
+					} else {
 						return chartService.getJsonData(widget, urlQueryParameters, isHTML5);						
 					}
 				}
@@ -238,10 +244,10 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 	
     private class HTML5Behavior extends AbstractDefaultAjaxBehavior {
 	    	
-	    	private static final long serialVersionUID = 1L;	    					    		    
+	    	private static final long serialVersionUID = 1L;		    	
 	    	    			
 			public HTML5Behavior() {
-				super();																
+				super();
 			}
 
 			@Override
@@ -268,16 +274,27 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 
 			@Override
 			protected void respond(AjaxRequestTarget target) {
-				String param = getRequest().getRequestParameters().getParameterValue(PARAM).toString();					
-				//System.out.println("--->  "+param);	
+				String param = getRequest().getRequestParameters().getParameterValue(PARAM).toString();		
+				StringValue widgetIdString = getRequest().getRequestParameters().getParameterValue("id");
+				if (widgetIdString != null) {
+					String widgetId = widgetIdString.toString();
+					if (widgetId != null) {	
+						// for iframe we get widget id from url!!! 
+						try {
+							widget = (ChartWidget)dashboardService.getWidgetById(widgetId);
+						} catch (NotFoundException e) {														
+							LOG.error(e.getMessage(), e);
+						}
+					}
+				}
+					
 				// behavior is called on any refresh, we have to call it only once 
 				// (otherwise the panel will be replaced in the same time the old one is refreshed)
 				boolean isHTML5 = true;
 				if (isHTML5String.isEmpty()) {
 					isHTML5String = param;
 					isHTML5 = Boolean.parseBoolean(param);
-				}									
-				
+				}
 				final ChartModel chartModel = new ChartModel(model, widget, isHTML5);														
 				
 				// TODO put width, height in settings

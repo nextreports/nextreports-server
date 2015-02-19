@@ -58,10 +58,10 @@ public class WidgetWebPage extends WebPage {
 			add(new WidgetErrorView("widget", null, new Exception("You are not allowed to see iframe if you are not logged!")));
 			return;
 		}
-						
+							
 		// TODO test for id parameter
 		String widgetId = pageParameters.get("id").toString();
-		//System.out.println("widgetId = " + widgetId);
+		//System.out.println("################### widgetId = " + widgetId);
 		
 		if (iframeSettings.isUseAuthentication()) {			
 			try {
@@ -94,7 +94,7 @@ public class WidgetWebPage extends WebPage {
 		// multiple values are between brackets
 		Map<String, Object> urlQueryParamaters = ChartUtil.getUrlQueryParameters(pageParameters, iframeSettings.getEncryptionKey());
 		
-		WidgetModel widgetModel = new WidgetModel(widgetId);	
+		WidgetModel widgetModel = new WidgetModel(widgetId);
 		if (widgetModel.getObject() == null) {
 			// widget was deleted
 			add(new WidgetErrorView("widget", widgetModel, new Exception("Widget was deleted from server!")));

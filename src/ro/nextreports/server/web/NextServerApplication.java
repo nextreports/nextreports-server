@@ -28,6 +28,7 @@ import org.apache.wicket.authorization.IAuthorizationStrategy;
 import org.apache.wicket.authorization.strategies.page.SimplePageAuthorizationStrategy;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
+import org.apache.wicket.core.request.mapper.StalePageException;
 import org.apache.wicket.devutils.DevUtilsPage;
 import org.apache.wicket.markup.html.pages.RedirectPage;
 import org.apache.wicket.protocol.http.PageExpiredException;
@@ -197,7 +198,7 @@ public class NextServerApplication extends WebApplication  {
 			
 			IFrameSettings iframeSettings = storageService.getSettings().getIframe();
 			if ((iframeSettings != null) && iframeSettings.isEnable()) { 
-				mountPage("/widget", WidgetWebPage.class);
+				mount(new NoVersionMountMapper("/widget", WidgetWebPage.class));
 			}
 			
 			// set the current color theme at startup
@@ -388,6 +389,10 @@ public class NextServerApplication extends WebApplication  {
 						
 			if (e instanceof MaintenanceException) {				
 				return new RenderPageRequestHandler(new PageProvider(MaintenancePage.class));				
+			}
+			
+			if (e instanceof StalePageException) {
+				return null;
 			}
 						
 			String errorCode = String.valueOf(System.currentTimeMillis());

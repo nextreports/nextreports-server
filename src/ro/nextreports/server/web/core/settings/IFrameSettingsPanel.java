@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import ro.nextreports.server.domain.Settings;
 import ro.nextreports.server.service.StorageService;
+import ro.nextreports.server.web.common.misc.NoVersionMountMapper;
 import ro.nextreports.server.web.dashboard.WidgetWebPage;
 
 
@@ -57,7 +58,7 @@ public class IFrameSettingsPanel extends AbstractSettingsPanel {
 	protected void afterChange(Form form, AjaxRequestTarget target) {	
     	Settings settings = (Settings)form.getModelObject();	     	
     	if (settings.getIframe().isEnable()) {    		
-    		((WebApplication)getApplication()).mountPage("/widget", WidgetWebPage.class);    		
+    		((WebApplication)getApplication()).mount(new NoVersionMountMapper("/widget", WidgetWebPage.class));    		
     	} else {    		
     		((WebApplication)getApplication()).unmount("widget");
     	}
