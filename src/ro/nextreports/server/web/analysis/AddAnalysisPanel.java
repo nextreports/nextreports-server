@@ -43,7 +43,7 @@ public class AddAnalysisPanel extends FormContentPanel {
 		selectedTable.setOutputMarkupPlaceholderTag(true);
 		selectedTable.setNullValid(false);		
 		selectedTable.setRequired(true);
-		selectedTable.setLabel(new StringResourceModel("Table", null));
+		selectedTable.setLabel(new StringResourceModel("Analysis.source", null));
  		add(selectedTable);  		
 	}
 
