@@ -207,4 +207,8 @@ public class GroupPanel extends FormContentPanel<Analysis> {
 		return groups;
 	}
 	
+	public boolean isEdit() {
+		return editIndex != -1;
+	}
+	
 }

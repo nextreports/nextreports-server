@@ -122,7 +122,7 @@ public class CreatePanel extends FormContentPanel<Analysis> {
  		add(addColumn);
  		
  		add(new Label("expression", new StringResourceModel("CreatePanel.expression", this, null)));
-		expressionText = new TextArea<String>("expressionText", new PropertyModel<String>(this, "declaredColumnObject.expression"));
+		expressionText = new TextArea<String>("expressionText", new PropertyModel<String>(this, "declaredColumnObject.expression"));		
 		//expressionText.add(new JcrNameValidator(getString("JcrNameValidator")));
 		expressionText.setOutputMarkupPlaceholderTag(true);			
  		add(expressionText); 
@@ -164,7 +164,7 @@ public class CreatePanel extends FormContentPanel<Analysis> {
 	        			return;
  					}
  					 					
- 					CreatePanel.this.model.getObject().editDeclaredColumn(editIndex, oldColumnIndex, oldFilterIndex, oldSortIndex, oldGroupIndex, declaredColumnObject);
+ 					CreatePanel.this.model.getObject().editDeclaredColumn(editIndex, oldColumnIndex, oldFilterIndex, oldSortIndex, oldGroupIndex, declaredColumnObject.clone());
  					resetEdit(target);
  				} else { 	
  					int index = findDeclaredColumnByName(CreatePanel.this.model.getObject().getDeclaredColumns(), declaredColumnObject.getColumnName());
@@ -310,6 +310,10 @@ public class CreatePanel extends FormContentPanel<Analysis> {
 			}
 		}
 		return -1;
+	}
+	
+	public boolean isEdit() {
+		return editIndex != -1;
 	}
 
 }

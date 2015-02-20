@@ -269,5 +269,9 @@ public class SortPanel extends FormContentPanel<Analysis> {
 	public boolean isChangeFirstSortOrder() {
 		return changeFirstSortOrder;
 	}	
+	
+	public boolean isEdit() {
+		return editIndex != -1;
+	}
 		
 }

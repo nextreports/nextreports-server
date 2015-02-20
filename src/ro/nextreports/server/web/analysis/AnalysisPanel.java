@@ -276,6 +276,11 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
 
 	                @Override
 	                public void onOk(AjaxRequestTarget target) {	  
+	                	if (isEdit()) {
+	                		error(getString("editMode"));
+	                		target.add(getFeedbackPanel());
+	            			return;
+	            		}
 	                	if (getSortProperty().size() == 0) {	                		
 	                		error(getString("SortPanel.selectOne"));	    
 	                		target.add(getFeedbackPanel());
@@ -307,7 +312,14 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
 	                private static final long serialVersionUID = 1L;
 
 	                @Override
-	                public void onOk(AjaxRequestTarget target) {	  	                	
+	                public void onOk(AjaxRequestTarget target) {	
+	                	
+	                	if (isEdit()) {
+	                		error(getString("editMode"));
+	                		target.add(getFeedbackPanel());
+	            			return;
+	            		}
+	                	
 	                	ModalWindow.closeCurrent(target);	                    
 	                	Analysis analysis = AnalysisPanel.this.getModel().getObject();
 	                	analysis.setFilters(getFilters());
@@ -330,7 +342,13 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
 	                private boolean deleted = false;
 
 	                @Override
-	                public void onOk(AjaxRequestTarget target) {	  
+	                public void onOk(AjaxRequestTarget target) {	
+	                	
+	                	if (isEdit()) {
+	                		error(getString("editMode"));
+	                		target.add(getFeedbackPanel());
+	            			return;
+	            		}
 	                	
 	                	ModalWindow.closeCurrent(target);
 	                    
@@ -379,7 +397,12 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
 	                private static final long serialVersionUID = 1L;
 
 	                @Override
-	                public void onOk(AjaxRequestTarget target) {	  	                		 
+	                public void onOk(AjaxRequestTarget target) {	
+	                	if (isEdit()) {
+	                		error(getString("editMode"));
+	                		target.add(getFeedbackPanel());
+	            			return;
+	            		}
 	                	ModalWindow.closeCurrent(target);	                    
 	                	Analysis analysis = AnalysisPanel.this.getModel().getObject();	                	
 	                	analysis.setGroups(getGroups());

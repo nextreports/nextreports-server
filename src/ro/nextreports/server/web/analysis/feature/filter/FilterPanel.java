@@ -266,6 +266,10 @@ public class FilterPanel extends FormContentPanel<Analysis> {
 
 	public List<AnalysisFilter> getFilters() {
 		return filters;
-	}				
+	}			
+	
+	public boolean isEdit() {
+		return editIndex != -1;
+	}
 
 }
