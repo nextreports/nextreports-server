@@ -385,17 +385,19 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
 	                	analysis.setGroups(getGroups());
 	                	
 	                	// keep as selected only columns from groups and created columns with aggregate functions
-	                	List<String> keptColumns = new ArrayList<String>();
-	                	for (String col : analysis.getColumns()) {
-	                		if (getGroups().contains(col) || AnalysisUtil.isAggregateColumn(col)) {
-	                			keptColumns.add(col);
-	                		}	                		
-	                	}	                	
-	                	List<Boolean> sel = new ArrayList<Boolean>();
-	                	for (String column : analysis.getColumns()) {
-	                		sel.add(keptColumns.contains(column)); 
-	                	}		                	
-	                	analysis.setSelected(sel);
+	                	if (!getGroups().isEmpty()) {
+		                	List<String> keptColumns = new ArrayList<String>();
+		                	for (String col : analysis.getColumns()) {
+		                		if (getGroups().contains(col) || AnalysisUtil.isAggregateColumn(col)) {
+		                			keptColumns.add(col);
+		                		}	                		
+		                	}	                	
+		                	List<Boolean> sel = new ArrayList<Boolean>();
+		                	for (String column : analysis.getColumns()) {
+		                		sel.add(keptColumns.contains(column)); 
+		                	}		                	
+		                	analysis.setSelected(sel);
+	                	}
 	                		                	
 	                	changeDataProvider(AnalysisPanel.this.getModel(), target);	    
 	                }
