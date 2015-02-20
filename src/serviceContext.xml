@@ -182,5 +182,7 @@
       <property name="analysisService" ref="analysisService"></property>
       <property name="reportService" ref="reportService"></property>
     </bean> 
+    
+    <bean id="moduleLicence" class="ro.nextreports.server.licence.NextServerModuleLicence"/>
 
 </beans>

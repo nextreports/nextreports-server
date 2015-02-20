@@ -28,12 +28,15 @@ import org.wicketstuff.push.timer.TimerPushService;
 
 import ro.nextreports.engine.util.DateUtil;
 import ro.nextreports.server.domain.ReportResultEvent;
+import ro.nextreports.server.licence.ModuleLicence;
+import ro.nextreports.server.licence.NextServerModuleLicence;
 import ro.nextreports.server.report.ReportConstants;
 import ro.nextreports.server.service.ReportListener;
 import ro.nextreports.server.service.ReportService;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.util.AnalysisUtil;
 import ro.nextreports.server.web.NextServerSession;
+import ro.nextreports.server.web.analysis.AnalysisSection;
 import ro.nextreports.server.web.common.jgrowl.JGrowlAjaxBehavior;
 import ro.nextreports.server.web.common.util.PreferencesHelper;
 import ro.nextreports.server.web.core.section.SectionManager;
@@ -64,6 +67,9 @@ public class HomePage extends BasePage {
 	
 	@SpringBean
 	private StorageService storageService;
+	
+	@SpringBean
+	private ModuleLicence moduleLicence;
 
     public HomePage(PageParameters parameters) {
     	// clear search context
@@ -72,6 +78,9 @@ public class HomePage extends BasePage {
     	// add sections tab
     	List<ITab> tabs = new ArrayList<ITab>();
         for (String sectionId : sectionManager.getIds()) {
+        	if (AnalysisSection.ID.equals(sectionId) && !moduleLicence.isValid(NextServerModuleLicence.ANALYSIS_MODULE)) {
+        		continue;
+        	}
         	tabs.add(new SectionTab(sectionId));
         }        
     	

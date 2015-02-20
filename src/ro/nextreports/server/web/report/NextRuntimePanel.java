@@ -18,20 +18,20 @@ package ro.nextreports.server.web.report;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.beans.factory.annotation.Required;
 
 import ro.nextreports.server.domain.DataSource;
 import ro.nextreports.server.domain.Report;
+import ro.nextreports.server.licence.ModuleLicence;
+import ro.nextreports.server.licence.NextServerModuleLicence;
 import ro.nextreports.server.report.ReportConstants;
 import ro.nextreports.server.report.next.NextUtil;
 import ro.nextreports.server.service.StorageService;
@@ -46,9 +46,12 @@ public class NextRuntimePanel extends DynamicParameterRuntimePanel {
     private Report report;
     
     @SpringBean
-    private StorageService storageService;    
+    private StorageService storageService;   
+    
+    @SpringBean
+    private ModuleLicence moduleLicence;
 
-    private static final List<String> typeList = createTypeList();
+    private final List<String> typeList = createTypeList();
 
     public NextRuntimePanel(String id, final Report report, ReportRuntimeModel runtimeModel, boolean runNow) {
         super(id, runNow);        
@@ -62,10 +65,12 @@ public class NextRuntimePanel extends DynamicParameterRuntimePanel {
         init(runtimeModel);        
     }
     
-    private static List<String> createTypeList() {
+    private List<String> createTypeList() {
     	List<String> result = new ArrayList<String>();
     	result.addAll(Arrays.asList(ReportRunner.FORMATS));
-    	result.add(ReportConstants.ETL_FORMAT);
+    	if (moduleLicence.isValid(NextServerModuleLicence.ANALYSIS_MODULE)) {
+    		result.add(ReportConstants.ETL_FORMAT);
+    	}
     	return result;
     }
 
