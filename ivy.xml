@@ -168,6 +168,9 @@
 
         <!-- OrientDb -->
         <dependency org="com.orientechnologies" name="orientdb-jdbc" rev="2.0"/>
+        
+        <!-- Licence -->
+        <dependency org="licence" name="licence-validator" rev="0.0.1"/>
     </dependencies>
 
 </ivy-module>

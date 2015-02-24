@@ -16,13 +16,37 @@
  */
 package ro.nextreports.server.licence;
 
+import java.io.File;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import licence.nextserver.LicenceException;
+import licence.nextserver.LicenseLoader;
+import licence.nextserver.NextServerLicense;
+
 public class NextServerModuleLicence implements ModuleLicence {
 	
+	private static final Logger LOG = LoggerFactory.getLogger(NextServerModuleLicence.class);
+	
+	public static final String LICENCES_FOLDER = "licences";
 	public static final String ANALYSIS_MODULE = "analysismdl"; 
 
 	@Override
 	public boolean isValid(String moduleName) {
-		return true;
+
+		File f = new File("./" + LICENCES_FOLDER + "/" + moduleName + ".key");		
+		LOG.info("* Licence " + moduleName + " : " + f.exists());		
+				
+		try {			
+			NextServerLicense licence = LicenseLoader.decodeLicence(f);						
+			if (licence.isValid(true) && moduleName.equals(licence.getPCODE())) {
+				return true;				
+			}			
+		} catch (LicenceException e) {
+			LOG.info("Invalid licence for " +  moduleName + " module.");
+		}		
+		return false;
 	}
 
 }
