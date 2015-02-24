@@ -363,6 +363,14 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
 	                public void onDelete(Analysis analysis, AjaxRequestTarget target) {	                	
 	                	AnalysisPanel.this.getModel().setObject(analysis);	                	                	
 	            	}
+
+					@Override
+					public void onCancel(AjaxRequestTarget target) {						
+						super.onCancel(target);
+						cancelAdd();
+					}
+	                
+	                
 	            };
 			}			
     	};

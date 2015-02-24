@@ -195,6 +195,12 @@ public class CreatePanel extends FormContentPanel<Analysis> {
  	    addTable();
 	}	
 	
+	protected void cancelAdd() {
+		if (declaredColumnObject != null) {
+			CreatePanel.this.model.getObject().deleteDeclaredColumn(declaredColumnObject);
+		}
+	}
+	
 	protected void onConfigure()  {
 		super.onConfigure();
 		addTextModel.setObject(getString("add"));

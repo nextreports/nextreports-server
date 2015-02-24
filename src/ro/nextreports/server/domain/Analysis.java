@@ -180,7 +180,9 @@ public class Analysis extends Entity {
 		int foundIndex = getColumnIndexByName(colName);
 		columns.remove(colName);
 		columnTypes.remove(colName);
-		selected.remove(foundIndex);
+		if (foundIndex != -1) {
+			selected.remove(foundIndex);
+		}
 		// / must also remove declared column from filters, sorts, groups ,..
 		AnalysisUtil.removeFilterByColumnName(filters, col.getColumnName());
 		boolean isFirstSort = AnalysisUtil.removeSortByColumnName(sortProperty, ascending, col.getColumnName());
