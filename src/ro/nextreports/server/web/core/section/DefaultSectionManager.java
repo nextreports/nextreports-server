@@ -25,21 +25,32 @@ import java.util.Map;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import ro.nextreports.server.licence.ModuleLicence;
+import ro.nextreports.server.licence.NextServerModuleLicence;
 import ro.nextreports.server.web.NextServerSession;
+import ro.nextreports.server.web.analysis.AnalysisSection;
 
 
 /**
  * @author Decebal Suiu
  */
 public class DefaultSectionManager implements SectionManager, ApplicationContextAware, InitializingBean {
+		
+	private ModuleLicence moduleLicence;
 
 	private ApplicationContext context;
 	private Map<String, Section> sections;
 	private List<Section> sectionsCache;
 	private List<String> idsCache;
+	
+	@Required
+	public void setModuleLicence(ModuleLicence moduleLicence) {
+		this.moduleLicence = moduleLicence;
+	}
 	
 	public int getSectionCount() {
 		return sections.size();
@@ -87,7 +98,13 @@ public class DefaultSectionManager implements SectionManager, ApplicationContext
 		
 		Map<String, Section> matches = BeanFactoryUtils.beansOfTypeIncludingAncestors(context, Section.class);
 		for (Section section: matches.values()) {
-			sections.put(section.getId(), section);
+			if (AnalysisSection.ID.equals(section.getId())) {
+				if(moduleLicence.isValid(NextServerModuleLicence.ANALYSIS_MODULE)) {				
+					sections.put(section.getId(), section);
+				}
+			} else {
+				sections.put(section.getId(), section);
+			}			
 		}
 		
 		sections = Collections.unmodifiableMap(sections);

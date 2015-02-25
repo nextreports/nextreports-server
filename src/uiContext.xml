@@ -7,7 +7,11 @@
     <!-- S E C T I O N S                                      -->
     <!-- ==================================================== -->
 
-    <bean id="sectionManager" class="ro.nextreports.server.web.core.section.DefaultSectionManager"/>
+    <bean id="sectionManager" class="ro.nextreports.server.web.core.section.DefaultSectionManager">
+        <property name="moduleLicence">
+            <ref bean="moduleLicence"/>
+        </property>
+    </bean>    
 
     <bean id="dashboardSection" class="ro.nextreports.server.web.dashboard.DashboardSection">
          <property name="popupContributors">
