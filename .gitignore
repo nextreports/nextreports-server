@@ -23,3 +23,5 @@ webapp/WEB-INF/classes/
 local.properties
 derby.log
 data*
+licences/
+src/*.zip
