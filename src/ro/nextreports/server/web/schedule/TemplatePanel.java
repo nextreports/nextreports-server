@@ -112,7 +112,7 @@ public class TemplatePanel extends Panel {
 					protected List<ReportRuntimeTemplate> load() {
 						List<ReportRuntimeTemplate> templates = new ArrayList<ReportRuntimeTemplate>();
 				        try {
-				        	templates = reportService.getReportTemplates(report.getPath());				        	
+				        	templates = reportService.getReportTemplatesById(report.getId());				        	
 				        } catch (Exception e) {
 				            e.printStackTrace();
 				            LOG.error(e.getMessage(), e);

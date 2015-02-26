@@ -480,6 +480,12 @@ public class DefaultReportService implements ReportService {
     public List<ReportRuntimeTemplate> getReportTemplates(String reportPath) throws NotFoundException {
     	return storageDao.getReportTemplates(reportPath);
     }
+    
+    @Transactional(readOnly = true)
+    @Secured("AFTER_ACL_COLLECTION_READ")
+    public List<ReportRuntimeTemplate> getReportTemplatesById(String reportId) throws NotFoundException {
+    	return storageDao.getReportTemplatesById(reportId);
+    }
 
     @Transactional(readOnly = true)
     public List<String> getImages(Report report) {

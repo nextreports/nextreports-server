@@ -849,6 +849,14 @@ public class JcrStorageDao extends AbstractJcrDao implements StorageDao, Initial
         return list;
     }
     
+    public List<ReportRuntimeTemplate> getReportTemplatesById(String reportId) throws NotFoundException {
+        if (reportId == null) {
+            return new ArrayList<ReportRuntimeTemplate>();
+        }        
+        String reportPath = getEntityById(reportId).getPath();                
+        return getReportTemplates(reportPath);
+    }
+    
     public List<RunReportHistory> getRunHistoryForRange(String reportPath, DateRange range) throws NotFoundException {
         if (reportPath == null) {
             reportPath = StorageConstants.REPORTS_ROOT;
