@@ -24,9 +24,9 @@ body { background: url(../images/general_bg.png); }
  #header, #content, #footer { width: 820px; margin: 0 auto; }
           #header, #content { border-bottom: 1px solid #97b129; }
                       .logo { margin: 12px 0 30px 0; }
-              .left, .right { width: 400px; margin: 0px; padding: 0px; float:left; text-align:left; }
-	                  .left { margin-right: 10px; }
-                     .right { margin-left: 10px; }
+              .left, .right { margin: 0px; padding: 0px; float:left; text-align:left; }
+	                  .left { width: 350px; margin-right: 10px; }
+                     .right { width: 450px; margin-left: 10px; }
                  .text_logo { font-family:Arial, Helvetica, sans-serif; font-size:11px; padding: 0 0 18px; width: 300px; color: #505050; }
                .text-shadow { text-shadow: 0px 1px 0px #ffffff; }
               .text-justify { text-align: justify; }
@@ -36,7 +36,8 @@ body { background: url(../images/general_bg.png); }
 .server, .engine, .designer { float:left; display:block; margin-bottom: 16px; }
                     .server { width: 100%; }
                     .engine { width: 160px;	margin-right: 10px; }
-                  .designer { width: 220px; margin-left: 10px; }
+                  .designer { width: 270px; margin-left: 10px; }
+                  .charts	{float: right;}
                      .green { color: #8cb200;}
 
              #next-products { width: 100%; margin-top: 16px; }
