@@ -40,7 +40,7 @@ public class NextServerModuleLicence implements ModuleLicence {
 				
 		try {			
 			NextServerLicense licence = LicenseLoader.decodeLicence(f);						
-			if (licence.isValid(true) && moduleName.equals(licence.getPCODE())) {
+			if (licence.isValid() && moduleName.equals(licence.getPCODE())) {
 				return true;				
 			}			
 		} catch (LicenceException e) {
