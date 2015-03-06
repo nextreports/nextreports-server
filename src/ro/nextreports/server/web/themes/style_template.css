@@ -1573,7 +1573,7 @@ div.w_content {
 
 .navigator {
 	padding: 2px 2px 0px 1px;	
-	min-width: 650px;
+	float: left;	
 }
 
 .navigatorLabel {
