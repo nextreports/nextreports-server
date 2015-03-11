@@ -49,6 +49,11 @@
             <param-name>com.sun.jersey.config.property.packages</param-name>
             <param-value>ro.nextreports.server.api</param-value>
         </init-param>
+        <!-- ResponseCorsFilter is used for testing Jersey web services allowing cross-domain requests -->          
+        <!--<init-param>
+    		<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
+    		<param-value>ro.nextreports.server.web.core.ResponseCorsFilter</param-value>
+		</init-param>-->		
         <load-on-startup>1</load-on-startup>
     </servlet>
 
