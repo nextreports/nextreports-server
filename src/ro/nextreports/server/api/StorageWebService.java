@@ -32,7 +32,6 @@ import javax.ws.rs.WebApplicationException;
 
 import org.jcrom.JcrDataProviderImpl;
 import org.jcrom.JcrFile;
-import org.jcrom.JcrDataProvider.TYPE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,7 +63,6 @@ import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.util.ConnectionUtil;
 import ro.nextreports.server.util.MimeTypeUtil;
 import ro.nextreports.server.util.StorageUtil;
-
 import ro.nextreports.engine.ReleaseInfoAdapter;
 import ro.nextreports.engine.util.NextChartUtil;
 import ro.nextreports.engine.util.ReportUtil;
