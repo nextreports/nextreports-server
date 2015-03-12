@@ -94,6 +94,18 @@ public class WidgetWebPage extends WebPage {
 		// multiple values are between brackets
 		Map<String, Object> urlQueryParamaters = ChartUtil.getUrlQueryParameters(pageParameters, iframeSettings.getEncryptionKey());
 		
+		// special iframe parameters 
+		// tableFontSize : to allow bigger fonts on iframe tables when using a wall-monitor
+		// tableCellPadding : if font size is increased, cell padding must be increased
+		if (pageParameters.getPosition("tableFontSize") != -1) {
+			String tableFontSize = pageParameters.get("tableFontSize").toString();
+			urlQueryParamaters.put("tableFontSize", tableFontSize);
+		}
+		if (pageParameters.getPosition("tableCellPadding") != -1) {
+			String tableCellPadding = pageParameters.get("tableCellPadding").toString();
+			urlQueryParamaters.put("tableCellPadding", tableCellPadding);
+		}
+		
 		WidgetModel widgetModel = new WidgetModel(widgetId);
 		if (widgetModel.getObject() == null) {
 			// widget was deleted

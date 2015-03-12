@@ -18,11 +18,13 @@ package ro.nextreports.server.web.dashboard.table;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -62,6 +64,9 @@ public class TableRendererPanel extends GenericPanel<Report> {
 	private static final Logger LOG = LoggerFactory.getLogger(TableRendererPanel.class);
 	private DrillEntityContext drillContext;	
 	private String drillPattern;
+	// font size specified as a parameter in iframe
+	private String iframeFontSize = null;
+	private String iframeCellPadding = null;
 	
 	@SpringBean
 	private DashboardService dashboardService;
@@ -80,6 +85,17 @@ public class TableRendererPanel extends GenericPanel<Report> {
 		if ((drillContext != null) && (drillContext.getColumn() > 0)) {
 			ro.nextreports.engine.Report rep = NextUtil.getNextReport(storageService.getSettings(), model.getObject());
 			drillPattern = NextUtil.getDetailColumnPattern(rep, drillContext.getColumn()-1);			
+		}
+		
+		if (urlQueryParameters != null) {
+			Object tableFontSizeObj = urlQueryParameters.get("tableFontSize");
+			if (tableFontSizeObj != null) {
+				iframeFontSize = (String)tableFontSizeObj;
+			}
+			Object tableCellPaddingObj = urlQueryParameters.get("tableCellPadding");
+			if (tableCellPaddingObj != null) {
+				iframeCellPadding = (String)tableCellPaddingObj;
+			}
 		}
 						
 		TableDataProvider dataProvider = new TableDataProvider(widgetId, drillContext, urlQueryParameters);
@@ -114,7 +130,9 @@ public class TableRendererPanel extends GenericPanel<Report> {
 		} catch (NotFoundException e) {
 			LOG.error(e.getMessage(), e);
 		}
-		BaseTable<RowData> table = new BaseTable<RowData>("table", getPropertyColumns(tableHeader), dataProvider, rowsPerPage);					
+		BaseTable<RowData> table = new BaseTable<RowData>("table", getPropertyColumns(tableHeader), dataProvider, rowsPerPage) {
+			
+		};					
         return table;
     }
 
@@ -131,12 +149,30 @@ public class TableRendererPanel extends GenericPanel<Report> {
 			    		setCellStyle(cellItem, rowModel, j);
 						super.populateItem(cellItem, componentId, rowModel); 
 			    	  }
-			    	
+
+					@Override
+					public Component getHeader(String componentId) {
+						Component header = super.getHeader(componentId);
+						setCellStyle(header);
+						return header;
+					}			    	 			    	 			    	
 			    });
 			} else {				
 				// link is added only for the column from the drill down report				
 				if (drillContext.getColumn() != i+1) {
-					columns.add(new PropertyColumn<RowData, String>(new Model<String>(header.get(i)), "cellValues." + i));
+					columns.add(new PropertyColumn<RowData, String>(new Model<String>(header.get(i)), "cellValues." + i) {
+						public void populateItem(Item cellItem, String componentId, IModel rowModel) {
+				    		setCellStyle(cellItem, rowModel, j);
+							super.populateItem(cellItem, componentId, rowModel); 
+				    	}
+						
+						@Override
+						public Component getHeader(String componentId) {
+							Component header = super.getHeader(componentId);
+							setCellStyle(header);
+							return header;
+						}
+					});
 				} else {					
 					columns.add(new LinkPropertyColumn<RowData>(new Model<String>(header.get(i)), "cellValues." + i) {
 						
@@ -156,7 +192,14 @@ public class TableRendererPanel extends GenericPanel<Report> {
 						public void populateItem(Item cellItem, String componentId, IModel rowModel) {
 							setCellStyle(cellItem, rowModel, j);
 				    		super.populateItem(cellItem, componentId, rowModel); 
-				    	  }
+				    	}
+						
+						@Override
+						public Component getHeader(String componentId) {
+							Component header = super.getHeader(componentId);
+							setCellStyle(header);
+							return header;
+						}
 					});
 				}
 			}
@@ -169,14 +212,40 @@ public class TableRendererPanel extends GenericPanel<Report> {
 	}
     
     private void setCellStyle(Item cellItem, IModel rowModel, int rowIndex) {
-    	List<Map<String, Object>> styles = ((RowData)rowModel.getObject()).getStyles();
-		if (styles.size() > rowIndex) {
+    	List<Map<String, Object>> styles = ((RowData)rowModel.getObject()).getStyles();    	
+		if (styles.size() > rowIndex) {				
 			Map<String, Object> style = styles.get(rowIndex);
+			boolean needed = setIframeStyleParameters(style);
 			Color val = (Color) style.get(StyleFormatConstants.FONT_COLOR);
-			if (val != null) {
-				String text = HtmlUtil.getCssCode(null, style, false);
+			if ((val != null) || (iframeFontSize != null)) {				
+				String text = HtmlUtil.getCssCode(null, style, needed);
 				cellItem.add(new AttributeAppender("style", Model.of(text)));
 			}
 		}
+    }
+    
+    private void setCellStyle(Component header) {
+    	Map<String, Object> style = new HashMap<String, Object>();
+    	boolean needed = setIframeStyleParameters(style);
+    	if (needed) {
+    		String text = HtmlUtil.getCssCode(null, style, needed);
+			header.add(new AttributeAppender("style", Model.of(text)));
+    	}
+    }
+    
+    private boolean setIframeStyleParameters(Map<String, Object> style) {
+    	boolean needed = false;
+		if (iframeFontSize != null) {
+			style.put(StyleFormatConstants.FONT_SIZE, Float.parseFloat(iframeFontSize));
+			if (iframeCellPadding != null) {
+				Float padding = Float.parseFloat(iframeCellPadding);					
+				style.put(StyleFormatConstants.PADDING_LEFT, padding);
+				style.put(StyleFormatConstants.PADDING_RIGHT, padding);
+				style.put(StyleFormatConstants.PADDING_TOP, padding);
+				style.put(StyleFormatConstants.PADDING_BOTTOM, padding);				
+			}
+			needed = true;
+		}	
+		return needed;
     }
 }
