@@ -97,6 +97,7 @@ public class WidgetWebPage extends WebPage {
 		// special iframe parameters 
 		// tableFontSize : to allow bigger fonts on iframe tables when using a wall-monitor
 		// tableCellPadding : if font size is increased, cell padding must be increased
+		// adjustableTextFontSize : to allow fonts in iframe charts to be scaled and not to have a fixed size like in server dashboards
 		if (pageParameters.getPosition("tableFontSize") != -1) {
 			String tableFontSize = pageParameters.get("tableFontSize").toString();
 			urlQueryParamaters.put("tableFontSize", tableFontSize);
@@ -104,6 +105,10 @@ public class WidgetWebPage extends WebPage {
 		if (pageParameters.getPosition("tableCellPadding") != -1) {
 			String tableCellPadding = pageParameters.get("tableCellPadding").toString();
 			urlQueryParamaters.put("tableCellPadding", tableCellPadding);
+		}
+		if (pageParameters.getPosition("adjustableTextFontSize") != -1) {
+			String adjustTextFontSize = pageParameters.get("adjustableTextFontSize").toString();
+			urlQueryParamaters.put("adjustableTextFontSize", Boolean.parseBoolean(adjustTextFontSize));
 		}
 		
 		WidgetModel widgetModel = new WidgetModel(widgetId);
