@@ -16,6 +16,7 @@
  */
 package ro.nextreports.server.web.dashboard.chart;
 
+import java.io.IOException;
 import java.util.Map;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -40,6 +41,10 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.server.domain.Chart;
@@ -119,7 +124,7 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 	}	
 	
 	private ChartRendererPanel(String id, final IModel<Chart> model, ChartWidget widget, final DrillEntityContext drillContext, boolean zoom, String width, String height, Map<String,Object> urlQueryParameters) {
-		super(id, model);
+		super(id, model);		
 		this.drillContext = drillContext;		
 		this.urlQueryParameters = urlQueryParameters;
 		this.model = model;
@@ -189,12 +194,15 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 					throw new Exception("Chart Type '" + widget.getChartType() + "' is not supported in flash mode. Please select a type that is not in the following: " + ChartUtil.FLASH_UNSUPPORTED);
 				}
 				
-				if (drillContext == null) {							
+				if (drillContext == null) {
+					String jsonData;
 					if (widget == null) {											
-						return chartService.getJsonData(model.getObject(), urlQueryParameters, isHTML5);						
+						jsonData = chartService.getJsonData(model.getObject(), urlQueryParameters, isHTML5);						
 					} else {
-						return chartService.getJsonData(widget, urlQueryParameters, isHTML5);						
+						jsonData = chartService.getJsonData(widget, urlQueryParameters, isHTML5);						
 					}
+					jsonData = updateJsonData(jsonData);
+					return jsonData;
 				}
 
 				// get onClickJavaScript
@@ -220,9 +228,11 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
                 if (chart != null) {
                 	LOG.debug("current chart = " + chart.getName());
                 } else {
-                	LOG.debug("current chart = null");
+                	LOG.debug("current chart = null");                	
                 }
 				LOG.debug("jsonData = " + jsonData);
+								
+				jsonData = updateJsonData(jsonData);
 				
 				return jsonData;
 			} catch (Throwable t) {
@@ -239,6 +249,23 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 		
 		public boolean hasError() {
 			return error != null;
+		}
+		
+		public String updateJsonData(String jsonData) throws Exception {			
+			if (urlQueryParameters != null) {
+				boolean adjustFont = false;
+				Object adjustTextFontSize = urlQueryParameters.get("adjustableTextFontSize");				
+				if (adjustTextFontSize != null) {
+					adjustFont = (Boolean)adjustTextFontSize;
+				}				
+				if (adjustFont) {
+					ObjectMapper mapper = new ObjectMapper();
+					ObjectNode json = (ObjectNode)mapper.readTree(jsonData);
+					json.put("adjustableTextFontSize",true);
+					jsonData = json.toString();					
+				}					
+			}
+			return jsonData;
 		}
 	}
 	
