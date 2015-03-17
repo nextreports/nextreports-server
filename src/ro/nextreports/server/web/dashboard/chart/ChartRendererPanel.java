@@ -251,20 +251,20 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 			return error != null;
 		}
 		
-		public String updateJsonData(String jsonData) throws Exception {			
-			if (urlQueryParameters != null) {
-				boolean adjustFont = false;
+		public String updateJsonData(String jsonData) throws Exception {	
+			boolean adjustFont = false;
+			if (urlQueryParameters != null) {				
 				Object adjustTextFontSize = urlQueryParameters.get("adjustableTextFontSize");				
 				if (adjustTextFontSize != null) {
 					adjustFont = (Boolean)adjustTextFontSize;
-				}				
-				if (adjustFont) {
-					ObjectMapper mapper = new ObjectMapper();
-					ObjectNode json = (ObjectNode)mapper.readTree(jsonData);
-					json.put("adjustableTextFontSize",true);
-					jsonData = json.toString();					
-				}					
+				}												
 			}
+			if (adjustFont || zoom) {
+				ObjectMapper mapper = new ObjectMapper();
+				ObjectNode json = (ObjectNode)mapper.readTree(jsonData);
+				json.put("adjustableTextFontSize",true);
+				jsonData = json.toString();					
+			}	
 			return jsonData;
 		}
 	}
