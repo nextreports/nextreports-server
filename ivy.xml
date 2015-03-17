@@ -150,7 +150,7 @@
         <dependency org="jmimemagic" name="jmimemagic" rev="0.1.2"/>
 
         <!-- Java Mail -->
-        <dependency org="javax.mail" name="mail" rev="1.4.1"/>
+        <dependency org="com.sun.mail" name="javax.mail" rev="1.5.2"/>
 
         <!-- AspectJ -->
         <dependency org="org.aspectj" name="aspectjrt" rev="1.7.4"/>
