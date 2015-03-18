@@ -161,7 +161,8 @@
 	           <bean class="ro.nextreports.server.web.action.schedule.ModifyActionContributor"/>
 	           <bean class="ro.nextreports.server.web.action.schedule.HistoryActionContributor"/>
 	           <bean class="ro.nextreports.server.web.action.schedule.GoToReportActionContributor"/>
-               <bean class="ro.nextreports.server.web.action.RenameActionContributor"/>
+	           <bean class="ro.nextreports.server.web.action.schedule.CloneActionContributor"/>
+               <bean class="ro.nextreports.server.web.action.RenameActionContributor"/>               
                <bean class="ro.nextreports.server.web.action.DeleteActionContributor"/>
                <bean class="ro.nextreports.server.web.action.security.SecurityActionContributor"/>
             </list>
