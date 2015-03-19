@@ -80,7 +80,7 @@ public class TableRendererPanel extends GenericPanel<Report> {
 		
 	public TableRendererPanel(String id, IModel<Report> model, String widgetId, DrillEntityContext drillContext,  boolean zoom,  Map<String, Object> urlQueryParameters) throws NoDataFoundException {
 		super(id, model);
-		this.drillContext = drillContext;	
+		this.drillContext = drillContext;
 		
 		if ((drillContext != null) && (drillContext.getColumn() > 0)) {
 			ro.nextreports.engine.Report rep = NextUtil.getNextReport(storageService.getSettings(), model.getObject());
