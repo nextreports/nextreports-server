@@ -179,6 +179,30 @@ public class ReportUtil {
         return buffer.toString();
     }
     
+    public static String getDisplayParameterValueAsString(Object value) {
+        StringBuilder buffer = new StringBuilder();
+        if (value instanceof Object[]) {
+            buffer.append("[");
+            for (Object obj : (Object[]) value) {
+                if (obj instanceof IdName) {
+                    buffer.append(((IdName) obj).getName());
+                } else {
+                    buffer.append(obj);
+                }
+                buffer.append(";");
+            }
+            if (buffer.toString().endsWith(";")) {
+                buffer.deleteCharAt(buffer.length() - 1);
+            }
+            buffer.append("]");
+        } else if (value instanceof IdName) {
+            buffer.append(((IdName) value).getName());
+        } else {
+            buffer.append(value);
+        }
+        return buffer.toString();
+    }
+    
     public static void addUrlQueryParameters(Settings settings, Entity entity, Map<String, Object> allParameters, Map<String, Object> urlQueryParameters) throws Exception {
     	
     	if ((urlQueryParameters == null) || (urlQueryParameters.size() == 0)) {

@@ -358,6 +358,7 @@ public class RunReportJob implements Job {
         distributionContext.setReportsPath(reportsPath);
         distributionContext.setUrl(url);
         distributionContext.setReportName(report.getName());
+        distributionContext.setParameterValues(schedulerJob.getReportRuntime().getParametersValues());
                 
         if (fileName != null) {        	
             int errors = 0;

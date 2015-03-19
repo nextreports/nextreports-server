@@ -16,6 +16,8 @@
  */
 package ro.nextreports.server.distribution;
 
+import java.util.Map;
+
 import org.springframework.mail.javamail.JavaMailSender;
 
 import ro.nextreports.server.service.SecurityService;
@@ -36,6 +38,7 @@ public class DistributionContext {
     private String reportsPath;
     private String reportName;
     private String alertMessage;
+    private Map<String, Object> parameterValues;
 
     public SecurityService getSecurityService() {
         return securityService;
@@ -107,6 +110,14 @@ public class DistributionContext {
 
 	public void setReportName(String reportName) {
 		this.reportName = reportName;
-	}		
+	}
+
+	public Map<String, Object> getParameterValues() {
+		return parameterValues;
+	}
+
+	public void setParameterValues(Map<String, Object> parameterValues) {
+		this.parameterValues = parameterValues;
+	}				
         
 }

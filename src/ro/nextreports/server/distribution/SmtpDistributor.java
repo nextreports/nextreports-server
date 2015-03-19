@@ -53,6 +53,11 @@ public class SmtpDistributor implements Distributor {
 	
 	public static String REPORT_NAME_TEMPLATE = "${name}";
 	private static String REPORT_NAME_TEMPLATE_ESC = "\\$\\{name\\}";
+	
+	public static String PARAMETER_START_TEMPLATE = "$P{";
+	public static String PARAMETER_END_TEMPLATE = "}";
+	public static String PARAMETER_START_TEMPLATE_ESC = "\\$P\\{";
+	public static String PARAMETER_END_TEMPLATE_ESC = "\\}";	
 
     private List<String> users;
 
@@ -190,6 +195,14 @@ public class SmtpDistributor implements Distributor {
 		}
 		if (s.contains(REPORT_NAME_TEMPLATE)) {
 			s = s.replaceAll(REPORT_NAME_TEMPLATE_ESC, context.getReportName());
+		}
+		if (context.getParameterValues() != null) {
+			for (String param : context.getParameterValues().keySet()) {
+				Object value = context.getParameterValues().get(param);
+				if ((value != null) && (s.contains(PARAMETER_START_TEMPLATE + param + PARAMETER_END_TEMPLATE))) {
+					s = s.replaceAll(PARAMETER_START_TEMPLATE_ESC + param + PARAMETER_END_TEMPLATE_ESC, ReportUtil.getDisplayParameterValueAsString(value));
+				}
+			}
 		}
     	return s;
 	}
