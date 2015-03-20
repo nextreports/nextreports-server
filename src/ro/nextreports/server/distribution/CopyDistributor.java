@@ -16,7 +16,8 @@ public class CopyDistributor implements Distributor {
 	public void distribute(File file, Destination destination, DistributionContext context) throws DistributionException {
 		CopyDestination copyDestination = (CopyDestination) destination;
 		if (file != null) {			
-			DistributorUtil.getFileCopy(file, copyDestination.getFileName());
+			String fileName = DistributorUtil.replaceTemplates(copyDestination.getFileName(), context);
+			DistributorUtil.getFileCopy(file, fileName);
 		}		
 	}
 

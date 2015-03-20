@@ -40,7 +40,8 @@ public class WebdavDistributor implements Distributor {
 		WebdavDestination webdavDestination = (WebdavDestination) destination;
 
 		if (webdavDestination.getChangedFileName() != null) {
-			file = DistributorUtil.getFileCopy(file, webdavDestination.getChangedFileName());
+			String fileName = DistributorUtil.replaceTemplates(webdavDestination.getChangedFileName(), context);
+			file = DistributorUtil.getFileCopy(file, fileName);
 		}
 
 		Sardine sardine = createSardine(webdavDestination);

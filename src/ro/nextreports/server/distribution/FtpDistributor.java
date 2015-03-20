@@ -54,8 +54,9 @@ public class FtpDistributor implements Distributor {
 			if (folder != null) {
 				client.changeDirectory(folder);
 			}			
-			if (ftpDestination.getChangedFileName() != null) {				
-				uploadFile = DistributorUtil.getFileCopy(file, ftpDestination.getChangedFileName());
+			if (ftpDestination.getChangedFileName() != null) {			
+				String fileName = DistributorUtil.replaceTemplates(ftpDestination.getChangedFileName(), context);
+				uploadFile = DistributorUtil.getFileCopy(file, fileName);
 			}
 			client.upload(uploadFile);						
 		} catch (Exception e) {

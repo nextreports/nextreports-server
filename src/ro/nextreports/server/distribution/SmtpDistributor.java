@@ -17,11 +17,8 @@
 package ro.nextreports.server.distribution;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -42,23 +39,10 @@ import javax.mail.internet.MimeMessage;
 
 /**
  * @author Decebal Suiu
+ * @author Mihai Dinca-Panaitescu
  */
 public class SmtpDistributor implements Distributor {
-	
-	public static String DATE_TEMPLATE = "${date}";
-	private static String DATE_TEMPLATE_ESC = "\\$\\{date\\}";
-	
-	public static String TIME_TEMPLATE = "${time}";
-	private static String TIME_TEMPLATE_ESC = "\\$\\{time\\}";
-	
-	public static String REPORT_NAME_TEMPLATE = "${name}";
-	private static String REPORT_NAME_TEMPLATE_ESC = "\\$\\{name\\}";
-	
-	public static String PARAMETER_START_TEMPLATE = "$P{";
-	public static String PARAMETER_END_TEMPLATE = "}";
-	public static String PARAMETER_START_TEMPLATE_ESC = "\\$P\\{";
-	public static String PARAMETER_END_TEMPLATE_ESC = "\\}";	
-
+			
     private List<String> users;
 
     private static final Logger LOG = LoggerFactory.getLogger(SmtpDistributor.class);
@@ -66,7 +50,8 @@ public class SmtpDistributor implements Distributor {
     public void distribute(File exportedFile, Destination destination, DistributionContext context) throws DistributionException {
         SmtpDestination smtpDestination = (SmtpDestination) destination;
         if (smtpDestination.getChangedFileName() != null) {				
-        	exportedFile = DistributorUtil.getFileCopy(exportedFile, smtpDestination.getChangedFileName());
+        	String fileName = DistributorUtil.replaceTemplates(smtpDestination.getChangedFileName(), context);
+        	exportedFile = DistributorUtil.getFileCopy(exportedFile, fileName);
 		}
 
         users = new ArrayList<String>(smtpDestination.getUserRecipients());
@@ -79,7 +64,7 @@ public class SmtpDistributor implements Distributor {
         } else if (!smtpDestination.isAttachFile()) {
             body = body + "\r\n" + context.getUrl().replaceAll("\\+", "%20");
         }        
-        body = replaceTemplates(body, context);    	
+        body = DistributorUtil.replaceTemplates(body, context);    	
         
         try {
             List<String> groups = smtpDestination.getGroupRecipients();
@@ -115,7 +100,7 @@ public class SmtpDistributor implements Distributor {
                     if (subject == null) {
                         subject = "NextServer";
                     } else {                    	
-                        subject = replaceTemplates(subject, context);                    	
+                        subject = DistributorUtil.replaceTemplates(subject, context);                    	
                     }
 
                     if (smtpDestination.isAttachFile()) {
@@ -181,30 +166,6 @@ public class SmtpDistributor implements Distributor {
 	public void test(Destination destination) throws DistributionException {
 	}
 	
-	private String replaceTemplates(String s, DistributionContext context) {
-		Date local = new Date();
-		if (s.contains(DATE_TEMPLATE)) {			
-			DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault());
-	    	String formattedDate = df.format(local);	    		    	
-	    	s = s.replaceAll(DATE_TEMPLATE_ESC, formattedDate);
-		}
-		if (s.contains(TIME_TEMPLATE)) {
-			DateFormat df = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
-	    	String formattedTime = df.format(local);
-	    	s = s.replaceAll(TIME_TEMPLATE_ESC, formattedTime);
-		}
-		if (s.contains(REPORT_NAME_TEMPLATE)) {
-			s = s.replaceAll(REPORT_NAME_TEMPLATE_ESC, context.getReportName());
-		}
-		if (context.getParameterValues() != null) {
-			for (String param : context.getParameterValues().keySet()) {
-				Object value = context.getParameterValues().get(param);
-				if ((value != null) && (s.contains(PARAMETER_START_TEMPLATE + param + PARAMETER_END_TEMPLATE))) {
-					s = s.replaceAll(PARAMETER_START_TEMPLATE_ESC + param + PARAMETER_END_TEMPLATE_ESC, ReportUtil.getDisplayParameterValueAsString(value));
-				}
-			}
-		}
-    	return s;
-	}
+	
 
 }

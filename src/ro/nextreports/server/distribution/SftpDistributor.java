@@ -51,8 +51,9 @@ public class SftpDistributor implements Distributor {
 		}
 		InputStream input = null;
         try {        	     	
-			if (sftpDestination.getChangedFileName() != null) {				
-				file = DistributorUtil.getFileCopy(file, sftpDestination.getChangedFileName());
+			if (sftpDestination.getChangedFileName() != null) {		
+				String fileName = DistributorUtil.replaceTemplates(sftpDestination.getChangedFileName(), context);
+				file = DistributorUtil.getFileCopy(file, fileName);
 			}
 			input = new FileInputStream(file);   			
         	
