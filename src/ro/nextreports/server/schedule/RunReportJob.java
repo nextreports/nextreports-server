@@ -46,7 +46,6 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import ro.nextreports.server.StorageConstants;
@@ -64,6 +63,7 @@ import ro.nextreports.server.domain.Report;
 import ro.nextreports.server.domain.ReportResultEvent;
 import ro.nextreports.server.domain.ReportRuntimeTemplate;
 import ro.nextreports.server.domain.RunReportHistory;
+import ro.nextreports.server.domain.SchedulerBatchDefinition;
 import ro.nextreports.server.domain.SchedulerJob;
 import ro.nextreports.server.domain.Settings;
 import ro.nextreports.server.domain.ShortcutType;
@@ -73,6 +73,7 @@ import ro.nextreports.server.exception.ReportEngineException;
 import ro.nextreports.server.report.ReportConstants;
 import ro.nextreports.server.report.next.NextUtil;
 import ro.nextreports.server.report.util.ReportUtil;
+import ro.nextreports.server.service.DataSourceService;
 import ro.nextreports.server.service.ReportService;
 import ro.nextreports.server.service.SecurityService;
 import ro.nextreports.server.service.StorageService;
@@ -86,7 +87,9 @@ import ro.nextreports.engine.condition.ConditionalExpression;
 import ro.nextreports.engine.condition.exception.ConditionalException;
 import ro.nextreports.engine.exporter.Alert;
 import ro.nextreports.engine.exporter.exception.NoDataFoundException;
+import ro.nextreports.engine.queryexec.IdName;
 import ro.nextreports.engine.queryexec.QueryParameter;
+import ro.nextreports.engine.util.ParameterUtil;
 
 /**
  * @author Decebal Suiu
@@ -99,23 +102,25 @@ public class RunReportJob implements Job {
     public static final String MAIL_SENDER = "MAIL_SENDER";        
     public static final String REPORT_SERVICE = "REPORT_SERVICE";
     public static final String STORAGE_SERVICE = "STORAGE_SERVICE";
-    public static final String SECURITY_SERVICE = "SECURITY_SERVICE";    
+    public static final String SECURITY_SERVICE = "SECURITY_SERVICE";
+    public static final String DATASOURCE_SERVICE = "DATASOURCE_SERVICE";    
     public static final String RUNNER_ID = "RUNNER_ID";
     public static final String RUNNER_TYPE = "RUNNER_TYPE";
     public static final String RUNNER_KEY = "RUNNER_KEY";
     public static final String REPORT_TYPE = "REPORT_TYPE";
     public static final String AUDIT_EVENT = " AUDIT_EVENT";
     public static final String AUDITOR = "AUDITOR";    
+    
+    private Map<Serializable, String> batchMailMap;
 
     public void execute(JobExecutionContext context) throws JobExecutionException {
         JobDataMap dataMap = context.getMergedJobDataMap();
         SchedulerJob schedulerJob = (SchedulerJob) dataMap.get(SCHEDULER_JOB);
 
         Report report = schedulerJob.getReport();       
-
-        ReportService reportService = (ReportService) dataMap.get(REPORT_SERVICE);
-        StorageService storageService = (StorageService) dataMap.get(STORAGE_SERVICE);
-        final SecurityService securityService = (SecurityService) dataMap.get(SECURITY_SERVICE);
+        
+        DataSourceService dataSourceService = (DataSourceService) dataMap.get(DATASOURCE_SERVICE);
+        StorageService storageService = (StorageService) dataMap.get(STORAGE_SERVICE);        
         final JavaMailSenderImpl mailSender = (JavaMailSenderImpl) dataMap.get(MAIL_SENDER);
         
         if (storageService.getSettings().getMailServer().getUsername() != null) {        	
@@ -126,13 +131,56 @@ public class RunReportJob implements Job {
         	// username password are not set inside configuration xml file
         	mailSender.getJavaMailProperties().put("mail.smtp.auth", false);      
         }
-        
-        Auditor auditor = (Auditor) dataMap.get(AUDITOR);
-        AuditEvent auditEvent = (AuditEvent) dataMap.get(AUDIT_EVENT);
-        
+                        
         Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
 		ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);			
-        
+                		        
+        SchedulerBatchDefinition batchDef = schedulerJob.getBatchDefinition();
+		List<IdName> batchValues = new ArrayList<IdName>();
+		QueryParameter reportParameter = ReportUtil.getBatchQueryParameter(schedulerJob, storageService.getSettings());
+		if (reportParameter != null) {
+			try {
+				batchValues = dataSourceService.getParameterValues(report.getDataSource(), reportParameter);
+			} catch (Exception e) {
+				LOG.error(e.getMessage(), e);
+				e.printStackTrace();
+			}
+		}
+		if (batchValues.isEmpty()) {
+			executeOneReport(context, bundle, null);
+		} else {
+			if ((batchDef != null) && (batchDef.getDataQuery() != null)) {
+				try {
+					batchMailMap = ReportUtil.getBatchMailMap(batchDef.getDataQuery(), storageService, report.getDataSource());
+				} catch (Exception e) {
+					LOG.error(e.getMessage(), e);
+				}
+			}
+			for (IdName batchValue : batchValues) {				
+				schedulerJob.getReportRuntime().updateParameterValue(reportParameter.getName(), batchValue);				
+				executeOneReport(context, bundle, batchValue);
+			}
+		}
+    }
+    
+    private void executeOneReport(JobExecutionContext context, ResourceBundle bundle, IdName batchValue) {
+    	
+		JobDataMap dataMap = context.getMergedJobDataMap();
+		SchedulerJob schedulerJob = (SchedulerJob) dataMap.get(SCHEDULER_JOB);
+		Report report = schedulerJob.getReport();
+		
+		ReportService reportService = (ReportService) dataMap.get(REPORT_SERVICE);
+		DataSourceService dataSourceService = (DataSourceService) dataMap.get(DATASOURCE_SERVICE);
+		StorageService storageService = (StorageService) dataMap.get(STORAGE_SERVICE);
+		final SecurityService securityService = (SecurityService) dataMap.get(SECURITY_SERVICE);
+		
+		List<Destination> destinations = schedulerJob.getDestinations();
+		final JavaMailSenderImpl mailSender = (JavaMailSenderImpl) dataMap.get(MAIL_SENDER);				
+		final String mailFrom = storageService.getSettings().getMailServer().getFrom();
+		String reportsPath = new File(storageService.getSettings().getReportsHome()).getAbsolutePath();
+		
+		Auditor auditor = (Auditor) dataMap.get(AUDITOR);
+        AuditEvent auditEvent = (AuditEvent) dataMap.get(AUDIT_EVENT);
         String runnerType = dataMap.getString(RUNNER_TYPE);        
         String runnerId = dataMap.getString(RUNNER_ID);
         String creator = "";    	
@@ -146,15 +194,10 @@ public class RunReportJob implements Job {
                 e.printStackTrace();
                 LOG.error(e.getMessage(), e);
             }                        
-        }
-        
-        final String mailFrom = storageService.getSettings().getMailServer().getFrom();
-        String reportsPath = new File(storageService.getSettings().getReportsHome()).getAbsolutePath();
-
-        List<Destination> destinations = schedulerJob.getDestinations();        
+        }                               
         String key = dataMap.getString(RUNNER_KEY);
-
-        boolean error = false;
+        
+    	boolean error = false;
         String message = "Ok";
         String url = "";        
         String fileName = null;
@@ -209,8 +252,8 @@ public class RunReportJob implements Job {
 						}
 					}
 				}
-			}	
-			
+			}
+											
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("Run report '" + report.getPath() + "'");
 				// debug runtime parameters
@@ -351,6 +394,8 @@ public class RunReportJob implements Job {
         List<Distributor> distributors = new ArrayList<Distributor>();
         DistributionContext distributionContext = new DistributionContext();
         distributionContext.setSecurityService(securityService);
+        distributionContext.setStorageService(storageService);
+        distributionContext.setDataSource(report.getDataSource());
         distributionContext.setError(error);
         distributionContext.setMailFrom(mailFrom);
         distributionContext.setMailSender(mailSender);
@@ -358,7 +403,13 @@ public class RunReportJob implements Job {
         distributionContext.setReportsPath(reportsPath);
         distributionContext.setUrl(url);
         distributionContext.setReportName(report.getName());
-        distributionContext.setParameterValues(schedulerJob.getReportRuntime().getParametersValues());
+        distributionContext.setParameterValues(schedulerJob.getReportRuntime().getHistoryParametersValues()); // contains also the dynamic values
+        if (batchMailMap != null) {        	
+        	distributionContext.setBatchMailMap(batchMailMap);
+        }
+        if (batchValue != null) {
+        	distributionContext.setBatchValue(batchValue.getId());
+        }
                 
         if (fileName != null) {        	
             int errors = 0;

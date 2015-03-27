@@ -64,8 +64,8 @@ public class SmtpDistributor implements Distributor {
         } else if (!smtpDestination.isAttachFile()) {
             body = body + "\r\n" + context.getUrl().replaceAll("\\+", "%20");
         }        
-        body = DistributorUtil.replaceTemplates(body, context);    	
-        
+        body = DistributorUtil.replaceTemplates(body, context);  
+               
         try {
             List<String> groups = smtpDestination.getGroupRecipients();
             for (String groupName : groups) {
@@ -77,12 +77,19 @@ public class SmtpDistributor implements Distributor {
                 }
             }
 
-            List<String> mails = smtpDestination.getMailRecipients();
+            List<String> mails = new ArrayList<String>(smtpDestination.getMailRecipients());
             for (String userName : users) {
                 User user = context.getSecurityService().getUserByName(userName);
                 String email = user.getEmail();
                 if (MailUtil.isEmailValid(email) && !mails.contains(email)) {
                     mails.add(email);
+                }
+            }
+                        
+            if ((context.getBatchValue() != null) && (context.getBatchMailMap() != null)) {
+            	String batchEmail = context.getBatchMailMap().get(context.getBatchValue());            	
+            	if (MailUtil.isEmailValid(batchEmail) && !mails.contains(batchEmail)) {
+                    mails.add(batchEmail);
                 }
             }
 
@@ -143,7 +150,7 @@ public class SmtpDistributor implements Distributor {
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
             throw new DistributionException(e.getMessage());
-        } finally {
+        } finally {        	
         	DistributorUtil.deleteFileCopy(smtpDestination.getChangedFileName(), exportedFile);
         }
     }
@@ -164,8 +171,6 @@ public class SmtpDistributor implements Distributor {
     }
 
 	public void test(Destination destination) throws DistributionException {
-	}
-	
-	
+	}			
 
 }

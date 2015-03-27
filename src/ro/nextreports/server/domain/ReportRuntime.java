@@ -181,5 +181,26 @@ public class ReportRuntime extends EntityFragment {
        
        return false;
     }
+    
+    public void resetDynamic(String parameterValueName) {
+        for (ParameterValue parameterValue : parametersValues) {
+            if (parameterValue.getName().equals(parameterValueName)) {
+                if (parameterValue.isDynamic()) {
+                	parameterValue.setDynamic(false);                	
+                	return;
+                }
+            }
+        }                
+     }
+    
+    public void setDynamic(List<String> parametersNames) {
+        for (ParameterValue parameterValue : parametersValues) {        	
+        	for (String pName: parametersNames) {        		
+	            if (parameterValue.getName().equals(pName)) {	            	
+	                parameterValue.setDynamic(true);	                
+	            }
+        	}
+        }                
+     }
 
 }

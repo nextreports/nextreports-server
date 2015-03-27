@@ -48,6 +48,9 @@ public class SchedulerJob extends Entity {
 
     @JcrChildNode(createContainerNode = false)
     private SchedulerTime time;
+    
+    @JcrChildNode(createContainerNode = false)
+    private SchedulerBatchDefinition batchDefinition;
 
     @JcrChildNode(createContainerNode = false)
     private List<Destination> destinations;
@@ -71,6 +74,7 @@ public class SchedulerJob extends Entity {
         reportRuntime = new ReportRuntime();
         destinations = new ArrayList<Destination>();
         time = new SchedulerTime();
+        batchDefinition = new SchedulerBatchDefinition();
         runNow = false;
     }
 
@@ -97,8 +101,16 @@ public class SchedulerJob extends Entity {
     public void setTime(SchedulerTime schedulerTime) {
         this.time = schedulerTime;
     }
+        
+    public SchedulerBatchDefinition getBatchDefinition() {
+		return batchDefinition;
+	}
 
-    public List<Destination> getDestinations() {
+	public void setBatchDefinition(SchedulerBatchDefinition batchDefinition) {
+		this.batchDefinition = batchDefinition;
+	}
+
+	public List<Destination> getDestinations() {
 		return destinations;
 	}
 
@@ -193,6 +205,7 @@ public class SchedulerJob extends Entity {
                 "report=" + report +
                 ", reportRuntime=" + reportRuntime +
                 ", time=" + time +
+                ", batchDefinition=" + batchDefinition +
                 ", destinations=" + destinations +
                 ", running=" + running +
                 ", nextRun=" + nextRun +

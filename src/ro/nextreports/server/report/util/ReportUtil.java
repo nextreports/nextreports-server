@@ -18,28 +18,41 @@ package ro.nextreports.server.report.util;
 
 import org.jcrom.JcrFile;
 
+import ro.nextreports.server.distribution.DistributionContext;
 import ro.nextreports.server.domain.Chart;
+import ro.nextreports.server.domain.DataSource;
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.domain.ParameterValue;
 import ro.nextreports.server.domain.Report;
+import ro.nextreports.server.domain.SchedulerBatchDefinition;
+import ro.nextreports.server.domain.SchedulerJob;
 import ro.nextreports.server.domain.Settings;
 import ro.nextreports.server.report.ReportConstants;
 import ro.nextreports.server.report.next.NextUtil;
+import ro.nextreports.server.service.StorageService;
+import ro.nextreports.server.util.ConnectionUtil;
 import ro.nextreports.server.util.FileUtil;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.io.File;
 import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
+import java.io.Serializable;
 
 import ro.nextreports.engine.queryexec.IdName;
+import ro.nextreports.engine.queryexec.Query;
+import ro.nextreports.engine.queryexec.QueryExecutor;
 import ro.nextreports.engine.queryexec.QueryParameter;
+import ro.nextreports.engine.queryexec.QueryResult;
 import ro.nextreports.engine.util.ParameterUtil;
 
 /**
@@ -285,5 +298,51 @@ public class ReportUtil {
     	}
     	return (hasStart && hasEnd);    	
     }
+    
+    public static QueryParameter getBatchQueryParameter(SchedulerJob schedulerJob, Settings settings) {
+    	SchedulerBatchDefinition batchDef = schedulerJob.getBatchDefinition();
+    	QueryParameter parameter = null;
+    	if ((batchDef != null) && (batchDef.getParameter() != null)) {				
+			ro.nextreports.engine.Report nextReport = NextUtil.getNextReport(settings, schedulerJob.getReport());			
+			Map<String, QueryParameter> parameters = ParameterUtil.getUsedParametersMap(nextReport);				
+			for (String p : parameters.keySet()) {
+				if (p.equals(batchDef.getParameter())) {
+					parameter = parameters.get(p);
+					break;
+				}
+			}
+    	}	
+    	return parameter;
+    }
+    
+    // select <batch_parameter>, mail from <table>
+    public static Map<Serializable, String> getBatchMailMap(String batchDataQuery, StorageService storageservice, DataSource dataSource) throws Exception {
+		Map<Serializable, String> result = new HashMap<Serializable, String>();
+		if (batchDataQuery == null) {
+			return result;
+		}
+		Connection connection = null;
+		QueryResult queryResult = null;
+        try {        	
+        	connection = ConnectionUtil.createConnection(storageservice, dataSource);
+            Query query = new Query(batchDataQuery);
+            QueryExecutor executor = new QueryExecutor(query, connection);
+            executor.setMaxRows(0);
+            executor.setTimeout(storageservice.getSettings().getQueryTimeout());
+
+            queryResult = executor.execute();
+
+            ResultSet rs = queryResult.getResultSet();    
+            while(rs.next()) {
+            	Serializable batchValue = (Serializable)rs.getObject(1);
+            	String mail = rs.getString(2);            	
+            	result.put(batchValue, mail);
+            }       
+        } finally {
+        	ConnectionUtil.closeConnection(connection);		
+        }
+        return result;
+	}
+
 
 }

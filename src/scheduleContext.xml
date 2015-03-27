@@ -51,6 +51,7 @@
         <property name="reportService" ref="reportService"/>
         <property name="storageService" ref="storageService"/>
         <property name="securityService" ref="securityService"/>
+        <property name="dataSourceService" ref="dataSourceService"/>
         <property name="auditor" ref="auditor"/>        
     </bean>
 

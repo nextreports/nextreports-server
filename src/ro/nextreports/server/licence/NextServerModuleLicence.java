@@ -31,6 +31,7 @@ public class NextServerModuleLicence implements ModuleLicence {
 	
 	public static final String LICENCES_FOLDER = "licences";
 	public static final String ANALYSIS_MODULE = "analysismdl"; 
+	public static final String BATCH_MODULE = "batchmdl";
 
 	@Override
 	public boolean isValid(String moduleName) {

@@ -18,8 +18,10 @@ package ro.nextreports.server.web.schedule;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -57,8 +59,11 @@ import ro.nextreports.server.domain.ReportRuntimeTemplate;
 import ro.nextreports.server.domain.SchedulerJob;
 import ro.nextreports.server.domain.Settings;
 import ro.nextreports.server.domain.ShortcutType;
+import ro.nextreports.server.licence.ModuleLicence;
+import ro.nextreports.server.licence.NextServerModuleLicence;
 import ro.nextreports.server.report.AbstractReportRuntimeParameterModel;
 import ro.nextreports.server.report.ReportConstants;
+import ro.nextreports.server.report.next.NextUtil;
 import ro.nextreports.server.service.AnalysisService;
 import ro.nextreports.server.service.DataSourceService;
 import ro.nextreports.server.service.ReportService;
@@ -82,9 +87,11 @@ import ro.nextreports.server.web.integration.ReportsPage;
 import ro.nextreports.server.web.report.NextRuntimePanel;
 import ro.nextreports.server.web.report.ReportRuntimeModel;
 import ro.nextreports.server.web.report.jasper.JasperRuntimePanel;
+import ro.nextreports.server.web.schedule.batch.BatchDefinitionPanel;
 import ro.nextreports.server.web.schedule.destination.DestinationsPanel;
 import ro.nextreports.server.web.schedule.time.JobPanel;
 import ro.nextreports.engine.queryexec.QueryParameter;
+import ro.nextreports.engine.util.ParameterUtil;
 
 public class ScheduleWizard extends Wizard {
 
@@ -104,6 +111,9 @@ public class ScheduleWizard extends Wizard {
 
     @SpringBean
     protected SectionManager sectionManager;
+    
+    @SpringBean
+    private ModuleLicence moduleLicence;
 
     private SchedulerJob schedulerJob;
     private ReportRuntimeModel runtimeModel;
@@ -147,12 +157,15 @@ public class ScheduleWizard extends Wizard {
         model.add(new ScheduleNameStep(), editNotRunNowCondition);
         model.add(new ScheduleRuntimeStep());
         model.add(new ScheduleJobStep(), notRunNowCondition);
+        if (moduleLicence.isValid(NextServerModuleLicence.BATCH_MODULE)) {
+        	model.add(new ScheduleBatchStep());
+        }
         model.add(new ScheduleDestinationsStep());
                         
         if (runNow) {
-        	finishSteps = new int[] {1,2};
+        	finishSteps = new int[] {1,2,3};
         } else {
-        	finishSteps = new int[] {2,3};
+        	finishSteps = new int[] {2,3,4};
         }        
 
         // initialize the wizard with the wizard model we just built
@@ -185,12 +198,12 @@ public class ScheduleWizard extends Wizard {
 				return;
 			}
 		}
-    	
+						    	
     	String globalMessage;
     	if (runNow) {
     		globalMessage = getString("ActionContributor.Run.running");
     	} else {
-    		globalMessage = getString("ActionContributor.Run.schedule");
+    		globalMessage = getString("ActionContributor.Run.scheduledMessage");
     	}   
     	
     	schedulerJob.setCreator(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -201,6 +214,20 @@ public class ScheduleWizard extends Wizard {
     	}
     	
         schedulerJob.setRuntimeModel(runtimeModel);
+        
+        if (schedulerJob.getBatchDefinition() != null) {
+			String batchParameter = schedulerJob.getBatchDefinition().getParameter();
+			if (batchParameter != null) {	
+				// batch parameter must not be set as dynamic, if it is dynamic we reset it.
+				schedulerJob.getReportRuntime().resetDynamic(batchParameter);
+				
+				// all children dependent parameters to batch parameter must be dynamic
+				ro.nextreports.engine.Report nextReport = NextUtil.getNextReport(storageService.getSettings(), schedulerJob.getReport());					
+				Map<String, QueryParameter> map = ParameterUtil.getChildDependentParameters(nextReport, batchParameter);				
+				schedulerJob.getReportRuntime().setDynamic(new ArrayList<String>(map.keySet()));
+			}
+		}
+        
         if (!runNow) {
             schedulerJob.setPath(StorageConstants.SCHEDULER_ROOT + "/" + schedulerJob.getName());
             SchedulerUtil.updateSchedulerTime(schedulerJob.getTime());            
@@ -509,6 +536,32 @@ public class ScheduleWizard extends Wizard {
         @Override
         public String getSummary() {
             return getString("ActionContributor.Run.time");
+        }
+        
+        @Override
+    	public Component getHeader(final String id, final Component parent, final IWizard wizard) {
+    		Component c = super.getHeader(id, parent, wizard);
+    		c.get("summary").setEscapeModelStrings(false);
+    		return c;
+    	}
+
+    }
+    
+    private final class ScheduleBatchStep extends WizardStep {
+
+        public ScheduleBatchStep() {
+            super();
+            add(new BatchDefinitionPanel("batchPanel", schedulerJob));
+        }
+
+        @Override
+        public String getTitle() {
+        	return getString("ActionContributor.Run.schedule") + " : " + schedulerJob.getReport().getName();
+        }
+
+        @Override
+        public String getSummary() {
+        	return getString("ActionContributor.Run.batch");
         }
         
         @Override

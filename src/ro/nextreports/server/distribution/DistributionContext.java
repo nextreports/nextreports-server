@@ -16,11 +16,14 @@
  */
 package ro.nextreports.server.distribution;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import org.springframework.mail.javamail.JavaMailSender;
 
+import ro.nextreports.server.domain.DataSource;
 import ro.nextreports.server.service.SecurityService;
+import ro.nextreports.server.service.StorageService;
 
 /**
  * User: mihai.panaitescu
@@ -30,6 +33,8 @@ import ro.nextreports.server.service.SecurityService;
 public class DistributionContext {
 
     private SecurityService securityService;
+    private StorageService storageService;
+    private DataSource dataSource;
     private JavaMailSender mailSender;
     private String mailFrom;
     private boolean error;
@@ -39,6 +44,8 @@ public class DistributionContext {
     private String reportName;
     private String alertMessage;
     private Map<String, Object> parameterValues;
+    private Serializable batchValue;
+    private Map<Serializable, String> batchMailMap;
 
     public SecurityService getSecurityService() {
         return securityService;
@@ -47,8 +54,24 @@ public class DistributionContext {
     public void setSecurityService(SecurityService securityService) {
         this.securityService = securityService;
     }
+        
+    public StorageService getStorageService() {
+		return storageService;
+	}
 
-    public JavaMailSender getMailSender() {
+	public void setStorageService(StorageService storageService) {
+		this.storageService = storageService;
+	}
+
+	public DataSource getDataSource() {
+		return dataSource;
+	}
+
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
+
+	public JavaMailSender getMailSender() {
         return mailSender;
     }
 
@@ -118,6 +141,22 @@ public class DistributionContext {
 
 	public void setParameterValues(Map<String, Object> parameterValues) {
 		this.parameterValues = parameterValues;
-	}				
+	}
+	
+	public Serializable getBatchValue() {
+		return batchValue;
+	}
+
+	public void setBatchValue(Serializable batchValue) {
+		this.batchValue = batchValue;
+	}
+
+	public Map<Serializable, String> getBatchMailMap() {
+		return batchMailMap;
+	}
+
+	public void setBatchMailMap(Map<Serializable, String> batchMailMap) {
+		this.batchMailMap = batchMailMap;
+	}					
         
 }

@@ -45,6 +45,7 @@ import ro.nextreports.server.domain.RunReportHistory;
 import ro.nextreports.server.domain.SchedulerJob;
 import ro.nextreports.server.domain.SchedulerTime;
 import ro.nextreports.server.domain.User;
+import ro.nextreports.server.service.DataSourceService;
 import ro.nextreports.server.service.ReportService;
 import ro.nextreports.server.service.SecurityService;
 import ro.nextreports.server.service.StorageService;
@@ -62,7 +63,8 @@ public class QuartzJobHandler {
 	private JavaMailSender mailSender;
 	private ReportService reportService;
     private StorageService storageService;
-    private SecurityService securityService;        
+    private SecurityService securityService;
+    private DataSourceService dataSourceService;
     private Auditor auditor;
        
     public void runMonitorJob(JobDetail jobDetail) throws Exception {
@@ -106,6 +108,7 @@ public class QuartzJobHandler {
         jobData.put(RunReportJob.REPORT_SERVICE, reportService);
         jobData.put(RunReportJob.STORAGE_SERVICE, storageService);
         jobData.put(RunReportJob.SECURITY_SERVICE, securityService);
+        jobData.put(RunReportJob.DATASOURCE_SERVICE, dataSourceService);
         jobData.put(RunReportJob.AUDITOR, auditor);
                 
         String runnerId = job.getId();
@@ -238,6 +241,11 @@ public class QuartzJobHandler {
     @Required
     public void setSecurityService(SecurityService securityService) {
         this.securityService = securityService;
+    }
+    
+    @Required
+    public void setDataSourceService(DataSourceService dataSourceService) {
+        this.dataSourceService = dataSourceService;
     }
       
     @Required
