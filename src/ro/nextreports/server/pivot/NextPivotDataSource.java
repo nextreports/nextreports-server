@@ -124,10 +124,11 @@ public class NextPivotDataSource extends ResultSetPivotDataSource {
             queryResult = executor.execute();
 
             return queryResult.getResultSet();      
-        } catch (Exception e) {        	
-			ConnectionUtil.closeConnection(connection);			
+        } catch (Exception e) {        						
             throw new ReportRunnerException(e);
-        }                		
+        } finally {
+        	ConnectionUtil.closeConnection(connection);	
+        }
 	}
 		
 
