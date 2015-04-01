@@ -29,6 +29,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
 import ro.nextreports.engine.exporter.util.IndicatorData;
+import ro.nextreports.engine.util.StringUtil;
 import ro.nextreports.server.web.NextServerApplication;
 import ro.nextreports.server.web.dashboard.chart.ChartHTML5Panel;
 
@@ -72,6 +73,10 @@ public class IndicatorHTML5Panel extends GenericPanel<IndicatorData> {
 	private String getIndicatorCall() {		
 		boolean useParentWidth = zoom ? false : true;
 		IndicatorData data = getModel().getObject();
+		String v = String.valueOf(data.getValue());
+		if (data.getPattern() != null) {			
+			v = StringUtil.getValueAsString(data.getValue(), data.getPattern());
+		}
 		StringBuilder sb = new StringBuilder();		
 		sb.append("indicatorP(\"").
 		   append(get("canvas").getMarkupId()).
@@ -81,7 +86,7 @@ public class IndicatorHTML5Panel extends GenericPanel<IndicatorData> {
 		   append("\",\"").append(data.getUnit()).
 		   append("\",").append(data.getMin()).
 		   append(",").append(data.getMax()).
-		   append(",").append(data.getValue()).
+		   append(",").append(v).
 		   append(",").append(data.isShowMinMax()).
 		   append(",").append(data.isShadow()).
 		   append(",").append(zoom).

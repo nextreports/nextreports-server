@@ -29,6 +29,7 @@ import java.awt.geom.Area;
 import org.apache.wicket.markup.html.image.resource.RenderedDynamicImageResource;
 
 import ro.nextreports.engine.exporter.util.IndicatorData;
+import ro.nextreports.engine.util.StringUtil;
 
 public class IndicatorDynamicImageResource extends RenderedDynamicImageResource {
 	
@@ -155,6 +156,9 @@ public class IndicatorDynamicImageResource extends RenderedDynamicImageResource 
 			svalue = String.valueOf((int)data.getValue());
 		} else {
 			svalue = String.valueOf(data.getValue());
+			if (data.getPattern() != null) {
+				svalue = StringUtil.getValueAsString(data.getValue(), data.getPattern());
+			}			
 		}
 		if ((data.getUnit() != null) && !data.getUnit().isEmpty()) {
 			svalue = svalue + data.getUnit();
