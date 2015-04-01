@@ -77,6 +77,7 @@ import ro.nextreports.server.web.debug.Info;
 import ro.nextreports.server.web.debug.InfoUtil;
 import ro.nextreports.server.web.debug.SystemInfoPage;
 import ro.nextreports.server.web.debug.SystemLogPage;
+import ro.nextreports.server.web.integration.DashboardWebPage;
 import ro.nextreports.server.web.integration.DashboardsPage;
 import ro.nextreports.server.web.integration.ReportsPage;
 import ro.nextreports.server.web.security.LoginPage;
@@ -199,6 +200,7 @@ public class NextServerApplication extends WebApplication  {
 			IFrameSettings iframeSettings = storageService.getSettings().getIframe();
 			if ((iframeSettings != null) && iframeSettings.isEnable()) { 
 				mount(new NoVersionMountMapper("/widget", WidgetWebPage.class));
+				mount(new NoVersionMountMapper("/dashboard", DashboardWebPage.class));
 			}
 			
 			// set the current color theme at startup

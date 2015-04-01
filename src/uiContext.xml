@@ -20,6 +20,7 @@
                 <bean class="ro.nextreports.server.web.action.dashboard.ShareActionContributor"/>
                 <bean class="ro.nextreports.server.web.action.dashboard.ModifyActionContributor"/>
                 <bean class="ro.nextreports.server.web.action.dashboard.DeleteActionContributor"/>
+                <bean class="ro.nextreports.server.web.action.dashboard.EmbedCodeActionContributor"/>
             </list>
          </property>   
     </bean>        
