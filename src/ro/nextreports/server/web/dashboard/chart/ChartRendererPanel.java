@@ -49,12 +49,15 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.DrillEntityContext;
+import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.exception.NotFoundException;
 import ro.nextreports.server.report.next.NextUtil;
 import ro.nextreports.server.service.ChartService;
 import ro.nextreports.server.service.DashboardService;
 import ro.nextreports.server.util.ChartUtil;
 import ro.nextreports.server.web.NextServerApplication;
+import ro.nextreports.server.web.dashboard.Widget;
+import ro.nextreports.server.web.dashboard.drilldown.DrillDownWidget;
 
 /**
  * @author Mihai Dinca-Panaitescu
@@ -308,7 +311,15 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 					if (widgetId != null) {	
 						// for iframe we get widget id from url!!! 
 						try {
-							widget = (ChartWidget)dashboardService.getWidgetById(widgetId);
+							Widget loadWidget = dashboardService.getWidgetById(widgetId);
+							if (loadWidget instanceof ChartWidget) {
+								widget = (ChartWidget)loadWidget;
+							} else if (loadWidget instanceof DrillDownWidget) {
+								Entity entity = ((DrillDownWidget)loadWidget).getEntity();
+								if (entity instanceof Chart) {									
+									model = new Model<Chart>((Chart)entity);
+								}
+							}
 						} catch (NotFoundException e) {														
 							LOG.error(e.getMessage(), e);
 						}
