@@ -89,10 +89,10 @@ import ro.nextreports.engine.exporter.Alert;
 import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.engine.queryexec.IdName;
 import ro.nextreports.engine.queryexec.QueryParameter;
-import ro.nextreports.engine.util.ParameterUtil;
 
 /**
  * @author Decebal Suiu
+ * @author Mihai Dinca-Panaitescu
  */
 public class RunReportJob implements Job {
 
@@ -130,6 +130,9 @@ public class RunReportJob implements Job {
         } else if (mailSender.getUsername() == null) {
         	// username password are not set inside configuration xml file
         	mailSender.getJavaMailProperties().put("mail.smtp.auth", false);      
+        }
+        if (storageService.getSettings().getMailServer().getEnableTls() != null) { 
+        	mailSender.getJavaMailProperties().put("mail.smtp.starttls.enable", storageService.getSettings().getMailServer().getEnableTls());  
         }
                         
         Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());

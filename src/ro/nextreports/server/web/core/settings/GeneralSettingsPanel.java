@@ -28,6 +28,7 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.UrlValidator;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -53,6 +54,7 @@ public class GeneralSettingsPanel extends AbstractSettingsPanel {
 	private Integer oldMailPort;
 	private String oldMailUsername;
 	private String oldMailPassword;
+	private Boolean oldEnableTls;
 		
     public GeneralSettingsPanel(String id) {
         super(id);                
@@ -99,6 +101,8 @@ public class GeneralSettingsPanel extends AbstractSettingsPanel {
         mailServerPasswordField.setResetPassword(false);
         mailServerPasswordField.setRequired(false);
         form.add(mailServerPasswordField);
+        final CheckBox tlsCheckField = new CheckBox("mailServer.enableTls");
+        form.add(tlsCheckField);        
         form.add(new MailServerValidator(new FormComponent[] {mailServerIpField, mailServerPortField, mailServerSenderField}));
         
         final TextField<Integer> conTimeoutField = new TextField<Integer>("connectionTimeout");
@@ -131,6 +135,7 @@ public class GeneralSettingsPanel extends AbstractSettingsPanel {
         oldMailIp = settings.getMailServer().getIp();
         oldMailUsername = settings.getMailServer().getUsername();
         oldMailPassword = settings.getMailServer().getPassword();
+        oldEnableTls = settings.getMailServer().getEnableTls();
     }   
     
     protected void beforeChange(Form form, AjaxRequestTarget target) {	
@@ -150,12 +155,27 @@ public class GeneralSettingsPanel extends AbstractSettingsPanel {
 				e.printStackTrace();
 			}
     	}
+    	JavaMailSenderImpl mailSender = (JavaMailSenderImpl) NextServerApplication.get().getSpringBean("mailSender");
     	if (!oldMailIp.equals(settings.getMailServer().getIp()) || 
-    		!oldMailPort.equals(settings.getMailServer().getPort())) {
-    		JavaMailSenderImpl mailSender = (JavaMailSenderImpl) NextServerApplication.get().getSpringBean("mailSender");
+    		!oldMailPort.equals(settings.getMailServer().getPort())) {    		
             mailSender.setHost(settings.getMailServer().getIp());
-            mailSender.setPort(settings.getMailServer().getPort());                
+            mailSender.setPort(settings.getMailServer().getPort());
     	}
+    	
+    	if (  ((oldMailUsername == null) && (settings.getMailServer().getUsername() != null)) ||
+    			!oldMailUsername.equals(settings.getMailServer().getUsername()) ) {
+    		mailSender.setUsername(settings.getMailServer().getUsername());
+    	}
+    	
+    	if ( ((oldMailPassword == null) && (settings.getMailServer().getPassword() != null)) ||
+    		!oldMailPassword.equals(settings.getMailServer().getPassword()) ) {
+    		mailSender.setPassword(settings.getMailServer().getPassword());
+    	}
+    	
+		if (((oldEnableTls == null) && (settings.getMailServer().getEnableTls() != null)) ||
+			!oldEnableTls.equals(settings.getMailServer().getEnableTls())) {
+			mailSender.getJavaMailProperties().put("mail.smtp.starttls.enable", settings.getMailServer().getEnableTls());
+		}
 	}
 
 	public void setStorageService(StorageService storageService) {

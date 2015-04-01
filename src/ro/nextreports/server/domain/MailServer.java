@@ -35,7 +35,10 @@ public class MailServer extends EntityFragment {
 	private String username;
 	
 	@JcrProperty
-	private String password;		
+	private String password;	
+	
+	@JcrProperty
+	private Boolean enableTls;	
 	
 	public MailServer() {
 		super();        
@@ -84,6 +87,14 @@ public class MailServer extends EntityFragment {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+		
+	public Boolean getEnableTls() {
+		return enableTls;
+	}
+
+	public void setEnableTls(Boolean enableTls) {
+		this.enableTls = enableTls;
+	}
 
 	@Override
     public String toString() {
@@ -92,6 +103,7 @@ public class MailServer extends EntityFragment {
                 ", port=" + port +                
                 ", username=" + username +
                 ", password=" + password +
+                ", enableTls=" + enableTls +
                 ", from=" + from +
                 "]";
     }
