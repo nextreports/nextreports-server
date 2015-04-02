@@ -30,9 +30,18 @@ public class EntityMetaData {
     public static final int WIDGET = 40;
     public static final int OTHER = 100;
 	
+    protected String entityId;
 	protected String path;
 	protected int type;
-	
+		
+	public String getEntityId() {
+		return entityId;
+	}
+
+	public void setEntityId(String entityId) {
+		this.entityId = entityId;
+	}
+
 	public String getPath() {
 		return path;
 	}
@@ -53,7 +62,8 @@ public class EntityMetaData {
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("EntityMetaData[");
-		buffer.append("path = ").append(path);
+		buffer.append("entityId = ").append(entityId);
+		buffer.append(" path = ").append(path);
 		buffer.append(" type = ").append(type);
 		buffer.append("]");
 		

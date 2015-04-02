@@ -502,6 +502,7 @@ public class StorageWebService {
 
     private EntityMetaData createMetaData(Entity entity) {
 		EntityMetaData entityMetaData = new EntityMetaData();
+		entityMetaData.setEntityId(entity.getId());
 		entityMetaData.setPath(entity.getPath().substring(StorageConstants.NEXT_SERVER_ROOT.length()));
 		int type = EntityMetaData.OTHER;
 		if (entity instanceof Folder) {

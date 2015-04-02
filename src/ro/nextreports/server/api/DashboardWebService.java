@@ -93,6 +93,7 @@ public class DashboardWebService {
 
 	private DashboardMetaData createDashboardMetaData(Entity entity, boolean isLink) {
 		DashboardMetaData entityMetaData = new DashboardMetaData();
+		entityMetaData.setEntityId(entity.getId());
 		entityMetaData.setPath(entity.getPath().substring(StorageConstants.NEXT_SERVER_ROOT.length()));
 		entityMetaData.setType(EntityMetaData.DASHBOARD);
 		entityMetaData.setLink(isLink);
