@@ -69,17 +69,24 @@ public class ThemesManager {
 		// try to see if other theme files where added by hand
 	    // must have name like theme-<color>.properties
 		// you must add in all other i18n files the property:
-		// Settings.personalize.theme.theme-<color> to see it in seetings		
-		Collection<File> files = FileUtils.listFiles(new File("."), ThemeFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+		// Settings.personalize.theme.theme-<color> to see it in seetings	
+		long start = System.currentTimeMillis();
+		File themesPath = new File("./webapps/nextreports-server/WEB-INF/classes/ro/nextreports/server/web/themes");
+		if (!themesPath.exists()) {
+			themesPath = new File(".");
+		}
+		LOG.info("Check directory '" + themesPath.getAbsolutePath() + " for themes ...");
+		Collection<File> files = FileUtils.listFiles(themesPath, ThemeFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
 		Set<String> fileNames = new HashSet<String>();
 		for (File file : files) {
 			String name = file.getName();			
 			String baseName = name.substring(0, name.indexOf(".properties"));
 			if (!RED_THEME_FILE_NAME.equals(baseName) && !BLUE_THEME_FILE_NAME.equals(baseName) && !GREEN_THEME_FILE_NAME.equals(baseName)) {
 				THEMES.add(baseName);
-			}
-			LOG.info("Found "+ THEMES.size() + " theme files.");
+			}			
 		}
+		long end = System.currentTimeMillis();
+		LOG.info("Found "+ THEMES.size() + " theme files in " + (end-start) + " ms.");
 	}
 	
 	public static synchronized ThemesManager getInstance() {
