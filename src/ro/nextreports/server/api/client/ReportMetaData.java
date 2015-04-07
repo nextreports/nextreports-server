@@ -22,18 +22,30 @@ import java.util.List;
 
 /**
  * @author Decebal Suiu
+ * @author Mihai Dinca-Panaitescu
  */
 public class ReportMetaData extends EntityMetaData {
 
 	private String description;
 	private String dataSourcePath;
-	private FileMetaData mainFile;
+	private FileMetaData mainFile;	
     private List<FileMetaData> images;
     private FileMetaData template;  
     private int specialType;
+    
+    // Jasper properties
+    private List<FileMetaData> subreports;
+    private FileMetaData parametersFile; 
 
     public ReportMetaData() {
 		type = EntityMetaData.NEXT_REPORT;
+	}
+    
+    public ReportMetaData(int type) {
+    	if ((type != EntityMetaData.NEXT_REPORT) && (type != EntityMetaData.JASPER_REPORT)) {
+    		throw new IllegalArgumentException("Invalid report type: " + type);
+    	}
+		this.type = type;
 	}
 	
 	public String getDescription() {
@@ -88,6 +100,22 @@ public class ReportMetaData extends EntityMetaData {
 	public void setSpecialType(int specialType) {
 		this.specialType = specialType;
 	}
+	
+	public List<FileMetaData> getSubreports() {
+		return subreports;
+	}
+
+	public void setSubreports(List<FileMetaData> subreports) {
+		this.subreports = subreports;
+	}
+
+	public FileMetaData getParametersFile() {
+		return parametersFile;
+	}
+
+	public void setParametersFile(FileMetaData parametersFile) {
+		this.parametersFile = parametersFile;
+	}
 
 	@Override
 	public String toString() {
@@ -96,7 +124,8 @@ public class ReportMetaData extends EntityMetaData {
 		buffer.append("description = ").append(description);
 		buffer.append(" path = ").append(path);
 		buffer.append(" fileName = ").append(mainFile.getFileName());
-		buffer.append(" dataSourcePath = ").append(dataSourcePath);       
+		buffer.append(" dataSourcePath = ").append(dataSourcePath);
+		buffer.append(" type = ").append(type);
         buffer.append(" specialType = ").append(specialType);
         buffer.append("]");
 		

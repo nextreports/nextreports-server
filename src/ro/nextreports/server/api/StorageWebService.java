@@ -50,6 +50,7 @@ import ro.nextreports.server.domain.DataSource;
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.domain.Folder;
 import ro.nextreports.server.domain.Group;
+import ro.nextreports.server.domain.JasperContent;
 import ro.nextreports.server.domain.NextContent;
 import ro.nextreports.server.domain.Report;
 import ro.nextreports.server.domain.SchedulerJob;
@@ -57,7 +58,10 @@ import ro.nextreports.server.domain.User;
 import ro.nextreports.server.domain.WidgetState;
 import ro.nextreports.server.exception.DuplicationException;
 import ro.nextreports.server.exception.NotFoundException;
+import ro.nextreports.server.exception.ReportEngineException;
 import ro.nextreports.server.report.ReportConstants;
+import ro.nextreports.server.report.jasper.util.JasperReportSaxParser;
+import ro.nextreports.server.report.jasper.util.JasperUtil;
 import ro.nextreports.server.report.next.NextUtil;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.util.ConnectionUtil;
@@ -66,6 +70,7 @@ import ro.nextreports.server.util.StorageUtil;
 import ro.nextreports.engine.ReleaseInfoAdapter;
 import ro.nextreports.engine.util.NextChartUtil;
 import ro.nextreports.engine.util.ReportUtil;
+
 import com.sun.jersey.api.core.InjectParam;
 
 /**
@@ -92,14 +97,20 @@ public class StorageWebService {
 					ErrorCodes.INVALID_REPORT_PATH);
 		}
 
-        byte status = ReportUtil.isValidReportVersion(reportMetaData.getMainFile().getFileContent());
-        if (ReportUtil.REPORT_INVALID_OLDER == status) {
-            throw new WebApplicationException(new Exception("Cannot publish an older version than 2.0."), 
-            		ErrorCodes.OLD_REPORT_VERSION);
-        } else if (ReportUtil.REPORT_INVALID_NEWER == status) {
-            throw new WebApplicationException(new Exception("Cannot publish a newer version than " + ReleaseInfoAdapter.getVersionNumber()), 
-            		ErrorCodes.NEW_REPORT_VERSION);            
-        }
+		String reportType = "";
+		if (reportMetaData.getType() == EntityMetaData.NEXT_REPORT ) {
+	        byte status = ReportUtil.isValidReportVersion(reportMetaData.getMainFile().getFileContent());
+	        if (ReportUtil.REPORT_INVALID_OLDER == status) {
+	            throw new WebApplicationException(new Exception("Cannot publish an older version than 2.0."), 
+	            		ErrorCodes.OLD_REPORT_VERSION);
+	        } else if (ReportUtil.REPORT_INVALID_NEWER == status) {
+	            throw new WebApplicationException(new Exception("Cannot publish a newer version than " + ReleaseInfoAdapter.getVersionNumber()), 
+	            		ErrorCodes.NEW_REPORT_VERSION);            
+	        }
+	        reportType = ReportConstants.NEXT;
+		} else if (reportMetaData.getType() == EntityMetaData.JASPER_REPORT) {
+			reportType = ReportConstants.JASPER;
+		}
 
         boolean update = storageService.entityExists(absolutePath);
 		if (LOG.isDebugEnabled()) {
@@ -120,7 +131,7 @@ public class StorageWebService {
             report = new Report();
 		    report.setPath(absolutePath);
 		    report.setName(StorageUtil.getName(reportMetaData.getPath()));
-	        report.setType(ReportConstants.NEXT);
+	        report.setType(reportType);
 		}
         report.setSpecialType(reportMetaData.getSpecialType());
         report.setDescription(reportMetaData.getDescription());
@@ -139,9 +150,17 @@ public class StorageWebService {
 	    	report.setDataSource(dataSource);
 	    }
 		
-	    NextContent reportContent = createNextContent(reportMetaData, report.getPath());
-	    report.setContent(reportContent);
-        report = NextUtil.renameImagesAsUnique(report);
+
+	    if (reportMetaData.getType() == EntityMetaData.NEXT_REPORT ) {
+		    NextContent reportContent = createNextContent(reportMetaData, report.getPath());
+		    report.setContent(reportContent);
+	        report = NextUtil.renameImagesAsUnique(report);
+	    } else if (reportMetaData.getType() == EntityMetaData.JASPER_REPORT) {
+	    	JasperContent reportContent = createJasperContent(reportMetaData, report.getPath());
+	    	report.setContent(reportContent);
+	    	report = JasperUtil.renameImagesAsUnique(report);
+	    }
+	    
         if (update) {
 			storageService.modifyEntity(report);	    	
 	    } else {
@@ -483,6 +502,77 @@ public class StorageWebService {
         }
 
         return reportContent;
+	}
+	
+	private JasperContent createJasperContent(ReportMetaData reportMetaData, String reportPath) {
+		JasperContent reportContent = new JasperContent();
+		reportContent.setName("content");
+		reportContent.setPath(StorageUtil.createPath(reportPath, "content"));
+		try {
+			List<JcrFile> jasperFiles = new ArrayList<JcrFile>();
+			JcrFile masterFile = new JcrFile();
+			masterFile.setName(reportMetaData.getMainFile().getFileName());
+			masterFile.setPath(StorageUtil.createPath(reportContent.getPath(), masterFile.getName()));
+			masterFile.setMimeType("text/xml");
+			masterFile.setLastModified(Calendar.getInstance());
+			masterFile.setDataProvider(new JcrDataProviderImpl(reportMetaData.getMainFile().getFileContent())); // TODO HZ
+
+			JasperReportSaxParser parser = new JasperReportSaxParser();
+			parser.process(reportMetaData.getMainFile().getFileContent());
+			String language = parser.getLanguage();			
+			if ((language != null) && !"java".equals(language)) {
+				throw new ReportEngineException("Report language is '" + language + "'. Only reports with 'java' may be added.");
+			}
+			jasperFiles.add(masterFile);
+			
+			if (reportMetaData.getSubreports() != null) {
+				for (FileMetaData subreport : reportMetaData.getSubreports()) {
+	                JcrFile subreportFile = new JcrFile();
+	                subreportFile.setName(subreport.getFileName());
+	                subreportFile.setPath(StorageUtil.createPath(reportContent.getPath(), subreportFile.getName()));
+	                subreportFile.setMimeType("text/xml");
+	                subreportFile.setLastModified(Calendar.getInstance());
+	                subreportFile.setDataProvider(new JcrDataProviderImpl(subreport.getFileContent()));
+	
+	                parser.process(subreport.getFileContent());
+	                language = parser.getLanguage();
+	                if ((language != null) && !"java".equals(language)) {
+	                    throw new ReportEngineException("Report language is '" + language + "'. Only reports with 'java' may be added.");
+	                }
+	
+	                jasperFiles.add(subreportFile);
+	            }
+			}
+            reportContent.setJasperFiles(jasperFiles);
+
+            if (reportMetaData.getParametersFile() != null) {
+                JcrFile parametersFile = new JcrFile();
+                parametersFile.setName(reportMetaData.getParametersFile().getFileName());
+                parametersFile.setPath(StorageUtil.createPath(reportContent.getPath(), parametersFile.getName()));
+                parametersFile.setMimeType("text/xml");
+                parametersFile.setLastModified(Calendar.getInstance());
+                parametersFile.setDataProvider(new JcrDataProviderImpl(reportMetaData.getParametersFile().getFileContent()));
+                reportContent.setParametersFile(parametersFile);
+            }
+
+            List<JcrFile> imageFiles = new ArrayList<JcrFile>();
+            if (reportMetaData.getImages() != null) {
+	            for (FileMetaData img : reportMetaData.getImages()) {
+	                JcrFile imageFile = new JcrFile();
+	                imageFile.setName(img.getFileName());
+	                imageFile.setPath(StorageUtil.createPath(reportContent.getPath(), imageFile.getName()));
+	                imageFile.setMimeType(MimeTypeUtil.getMimeType(img.getFileContent()));
+	                imageFile.setLastModified(Calendar.getInstance());
+	                imageFile.setDataProvider(new JcrDataProviderImpl(img.getFileContent()));
+	                imageFiles.add(imageFile);
+	            }
+            }
+            reportContent.setImageFiles(imageFiles);
+		} catch (Exception e) {
+			LOG.debug("error = " + e);
+		}
+
+		return reportContent;
 	}
 
     private ChartContent createChartContent(ChartMetaData chartMetaData, String chartPath) {
