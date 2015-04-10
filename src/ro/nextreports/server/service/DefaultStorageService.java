@@ -200,6 +200,16 @@ public class DefaultStorageService implements StorageService {
             auditPath("Delete entity", path);
         }
     }
+    
+    @Transactional
+    public List<String> getReferences(List<String> ids)  {
+    	List<String> result = new ArrayList<String>();
+        for (String id : ids) {
+            List<String> refs = storageDao.getReferences(id);
+            result.addAll(refs);
+        }
+        return result;
+    }
 
     @Transactional
     public void renameEntity(String path, String newName) throws NotFoundException, DuplicationException {

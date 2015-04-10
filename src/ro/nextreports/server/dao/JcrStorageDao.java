@@ -25,6 +25,7 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
+import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.query.QueryResult;
 import javax.jcr.version.Version;
@@ -485,11 +486,25 @@ public class JcrStorageDao extends AbstractJcrDao implements StorageDao, Initial
         } catch (RepositoryException e) {
             throw convertJcrAccessException(e);
         }
-
+        
         getTemplate().save();
         
         entitiesCache.remove(id);
     }
+    
+	public List<String> getReferences(String id) {
+		List<String> result = new ArrayList<String>();
+		try {
+			Node node = checkId(id);
+			PropertyIterator pi = node.getReferences();
+			while (pi.hasNext()) {				
+				result.add(pi.nextProperty().getParent().getPath());
+			}
+		} catch (Exception e) {					
+			e.printStackTrace();
+		}
+		return result;
+	}
 
     public void renameEntity(String path, String newName) throws NotFoundException, DuplicationException {
     	checkPath(path);

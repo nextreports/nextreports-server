@@ -35,7 +35,6 @@ import ro.nextreports.server.web.core.action.ActionConfirmAjaxLink;
 import ro.nextreports.server.web.core.action.ActionContext;
 import ro.nextreports.server.web.core.event.SelectEntityEvent;
 
-
 import java.util.List;
 import java.util.ArrayList;
 
@@ -43,6 +42,9 @@ import java.util.ArrayList;
  * @author Decebal Suiu
  */
 public class DeleteActionLink extends ActionConfirmAjaxLink {
+	
+	// max number of references to show to user
+	private static final int MAX_REFERENCES=10;
 
     @SpringBean
     private StorageService storageService;
@@ -80,25 +82,32 @@ public class DeleteActionLink extends ActionConfirmAjaxLink {
                 Entity parent = storageService.getEntity(StorageUtil.getParentPath(entityPath));
                 new SelectEntityEvent(this, target, parent).fire();
             }
-        } catch (ReferenceException e) {
-            String message = e.getMessage();
-
-            int index = message.indexOf(":");
-            int lastIndex = message.lastIndexOf(":");
-            if ((index != -1) && (lastIndex != -1) && (lastIndex > index)) {
-                String id = message.substring(index + 2, lastIndex);
-                Entity entity;
-				try {
-					entity = storageService.getEntityById(id);
-	                message = "References to child entity \"" + entity.getName() + "\" exist.";
-				} catch (NotFoundException e1) {
-					// TODO
-					e1.printStackTrace();
+		} catch (ReferenceException e) {
+			String message = e.getMessage();
+			try {				
+				List<String> refs = storageService.getReferences(ids);				
+				if (refs.size() > 0) {
+					StringBuilder sb = new StringBuilder(getString("References.exists"));
+					sb.append(":\\n\\n");
+					int no = 1;
+					for (int i=0; i<refs.size(); i++) {
+						if (i < MAX_REFERENCES) {
+							sb.append(refs.get(i));
+							sb.append("\\n");
+						} else {
+							break;
+						}
+					}
+					if (MAX_REFERENCES < refs.size()) {
+						sb.append("...\\n");
+					}
+					message = sb.toString();					
 				}
-            }
-            
-            add(new AlertBehavior(message));
-            target.add(this);
+			} catch (Throwable e1) {				
+				e1.printStackTrace();
+			}			
+			add(new AlertBehavior(message));
+			target.add(this);
         } catch (Exception e) {
             e.printStackTrace();
         }

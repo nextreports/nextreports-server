@@ -116,4 +116,6 @@ public interface StorageService {
     
     public void clearUserWidgetData(String widgetId);
     
+    public List<String> getReferences(List<String> ids);
+    
 }

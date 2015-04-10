@@ -120,4 +120,6 @@ public interface StorageDao {
     
     public void clearUserWidgetData(String widgetId) ;
     
+    public List<String> getReferences(String id);
+    
 }
