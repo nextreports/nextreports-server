@@ -32,6 +32,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import ro.nextreports.server.StorageConstants;
 import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.exception.NotFoundException;
@@ -47,6 +48,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Mihai Dinca-Panaitescu
@@ -68,6 +70,7 @@ public class AddEntityPanel extends FormContentPanel {
 	private Component swapComponent;
 	private ITreeProvider<Entity> treeProvider;
 	private EntityTree tree;
+	private DropDownChoice<MigrationEntityType> typeDropDownChoice;
 
 	private ProviderSubset<Entity> selected;
 
@@ -97,7 +100,7 @@ public class AddEntityPanel extends FormContentPanel {
 			}
 
 	    };
-		DropDownChoice<MigrationEntityType> typeDropDownChoice = new DropDownChoice<MigrationEntityType>("type",
+		typeDropDownChoice = new DropDownChoice<MigrationEntityType>("type",
 				new PropertyModel<MigrationEntityType>(this, "type"), types, renderer);
 		typeDropDownChoice.setOutputMarkupPlaceholderTag(true);
 		add(typeDropDownChoice);
@@ -241,6 +244,22 @@ public class AddEntityPanel extends FormContentPanel {
 		}
 
 	}
-
+	
+	public void setRoot(MigrationEntityType type) {
+		if (type == null) {
+			return;
+		}
+		this.type = type;
+		typeDropDownChoice.setEnabled(false);
+		tree = createTree(getRootPath());
+		tree.setOutputMarkupId(true);
+		swapComponent.replaceWith(tree);
+		swapComponent = tree;			
+	}
+	
+	public Set<Entity> getTreeModel() {
+		return tree.getModelObject();
+	}
+	
 }
 
