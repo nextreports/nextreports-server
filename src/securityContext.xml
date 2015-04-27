@@ -22,12 +22,31 @@
     <import resource="classpath:authenticationCas.xml"/>
     <import resource="classpath:securitySynchronizer.xml"/>
     -->   
+            
+    <bean id="auditor" class="ro.nextreports.server.audit.CompoundAuditor">
+        <property name="auditors">
+            <list>
+                <ref bean="logAuditor"/>
+                <!-- 
+                <ref bean="dbAuditor"/>
+                 -->
+            </list>
+	    </property>
+    </bean> 
     
-    <bean id="auditor" class="ro.nextreports.server.audit.LogAuditor"/>
-    <!--
-    <bean id="auditor" class="ro.nextreports.server.audit.OracleAuditor">
-        <property name="dataSource" ref="cssDataSource"/>
-    </bean>
+    <bean id="logAuditor" class="ro.nextreports.server.audit.LogAuditor"/>   
+   
+    <!-- 
+    <bean id="dbAuditor" class="ro.nextreports.server.audit.MySqlAuditor">
+        <property name="dataSource" ref="auditDataSource"/>
+    </bean>    
+    
+    <bean id="auditDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+      <property name="url" value=""/>
+      <property name="username" value=""/>
+      <property name="password" value=""/>
+   </bean>
     -->
     
     <!-- ======================== FILTER CHAIN ======================= -->
