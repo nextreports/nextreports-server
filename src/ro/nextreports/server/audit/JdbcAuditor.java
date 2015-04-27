@@ -29,10 +29,10 @@ import org.springframework.transaction.support.TransactionTemplate;
  */
 public abstract class JdbcAuditor extends JdbcDaoSupport implements Auditor {
 
-	public static final String INSERT_EVENT_SQL = "INSERT INTO NS_AUDIT (EVENT_ID, \"DATE\", USERNAME, ACTION, \"SESSION\", IP, \"LEVEL\", ERROR_MESSAGE) " +
+	public static final String INSERT_EVENT_SQL = "INSERT INTO NS_AUDIT (EVENT_ID, EVENT_DATE, EVENT_USERNAME, EVENT_ACTION, EVENT_SESSION, EVENT_IP, EVENT_LEVEL, EVENT_ERROR_MESSAGE) " +
 			"VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-	public static final String INSERT_CONTEXT_SQL = "INSERT INTO NS_AUDIT_CONTEXT (EVENT_ID, NAME, VALUE) " +
+	public static final String INSERT_CONTEXT_SQL = "INSERT INTO NS_AUDIT_CONTEXT (EVENT_ID, EVENT_NAME, EVENT_VALUE) " +
 			"VALUES (?, ?, ?)";
 
 	public abstract int getNextEventId();
