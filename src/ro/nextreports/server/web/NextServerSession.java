@@ -89,7 +89,7 @@ public class NextServerSession extends WebSession {
 	@SpringBean
 	private StorageService storageService;
 
-	@SpringBean
+	@SpringBean(name="auditor")
 	private Auditor auditor;
 	
 	public NextServerSession(Request request) {
