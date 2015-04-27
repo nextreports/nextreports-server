@@ -102,6 +102,10 @@ public class DefaultSectionManager implements SectionManager, ApplicationContext
 				if(moduleLicence.isValid(NextServerModuleLicence.ANALYSIS_MODULE)) {				
 					sections.put(section.getId(), section);
 				}
+			} else if (AuditSection.ID.equals(section.getId())) {
+				if(moduleLicence.isValid(NextServerModuleLicence.AUDIT_MODULE)) {				
+					sections.put(section.getId(), section);
+				}	
 			} else {
 				sections.put(section.getId(), section);
 			}			

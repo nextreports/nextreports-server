@@ -61,6 +61,10 @@ public class SchedulerJobReadAdvice {
 	@Pointcut("execution(* getEntitiesByClassName(..))")
 	public void getEntitiesByClassName() {
 	}
+	
+	@Pointcut("execution(* getEntitiesByClassNameWithoutSecurity(..))")
+	public void getEntitiesByClassNameWithoutSecurity() {
+	}
 
     @Pointcut("execution(* getEntityChildrenById(..))")
 	public void getEntityChildrenById() {
@@ -94,7 +98,7 @@ public class SchedulerJobReadAdvice {
     public void schedulerJobsReadById() {
     }
 
-    @Pointcut("inStorageService() && getEntitiesByClassName()")
+    @Pointcut("inStorageService() && (getEntitiesByClassName() || getEntitiesByClassNameWithoutSecurity())")
     public void schedulerJobsReadByClassName() {
     }
 

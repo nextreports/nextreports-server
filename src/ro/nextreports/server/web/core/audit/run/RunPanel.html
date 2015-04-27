@@ -1,0 +1,48 @@
+<wicket:panel>  
+    <table>    
+    	<tr>
+            <td class="td-label">
+                <label><strong><wicket:message key="Section.Audit.Run.start">Start</wicket:message></strong></label>
+            </td>
+            <td>                  
+                <span wicket:id="startDate" style="margin-top:2px; display: block;"/>                      
+            </td>                    
+        </tr>      
+        <tr>
+            <td class="td-label">
+                <label><strong><wicket:message key="Section.Audit.Run.end">End</wicket:message></strong></label>
+            </td>
+            <td>                  
+                <span wicket:id="endDate" style="margin-top:2px; display: block;"/>                      
+            </td>                    
+        </tr>                                     
+		<tr>
+            <td class="td-label">
+                <label><strong><wicket:message key="Section.Audit.Run.owner">Owner</wicket:message></strong></label>
+            </td>
+            <td>
+                <select wicket:id="owner" style="margin-top:2px;"></select>                        
+            </td>                    
+        </tr> 
+        <tr>
+            <td class="td-label">
+                <label><strong><wicket:message key="Section.Audit.Run.path">Path</wicket:message></strong></label>
+            </td>
+            <td>
+            	<span style="margin-top:2px; display: block;">           
+                	<input type="text" wicket:id="path" style="width:200px; height: 20px;"//>
+                	<a wicket:id="addPath" class="button" style="margin-left: 2px; float: right;margin-top: 0px;">+</a>
+                </span>                        
+            </td>                    
+        </tr>
+        <tr>
+            <td class="td-label">
+                <label><strong><wicket:message key="Section.Audit.Run.status">Status</wicket:message></strong></label>
+            </td>
+            <td>
+                <select wicket:id="status" style="margin-top:2px;"></select>                        
+            </td>                    
+        </tr> 		    		                       
+    </table>     
+    <div wicket:id="runDialog"/>      
+</wicket:panel>

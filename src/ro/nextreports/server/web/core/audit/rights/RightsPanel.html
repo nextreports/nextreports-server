@@ -1,0 +1,40 @@
+<wicket:panel>  
+    <table>                                
+        <tr>
+            <td class="td-label">
+                <label><strong><wicket:message key="Section.Audit.Rights.type">Type</wicket:message></strong></label>
+            </td>
+            <td>
+                <select wicket:id="type" style="margin-top:2px;"></select>                        
+            </td>                    
+        </tr> 
+		<tr>
+            <td class="td-label">
+                <label><strong><wicket:message key="Section.Audit.Rights.name">Name</wicket:message></strong></label>
+            </td>
+            <td>
+                <select wicket:id="name" style="margin-top:2px;"></select>                        
+            </td>                    
+        </tr> 
+		<tr>
+            <td class="td-label">
+                <label><strong><wicket:message key="Section.Audit.Rights.entities">Entities</wicket:message></strong></label>
+            </td>
+            <td>
+                <div class="paletteContainer">
+                     <div wicket:id="entities"></div>
+                </div>
+            </td>
+        </tr>  
+        <tr>
+            <td class="td-label">
+                <label><strong><wicket:message key="Section.Audit.Rights.rights">Rights</wicket:message></strong></label>
+            </td>
+            <td>
+                <div class="paletteContainer">
+                     <div wicket:id="rights"></div>
+                </div>
+            </td>
+        </tr>                                                      
+    </table>              
+</wicket:panel>

@@ -203,5 +203,7 @@
     <bean id="settingsSection" class="ro.nextreports.server.web.core.section.SettingsSection"/>    
     
     <bean id="migrationSection" class="ro.nextreports.server.web.core.section.MigrationSection"/>
+    
+    <bean id="auditSection" class="ro.nextreports.server.web.core.section.AuditSection"/>
 
 </beans>
