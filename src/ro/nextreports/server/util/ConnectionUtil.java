@@ -99,10 +99,10 @@ public class ConnectionUtil {
     			}	    			
     			if (connectionTimeout > 0) {
     				pool.setCheckoutTimeout(connectionTimeout*1000); // ms
-    			}
-    			pool.setMinPoolSize(3);
+    			}    			
+    			pool.setMinPoolSize(dataSource.getMinPoolSize());
     			pool.setAcquireIncrement(5);
-    			pool.setMaxPoolSize(20);
+    			pool.setMaxPoolSize(dataSource.getMaxPoolSize());
     			pool.setMaxIdleTime(300);
     			
     			if (dataSource.getPath() != null) {

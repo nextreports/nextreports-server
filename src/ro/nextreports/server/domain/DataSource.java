@@ -27,6 +27,9 @@ import org.jcrom.annotations.JcrProperty;
 public class DataSource extends Entity {
 
 	private static final long serialVersionUID = 1L;
+	
+	private static final int DEFAULT_MIN_POOL_SIZE = 3;
+	private static final int DEFAULT_MAX_POOL_SIZE = 20;
 
 	@JcrProperty
     private String vendor;
@@ -45,6 +48,12 @@ public class DataSource extends Entity {
     
     @JcrChildNode
     private List<KeyValue> properties;
+    
+    @JcrProperty
+    private Integer minPoolSize;
+    
+    @JcrProperty
+    private Integer maxPoolSize;
 
     public DataSource() {
     	super();
@@ -94,13 +103,42 @@ public class DataSource extends Entity {
         this.password = password;
     }
    
-
 	public List<KeyValue> getProperties() {
 		return properties;
 	}
 
 	public void setProperties(List<KeyValue> properties) {
 		this.properties = properties;
+	}
+	
+	public Integer getMinPoolSize() {
+		if (minPoolSize == null) {
+			return DEFAULT_MIN_POOL_SIZE;
+		}
+		return minPoolSize;
+	}
+
+	public void setMinPoolSize(Integer minPoolSize) {
+		if ((minPoolSize == null) || (minPoolSize < 1)) {
+			this.minPoolSize = DEFAULT_MIN_POOL_SIZE;
+		} else {
+			this.minPoolSize = minPoolSize;
+		}
+	}
+
+	public Integer getMaxPoolSize() {
+		if (maxPoolSize == null) {
+			return DEFAULT_MAX_POOL_SIZE;
+		}
+		return maxPoolSize;
+	}
+
+	public void setMaxPoolSize(Integer maxPoolSize) {
+		if ((maxPoolSize == null) || (maxPoolSize < 1)) {
+			this.maxPoolSize = DEFAULT_MAX_POOL_SIZE;
+		} else {
+			this.maxPoolSize = maxPoolSize;
+		}
 	}
 
 	@Override
@@ -115,6 +153,8 @@ public class DataSource extends Entity {
            append("\r\ndriver=").append(driver).
            append("\r\nurl=").append(url).
            append("\r\nproperties=").append(properties).
+           append("\r\nminPoolSize=").append(minPoolSize).
+           append("\r\nmaxPoolSize=").append(maxPoolSize).
            append("\r\n]");
         return sb.toString();
     }
