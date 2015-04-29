@@ -35,6 +35,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.validator.RangeValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +50,7 @@ import ro.nextreports.server.web.core.BasePage;
 import ro.nextreports.server.web.core.EntityBrowserPanel;
 import ro.nextreports.server.web.core.validation.DuplicationEntityValidator;
 import ro.nextreports.server.web.core.validation.JcrNameValidator;
-
+import ro.nextreports.server.web.datasource.validator.MinMaxPoolSizeValidator;
 import ro.nextreports.engine.querybuilder.sql.dialect.CSVDialect;
 
 /**
@@ -180,6 +181,14 @@ public class DataSourcePanel extends Panel {
             password.setRequired(false);
             password.setResetPassword(false);
             add(password);
+            
+            final TextField<Integer> minPool = new TextField<Integer>("minPoolSize");
+            minPool.add(RangeValidator.minimum(1));
+            add(minPool);
+            final TextField<Integer> maxPool = new TextField<Integer>("maxPoolSize");
+            maxPool.add(RangeValidator.minimum(1));
+            add(maxPool);
+            add(new MinMaxPoolSizeValidator(minPool, maxPool));
 
             add(new AjaxLink("cancel") {
 
