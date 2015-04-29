@@ -1136,6 +1136,10 @@ span.tree-content .selected span.tree-label {
     width: 200px;
 }
 
+.auditRights .paletteContainer table.palette td.pane select {
+    width: 170px !important;
+}
+
 .paletteContainer table.palette td.pane select.choicesSelect {
     min-width:170px;    
     width: 100%;

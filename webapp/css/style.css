@@ -1136,6 +1136,10 @@ span.tree-content .selected span.tree-label {
     width: 200px;
 }
 
+.auditRights .paletteContainer table.palette td.pane select {
+    width: 170px !important;
+}
+
 .paletteContainer table.palette td.pane select.choicesSelect {
     min-width:170px;    
     width: 100%;
@@ -1643,4 +1647,46 @@ div.w_content {
 
 table.actions-grid tr.navigation td.actions-col a, .actions-grid .navigation a {
     padding-top: 0px !important;
+}
+
+.auditSection {
+	overflow: auto;
+}
+
+.auditTable {	
+	border: 1px solid rgb(202, 202, 202); 
+	float: left;
+    margin: 0 10px 10px 10px;
+    width: 98%;
+}
+
+.audit {
+    margin-top: 20px;    
+}
+
+.audit ul li {
+    font-size: 14px;
+    padding: 0px 10px 0px 10px;    
+}
+
+.audit ul li:hover{
+	color: #789800;
+	cursor: pointer;
+}
+
+.auditRow {
+	display: inline-block;
+	float: left;
+	margin-right: 20px;
+	margin-bottom: 10px;
+}
+
+.auditDesc {	
+	color: #999;
+	margin-left: 10px;
+}
+
+.auditToolbar {
+	margin-right: 10px;
+	clear: left;
 }

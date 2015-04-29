@@ -78,8 +78,7 @@ public class InnerReportsPanel extends Panel {
 	private void click(InnerReport ir, AjaxRequestTarget target) {
 		final ModalWindow dialog = findParent(BasePage.class).getDialog();
         dialog.setTitle(getString("Section.Audit.innerReports." + ir.toString()));
-        dialog.setInitialWidth(550);
-        dialog.setUseInitialHeight(false);                
+        int width = 500;                       
         
         FormContentPanel panel;
         if (ir.toString().equals(InnerReport.RIGHTS.toString())) {
@@ -91,6 +90,7 @@ public class InnerReportsPanel extends Panel {
 				}
 			};
         } else if (ir.toString().equals(InnerReport.RUN.toString())) {
+        		width = 350;
 				panel = new RunPanel() {
 					@Override
 					public void onOk(AjaxRequestTarget target) {												
@@ -99,6 +99,7 @@ public class InnerReportsPanel extends Panel {
 					}
 				};	
         } else if (ir.toString().equals(InnerReport.LIST.toString())) {
+        	width = 250;
 			panel = new ListPanel() {
 				@Override
 				public void onOk(AjaxRequestTarget target) {											
@@ -109,6 +110,8 @@ public class InnerReportsPanel extends Panel {
         } else {
         	panel = new FormContentPanel(FormPanel.CONTENT_ID);
         }
+        dialog.setInitialWidth(width);
+        dialog.setUseInitialHeight(false);
         dialog.setContent(new FormPanel(dialog.getContentId(), panel, true));        
         dialog.show(target);
 
