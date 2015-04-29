@@ -17,6 +17,8 @@
 package ro.nextreports.server.web.dashboard.table;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,8 +34,10 @@ import org.slf4j.LoggerFactory;
 
 import ro.nextreports.server.domain.DrillEntityContext;
 import ro.nextreports.server.service.DashboardService;
+import ro.nextreports.server.util.ServerUtil;
 import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.engine.exporter.util.TableData;
+import ro.nextreports.engine.i18n.I18nLanguage;
 
 /**
  * @author Decebal Suiu
@@ -41,18 +45,25 @@ import ro.nextreports.engine.exporter.util.TableData;
 public class TableDataProvider extends SortableDataProvider<RowData, String> {
 
     private static final long serialVersionUID = 1L;
+    
+    public static final String SORT_PROP_POS_SUFFIX = "_sortPos";
+    public static final String SORT_PROP_DIR_SUFFIX = "_sortDir";
 
     private static final Logger LOG = LoggerFactory.getLogger(TableDataProvider.class);
 
     private transient List<RowData> cache;
     private transient List<String> header;
+    private transient List<String> pattern;
+    private transient I18nLanguage language;
     private String widgetId;
     private DrillEntityContext drillContext;
-    private Map<String, Object> urlQueryParameters;
+    private Map<String, Object> urlQueryParameters; 
+    
+    private int sortPos;
+    private int sortDir;
 
     @SpringBean
     private DashboardService dashboardService;
-
 
     public TableDataProvider() {
         this(null, null);
@@ -65,8 +76,8 @@ public class TableDataProvider extends SortableDataProvider<RowData, String> {
     public TableDataProvider(String widgetId, DrillEntityContext drillContext, Map<String, Object> urlQueryParameters) {        
         this.widgetId = widgetId;
         this.drillContext = drillContext;
-        this.urlQueryParameters = urlQueryParameters;
-        
+        this.urlQueryParameters = urlQueryParameters;     
+       
         Injector.get().inject(this);
     }
 
@@ -74,11 +85,56 @@ public class TableDataProvider extends SortableDataProvider<RowData, String> {
     @Override
 	public Iterator<RowData> iterator(long first, long count) {
         try {
+        	List<RowData> data = getCache();
+        	String username = ServerUtil.getUsername();
+        	String sortPosKey = username == null ? widgetId + SORT_PROP_POS_SUFFIX : widgetId + "_" + username + SORT_PROP_POS_SUFFIX;
+        	String sortDirKey = username == null ? widgetId + SORT_PROP_DIR_SUFFIX : widgetId + "_" + username + SORT_PROP_DIR_SUFFIX;
+        	if (getSort() != null) {      
+        		sortDir = getSort().isAscending() ? 1 : -1;
+            	sortPos = getPropertyPosition(getSort().getProperty());
+            	// save these properties to be used by TableResource (save to excel)            	
+        		System.setProperty(sortPosKey, String.valueOf(sortPos));
+        		System.setProperty(sortDirKey, String.valueOf(sortDir));
+				Collections.sort(data, new Comparator<RowData>() {
+					public int compare(RowData o1, RowData o2) {											
+						if (sortPos != -1) {
+							if ((o1.getCellValues(sortPos) == null) && (o2.getCellValues(sortPos) == null)) {
+								return 0;
+							} else if (o1.getCellValues(sortPos) == null) {
+								return sortDir;
+							} else if (o2.getCellValues(sortPos) == null) {
+								return -sortDir;
+							} else {								
+								return sortDir * new TableObjectComparator().compare(o1.getCellValues(sortPos), o2.getCellValues(sortPos)); 
+							}	
+						}
+						return 0;
+					}
+				});
+        	} else {
+        		System.clearProperty(sortPosKey);
+            	System.clearProperty(sortDirKey);
+        	}
 			return getCache().subList((int) first, (int) (first + count)).iterator();
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			return IteratorUtils.EMPTY_ITERATOR;
 		}
+    }
+    
+    private int getPropertyPosition(String property) {
+    	List<String> header = new ArrayList<String>();
+		try {
+			header = getHeader();
+			for (int i=0, size=header.size(); i<size; i++) {
+	    		if (header.get(i).equals(property)) {
+	    			return i;
+	    		}
+	    	}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+		}    	
+    	return -1;
     }
 
     @Override
@@ -111,6 +167,18 @@ public class TableDataProvider extends SortableDataProvider<RowData, String> {
         return header;
     }
 	
+	public List<String> getPattern() throws NoDataFoundException, Exception {
+        getCache();
+        
+        return pattern;
+    }
+	
+	public I18nLanguage getLanguage() throws NoDataFoundException, Exception {
+        getCache();
+        
+        return language;
+    }
+	
     private List<RowData> getCache() throws NoDataFoundException, Exception {
         if (cache == null) {
             if (widgetId != null) {
@@ -123,6 +191,10 @@ public class TableDataProvider extends SortableDataProvider<RowData, String> {
                     for (int i=0, size=data.size(); i<size; i++) {
                     	List<Object> row = data.get(i);
             			RowData rowData = new RowData(row);
+            			if (i == 0) {
+            				pattern = tableData.getPattern();
+            				language = tableData.getLanguage();
+            			}	
             			rowData.setStyles(style.get(i));
             			cache.add(rowData);
             		}

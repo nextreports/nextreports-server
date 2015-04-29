@@ -40,7 +40,10 @@ import org.slf4j.LoggerFactory;
 
 import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.engine.exporter.util.StyleFormatConstants;
+import ro.nextreports.engine.i18n.I18nLanguage;
 import ro.nextreports.engine.util.HtmlUtil;
+import ro.nextreports.engine.util.StringUtil;
+import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.DrillEntityContext;
 import ro.nextreports.server.domain.Report;
 import ro.nextreports.server.exception.NotFoundException;
@@ -50,6 +53,7 @@ import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.util.WidgetUtil;
 import ro.nextreports.server.web.common.table.BaseTable;
 import ro.nextreports.server.web.common.table.LinkPropertyColumn;
+import ro.nextreports.server.web.dashboard.EntityWidget;
 import ro.nextreports.server.web.dashboard.Widget;
 
 /**
@@ -64,6 +68,7 @@ public class TableRendererPanel extends GenericPanel<Report> {
 	private static final Logger LOG = LoggerFactory.getLogger(TableRendererPanel.class);
 	private DrillEntityContext drillContext;	
 	private String drillPattern;
+	private boolean allowSorting = false;
 	// font size specified as a parameter in iframe
 	private String iframeFontSize = null;
 	private String iframeCellPadding = null;
@@ -82,10 +87,29 @@ public class TableRendererPanel extends GenericPanel<Report> {
 		super(id, model);
 		this.drillContext = drillContext;
 		
+		ro.nextreports.engine.Report rep = null; 
+				
 		if ((drillContext != null) && (drillContext.getColumn() > 0)) {
-			ro.nextreports.engine.Report rep = NextUtil.getNextReport(storageService.getSettings(), model.getObject());
+			rep = NextUtil.getNextReport(storageService.getSettings(), model.getObject());
 			drillPattern = NextUtil.getDetailColumnPattern(rep, drillContext.getColumn()-1);			
+		} else {
+			if (model != null) {
+				rep = NextUtil.getNextReport(storageService.getSettings(), model.getObject());
+			} else {
+				try {
+					EntityWidget widget = (EntityWidget)dashboardService.getWidgetById(widgetId);	
+					if (widget.getEntity() instanceof Chart) {						
+						rep = NextUtil.getNextReport((Chart)widget.getEntity());						
+					} else {
+						rep = NextUtil.getNextReport(storageService.getSettings(), (Report)widget.getEntity());
+					}
+				} catch (NotFoundException e) {
+					LOG.error(e.getMessage(), e);
+				}
+			}
 		}
+		
+		this.allowSorting = reportHasHeaderAndOneDetail(rep);
 		
 		if (urlQueryParameters != null) {
 			Object tableFontSizeObj = urlQueryParameters.get("tableFontSize");
@@ -112,8 +136,12 @@ public class TableRendererPanel extends GenericPanel<Report> {
 	
 	private BaseTable getCurrentTable(TableDataProvider dataProvider, String widgetId ) throws NoDataFoundException {    	        
         List<String> tableHeader;
+        List<String> tablePattern;
+        I18nLanguage language;
 		try {
-			tableHeader = dataProvider.getHeader();			
+			tableHeader = dataProvider.getHeader();
+			tablePattern = dataProvider.getPattern();
+			language = dataProvider.getLanguage();
 		} catch (Exception e) {		
 			e.printStackTrace();
 			LOG.error(e.getMessage(), e);
@@ -130,77 +158,105 @@ public class TableRendererPanel extends GenericPanel<Report> {
 		} catch (NotFoundException e) {
 			LOG.error(e.getMessage(), e);
 		}
-		BaseTable<RowData> table = new BaseTable<RowData>("table", getPropertyColumns(tableHeader), dataProvider, rowsPerPage) {
+		BaseTable<RowData> table = new BaseTable<RowData>("table", getPropertyColumns(tableHeader, tablePattern, language), dataProvider, rowsPerPage) {
 			
 		};					
         return table;
     }
+	
+	private PropertyColumn<RowData, String> createPropertyColumn(List<String> header, final List<String> pattern, final I18nLanguage language, final int i) {
+		return new PropertyColumn<RowData, String>(new Model<String>(header.get(i)),header.get(i), "cellValues." + i) {
+	    	 public void populateItem(Item cellItem, String componentId, IModel rowModel) {
+	    		setCellStyle(cellItem, rowModel, i);
+				super.populateItem(cellItem, componentId, rowModel); 
+	    	  }
 
-    private List<IColumn<RowData, String>> getPropertyColumns(List<String> header) {
+			@Override
+			public Component getHeader(String componentId) {
+				Component header = super.getHeader(componentId);
+				setCellStyle(header);
+				return header;
+			}	
+			
+			@Override				    
+			public IModel<Object> getDataModel(IModel rowModel) {
+				IModel<Object> model = super.getDataModel(rowModel);						
+				String s = StringUtil.getValueAsString(model.getObject(), pattern.get(i), language);				
+				return new Model(s);
+			}
+			
+			@Override
+			public String getSortProperty() {
+				if (allowSorting) {
+					return super.getSortProperty();
+				} else {
+					return null;
+				}
+			}
+			
+	    };
+	}
+	
+	private LinkPropertyColumn<RowData> createLinkPropertyColumn(List<String> header, final List<String> pattern, final I18nLanguage language, final int i) {
+		return new LinkPropertyColumn<RowData>(new Model<String>(header.get(i)), header.get(i), "cellValues." + i) {
+			
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(Item item, String componentId, IModel model, AjaxRequestTarget target) {
+														
+				String clickedValue = StringUtil.getValueAsString(((RowData) model.getObject()).getCellValues().get(drillContext.getColumn() - 1), pattern.get(i), language);
+				try {
+					onClickLink(target, clickedValue, drillPattern);
+				} catch (Exception e) {
+					LOG.error(e.getMessage(), e);
+				}	
+			}
+			
+			public void populateItem(Item cellItem, String componentId, IModel rowModel) {
+				setCellStyle(cellItem, rowModel, i);
+	    		super.populateItem(cellItem, componentId, rowModel); 
+	    	}
+			
+			@Override
+			public Component getHeader(String componentId) {
+				Component header = super.getHeader(componentId);
+				setCellStyle(header);
+				return header;
+			}
+			
+			@Override				    
+			public IModel<Object> getDataModel(IModel rowModel) {
+				IModel<Object> model = super.getDataModel(rowModel);				
+				String s = StringUtil.getValueAsString(model.getObject(), pattern.get(i), language);
+				return new Model(s);
+			}
+			
+			@Override
+			public String getSortProperty() {
+				if (allowSorting) {
+					return super.getSortProperty();
+				} else {
+					return null;
+				}
+			}
+		};
+	}
+
+    private List<IColumn<RowData, String>> getPropertyColumns(List<String> header, final List<String> pattern, final I18nLanguage language) {
 		List<IColumn<RowData, String>> columns = new ArrayList<IColumn<RowData, String>>();
 		int columnCount = header.size();		
 		boolean isDrillDownlable =  drillContext != null;
 		boolean isLastDrill = (drillContext != null) && drillContext.isLast();		
-		for (int i = 0; i < columnCount; i++) {		
-			final int j = i;
+		for (int i = 0; i < columnCount; i++) {					
 			if (!isDrillDownlable || isLastDrill) {				
-			    columns.add(new PropertyColumn<RowData, String>(new Model<String>(header.get(i)), "cellValues." + i) {
-			    	 public void populateItem(Item cellItem, String componentId, IModel rowModel) {
-			    		setCellStyle(cellItem, rowModel, j);
-						super.populateItem(cellItem, componentId, rowModel); 
-			    	  }
-
-					@Override
-					public Component getHeader(String componentId) {
-						Component header = super.getHeader(componentId);
-						setCellStyle(header);
-						return header;
-					}			    	 			    	 			    	
-			    });
+			    columns.add(createPropertyColumn(header, pattern, language, i));
 			} else {				
 				// link is added only for the column from the drill down report				
 				if (drillContext.getColumn() != i+1) {
-					columns.add(new PropertyColumn<RowData, String>(new Model<String>(header.get(i)), "cellValues." + i) {
-						public void populateItem(Item cellItem, String componentId, IModel rowModel) {
-				    		setCellStyle(cellItem, rowModel, j);
-							super.populateItem(cellItem, componentId, rowModel); 
-				    	}
-						
-						@Override
-						public Component getHeader(String componentId) {
-							Component header = super.getHeader(componentId);
-							setCellStyle(header);
-							return header;
-						}
-					});
+					columns.add(createPropertyColumn(header, pattern, language, i));
 				} else {					
-					columns.add(new LinkPropertyColumn<RowData>(new Model<String>(header.get(i)), "cellValues." + i) {
-						
-						private static final long serialVersionUID = 1L;
-
-						@Override
-						public void onClick(Item item, String componentId, IModel model, AjaxRequestTarget target) {
-													
-							String clickedValue = ((RowData) model.getObject()).getCellValues().get(drillContext.getColumn() - 1).toString();																																
-							try {
-								onClickLink(target, clickedValue, drillPattern);
-							} catch (Exception e) {
-								LOG.error(e.getMessage(), e);
-							}	
-						}
-						
-						public void populateItem(Item cellItem, String componentId, IModel rowModel) {
-							setCellStyle(cellItem, rowModel, j);
-				    		super.populateItem(cellItem, componentId, rowModel); 
-				    	}
-						
-						@Override
-						public Component getHeader(String componentId) {
-							Component header = super.getHeader(componentId);
-							setCellStyle(header);
-							return header;
-						}
-					});
+					columns.add(createLinkPropertyColumn(header, pattern, language, i));
 				}
 			}
 		}
@@ -248,4 +304,12 @@ public class TableRendererPanel extends GenericPanel<Report> {
 		}	
 		return needed;
     }
+    
+    private boolean reportHasHeaderAndOneDetail(ro.nextreports.engine.Report report) {
+    	if ((report == null) || (report.getLayout() == null)) {
+    		return false;
+    	}
+        return (report.getLayout().getHeaderBand().getRowCount() > 0) &&
+         	   (report.getLayout().getDetailBand().getRowCount() == 1);
+     }
 }

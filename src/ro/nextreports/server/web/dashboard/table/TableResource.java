@@ -17,6 +17,9 @@
 package ro.nextreports.server.web.dashboard.table;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.request.resource.ByteArrayResource;
@@ -24,7 +27,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ro.nextreports.server.service.DashboardService;
 import ro.nextreports.server.util.FileUtil;
-
+import ro.nextreports.server.util.ServerUtil;
 import ro.nextreports.engine.exporter.util.TableData;
 
 /**
@@ -37,6 +40,8 @@ public class TableResource extends ByteArrayResource {
     private static final long serialVersionUID = 1L;
 
 	private String widgetId;
+	private TableData data;
+	private String fileName = "table.xls";
 
     @SpringBean
     private DashboardService dashboardService;
@@ -47,11 +52,45 @@ public class TableResource extends ByteArrayResource {
         this.widgetId = widgetId;
         Injector.get().inject(this);
     }
+    
+    public TableResource(TableData data, String fileName) {
+        super("excel/ms-excel");        
+        
+        this.data = data;
+        this.fileName = fileName;
+        Injector.get().inject(this);
+    }
 
     @Override
 	protected byte[] getData(Attributes attributes) {
         try {
-        	TableData data = dashboardService.getTableData(widgetId, null);            
+        	String username = ServerUtil.getUsername();
+        	String sortPosKey = username == null ? widgetId + TableDataProvider.SORT_PROP_POS_SUFFIX : widgetId + "_" + username + TableDataProvider.SORT_PROP_POS_SUFFIX;
+        	String sortDirKey = username == null ? widgetId + TableDataProvider.SORT_PROP_DIR_SUFFIX : widgetId + "_" + username + TableDataProvider.SORT_PROP_DIR_SUFFIX;
+        	String pos = System.getProperty(sortPosKey);
+    		String dir = System.getProperty(sortDirKey);
+    		System.out.println(">> pos="+pos + "  dir="+dir);
+        	if (widgetId != null) {
+        		data = dashboardService.getTableData(widgetId, null);
+        	}
+        	if (pos != null) {
+        		final int sortPos = Integer.parseInt(pos);
+        		final int sortDir = Integer.parseInt(dir);
+        		//!! Here we sort only data (style list is not, but it is not used inside TableDataExporter)
+	        	Collections.sort(data.getData(), new Comparator<List<Object>>() {
+					public int compare(List<Object> o1, List<Object> o2) {
+						if ((o1.get(sortPos) == null) && (o2.get(sortPos) == null)) {
+							return 0;
+						} else if (o1.get(sortPos) == null) {
+							return sortDir;
+						} else if (o2.get(sortPos) == null) {
+							return -sortDir;
+						} else {
+							return sortDir * new TableObjectComparator().compare(o1.get(sortPos), o2.get(sortPos));
+						}								
+					}
+				});
+        	}
             String file = new TableDataExporter().toExcel(data);
             return FileUtil.getBytes(new File(file));
         } catch (Exception e) {
@@ -62,14 +101,10 @@ public class TableResource extends ByteArrayResource {
     }
 
     @Override
-	protected void setResponseHeaders(ResourceResponse data, Attributes attributes) {
-    	// TODO wicket 1.5
+	protected void setResponseHeaders(ResourceResponse data, Attributes attributes) {    	
     	data.disableCaching();
-    	data.setFileName("table.xls");
-		super.setResponseHeaders(data, attributes);
-		/*
-        response.setAttachmentHeader("table.xls");
-        */
+    	data.setFileName(fileName);
+		super.setResponseHeaders(data, attributes);		
     }
 
 }
