@@ -635,7 +635,9 @@ public class DefaultDashboardService implements DashboardService {
             reportRunner.setParameterValues(parameterValues);
             reportRunner.setReport(nextReport); 
             reportRunner.setFormat(ReportRunner.TABLE_FORMAT);
-            reportRunner.setTableRawData(true); // formatted data is shown inside TableRendererPanel in any PropertyColumn!
+            if (TableWidget.ALLOW_COLUMNS_SORTING) {
+            	reportRunner.setTableRawData(true); // formatted data is shown inside TableRendererPanel in any PropertyColumn!
+            }
             I18nLanguage language = I18nUtil.getLocaleLanguage(nextReport.getLayout());
     		if (language != null) {
     			reportRunner.setLanguage(language.getName());

@@ -109,7 +109,9 @@ public class TableRendererPanel extends GenericPanel<Report> {
 			}
 		}
 		
-		this.allowSorting = reportHasHeaderAndOneDetail(rep);
+		if (TableWidget.ALLOW_COLUMNS_SORTING) {
+			this.allowSorting = reportHasHeaderAndOneDetail(rep);
+		}
 		
 		if (urlQueryParameters != null) {
 			Object tableFontSizeObj = urlQueryParameters.get("tableFontSize");
@@ -204,8 +206,13 @@ public class TableRendererPanel extends GenericPanel<Report> {
 
 			@Override
 			public void onClick(Item item, String componentId, IModel model, AjaxRequestTarget target) {
-														
-				String clickedValue = StringUtil.getValueAsString(((RowData) model.getObject()).getCellValues().get(drillContext.getColumn() - 1), pattern.get(i), language);
+					
+				String clickedValue;
+				if (TableWidget.ALLOW_COLUMNS_SORTING) {
+					clickedValue = StringUtil.getValueAsString(((RowData) model.getObject()).getCellValues().get(drillContext.getColumn() - 1), pattern.get(i), language);
+				} else {
+					clickedValue = ((RowData) model.getObject()).getCellValues().get(drillContext.getColumn() - 1).toString();
+				}				
 				try {
 					onClickLink(target, clickedValue, drillPattern);
 				} catch (Exception e) {

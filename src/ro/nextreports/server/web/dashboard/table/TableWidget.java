@@ -31,6 +31,8 @@ public class TableWidget extends EntityWidget {
 	private static final long serialVersionUID = 1L;
 			
 	public static final String DEFAULT_TITLE = "Table";		
+	// if true we keep raw data inside it, otherwise we keep fromatted data as strings
+	public static final boolean ALLOW_COLUMNS_SORTING = true;
 
     public TableWidget() {
 		title = DEFAULT_TITLE;
