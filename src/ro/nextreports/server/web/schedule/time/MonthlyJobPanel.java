@@ -17,6 +17,7 @@
 package ro.nextreports.server.web.schedule.time;
 
 import java.text.DateFormatSymbols;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -40,6 +41,8 @@ public class MonthlyJobPanel extends Panel {
     private SchedulerJob schedulerJob;
 
     private Label minuteLabel;
+    private DropDownChoice minuteChoice;
+    private Label everyMinuteLabel;
     private TextField<Integer> minuteText;
     private IntervalFieldPanel hoursPanel;
     private IntervalFieldPanel daysPanel;
@@ -57,10 +60,13 @@ public class MonthlyJobPanel extends Panel {
         super(id, new Model<SchedulerJob>(schedulerJob));
 
         this.schedulerJob = schedulerJob;
-        setOutputMarkupId(true);        
+        setOutputMarkupId(true);   
+        
+        add(minuteLabel = new Label("minuteLabel", getString("JobPanel.minute")));
+        add(minuteChoice = new DropDownChoice<Integer>("minuteChoice", new PropertyModel<Integer>(schedulerJob, "time.minute"), getMinutes()));
 
-        minuteLabel = new Label("minuteLabel", getString("JobPanel.everyMinute"));
-        add(minuteLabel);
+        everyMinuteLabel = new Label("everyMinuteLabel", getString("JobPanel.everyMinute"));
+        add(everyMinuteLabel);
 
         minuteText = new TextField<Integer>("minuteText", new PropertyModel<Integer>(schedulerJob, "time.gap"));
         add(minuteText);
@@ -158,7 +164,7 @@ public class MonthlyJobPanel extends Panel {
 
                 protected void onUpdate(AjaxRequestTarget target) {
                     int monthlyType = mTypeChoice.getModelObject();
-                    enableComponents(monthlyType, minuteLabel, minuteText, hoursPanel, monthsPanel,
+                    enableComponents(monthlyType, minuteLabel, minuteChoice, everyMinuteLabel, minuteText, hoursPanel, monthsPanel,
                                 noChoice, dayChoice, everyLabel);
                     getSchedulerTime().setMonthlyType(monthlyType);
                         target.add(MonthlyJobPanel.this);
@@ -167,16 +173,18 @@ public class MonthlyJobPanel extends Panel {
             });
 
         if ((schedulerJob.getTime() != null) && (schedulerJob.getTime().getMonthlyType() != 0)) {
-            enableComponents(schedulerJob.getTime().getMonthlyType(), minuteLabel, minuteText, hoursPanel, monthsPanel,
+            enableComponents(schedulerJob.getTime().getMonthlyType(), minuteLabel, minuteChoice, everyMinuteLabel, minuteText, hoursPanel, monthsPanel,
                                 noChoice, dayChoice, everyLabel);
         }
     }
 
-    private void enableComponents(int monthlyType, Label label, TextField<Integer> minuteText,
+    private void enableComponents(int monthlyType, Label mLabel, DropDownChoice minuteChoice, Label label, TextField<Integer> minuteText,
                                   IntervalFieldPanel hoursPanel, IntervalFieldPanel monthsPanel,
                                   DropDownChoice<Integer> noChoice, DropDownChoice<String> dayChoice,
                                   Label everyLabel) {
         if (ScheduleConstants.MONTHLY_GENERAL_TYPE == monthlyType) {
+        	mLabel.setVisible(true);
+            minuteChoice.setVisible(true);
             label.setEnabled(true);
             minuteText.setEnabled(true);
             hoursPanel.setEnabled(true);
@@ -188,6 +196,8 @@ public class MonthlyJobPanel extends Panel {
             dayChoice.setEnabled(false);
             everyLabel.setEnabled(false);
         } else if (ScheduleConstants.MONTHLY_DAY_OF_WEEK_TYPE == monthlyType) {
+        	mLabel.setVisible(false);
+            minuteChoice.setVisible(false);
             label.setEnabled(false);
             minuteText.setEnabled(false);
             hoursPanel.setEnabled(false);
@@ -199,6 +209,8 @@ public class MonthlyJobPanel extends Panel {
             dayChoice.setEnabled(true);
             everyLabel.setEnabled(true);
         } else {
+        	mLabel.setVisible(false);
+            minuteChoice.setVisible(false);
             label.setEnabled(false);
             minuteText.setEnabled(false);
             hoursPanel.setEnabled(false);
@@ -228,7 +240,9 @@ public class MonthlyJobPanel extends Panel {
 
         typeLabel.setVisible(advanced);
         mTypeChoice.setVisible(advanced);
-        minuteLabel.setVisible(advanced);
+//        minuteLabel.setVisible(advanced);
+//        minuteChoice.setVisible(advanced);
+        everyMinuteLabel.setVisible(advanced);
         minuteText.setVisible(advanced);
         hoursPanel.setLinkVisible(advanced);
         weekDaysLabel.setVisible(advanced);
@@ -243,11 +257,20 @@ public class MonthlyJobPanel extends Panel {
 
      public void reset(boolean advanced) {
         if (!advanced) {
-            schedulerJob.getTime().setGap(1);
+            schedulerJob.getTime().setGap(0); // we have fixed minute
             schedulerJob.getTime().setMonths(null);
             schedulerJob.getTime().setDaysOfWeek(null);
             schedulerJob.getTime().setMonthlyType(ScheduleConstants.MONTHLY_GENERAL_TYPE);
         } 
+     }
+     
+     public ArrayList<Integer> getMinutes() {
+         ArrayList<Integer> result = new ArrayList<Integer>();
+         for (int i = 0; i <= 59; i++) {
+             result.add(i);
+         }
+         
+         return result;
      }
     
 }
