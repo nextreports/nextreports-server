@@ -183,8 +183,8 @@ public class MonthlyJobPanel extends Panel {
                                   DropDownChoice<Integer> noChoice, DropDownChoice<String> dayChoice,
                                   Label everyLabel) {
         if (ScheduleConstants.MONTHLY_GENERAL_TYPE == monthlyType) {
-        	mLabel.setVisible(true);
-            minuteChoice.setVisible(true);
+        	mLabel.setEnabled(true);
+            minuteChoice.setEnabled(true);
             label.setEnabled(true);
             minuteText.setEnabled(true);
             hoursPanel.setEnabled(true);
@@ -196,8 +196,8 @@ public class MonthlyJobPanel extends Panel {
             dayChoice.setEnabled(false);
             everyLabel.setEnabled(false);
         } else if (ScheduleConstants.MONTHLY_DAY_OF_WEEK_TYPE == monthlyType) {
-        	mLabel.setVisible(false);
-            minuteChoice.setVisible(false);
+        	mLabel.setEnabled(false);
+            minuteChoice.setEnabled(false);
             label.setEnabled(false);
             minuteText.setEnabled(false);
             hoursPanel.setEnabled(false);
@@ -209,8 +209,8 @@ public class MonthlyJobPanel extends Panel {
             dayChoice.setEnabled(true);
             everyLabel.setEnabled(true);
         } else {
-        	mLabel.setVisible(false);
-            minuteChoice.setVisible(false);
+        	mLabel.setEnabled(false);
+            minuteChoice.setEnabled(false);
             label.setEnabled(false);
             minuteText.setEnabled(false);
             hoursPanel.setEnabled(false);
@@ -240,8 +240,6 @@ public class MonthlyJobPanel extends Panel {
 
         typeLabel.setVisible(advanced);
         mTypeChoice.setVisible(advanced);
-//        minuteLabel.setVisible(advanced);
-//        minuteChoice.setVisible(advanced);
         everyMinuteLabel.setVisible(advanced);
         minuteText.setVisible(advanced);
         hoursPanel.setLinkVisible(advanced);
