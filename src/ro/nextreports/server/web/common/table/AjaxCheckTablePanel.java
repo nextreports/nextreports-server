@@ -31,7 +31,6 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -74,7 +73,10 @@ public class AjaxCheckTablePanel<T> extends Panel {
             }
 
         };
-        dataTable.setItemReuseStrategy(ReuseIfModelsEqualStrategy.getInstance());
+        // ItemReuseStrategy is usefull to refresh only modified row, but it uses hash code and equals of the model 
+        // (EntityModel in this case which contains only the id)
+        // So if we do a rename with this strategy, the change will not be seen (as when adding a new report for example)
+        //dataTable.setItemReuseStrategy(ReuseIfModelsEqualStrategy.getInstance());
         add(dataTable);
     }
 
