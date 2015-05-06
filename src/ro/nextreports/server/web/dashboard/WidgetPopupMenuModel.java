@@ -140,9 +140,11 @@ public class WidgetPopupMenuModel extends LoadableDetachableModel<List<MenuItem>
 		ByteArrayResource download;
 		if (model.getObject() instanceof PivotWidget) {
 			PivotWidget pivotWidget = (PivotWidget)model.getObject();												
-			download = new PivotResource(pivotWidget);						
+			download = new PivotResource(pivotWidget);		
+		} else if (model.getObject() instanceof DrillDownWidget) {
+			download = new TableResource(model.getObject().getId(), ((DrillDownWidget)model.getObject()).getDrillEntityContext());
 		} else {
-			download = new TableResource(model.getObject().getId());
+			download = new TableResource(model.getObject().getId(), null);
 		}
 		ResourceLink resourceLink =  new ResourceLink<TableResource>(MenuPanel.LINK_ID, download);
 		// see busy-indicator.js

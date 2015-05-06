@@ -19,6 +19,7 @@ package ro.nextreports.server.web.dashboard.drilldown;
 import java.util.Map;
 
 import ro.nextreports.server.domain.Chart;
+import ro.nextreports.server.domain.DrillEntityContext;
 import ro.nextreports.server.report.next.NextUtil;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.util.ChartUtil;
@@ -33,6 +34,8 @@ public class DrillDownWidget extends EntityWidget {
 		
 	public static final String DEFAULT_TITLE = "Drill-down";
     public static final String CHART_TYPE = "chartType";    
+    
+    private DrillDownWidgetView ddView;
 	
 	public DrillDownWidget() {
 		title = DEFAULT_TITLE;
@@ -43,7 +46,8 @@ public class DrillDownWidget extends EntityWidget {
             return new WidgetView(viewId, new WidgetModel(getId()), false); // dynamic
         }
         
-        return new DrillDownWidgetView(viewId, new WidgetModel(getId()), zoom); // dynamic
+        ddView = new DrillDownWidgetView(viewId, new WidgetModel(getId()), zoom); // dynamic
+        return ddView;
 	}
 	
 	public WidgetView createView(String viewId, String width, String height) {
@@ -51,7 +55,8 @@ public class DrillDownWidget extends EntityWidget {
             return new WidgetView(viewId, new WidgetModel(getId()), false); // dynamic
         }
         
-        return new DrillDownWidgetView(viewId, new WidgetModel(getId()), false, width, height); // dynamic
+        ddView = new DrillDownWidgetView(viewId, new WidgetModel(getId()), false, width, height); // dynamic
+        return ddView;
 	}	
 	
 	public WidgetView createView(String viewId, boolean zoom, Map<String, Object> urlQueryParameters) {
@@ -59,7 +64,8 @@ public class DrillDownWidget extends EntityWidget {
 			return new WidgetView(viewId, new WidgetModel(getId()), false); // dynamic
 		}
 
-		return new DrillDownWidgetView(viewId, new WidgetModel(getId()), zoom, urlQueryParameters); // dynamic
+		ddView = new DrillDownWidgetView(viewId, new WidgetModel(getId()), zoom, urlQueryParameters); // dynamic
+		return ddView;
 	}
 	
 	public WidgetView createView(String viewId, String width, String height, Map<String,Object> urlQueryParameters) {
@@ -67,7 +73,8 @@ public class DrillDownWidget extends EntityWidget {
             return new WidgetView(viewId, new WidgetModel(getId()), false); // dynamic
         }
         
-        return new DrillDownWidgetView(viewId, new WidgetModel(getId()), false, width, height, urlQueryParameters); // dynamic
+        ddView = new DrillDownWidgetView(viewId, new WidgetModel(getId()), false, width, height, urlQueryParameters); // dynamic
+        return ddView;
 	}
   
     public boolean saveToExcel() {
@@ -101,8 +108,15 @@ public class DrillDownWidget extends EntityWidget {
     public String getChartType() {
         return settings.get(CHART_TYPE);
     }
-       
-    @Override
+           
+    public DrillEntityContext getDrillEntityContext() {
+    	if (ddView == null) {
+    		return null;
+    	}
+		return ddView.getDrillEntityContext();
+	}	
+
+	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("DrillDownWidget[");

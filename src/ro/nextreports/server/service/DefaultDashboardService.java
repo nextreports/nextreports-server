@@ -524,7 +524,7 @@ public class DefaultDashboardService implements DashboardService {
             
             // if a drill down is present and a table follows we have to load that entity
 			try {				
-				entity = storageService.getEntityById(drillContext.getDrillLink());
+				entity = storageService.getEntityById(drillContext.getCurrentDrillEntityId());
 			} catch (NotFoundException ex) {
 				LOG.error(ex.getMessage(), ex);
 			}

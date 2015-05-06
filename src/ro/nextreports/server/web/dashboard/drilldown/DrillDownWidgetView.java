@@ -84,6 +84,7 @@ public class DrillDownWidgetView extends WidgetView {
 		drillContext = new DrillEntityContext();		
 		drillContext.setSettingsValues(getModelObject().getQueryRuntime().getParametersValues());		
 		Entity entity = getFirstEntity();
+		drillContext.setCurrentDrillEntityId(entity.getId());
 		if (entity instanceof Report) {			
 			DrillDownEntity drillEntity = getFirstDrillDownEntity();
 			drillContext.setColumn(drillEntity.getColumn());
@@ -183,6 +184,7 @@ public class DrillDownWidgetView extends WidgetView {
 		drillContext.getDrillParameterValues().clear();
 		drillContext.setLast(false);
 		Entity entity = getFirstEntity();
+		drillContext.setCurrentDrillEntityId(entity.getId());
 		if (entity instanceof Report) {			
 			DrillDownEntity drillEntity = getFirstDrillDownEntity();
 			drillContext.setColumn(drillEntity.getColumn());
@@ -207,6 +209,7 @@ public class DrillDownWidgetView extends WidgetView {
 		} else {
 			entity = getCurrentDrillDownEntity().getEntity();			
 		}			
+		drillContext.setCurrentDrillEntityId(entity.getId());
 	    return getRendererPanel(entity);
 	}		
 	
@@ -357,6 +360,10 @@ public class DrillDownWidgetView extends WidgetView {
         
         throw new Exception("Parameter with name '" + parameterName + "' not found.");
     }
+	
+	public DrillEntityContext getDrillEntityContext() {
+		return drillContext;
+	}
 
 
 }
