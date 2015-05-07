@@ -314,13 +314,6 @@ public class DataSourcePanel extends Panel {
             add(propButton);
             
             enableComponents(null);
-//            AjaxEventBehavior event = new AjaxEventBehavior("onload") {
-//                @Override
-//                protected void onEvent(final AjaxRequestTarget target) {
-//                	addJavaScript(target);
-//                }
-//            };
-//            add(event); 
         }
         
         @Override
