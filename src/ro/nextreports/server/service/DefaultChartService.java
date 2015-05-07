@@ -308,7 +308,7 @@ public class DefaultChartService implements ChartService {
     			throw new ReportRunnerException("Cannot connect to database", e);
     		} 
         }
-        boolean csv = chart.getDataSource().getDriver().equals(CSVDialect.DRIVER_CLASS);
+        boolean csv = CSVDialect.DRIVER_CLASS.equals(chart.getDataSource().getDriver());
         runner.setConnection(connection, csv);
         int timeout = WidgetUtil.getTimeout(dashboardService, chartWidget);                        
         runner.setQueryTimeout(timeout);

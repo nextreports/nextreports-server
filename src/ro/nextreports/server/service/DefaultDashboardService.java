@@ -575,7 +575,7 @@ public class DefaultDashboardService implements DashboardService {
             } catch (RepositoryException e) {
                 throw new ReportRunnerException("Cannot connect to database", e);
             }
-            boolean csv = chart.getDataSource().getDriver().equals(CSVDialect.DRIVER_CLASS);
+            boolean csv = CSVDialect.DRIVER_CLASS.equals(chart.getDataSource().getDriver());
             chartRunner.setConnection(connection, csv);
             
             int timeout = WidgetUtil.getTimeout(this, widget);
@@ -752,7 +752,7 @@ public class DefaultDashboardService implements DashboardService {
 		} catch (RepositoryException e) {
 			throw new ReportRunnerException("Cannot connect to database", e);
 		}
-		boolean csv = report.getDataSource().getDriver().equals(CSVDialect.DRIVER_CLASS);
+		boolean csv = CSVDialect.DRIVER_CLASS.equals(report.getDataSource().getDriver());
 		reportRunner.setConnection(connection, csv);
 
 		int timeout = WidgetUtil.getTimeout(this, widget);
@@ -856,7 +856,7 @@ public class DefaultDashboardService implements DashboardService {
 		} catch (RepositoryException e) {
 			throw new ReportRunnerException("Cannot connect to database", e);
 		}
-		boolean csv = report.getDataSource().getDriver().equals(CSVDialect.DRIVER_CLASS);
+		boolean csv = CSVDialect.DRIVER_CLASS.equals(report.getDataSource().getDriver());
 		reportRunner.setConnection(connection, csv);
 
 		int timeout = WidgetUtil.getTimeout(this, widget);
@@ -963,7 +963,7 @@ public class DefaultDashboardService implements DashboardService {
 		} catch (RepositoryException e) {
 			throw new ReportRunnerException("Cannot connect to database", e);
 		}
-		boolean csv = report.getDataSource().getDriver().equals(CSVDialect.DRIVER_CLASS);
+		boolean csv = CSVDialect.DRIVER_CLASS.equals(report.getDataSource().getDriver());
 		reportRunner.setConnection(connection, csv);
 
 		int timeout = WidgetUtil.getTimeout(this, widget);

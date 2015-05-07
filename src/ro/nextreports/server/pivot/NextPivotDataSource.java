@@ -114,7 +114,7 @@ public class NextPivotDataSource extends ResultSetPivotDataSource {
         
         QueryResult queryResult = null;
         try {
-        	boolean csv = dataSource.getDriver().equals(CSVDialect.DRIVER_CLASS);
+        	boolean csv = CSVDialect.DRIVER_CLASS.equals(dataSource.getDriver());
         	connection = ConnectionUtil.createConnection(storageService, dataSource);
             Query query = new Query(sql);
             QueryExecutor executor = new QueryExecutor(query, parameters, parameterValues, connection, true, true, csv);
