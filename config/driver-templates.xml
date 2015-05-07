@@ -86,5 +86,9 @@
     	<className>net.ucanaccess.jdbc.UcanaccessDriver</className>
     	<urlTemplate>jdbc:ucanaccess://&lt;dbfile-path&gt;;showschema=true</urlTemplate>
     	<defaultPort>0</defaultPort>
-  </driver> 
+    </driver>
+    <driver>
+        <type>JNDI</type>        
+        <urlTemplate>&lt;JNDI name&gt;</urlTemplate>        
+    </driver> 
 </drivers>
