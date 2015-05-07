@@ -162,7 +162,7 @@ public class NextEngine extends ReportEngineAdapter {
             		 " queryTimeout="+settings.getQueryTimeout());
             
             
-            if (exportContext.getReportDataSource().getDriver().equals(CSVDialect.DRIVER_CLASS)) {
+            if (CSVDialect.DRIVER_CLASS.equals(exportContext.getReportDataSource().getDriver())) {
             	runner = runner.connectToCsv(conn);
             } else {
             	runner = runner.connectTo(conn);
