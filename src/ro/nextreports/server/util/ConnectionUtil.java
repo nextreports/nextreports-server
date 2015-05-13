@@ -36,6 +36,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.jcr.RepositoryException;
 import javax.naming.InitialContext;
@@ -120,7 +121,8 @@ public class ConnectionUtil {
     	
     	
     	final ComboPooledDataSource poolF = pool;
-    	Connection connection;
+    	debug(poolF, dataSource);
+    	Connection connection = null;
     	try {	
 			if (connectionTimeout <= 0) {
 				// wait as long as driver manager (not deterministic)
@@ -135,16 +137,43 @@ public class ConnectionUtil {
 				});
 				new Thread(createConnectionTask).start();
 				connection = createConnectionTask.get(connectionTimeout, TimeUnit.SECONDS);
-
+				LOG.debug("      created");
 			}
     	} catch (Exception e) {
-			Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
-			ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);		
-			throw new RepositoryException(bundle.getString("Connection.failed") + " '" + dataSource.getPath() + "'", e);
+    		boolean slowDatabase = false;
+    		if (e instanceof TimeoutException) {
+    			// try to find real problem if timeout 
+    			try {
+					connection = poolF.getConnection();
+					slowDatabase = true;
+					LOG.warn("      created in more than " + connectionTimeout + " seconds!");
+				} catch (SQLException e1) {
+					LOG.error("      real error = " + e1.getMessage(), e1);
+				}
+    		}
+    		if (!slowDatabase) {
+    			Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
+				ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);		
+				throw new RepositoryException(bundle.getString("Connection.failed") + " '" + dataSource.getPath() + "'", e);
+    		}
+			
 		}    	    	
     	
 		return connection;    	
 	}
+    
+    private static void debug(ComboPooledDataSource pool, DataSource dataSource) {
+    	LOG.debug("***** Create connection for dataSource = " + dataSource.getPath());
+    	try {	    	
+	    	LOG.debug("      min=" + pool.getMinPoolSize() + 
+	    			  	   " max=" + pool.getMaxPoolSize() + 
+	    			  	   " curr=" +pool.getNumConnections() + 
+	    			  	   " busy=" + pool.getNumBusyConnections() + 
+	    			  	   " idle=" + pool.getNumIdleConnections());
+    	} catch (Exception ex) {
+    		LOG.error("      " + ex.getMessage(), ex);
+    	}
+    }
     
     // create a connection that does not use a pool of connections
     // this is useful if we want to test the connection
