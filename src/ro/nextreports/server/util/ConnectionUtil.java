@@ -121,7 +121,9 @@ public class ConnectionUtil {
     	
     	
     	final ComboPooledDataSource poolF = pool;
-    	debug(poolF, dataSource);
+    	if (LOG.isDebugEnabled()) {
+    		debug(poolF, dataSource);
+    	}
     	Connection connection = null;
     	try {	
 			if (connectionTimeout <= 0) {
@@ -137,7 +139,9 @@ public class ConnectionUtil {
 				});
 				new Thread(createConnectionTask).start();
 				connection = createConnectionTask.get(connectionTimeout, TimeUnit.SECONDS);
-				LOG.debug("      created");
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("      OK");
+				}
 			}
     	} catch (Exception e) {
     		boolean slowDatabase = false;
@@ -163,7 +167,7 @@ public class ConnectionUtil {
 	}
     
     private static void debug(ComboPooledDataSource pool, DataSource dataSource) {
-    	LOG.debug("***** Create connection for dataSource = " + dataSource.getPath());
+    	LOG.debug("***** Create connection for dataSource: " + dataSource.getPath());
     	try {	    	
 	    	LOG.debug("      min=" + pool.getMinPoolSize() + 
 	    			  	   " max=" + pool.getMaxPoolSize() + 
