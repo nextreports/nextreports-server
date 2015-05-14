@@ -144,23 +144,9 @@ public class ConnectionUtil {
 				}
 			}
     	} catch (Exception e) {
-    		boolean slowDatabase = false;
-    		if (e instanceof TimeoutException) {
-    			// try to find real problem if timeout 
-    			try {
-					connection = poolF.getConnection();
-					slowDatabase = true;
-					LOG.warn("      created in more than " + connectionTimeout + " seconds!");
-				} catch (SQLException e1) {
-					LOG.error("      real error = " + e1.getMessage(), e1);
-				}
-    		}
-    		if (!slowDatabase) {
-    			Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
-				ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);		
-				throw new RepositoryException(bundle.getString("Connection.failed") + " '" + dataSource.getPath() + "'", e);
-    		}
-			
+    		Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
+			ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);		
+			throw new RepositoryException(bundle.getString("Connection.failed") + " '" + dataSource.getPath() + "'", e);
 		}    	    	
     	
 		return connection;    	
