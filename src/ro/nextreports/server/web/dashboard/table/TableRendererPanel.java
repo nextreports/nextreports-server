@@ -28,7 +28,9 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterForm;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterToolbar;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.TextFilteredPropertyColumn;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.Item;
@@ -51,8 +53,9 @@ import ro.nextreports.server.report.next.NextUtil;
 import ro.nextreports.server.service.DashboardService;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.util.WidgetUtil;
+import ro.nextreports.server.web.NextServerSession;
 import ro.nextreports.server.web.common.table.BaseTable;
-import ro.nextreports.server.web.common.table.LinkPropertyColumn;
+import ro.nextreports.server.web.common.table.LinkTextFilteredPropertyColumn;
 import ro.nextreports.server.web.dashboard.EntityWidget;
 import ro.nextreports.server.web.dashboard.Widget;
 
@@ -72,6 +75,8 @@ public class TableRendererPanel extends GenericPanel<Report> {
 	// font size specified as a parameter in iframe
 	private String iframeFontSize = null;
 	private String iframeCellPadding = null;
+	private String widgetId;
+	private boolean enableFilter = false;
 	
 	@SpringBean
 	private DashboardService dashboardService;
@@ -83,11 +88,12 @@ public class TableRendererPanel extends GenericPanel<Report> {
 		this(id, model, widgetId, drillContext, zoom, null);
 	}
 		
-	public TableRendererPanel(String id, IModel<Report> model, String widgetId, DrillEntityContext drillContext,  boolean zoom,  Map<String, Object> urlQueryParameters) throws NoDataFoundException {
+	public TableRendererPanel(String id, IModel<Report> model, final String widgetId, DrillEntityContext drillContext,  boolean zoom,  Map<String, Object> urlQueryParameters) throws NoDataFoundException {
 		super(id, model);
 		this.drillContext = drillContext;
+		this.widgetId = widgetId;
 		
-		ro.nextreports.engine.Report rep = null; 
+		ro.nextreports.engine.Report rep = null;
 				
 		if ((drillContext != null) && (drillContext.getColumn() > 0)) {
 			rep = NextUtil.getNextReport(storageService.getSettings(), model.getObject());
@@ -122,21 +128,31 @@ public class TableRendererPanel extends GenericPanel<Report> {
 			if (tableCellPaddingObj != null) {
 				iframeCellPadding = (String)tableCellPaddingObj;
 			}
-		}
-						
-		TableDataProvider dataProvider = new TableDataProvider(widgetId, drillContext, urlQueryParameters);
-		WebMarkupContainer container = new WebMarkupContainer("tableContainer");
-		container.add(getCurrentTable(dataProvider, widgetId));
+		}				
+		final TableDataProvider dataProvider = new TableDataProvider(widgetId, drillContext, urlQueryParameters);
+		WebMarkupContainer container = new WebMarkupContainer("tableContainer");		
+		final FilterForm filterForm = new FilterForm("filterForm", dataProvider) {			
+			protected void onSubmit() {						
+				NextServerSession.get().setTableFilter(widgetId, dataProvider.getFilterState());
+		    	for(int i=0, size=dataProvider.getColumnCount(); i< size; i++) {
+		    		System.out.println(dataProvider.getFilterState().getCellValues().get(i));
+		    	}
+			}
+		};
+		setCurrentTable(filterForm, dataProvider, widgetId);
+		container.add(filterForm);
 		boolean single = dashboardService.isSingleWidget(widgetId);		
 		// table is the single widget in a dashboard with one column
 		// make the height 100%
 		if (single) {		
 			container.add(AttributeModifier.replace("class", "tableWidgetViewFull"));
 		}
-        add(container);        
+        add(container);
+        
+        
 	}	
 	
-	private BaseTable getCurrentTable(TableDataProvider dataProvider, String widgetId ) throws NoDataFoundException {    	        
+	private void setCurrentTable(FilterForm filterForm, TableDataProvider dataProvider, String widgetId ) throws NoDataFoundException {    	        
         List<String> tableHeader;
         List<String> tablePattern;
         I18nLanguage language;
@@ -160,21 +176,25 @@ public class TableRendererPanel extends GenericPanel<Report> {
 		} catch (NotFoundException e) {
 			LOG.error(e.getMessage(), e);
 		}
-		BaseTable<RowData> table = new BaseTable<RowData>("table", getPropertyColumns(tableHeader, tablePattern, language), dataProvider, rowsPerPage) {
-			
-		};					
-        return table;
+				
+		BaseTable<RowData> table = new BaseTable<RowData>("table", getPropertyColumns(tableHeader, tablePattern, language), dataProvider, rowsPerPage);
+		FilterToolbar filterToolbar = new FilterToolbar(table, filterForm, dataProvider);
+		table.addTopToolbar(filterToolbar);
+		if (!enableFilter || ((drillContext != null) && (drillContext.getDrillParameterValues().size() > 0))) {
+			filterToolbar.setVisible(false);
+		}
+        filterForm.add(table);      
     }
 	
-	private PropertyColumn<RowData, String> createPropertyColumn(List<String> header, final List<String> pattern, final I18nLanguage language, final int i) {
-		return new PropertyColumn<RowData, String>(new Model<String>(header.get(i)),header.get(i), "cellValues." + i) {
+	private TextFilteredPropertyColumn<RowData, String, String> createTextFilteredPropertyColumn(List<String> header, final List<String> pattern, final I18nLanguage language, final int i) {
+		return new TextFilteredPropertyColumn<RowData, String, String>(new Model<String>(header.get(i)),header.get(i), "cellValues." + i) {
 	    	 public void populateItem(Item cellItem, String componentId, IModel rowModel) {
 	    		setCellStyle(cellItem, rowModel, i);
 				super.populateItem(cellItem, componentId, rowModel); 
 	    	  }
 
 			@Override
-			public Component getHeader(String componentId) {
+			public Component getHeader(String componentId) {				
 				Component header = super.getHeader(componentId);
 				setCellStyle(header);
 				return header;
@@ -194,19 +214,20 @@ public class TableRendererPanel extends GenericPanel<Report> {
 				} else {
 					return null;
 				}
-			}
+			}				
 			
 	    };
 	}
 	
-	private LinkPropertyColumn<RowData> createLinkPropertyColumn(List<String> header, final List<String> pattern, final I18nLanguage language, final int i) {
-		return new LinkPropertyColumn<RowData>(new Model<String>(header.get(i)), header.get(i), "cellValues." + i) {
+	private LinkTextFilteredPropertyColumn<RowData> createLinkTextFilteredPropertyColumn(List<String> header, final List<String> pattern, final I18nLanguage language, final int i) {
+		return new LinkTextFilteredPropertyColumn<RowData>(new Model<String>(header.get(i)), header.get(i), "cellValues." + i) {
 			
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(Item item, String componentId, IModel model, AjaxRequestTarget target) {
-					
+
+				NextServerSession.get().setTableFilter(widgetId, null);
 				String clickedValue;
 				if (TableWidget.ALLOW_COLUMNS_SORTING) {
 					clickedValue = StringUtil.getValueAsString(((RowData) model.getObject()).getCellValues().get(drillContext.getColumn() - 1), pattern.get(i), language);
@@ -257,13 +278,13 @@ public class TableRendererPanel extends GenericPanel<Report> {
 		boolean isLastDrill = (drillContext != null) && drillContext.isLast();		
 		for (int i = 0; i < columnCount; i++) {					
 			if (!isDrillDownlable || isLastDrill) {				
-			    columns.add(createPropertyColumn(header, pattern, language, i));
+			    columns.add(createTextFilteredPropertyColumn(header, pattern, language, i));
 			} else {				
 				// link is added only for the column from the drill down report				
 				if (drillContext.getColumn() != i+1) {
-					columns.add(createPropertyColumn(header, pattern, language, i));
+					columns.add(createTextFilteredPropertyColumn(header, pattern, language, i));
 				} else {					
-					columns.add(createLinkPropertyColumn(header, pattern, language, i));
+					columns.add(createLinkTextFilteredPropertyColumn(header, pattern, language, i));
 				}
 			}
 		}

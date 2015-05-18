@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.IteratorUtils;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.IFilterStateLocator;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.IModel;
@@ -35,14 +36,16 @@ import org.slf4j.LoggerFactory;
 import ro.nextreports.server.domain.DrillEntityContext;
 import ro.nextreports.server.service.DashboardService;
 import ro.nextreports.server.util.ServerUtil;
+import ro.nextreports.server.web.NextServerSession;
 import ro.nextreports.engine.exporter.exception.NoDataFoundException;
 import ro.nextreports.engine.exporter.util.TableData;
 import ro.nextreports.engine.i18n.I18nLanguage;
+import ro.nextreports.engine.util.ObjectCloner;
 
 /**
  * @author Decebal Suiu
  */
-public class TableDataProvider extends SortableDataProvider<RowData, String> {
+public class TableDataProvider extends SortableDataProvider<RowData, String> implements IFilterStateLocator<RowData> {
 
     private static final long serialVersionUID = 1L;
     
@@ -61,7 +64,9 @@ public class TableDataProvider extends SortableDataProvider<RowData, String> {
     
     private int sortPos;
     private int sortDir;
-
+    
+    private RowData tableFilter;
+    
     @SpringBean
     private DashboardService dashboardService;
 
@@ -151,6 +156,15 @@ public class TableDataProvider extends SortableDataProvider<RowData, String> {
 			return 0;
 		}
     }
+    
+    public int getColumnCount() {
+    	try {
+			return getCache().get(0).getCellValues().size();
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			return 0;
+		}
+    }
 
     @Override
     public void detach() {
@@ -182,12 +196,27 @@ public class TableDataProvider extends SortableDataProvider<RowData, String> {
     private List<RowData> getCache() throws NoDataFoundException, Exception {
         if (cache == null) {
             if (widgetId != null) {
-            	TableData tableData = dashboardService.getTableData(widgetId, drillContext, urlQueryParameters);
+            	TableData td = dashboardService.getTableData(widgetId, drillContext, urlQueryParameters);
+            	// tableData may be kept in cache (if there are cache settings set)!
+            	// so we must use a clone here to not modify the original in case of filtering
+            	TableData tableData = ObjectCloner.silenceDeepCopy(td); 
             	List<List<Object>> data = tableData.getData();
             	List<List<Map<String, Object>>> style = tableData.getStyle();
             	header = tableData.getHeader();
             	if (data != null) {
                     cache = new ArrayList<RowData>();
+                    tableFilter = NextServerSession.get().getTableFilter(widgetId);
+                    if (tableFilter == null) {
+                		List<Object> cellValues = new ArrayList<Object>();
+                		if (data.size() > 0) {
+                			for (int k=0; k<data.get(0).size(); k++) {
+                				cellValues.add(null);
+                			}
+                		}            			
+            			tableFilter = new RowData(cellValues);
+            		} else {                          
+                		tableData.search(tableFilter.getCellValues());                		
+                	}                	
                     for (int i=0, size=data.size(); i<size; i++) {
                     	List<Object> row = data.get(i);
             			RowData rowData = new RowData(row);
@@ -203,6 +232,15 @@ public class TableDataProvider extends SortableDataProvider<RowData, String> {
         }
         
         return cache;
-    }       
+    }
     
+    @Override
+	public RowData getFilterState() {
+		return tableFilter;
+	}
+
+	@Override
+	public void setFilterState(RowData state) {
+		this.tableFilter = tableFilter;		
+	}       
 }

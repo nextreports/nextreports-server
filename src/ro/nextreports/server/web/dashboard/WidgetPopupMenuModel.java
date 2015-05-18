@@ -464,7 +464,8 @@ public class WidgetPopupMenuModel extends LoadableDetachableModel<List<MenuItem>
 		AjaxLink<Void> refreshLink = new AjaxLink<Void>(MenuPanel.LINK_ID) {
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {				
+			public void onClick(AjaxRequestTarget target) {		
+				NextServerSession.get().setTableFilter(model.getObject().getId(), null);
 				WidgetPanel widgetPanel = findParent(WidgetPanel.class);
 				widgetPanel.refresh(target);
 				WidgetView widgetView = widgetPanel.getWidgetView();
