@@ -244,7 +244,8 @@ public class RunPanel extends FormContentPanel<AuditRun> {
 					getString("Section.Audit.Run.duration"),
 					getString("Section.Audit.Run.end"),
 					getString("Section.Audit.Run.status"),
-					getString("Section.Audit.Rights.path"));
+					getString("Section.Audit.Rights.path"),
+					getString("Url"));
 			result.setHeader(header);
 			Collections.sort(list, new Comparator<RunReportHistory>() {
 				@Override
@@ -268,6 +269,7 @@ public class RunPanel extends FormContentPanel<AuditRun> {
 							row.add(h.getEndDate());
 							row.add(getStatus(h));
 							row.add(getReportPath(h));
+							row.add(getUrl(h));
 							result.getData().add(row);
 						}
 					}			
@@ -323,6 +325,16 @@ public class RunPanel extends FormContentPanel<AuditRun> {
             duration = formatter.print(runTime * 1000);
         }
         return duration;
+	}
+	
+	private String getUrl(RunReportHistory h) {
+		return h.getUrl();
+	}
+	
+	protected ArrayList<Integer> getLinkColumns() {
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		list.add(7);
+		return list;
 	}
 
 }
