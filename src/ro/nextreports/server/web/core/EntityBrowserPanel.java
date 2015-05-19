@@ -70,7 +70,9 @@ import ro.nextreports.server.web.core.table.LastUpdatedDateColumn;
 import ro.nextreports.server.web.core.table.NameColumn;
 import ro.nextreports.server.web.core.table.TypeColumn;
 import ro.nextreports.server.web.core.tree.EntityTreeProvider;
+import ro.nextreports.server.web.datasource.DataSourceSection;
 import ro.nextreports.server.web.report.ReportSection;
+import ro.nextreports.server.web.schedule.SchedulerSection;
 
 /**
  * @author Decebal Suiu
@@ -181,6 +183,10 @@ public class EntityBrowserPanel extends StackPanel implements AjaxUpdateListener
                 selectEntity(entityIModel.getObject(), item, ReportSection.ID);
                 // select chart from dashboard GoTo
                 selectEntity(entityIModel.getObject(), item, ChartSection.ID);
+                // select data source from audit GoTo
+                selectEntity(entityIModel.getObject(), item, DataSourceSection.ID);
+                // select scheduler from audit GoTo
+                selectEntity(entityIModel.getObject(), item, SchedulerSection.ID);
                 
                 return item;
             }

@@ -41,6 +41,7 @@ import ro.nextreports.server.web.common.form.FormContentPanel;
 import ro.nextreports.server.web.common.form.FormPanel;
 import ro.nextreports.server.web.common.misc.ExtendedPalette;
 import ro.nextreports.server.web.common.renderer.StringChoiceRenderer;
+import ro.nextreports.server.web.core.audit.InnerReport;
 
 public class RightsPanel extends FormContentPanel<AuditRights> {
 	
@@ -224,7 +225,8 @@ public class RightsPanel extends FormContentPanel<AuditRights> {
 		List<String> header = Arrays.asList(getString("Section.Audit.Rights.category"), 
 				getString("Section.Audit.Rights.name"), 
 				getString("Section.Audit.Rights.permissions"), 
-				getString("Section.Audit.Rights.path"));
+				getString("Section.Audit.Rights.path"),
+				"");
 		result.setHeader(header);
 		for (Iterator<Entity> it = entities.iterator(); it.hasNext();) {
 			Entity entity = it.next();
@@ -234,7 +236,8 @@ public class RightsPanel extends FormContentPanel<AuditRights> {
 				row.add(getCategory(entity.getClass().getName()));
 				row.add(entity.getName());
 				row.add(rights);
-				row.add(entity.getPath());							
+				row.add(entity.getPath());
+				row.add(getString("WidgetPopupMenu.gotoEntity"));
 				result.getData().add(row);
 			}
 		}
@@ -281,6 +284,26 @@ public class RightsPanel extends FormContentPanel<AuditRights> {
 			type = AuditRights.ENTITY_ANALYSIS;
 		}		
 		return getString("Section.Audit.Entity." + type);
+	}
+	
+	protected String getTitle() {
+		StringBuilder sb = new StringBuilder(InnerReport.RIGHTS.name());
+		sb.append("   ( ");
+		if (auditRights.getType().equals(AuditRights.USER_TYPE))  {
+			sb.append(getString("AclEntryPanel.user"));
+		} else {
+			sb.append(getString("AclEntryPanel.group"));
+		}
+		sb.append(" = ");
+		sb.append(auditRights.getName());
+		sb.append(" )");
+		return sb.toString();
+	}
+	
+	protected ArrayList<Integer> getLinkColumns() {
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		list.add(4);
+		return list;
 	}
 	
 }

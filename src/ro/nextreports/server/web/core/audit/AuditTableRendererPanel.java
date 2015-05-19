@@ -24,28 +24,52 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ro.nextreports.engine.exporter.util.TableData;
-import ro.nextreports.engine.util.ObjectCloner;
-import ro.nextreports.server.domain.RunReportHistory;
+import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.report.ReportConstants;
 import ro.nextreports.server.service.ReportService;
+import ro.nextreports.server.service.StorageService;
+import ro.nextreports.server.util.StorageUtil;
+import ro.nextreports.server.web.analysis.AnalysisSection;
+import ro.nextreports.server.web.chart.ChartSection;
+import ro.nextreports.server.web.common.misc.LabelLink;
 import ro.nextreports.server.web.common.misc.SimpleLink;
 import ro.nextreports.server.web.common.table.BaseTable;
+import ro.nextreports.server.web.core.HomePage;
+import ro.nextreports.server.web.core.audit.rights.AuditRights;
+import ro.nextreports.server.web.core.section.SectionContextUtil;
+import ro.nextreports.server.web.core.section.SectionManager;
+import ro.nextreports.server.web.dashboard.DashboardSection;
 import ro.nextreports.server.web.dashboard.table.TableResource;
+import ro.nextreports.server.web.datasource.DataSourceSection;
+import ro.nextreports.server.web.report.ReportSection;
+import ro.nextreports.server.web.schedule.SchedulerSection;
+
 
 public class AuditTableRendererPanel extends GenericPanel<TableData> {
 	
 	@SpringBean
 	private ReportService reportService;
+	
+	@SpringBean
+	private StorageService storageService;
+	
+	@SpringBean
+    private SectionManager sectionManager;
 		
 	private static final Logger LOG = LoggerFactory.getLogger(AuditTableRendererPanel.class);	
 	
 	private static DateFormat DATE_FORMAT= DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 	
 	private List<Integer> links;
+	private String type;
 		
-	public AuditTableRendererPanel(String id, IModel<TableData> model, IModel<List<Integer>> linksModel) {
+	public AuditTableRendererPanel(String id, String type, IModel<TableData> model, IModel<List<Integer>> linksModel, IModel<String> title) {
 		super(id, model);		
+		this.type = type;
 		links = linksModel.getObject();
+		
+		add(new Label("title", title.getObject()));
+		
 		add(createSaveToExcelLink(model));
 		
 		AuditDataProvider dataProvider = new AuditDataProvider(model.getObject());
@@ -71,18 +95,64 @@ public class AuditTableRendererPanel extends GenericPanel<TableData> {
 		            public void populateItem(Item<ICellPopulator<List<Object>>> item, String componentId,
 		                                     final IModel<List<Object>> rowModel) {
 		                String url = (String)rowModel.getObject().get(index);
-		                if ((url == null) || url.equals("")) {
-		                    item.add(new Label(componentId));
-		                    return;
-		                } else if (url.equals(ReportConstants.ETL_FORMAT)) {
-		                	item.add(new Label(componentId, Model.of(url)));
-		                    return;
-		                }
+		                
+		                if (InnerReport.RUN.toString().equals(type)) {
+			                if ((url == null) || url.equals("")) {
+			                    item.add(new Label(componentId));
+			                    return;
+			                } else if (url.equals(ReportConstants.ETL_FORMAT)) {
+			                	item.add(new Label(componentId, Model.of(url)));
+			                    return;
+			                }
+	
+			                // dynamic url
+			                String fileName = url.substring(url.lastIndexOf("/") + 1);
+			                String dynamicUrl = reportService.getReportURL(fileName);
+			                item.add(new SimpleLink(componentId, dynamicUrl, getString("view"), true));
+		                } else  if (InnerReport.RIGHTS.toString().equals(type)) {
+		                	
+		                	LabelLink link = new LabelLink(componentId, Model.of(""), Model.of(getString("WidgetPopupMenu.gotoEntity"))) {
 
-		                // dynamic url
-		                String fileName = url.substring(url.lastIndexOf("/") + 1);
-		                String dynamicUrl = reportService.getReportURL(fileName);
-		                item.add(new SimpleLink(componentId, dynamicUrl, getString("view"), true));
+		            			private static final long serialVersionUID = 1L;
+
+		            			@Override
+		            			public void onClick() {
+		            				
+		            				String sectionId = getSectionId();
+		            				String entityPath = (String)rowModel.getObject().get(3);
+		            				try {
+		            					Entity entity = storageService.getEntity(entityPath);					
+		            					sectionManager.setSelectedSectionId(sectionId);
+		            					SectionContextUtil.setCurrentPath(sectionId, StorageUtil.getParentPath(entity.getPath()));
+		            					SectionContextUtil.setSelectedEntityPath(sectionId,	entity.getPath());
+		            					setResponsePage(HomePage.class);
+		            				} catch (Exception e) {
+		            					e.printStackTrace();
+		            				}
+		            			}		            			
+		            			
+		            			private String getSectionId() {
+		            				String category = (String)rowModel.getObject().get(0);		            				
+		            				String sectionId = null;			            			
+		            				if (category.equals(getString("Section.Audit.Entity." + AuditRights.ENTITY_DASHBOARDS))) {
+		            					sectionId = DashboardSection.ID;
+		            				} else if (category.equals(getString("Section.Audit.Entity." + AuditRights.ENTITY_REPORTS))) {
+		            					sectionId = ReportSection.ID;
+		            				} else if (category.equals(getString("Section.Audit.Entity." + AuditRights.ENTITY_CHARTS))) {
+		            					sectionId = ChartSection.ID;
+		            				} else if (category.equals(getString("Section.Audit.Entity." + AuditRights.ENTITY_DATA_SOURCES))) {
+		            					sectionId = DataSourceSection.ID;
+		            				} else if (category.equals(getString("Section.Audit.Entity." + AuditRights.ENTITY_SCHEDULERS))) {
+		            					sectionId = SchedulerSection.ID;
+		            				} else if (category.equals(getString("Section.Audit.Entity." + AuditRights.ENTITY_ANALYSIS))) {
+		            					sectionId = AnalysisSection.ID;
+		            				} 		            				
+		            				return sectionId;
+		            			}
+		            		};
+		            		item.add(link);
+
+		                }
 		            }
 
 		        });
