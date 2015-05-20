@@ -17,6 +17,7 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,9 @@ import ro.nextreports.server.web.core.audit.InnerReport;
 
 public class RightsPanel extends FormContentPanel<AuditRights> {
 	
+	public static final int CATEGORY_COLUMN = 1;
+	public static final int PATH_COLUMN = 4;
+	
 	private static final Logger LOG = LoggerFactory.getLogger(RightsPanel.class);
 	
 	@SpringBean
@@ -53,7 +57,7 @@ public class RightsPanel extends FormContentPanel<AuditRights> {
 	@SpringBean
     private SecurityService securityService;
 	
-	private AuditRights auditRights;
+	private AuditRights auditRights;	
 	
 	public RightsPanel() {
 		super(FormPanel.CONTENT_ID);
@@ -73,13 +77,22 @@ public class RightsPanel extends FormContentPanel<AuditRights> {
         typeChoice.setRequired(true);
         typeChoice.setNullValid(false);		
         typeChoice.setOutputMarkupPlaceholderTag(true);
-		add(typeChoice);	
+		add(typeChoice);			
 		
-		final DropDownChoice<String> nameChoice = new DropDownChoice<String>("name", getNames(auditRights.getType()));		
-		nameChoice.setRequired(true);
-		nameChoice.setNullValid(false);		
-		nameChoice.setOutputMarkupId(true);
-		add(nameChoice);
+		final ListModel<String> namesModel = new ListModel<String>(getNames(auditRights.getType()));
+		final ExtendedPalette<String> namesPalette = new ExtendedPalette<String>("names", new PropertyModel(auditRights, "names"), 
+				namesModel,  new StringChoiceRenderer(), 6, false) {
+			
+			@Override
+	        protected Recorder<String> newRecorderComponent() {
+	            Recorder<String> recorder = super.newRecorderComponent();	          
+	            recorder.setRequired(true);	    
+	            recorder.setLabel(Model.of(getString("Section.Audit.Rights.name")));
+	            return recorder;
+	        }
+		};			
+		namesPalette.setOutputMarkupId(true);
+		add(namesPalette);
 		
 		typeChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 
@@ -87,8 +100,8 @@ public class RightsPanel extends FormContentPanel<AuditRights> {
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {    				                                   
-                nameChoice.setChoices(getNames(auditRights.getType()));
-                target.add(nameChoice);                                    
+                namesModel.setObject(getNames(auditRights.getType()));
+                target.add(namesPalette);                                    
 			}			
 		});     
 						
@@ -134,8 +147,8 @@ public class RightsPanel extends FormContentPanel<AuditRights> {
 		return auditRights;
 	}
 	
-	private List<String> getNames(String type) {
-		List<String> names = new ArrayList<String>();
+	private ArrayList<String> getNames(String type) {
+		ArrayList<String> names = new ArrayList<String>();
 		if (type.equals(AuditRights.USER_TYPE)) {
 	      	User[] users = securityService.getUsers();
 	      	for (User user : users) {
@@ -222,7 +235,15 @@ public class RightsPanel extends FormContentPanel<AuditRights> {
 		});
 		
 		TableData result = new TableData();
-		List<String> header = Arrays.asList(getString("Section.Audit.Rights.category"), 
+		String eType = null;
+		if (auditRights.getType().equals(AuditRights.USER_TYPE)) {
+			eType = getString("AclEntryPanel.user");
+		} else {
+			eType = getString("AclEntryPanel.group");
+		}
+		// see CATEGORY_COLUMN and PATH_COLUMN !!
+		List<String> header = Arrays.asList(eType,
+				getString("Section.Audit.Rights.category"), 
 				getString("Section.Audit.Rights.name"), 
 				getString("Section.Audit.Rights.permissions"), 
 				getString("Section.Audit.Rights.path"),
@@ -230,22 +251,25 @@ public class RightsPanel extends FormContentPanel<AuditRights> {
 		result.setHeader(header);
 		for (Iterator<Entity> it = entities.iterator(); it.hasNext();) {
 			Entity entity = it.next();
-			String rights = getRights(auditRights, entity);
-			if (!"".equals(rights)) {
-				List<Object> row = new ArrayList<Object>();
-				row.add(getCategory(entity.getClass().getName()));
-				row.add(entity.getName());
-				row.add(rights);
-				row.add(entity.getPath());
-				row.add(getString("WidgetPopupMenu.gotoEntity"));
-				result.getData().add(row);
+			for (String name : auditRights.getNames()) {
+				String rights = getRights(name, auditRights, entity);
+				if (!"".equals(rights)) {
+					List<Object> row = new ArrayList<Object>();
+					row.add(name);
+					row.add(getCategory(entity.getClass().getName()));
+					row.add(entity.getName());
+					row.add(rights);
+					row.add(entity.getPath());
+					row.add(getString("WidgetPopupMenu.gotoEntity"));
+					result.getData().add(row);
+				}
 			}
 		}
 		
 		return result;
 	}
 	
-	private String getRights(AuditRights auditRights, Entity entity) {		
+	private String getRights(String name, AuditRights auditRights, Entity entity) {		
 		byte aclType;
 		if (auditRights.getType().equals(AuditRights.USER_TYPE)) {
 			aclType = AclEntry.USER_TYPE;
@@ -255,7 +279,7 @@ public class RightsPanel extends FormContentPanel<AuditRights> {
 		AclEntry[] aclEntries = securityService.getGrantedById(entity.getId());
 		
 		for (AclEntry acl : aclEntries) {
-			if ((acl.getType() == aclType) && (acl.getName().equals(auditRights.getName()))) {
+			if ((acl.getType() == aclType) && (acl.getName().equals(name))) {
 				String permissions = PermissionUtil.toString(acl.getPermissions());
 				for (String right : auditRights.getRights()) {
 					if (!permissions.contains(right)) {
@@ -295,14 +319,23 @@ public class RightsPanel extends FormContentPanel<AuditRights> {
 			sb.append(getString("AclEntryPanel.group"));
 		}
 		sb.append(" = ");
-		sb.append(auditRights.getName());
+		for (int i=0, size=auditRights.getNames().size(); i<size; i++) {
+			sb.append(auditRights.getNames().get(i));
+			if (i < size-1) {
+				sb.append(" , ");
+			}
+			if (i == 3) {
+				sb.append("...");
+				break;
+			}
+		}
 		sb.append(" )");
 		return sb.toString();
 	}
 	
 	protected ArrayList<Integer> getLinkColumns() {
 		ArrayList<Integer> list = new ArrayList<Integer>();
-		list.add(4);
+		list.add(5);
 		return list;
 	}
 	

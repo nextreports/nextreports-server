@@ -36,6 +36,7 @@ import ro.nextreports.server.web.common.misc.SimpleLink;
 import ro.nextreports.server.web.common.table.BaseTable;
 import ro.nextreports.server.web.core.HomePage;
 import ro.nextreports.server.web.core.audit.rights.AuditRights;
+import ro.nextreports.server.web.core.audit.rights.RightsPanel;
 import ro.nextreports.server.web.core.section.SectionContextUtil;
 import ro.nextreports.server.web.core.section.SectionManager;
 import ro.nextreports.server.web.dashboard.DashboardSection;
@@ -119,7 +120,7 @@ public class AuditTableRendererPanel extends GenericPanel<TableData> {
 		            			public void onClick() {
 		            				
 		            				String sectionId = getSectionId();
-		            				String entityPath = (String)rowModel.getObject().get(3);
+		            				String entityPath = (String)rowModel.getObject().get(RightsPanel.PATH_COLUMN);
 		            				try {
 		            					Entity entity = storageService.getEntity(entityPath);					
 		            					sectionManager.setSelectedSectionId(sectionId);
@@ -132,7 +133,7 @@ public class AuditTableRendererPanel extends GenericPanel<TableData> {
 		            			}		            			
 		            			
 		            			private String getSectionId() {
-		            				String category = (String)rowModel.getObject().get(0);		            				
+		            				String category = (String)rowModel.getObject().get(RightsPanel.CATEGORY_COLUMN);		            				
 		            				String sectionId = null;			            			
 		            				if (category.equals(getString("Section.Audit.Entity." + AuditRights.ENTITY_DASHBOARDS))) {
 		            					sectionId = DashboardSection.ID;
@@ -185,28 +186,8 @@ public class AuditTableRendererPanel extends GenericPanel<TableData> {
 		if ((links == null) || links.isEmpty()) {
 			return td;
 		}		
-		List<String> header = new ArrayList<String>();
-		for (int i=0, size=td.getHeader().size(); i<size; i++) {
-			if (!links.contains(i)) {
-				header.add(td.getHeader().get(i));
-			}
-		}	
-		
-		List<List<Object>> data = new ArrayList<List<Object>>();
-		for (int i=0, size=td.getData().size(); i<size; i++) {
-			List<Object> row = td.getData().get(i);
-			List<Object> newRow = new ArrayList<Object>();
-			for (int j=0, cols=row.size(); j<cols; j++) {
-				if (!links.contains(j)) {
-					newRow.add(row.get(j));					
-				}
-			}
-			data.add(newRow);
-		}	
-		TableData result = new TableData();
-		result.setHeader(header);
-		result.setData(data);
-		return result;
+		td.setExcludedColumns(links);
+		return td;
 	}
        
 	
