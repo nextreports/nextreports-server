@@ -56,32 +56,41 @@ public class TableDataExporter {
         HSSFRow headerRow = sheet.createRow(0);
         int col = 0;
 		if (data.getHeader() != null) {
-			for (String s : data.getHeader()) {
-				HSSFCell cell = headerRow.createCell(col);
-				cell.setCellType(HSSFCell.CELL_TYPE_STRING);
-				if (s == null) {
-					s = "";
+			for (int i = 0, size = data.getHeader().size(); i < size; i++) {
+				if ( (data.getExcludedColumns() == null) ||
+					 ((data.getExcludedColumns() != null) && !data.getExcludedColumns().contains(i)) ) {
+					String s = data.getHeader().get(i);
+					HSSFCell cell = headerRow.createCell(col);
+					cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+					if (s == null) {
+						s = "";
+					}
+					cell.setCellValue(new HSSFRichTextString(s));
+					col++;
 				}
-				cell.setCellValue(new HSSFRichTextString(s));
-				col++;
 			}
 		}
 
-        int row = 1;
-        for (List<Object> rowData : data.getData()) {
-            HSSFRow detailRow = sheet.createRow(row);
-            col = 0;
-            for (Object obj : rowData) {
-                HSSFCell cell = detailRow.createCell(col);
-                cell.setCellType(HSSFCell.CELL_TYPE_STRING);
-                if (obj == null) {
-                    obj = "";
-                }
-                cell.setCellValue(new HSSFRichTextString(obj.toString()));
-                col++;
-            }
-            row++;
-        }
+		int row = 1;
+		for (int i = 0, size = data.getData().size(); i < size; i++) {
+			List<Object> rowData = data.getData().get(i);
+			HSSFRow detailRow = sheet.createRow(row);
+			col = 0;
+			for (int j=0, cols=rowData.size(); j<cols; j++) {
+				Object obj = rowData.get(j);
+				if ( (data.getExcludedColumns() == null) ||
+					 ((data.getExcludedColumns() != null) && !data.getExcludedColumns().contains(j))) {							
+					HSSFCell cell = detailRow.createCell(col);
+					cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+					if (obj == null) {
+						obj = "";
+					}
+					cell.setCellValue(new HSSFRichTextString(obj.toString()));
+					col++;
+				}				
+			}
+			row++;
+		}
 
         String file = getFile();
         FileOutputStream fos = null;
