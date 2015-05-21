@@ -53,6 +53,8 @@ public class NextServerModuleLicence implements ModuleLicence {
 			InputStream input = getClass().getResourceAsStream("/" + moduleName + ".key");
 			if (input == null) {
 				LOG.info("* Licence " + moduleName + " : not found in classpath.");	
+				LOG.info("  Invalid licence for " +  moduleName + " module.");
+				return false;
 			}
 			try {							
 				NextServerLicense licence = LicenseLoader.decodeLicence(input);						
@@ -60,7 +62,7 @@ public class NextServerModuleLicence implements ModuleLicence {
 					return true;				
 				}			
 			} catch (LicenceException ex) {			
-				LOG.info("Invalid licence for " +  moduleName + " module.");
+				LOG.info("  Invalid licence for " +  moduleName + " module.");
 			}
 		}		
 		return false;
