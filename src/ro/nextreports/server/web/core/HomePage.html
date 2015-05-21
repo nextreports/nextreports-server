@@ -1,6 +1,64 @@
-<wicket:extend>
-    <span wicket:id="growl">[Growl messages here]</span>    
-    <div wicket:id="tabs" class="tabpane"></div>
-    <div class="clear"></div>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://wicket.apache.org/"
+      xml:lang="en"
+      lang="en">
+
+<head>
+    <title>NextReports Server</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/table.css"/>
+
+    <link rel="SHORTCUT ICON" href="images/favicon.ico"/>
+
+    <script type="text/javascript" src="js/jquery.json-2.2.min.js"></script>
+</head>
+
+<body>
+<div id="sb-site">
+    <div class="big-container">
+        <div wicket:id="headerPanel"></div>
+        <div class="container">
+            <span wicket:id="growl">[Growl messages here]</span>
+            <div wicket:id="sectionPanel"></div>
+            <div class="clear"></div>
+            <div class="push"></div>
+        </div>
+    </div>
     <div class="push"></div>
-</wicket:extend>
+    <div wicket:id="footerPanel"></div>
+    <div wicket:id="dialog"></div>
+</div>
+<div class="sb-slidebar sb-style-overlay sb-right sb-width-custom" data-sb-width="15%">
+    <div class="profile">
+        <div class="info">
+            <div class="user-icon">
+                <i class="fa fa-user fa-4x"></i>
+            </div>
+            <div class="user-details">
+                <span class="userName" wicket:id="currentUser"></span><br>
+                <span class="realName" wicket:id="realName"></span>
+            </div>
+        </div>
+    </div>
+
+    <ul class="sb-menu">
+        <li class="sb-close">
+            <a href="#" wicket:id="changePassword"><i class="fa fa-fw fa-lg fa-key"></i><span><wicket:message key="HeaderPanel.changePassword">Change Password</wicket:message></span></a>
+        </li>
+        <li class="sb-close">
+            <a href="#" wicket:id="logout"><i class="fa fa-fw fa-lg fa-power-off"></i><span><wicket:message key="HeaderPanel.logout">Logout</wicket:message></span></a>
+        </li>
+    </ul>
+    <hr class="hr">
+
+    <ul class="sb-menu">
+        <li class="sb-close" wicket:id="section">
+            <a href="#" wicket:id="link"><i wicket:id="icon" class="fa fa-fw fa-lg"></i><span wicket:id="label"></span></a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
