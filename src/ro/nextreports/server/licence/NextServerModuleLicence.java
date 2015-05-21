@@ -17,6 +17,7 @@
 package ro.nextreports.server.licence;
 
 import java.io.File;
+import java.io.InputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +47,21 @@ public class NextServerModuleLicence implements ModuleLicence {
 				return true;				
 			}			
 		} catch (LicenceException e) {
-			LOG.info("Invalid licence for " +  moduleName + " module.");
+			
+			// try to get from classpath (need for war version)
+			LOG.info("* Licence " + moduleName + " : try to get it from classpath.");	
+			InputStream input = getClass().getResourceAsStream("/" + moduleName + ".key");
+			if (input == null) {
+				LOG.info("* Licence " + moduleName + " : not found in classpath.");	
+			}
+			try {							
+				NextServerLicense licence = LicenseLoader.decodeLicence(input);						
+				if (licence.isValid() && moduleName.equals(licence.getPCODE())) {
+					return true;				
+				}			
+			} catch (LicenceException ex) {			
+				LOG.info("Invalid licence for " +  moduleName + " module.");
+			}
 		}		
 		return false;
 	}
