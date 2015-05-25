@@ -202,8 +202,8 @@ public class TableRendererPanel extends GenericPanel<Report> {
 			
 			@Override				    
 			public IModel<Object> getDataModel(IModel rowModel) {
-				IModel<Object> model = super.getDataModel(rowModel);						
-				String s = StringUtil.getValueAsString(model.getObject(), pattern.get(i), language);				
+				IModel<Object> model = super.getDataModel(rowModel);
+				String s = StringUtil.getValueAsString(model.getObject(), pattern.get(i), language);
 				return new Model(s);
 			}
 			
