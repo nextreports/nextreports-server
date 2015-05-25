@@ -1,6 +1,7 @@
 package ro.nextreports.server.web.core.audit;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -174,7 +175,9 @@ public class AuditTableRendererPanel extends GenericPanel<TableData> {
 	}
 	
 	private Link<TableResource> createSaveToExcelLink(final IModel<TableData> model) {
-		ByteArrayResource download = new TableResource(excludeColumns(model.getObject()), "audit.xls");		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH-mm-ss");
+		String fileName = "audit-" +  type.toLowerCase() + "-" + sdf.format(new Date()) + ".xls";
+		ByteArrayResource download = new TableResource(excludeColumns(model.getObject()), fileName);		
 		ResourceLink resourceLink =  new ResourceLink<TableResource>("download", download);
 		// see busy-indicator.js
 		// we do not want a busy indicator in this situation
