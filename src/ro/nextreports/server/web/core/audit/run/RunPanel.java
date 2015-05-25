@@ -81,7 +81,12 @@ public class RunPanel extends FormContentPanel<AuditRun> {
         runDialog = new ModalWindow("runDialog");
         add(runDialog);
 		
-		final DropDownChoice<String> ownerChoice = new DropDownChoice<String>("owner", getOwners());			
+		final DropDownChoice<String> ownerChoice = new DropDownChoice<String>("owner", getOwners()) {
+			@Override
+		    protected String getNullKeyDisplayValue() {
+		        return "-- " + getString("Section.Audit.Run.status.all") + " --";
+		    }
+		};			
 		ownerChoice.setOutputMarkupId(true);
 		add(ownerChoice);
 		
@@ -152,7 +157,7 @@ public class RunPanel extends FormContentPanel<AuditRun> {
         endField.setRequired(true);
         add(endField);    
         
-        pathField = new TextField("path");
+        pathField = new TextField("path");       
         pathField.setOutputMarkupPlaceholderTag(true);
         add(pathField);
         
