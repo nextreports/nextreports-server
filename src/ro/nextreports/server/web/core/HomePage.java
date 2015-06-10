@@ -199,7 +199,7 @@ public class HomePage extends BasePage {
         boolean surveyTaken = PreferencesHelper.getBoolean("survey.taken", preferences);
         Date startDate = NextServerSession.get().getPreferencesDate();
         int array[] = DateUtil.getElapsedTime(startDate, new Date());
-        boolean showSurvey = !surveyTaken && ((array != null) && array[0] >= 10);
+        boolean showSurvey = !surveyTaken && ((array != null) && array[0] >= 30);
         if (showSurvey) {
             if (pushService.isConnected(pushNode)) {
                 pushService.publish(pushNode, createSurveyMessage());
