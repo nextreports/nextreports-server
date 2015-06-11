@@ -19,15 +19,18 @@ package ro.nextreports.server.web.core;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.pages.RedirectPage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 
+import ro.nextreports.server.ReleaseInfo;
 import ro.nextreports.server.domain.User;
 import ro.nextreports.server.service.SecurityService;
 import ro.nextreports.server.service.StorageService;
@@ -126,6 +129,14 @@ public class HeaderPanel extends Panel {
         if (NextServerSession.get().isDemo()) {
             changePassword.setEnabled(false);
         }
+        
+        ExternalLink link = new ExternalLink("survey", HomePage.surveyUrl) {
+            protected void onComponentTag(ComponentTag componentTag) {
+                super.onComponentTag(componentTag);
+                componentTag.put("target", "_blank");
+            }
+        };
+		add(link);
     }
 
 }
