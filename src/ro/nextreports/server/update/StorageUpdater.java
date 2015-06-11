@@ -20,7 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
+import javax.jcr.Property;
+import javax.jcr.query.QueryResult;
 
+import org.apache.jackrabbit.util.ISO9075;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -107,7 +112,35 @@ public class StorageUpdater implements InitializingBean {
     	node.setProperty("version", getStorageVersion() + 1);
     	jcrTemplate.save();
     }
+    
+    private void resetFirstUsageDates() throws Exception {
+    	LOG.info("Reset firstUsage.date for all users");
+		String statement = "/jcr:root"
+				+ ISO9075.encodePath(StorageConstants.USERS_ROOT)
+				+ "//*[@className='ro.nextreports.server.domain.UserPreferences']";
+		QueryResult queryResult = jcrTemplate.query(statement);
 
+		NodeIterator nodes = queryResult.getNodes();
+		LOG.info("Found " + nodes.getSize() + " user preferences nodes");		
+		while (nodes.hasNext()) {
+			Node node = nodes.nextNode();
+			
+			Node pNode = node.getNode("preferences");
+			try {
+				Property property = pNode.getProperty("firstUsage.date");
+				if (property.getValue() != null) {
+					LOG.info("    removed firstUsage.date = " + property.getString() + "  for user " + node.getParent().getName());
+					String s = null;
+					pNode.setProperty("firstUsage.date", s);
+				}
+			} catch (PathNotFoundException ex) {
+				// nothing to do
+			}
+		}
+
+		jcrTemplate.save();
+    }
+    
     private void performUpdates(List<StorageUpdate> updates) throws Exception {
     	for (StorageUpdate update : updates) {
     		long updateVersion = update.getVersion();
@@ -116,6 +149,7 @@ public class StorageUpdater implements InitializingBean {
     		update.executeUpdate();
     		LOG.info("Updated storage version to " + updateVersion);
     		incrementStorageVersion();
+    		resetFirstUsageDates();
     	}
     }
 
