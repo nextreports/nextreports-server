@@ -16,12 +16,17 @@
  */
 package ro.nextreports.server.web.common.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 /**
  * @author Decebal Suiu
  */
 public class PreferencesHelper {
+	
+	public static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	public static boolean getBoolean(String preference, Map<String, String> preferences) {
 		String value = preferences.get(preference);
@@ -49,6 +54,20 @@ public class PreferencesHelper {
 	public static String getString(String preference, Map<String, String> preferences, String defaultValue) {
 		String value = preferences.get(preference);
 		return (value == null) ? defaultValue : value;
+	}
+	
+	public static Date getDate(String preference, Map<String, String> preferences) {
+		String value = preferences.get(preference);
+		if (value == null) {
+			return null;
+		} else {
+			try {
+				return sdf.parse(value);
+			} catch (ParseException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
 	}
 
 }

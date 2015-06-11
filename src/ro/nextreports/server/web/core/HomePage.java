@@ -51,7 +51,7 @@ public class HomePage extends BasePage {
 
 	private static final long serialVersionUID = 1L;
 
-    private static final String surveyUrl = "http://www.next-reports.com/survey1";
+    public static final String surveyUrl = "http://www.next-reports.com/survey1";
 
 	private Label growlLabel;
     private JGrowlAjaxBehavior growlBehavior;
@@ -195,18 +195,36 @@ public class HomePage extends BasePage {
     }
 
 	private void initPushSurvey(IPushService pushService, IPushNode<Message> pushNode) {
+		int[] surveyDays = new int[]{30, 180}; // show survey at 30, 180 days
         Map<String, String> preferences = NextServerSession.get().getPreferences();
-        boolean surveyTaken = PreferencesHelper.getBoolean("survey.taken", preferences);
-        Date startDate = NextServerSession.get().getPreferencesDate();
-        int array[] = DateUtil.getElapsedTime(startDate, new Date());
-        boolean showSurvey = !surveyTaken && ((array != null) && array[0] >= 30);
-        if (showSurvey) {
-            if (pushService.isConnected(pushNode)) {
-                pushService.publish(pushNode, createSurveyMessage());
-                preferences.put("survey.taken", "true");
-            }
+        int surveyDay = PreferencesHelper.getInt("survey.day", preferences);
+        int surveyTestDay = surveyDay;
+        if (surveyDay == 0) {
+        	surveyTestDay = surveyDays[0];
+        } else {
+        	for (int i=0, size=surveyDays.length; i<size; i++) {
+        		if (surveyDay == surveyDays[i]) {
+        			if (i == size-1) {
+        				return;
+        			} else {
+        				surveyTestDay = surveyDays[i+1];
+        			}
+        		}
+        	}
         }
-
+        Date firstUsageDate = PreferencesHelper.getDate("firstUsage.date", preferences);
+        if (firstUsageDate == null) {
+        	firstUsageDate = new Date();
+        	preferences.put("firstUsage.date", PreferencesHelper.sdf.format(firstUsageDate));
+        }       
+        int array[] = DateUtil.getElapsedTime(firstUsageDate, new Date());
+		boolean showSurvey = (array != null) && (array[0] >= surveyTestDay);
+		if (showSurvey) {
+			if (pushService.isConnected(pushNode)) {				
+				pushService.publish(pushNode, createSurveyMessage());
+				preferences.put("survey.day", String.valueOf(surveyTestDay));
+			}			
+		}
         NextServerSession.get().setPreferences(preferences);
     }
 
