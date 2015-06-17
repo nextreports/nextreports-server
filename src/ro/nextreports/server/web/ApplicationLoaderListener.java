@@ -127,6 +127,22 @@ public class ApplicationLoaderListener implements ServletContextListener {
 //			LOG.debug("nextserver.baseUrl = " + baseUrl);
 //			LOG.debug("reports.url = " + reportsUrl);
 //		}
+		
+		// properties to be used if JCR is configured with an Oracle Database instead of Derby
+		// these properties must be found in nextserver.properties
+		String oracleDatabaseUrl = config.getString("oracle.database.url");
+		if (oracleDatabaseUrl != null) {
+			System.setProperty("oracle.database.url", oracleDatabaseUrl);
+			//LOG.info("oracle.database.url = " + oracleDatabaseUrl);
+			
+			String oracleDatabaseUser = config.getString("oracle.database.user");
+			System.setProperty("oracle.database.user", oracleDatabaseUser);
+			//LOG.info("oracle.database.user = " + oracleDatabaseUser);
+			
+			String oracleDatabasePass = config.getString("oracle.database.password");
+			System.setProperty("oracle.database.password", oracleDatabasePass);
+			//LOG.info("oracle.database.password = " + oracleDatabasePass);
+		}
 	}
 	
     private static void deployDemoData(String nextServerHome) throws IOException {    	
