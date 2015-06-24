@@ -116,7 +116,17 @@ public class HeaderPanel extends Panel {
         if (NextServerSession.get().isDemo()) {
             changePassword.setEnabled(false);
         }
-        */
+
+        ExternalLink link = new ExternalLink("survey", HomePage.surveyUrl) {
+
+            protected void onComponentTag(ComponentTag componentTag) {
+                super.onComponentTag(componentTag);
+                componentTag.put("target", "_blank");
+            }
+
+        };
+		add(link);
+		*/
     }
 
 }

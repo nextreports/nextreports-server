@@ -25,8 +25,10 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.feedback.FeedbackMessage;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -221,6 +223,16 @@ public class HomePage extends BasePage {
             changePassword.setEnabled(false);
         }
 
+        ExternalLink surveyLink = new ExternalLink("survey", HomePage.surveyUrl) {
+
+            protected void onComponentTag(ComponentTag componentTag) {
+                super.onComponentTag(componentTag);
+                componentTag.put("target", "_blank");
+            }
+
+        };
+        add(surveyLink);
+
         List<String> sections = new ArrayList<String>();
         for (Section section : sectionManager.getSections()) {
             sections.add(section.getId());
@@ -388,14 +400,14 @@ public class HomePage extends BasePage {
         if (firstUsageDate == null) {
         	firstUsageDate = new Date();
         	preferences.put("firstUsage.date", PreferencesHelper.sdf.format(firstUsageDate));
-        }       
+        }
         int array[] = DateUtil.getElapsedTime(firstUsageDate, new Date());
 		boolean showSurvey = (array != null) && (array[0] >= surveyTestDay);
 		if (showSurvey) {
-			if (pushService.isConnected(pushNode)) {				
+			if (pushService.isConnected(pushNode)) {
 				pushService.publish(pushNode, createSurveyMessage());
 				preferences.put("survey.day", String.valueOf(surveyTestDay));
-			}			
+			}
 		}
         NextServerSession.get().setPreferences(preferences);
     }
