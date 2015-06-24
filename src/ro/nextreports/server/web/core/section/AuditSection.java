@@ -21,7 +21,8 @@ public class AuditSection implements Section {
 
 	@Override
 	public String getIcon() {
-		return "images/audit.png";
+		//return "images/audit.png";
+		return "binoculars";
 	}
 
 	@Override
