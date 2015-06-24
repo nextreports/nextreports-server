@@ -1,5 +1,6 @@
 package ro.nextreports.server.web.dashboard.table;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Comparator;
 import java.util.Date;
@@ -42,6 +43,8 @@ public class TableObjectComparator implements Comparator<Object> {
 			return ((Float) o1).compareTo((Float) o2);
 		} else if (className.equals("java.lang.Double") || className.equals("double")) {
 			return ((Double) o1).compareTo((Double) o2);
+		} else if (className.equals("java.math.BigDecimal")) {
+			return ((BigDecimal) o1).compareTo((BigDecimal) o2);	
 		} else if (className.equals("java.lang.BigInteger")) {
 			return ((BigInteger) o1).compareTo((BigInteger) o2);
 		} else if (className.equals("java.lang.Character") || className.equals("char")) {
@@ -54,6 +57,8 @@ public class TableObjectComparator implements Comparator<Object> {
 			return ((java.sql.Date) o1).compareTo((java.sql.Date) o2);
 		} else if (className.equals("java.sql.Timestamp")) {
 			return ((java.sql.Timestamp) o1).compareTo((java.sql.Timestamp) o2);
+		} else if (className.equals("java.sql.Time")) {
+			return ((java.sql.Time) o1).compareTo((java.sql.Time) o2);
 		}
 
 		return o1.toString().compareTo(o2.toString());

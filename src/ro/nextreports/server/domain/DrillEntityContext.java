@@ -34,6 +34,8 @@ public class DrillEntityContext implements Serializable {
     private boolean isLast;      
     // clicked table column
     private int column;
+    
+    private String currentDrillEntityId;
 
     public DrillEntityContext() {
     	drillParameterValues = new HashMap<String, Object>();  
@@ -87,6 +89,14 @@ public class DrillEntityContext implements Serializable {
 
 	public void setColumn(int column) {
 		this.column = column;
+	}
+	
+	public String getCurrentDrillEntityId() {
+		return currentDrillEntityId;
+	}
+
+	public void setCurrentDrillEntityId(String currentDrillEntityId) {
+		this.currentDrillEntityId = currentDrillEntityId;
 	}
 
 	@Override

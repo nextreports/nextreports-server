@@ -164,3 +164,15 @@ table.actions-grid tr td.actions-col-hover {
 	border: 1px solid rgb(202, 202, 202);
 	max-height: 100% !important;
 }
+
+.filter-td {
+	padding: 1px !important;
+}
+
+.filter-td input {
+	width: 99%;
+}	
+
+tr.navigation td {
+	padding-bottom: 0px !important;
+}

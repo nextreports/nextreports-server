@@ -56,6 +56,7 @@ import ro.nextreports.server.web.core.section.Section;
 import ro.nextreports.server.web.core.section.SectionContext;
 import ro.nextreports.server.web.core.section.SectionContextFactory;
 import ro.nextreports.server.web.core.section.SectionManager;
+import ro.nextreports.server.web.dashboard.table.RowData;
 import ro.nextreports.server.web.language.LanguageManager;
 import ro.nextreports.server.web.security.SecurityUtil;
 
@@ -73,6 +74,8 @@ public class NextServerSession extends WebSession {
 	private String selectedSectionId;
 	private Map<String, SectionContext> sectionContexts;
 	private SearchContext searchContext;
+	// table widget filter
+	private Map<String,RowData> tableFilterMap = new HashMap<String, RowData>();
 
     @SpringBean
 	private SecurityService securityService;
@@ -246,6 +249,14 @@ public class NextServerSession extends WebSession {
 
 	public void setSearchContext(SearchContext searchContext) {
 		this.searchContext = searchContext;
+	}
+	
+	public RowData getTableFilter(String widgetId) {
+		return tableFilterMap.get(widgetId);
+	}
+
+	public void setTableFilter(String widgetId, RowData tableFilter) {
+		this.tableFilterMap.put(widgetId, tableFilter);
 	}
 
 	public Map<String, String> getPreferences() {

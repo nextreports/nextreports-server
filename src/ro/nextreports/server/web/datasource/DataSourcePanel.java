@@ -24,6 +24,8 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -52,6 +54,7 @@ import ro.nextreports.server.web.core.validation.DuplicationEntityValidator;
 import ro.nextreports.server.web.core.validation.JcrNameValidator;
 import ro.nextreports.server.web.datasource.validator.MinMaxPoolSizeValidator;
 import ro.nextreports.engine.querybuilder.sql.dialect.CSVDialect;
+import ro.nextreports.engine.util.ObjectCloner;
 
 /**
  * @author Decebal Suiu
@@ -79,7 +82,7 @@ public class DataSourcePanel extends Panel {
 
         this.parentPath = parentPath;
 
-        this.dataSource = dataSource;
+        this.dataSource = ObjectCloner.silenceDeepCopy(dataSource);
         if (dataSource.getName() != null) {
             this.modify = true;
         }
@@ -100,6 +103,21 @@ public class DataSourcePanel extends Panel {
 
         private DriverTemplate template;
         private String testResponse;
+        
+        private Label nameLabel;
+        private Label typeLabel;
+        private Label driverLabel;
+        private Label urlLabel;
+        private Label usernameLabel;
+        private Label passwordLabel;
+        private Label minPoolSizeLabel;
+        private Label maxPoolSizeLabel;
+        private TextField<String> driver;
+        private TextField<String> url;
+        private TextField<String> username;
+        private PasswordTextField password;
+        private TextField<Integer> minPool;
+        private TextField<Integer> maxPool;
 
         public DataSourceForm(String id) {
             super(id, new CompoundPropertyModel<DataSource>(dataSource));
@@ -110,6 +128,23 @@ public class DataSourcePanel extends Panel {
                 title = getString("ActionContributor.DataSource.modify");
             }
             add(new Label("title", title));
+            
+            nameLabel = new Label("nameLabel", getString("ActionContributor.DataSource.name") + " *");
+            add(nameLabel);
+            typeLabel = new Label("typeLabel", getString("ActionContributor.DataSource.type") + " *");
+            add(typeLabel);            
+            driverLabel = new Label("driverLabel", getString("ActionContributor.DataSource.driver") + " *");
+            add(driverLabel);
+            urlLabel = new Label("urlLabel", getString("ActionContributor.DataSource.url") + " *");
+            add(urlLabel);
+            usernameLabel = new Label("usernameLabel", getString("ActionContributor.DataSource.username"));
+            add(usernameLabel);
+            passwordLabel = new Label("passwordLabel", getString("ActionContributor.DataSource.password"));
+            add(passwordLabel);
+            minPoolSizeLabel = new Label("minPoolSizeLabel", getString("ActionContributor.DataSource.minPoolSize"));
+            add(minPoolSizeLabel);
+            maxPoolSizeLabel = new Label("maxPoolSizeLabel", getString("ActionContributor.DataSource.maxPoolSize"));
+            add(maxPoolSizeLabel);
 
             final TextField<String> name = new TextField<String>("name")  {
             	
@@ -128,16 +163,31 @@ public class DataSourcePanel extends Panel {
                 add(new DuplicationEntityValidator(name, parentPath));
             }
 
-            final TextField<String> driver = new TextField<String>("driver");
+            driver = new TextField<String>("driver");
             driver.setRequired(true);
             driver.setLabel(new Model<String>(getString("ActionContributor.DataSource.driver")));
             driver.setOutputMarkupId(true);
             add(driver);
-            final TextField<String> url = new TextField<String>("url");
+            url = new TextField<String>("url");
             url.setRequired(true);
             url.setLabel(new Model<String>(getString("ActionContributor.DataSource.url")));
             url.setOutputMarkupId(true);
             add(url);
+            
+            username = new TextField<String>("username");
+            add(username);
+            password = new PasswordTextField("password");
+            password.setRequired(false);
+            password.setResetPassword(false);
+            add(password);
+            
+            minPool = new TextField<Integer>("minPoolSize");
+            minPool.add(RangeValidator.minimum(1));
+            add(minPool);
+            maxPool = new TextField<Integer>("maxPoolSize");
+            maxPool.add(RangeValidator.minimum(1));
+            add(maxPool);
+            add(new MinMaxPoolSizeValidator(minPool, maxPool));
 
             List<DriverTemplate> driverTemplates;
             try {
@@ -167,29 +217,14 @@ public class DataSourcePanel extends Panel {
                 protected void onUpdate(AjaxRequestTarget target) {
                     dataSource.setDriver(template.getClassName());
                     dataSource.setVendor(template.getType());
-                    dataSource.setUrl(template.getUrlTemplate());
-                    target.add(driver);
-                    target.add(url);
+                    dataSource.setUrl(template.getUrlTemplate());                  
+					enableComponents(target);           					
+                    target.add(DataSourceForm.this);
                 }
 
             });
             add(templates);
-
-            final TextField<String> username = new TextField<String>("username");
-            add(username);
-            final PasswordTextField password = new PasswordTextField("password");
-            password.setRequired(false);
-            password.setResetPassword(false);
-            add(password);
-            
-            final TextField<Integer> minPool = new TextField<Integer>("minPoolSize");
-            minPool.add(RangeValidator.minimum(1));
-            add(minPool);
-            final TextField<Integer> maxPool = new TextField<Integer>("maxPoolSize");
-            maxPool.add(RangeValidator.minimum(1));
-            add(maxPool);
-            add(new MinMaxPoolSizeValidator(minPool, maxPool));
-
+           
             add(new AjaxLink("cancel") {
 
                 @Override
@@ -272,11 +307,54 @@ public class DataSourcePanel extends Panel {
 
 				@Override
 				public boolean isVisible() {					
-					return dataSource.getDriver().equals(CSVDialect.DRIVER_CLASS);
+					return CSVDialect.DRIVER_CLASS.equals(dataSource.getDriver());
 				}                                
                 
             };            
             add(propButton);
+            
+            enableComponents(null);
+        }
+        
+        @Override
+        public void renderHead(IHeaderResponse response) {
+            super.renderHead(response);          
+            response.render(OnDomReadyHeaderItem.forScript(getJavascriptCall()));
+        }
+              
+        
+        private void enableComponents(AjaxRequestTarget target) {
+        	boolean isJNDI = DataSource.JNDI_VENDOR.equals(template.getType());
+			driverLabel.setVisible(!isJNDI);
+			driver.setVisible(!isJNDI);
+			usernameLabel.setVisible(!isJNDI);
+			username.setVisible(!isJNDI);
+			passwordLabel.setVisible(!isJNDI);
+			password.setVisible(!isJNDI);
+			minPoolSizeLabel.setVisible(!isJNDI);
+			minPool.setVisible(!isJNDI);
+			maxPoolSizeLabel.setVisible(!isJNDI);
+			maxPool.setVisible(!isJNDI);
+			
+			if (isJNDI) {
+				urlLabel.setDefaultModelObject(DataSource.JNDI_VENDOR + " " + getString("ActionContributor.DataSource.name") + " *");
+			} else {
+				urlLabel.setDefaultModelObject(getString("ActionContributor.DataSource.url") + " *");
+			}
+			
+			if (target != null) {
+				target.appendJavaScript(getJavascriptCall());
+			}
+        }
+               
+        
+        private String getJavascriptCall() {
+        	boolean isJNDI = DataSource.JNDI_VENDOR.equals(template.getType());        	
+        	if (isJNDI) {
+				return "$('.dataSourceFormTable tr.trHide').hide();";
+			} else {
+				return "$('.dataSourceFormTable tr.trHide').show();";
+			}
         }
     }
 

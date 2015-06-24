@@ -17,6 +17,7 @@
 package ro.nextreports.server.licence;
 
 import java.io.File;
+import java.io.InputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,16 +38,38 @@ public class NextServerModuleLicence implements ModuleLicence {
 	@Override
 	public boolean isValid(String moduleName) {
 
-		File f = new File("./" + LICENCES_FOLDER + "/" + moduleName + ".key");		
-		LOG.info("* Licence " + moduleName + " : " + f.exists());		
+		File f = new File("./" + LICENCES_FOLDER + "/" + moduleName + ".key");	
+		if (f.exists()) {
+			LOG.info("* Licence " + moduleName + " : found");
+		}
 				
 		try {			
 			NextServerLicense licence = LicenseLoader.decodeLicence(f);						
 			if (licence.isValid() && moduleName.equals(licence.getPCODE())) {
+				LOG.info("  Valid licence for " +  moduleName + " module.");
 				return true;				
 			}			
 		} catch (LicenceException e) {
-			LOG.info("Invalid licence for " +  moduleName + " module.");
+			
+			// try to get from classpath (need for war version)
+			LOG.info("* Licence " + moduleName + " : try to get it from classpath.");	
+			InputStream input = getClass().getResourceAsStream("/" + moduleName + ".key");
+			if (input == null) {
+				LOG.info("* Licence " + moduleName + " : not found in classpath.");	
+				LOG.info("  Invalid licence for " +  moduleName + " module.");
+				return false;
+			} else {
+				LOG.info("* Licence " + moduleName + " : found in classpath.");
+			}
+			try {							
+				NextServerLicense licence = LicenseLoader.decodeLicence(input);						
+				if (licence.isValid() && moduleName.equals(licence.getPCODE())) {
+					LOG.info("  Valid licence for " +  moduleName + " module.");
+					return true;				
+				}			
+			} catch (LicenceException ex) {			
+				LOG.info("  Invalid licence for " +  moduleName + " module.");
+			}
 		}		
 		return false;
 	}

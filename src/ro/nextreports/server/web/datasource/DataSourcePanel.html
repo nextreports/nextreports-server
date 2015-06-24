@@ -2,10 +2,10 @@
     <form wicket:id="form">
         <fieldset class="fieldset-panel-right">
             <legend wicket:id="title">[]</legend>
-            <table>
+            <table class="dataSourceFormTable">
                 <tr>
                     <td class="td-label">
-                        <label><wicket:message key="ActionContributor.DataSource.name">Name</wicket:message><em>*</em></label>
+                        <label wicket:id="nameLabel"/>
                     </td>
                     <td>
                         <input wicket:id="name" name="name" type="text" size="45"/>
@@ -13,15 +13,15 @@
                 </tr>
                 <tr>
                     <td class="td-label">
-                        <label><wicket:message key="ActionContributor.DataSource.type">Type</wicket:message><em>*</em></label>
+                        <label wicket:id="typeLabel"/>
                     </td>
                     <td>
                         <select wicket:id="type" name="type"/>
                     </td>
                 </tr>
-                <tr>
+                <tr class="trHide">
                     <td class="td-label">
-                        <label><wicket:message key="ActionContributor.DataSource.driver">Driver</wicket:message><em>*</em></label>
+                        <label wicket:id="driverLabel"/>
                     </td>
                     <td>
                         <input wicket:id="driver" name="driver" type="text" size="45"/>
@@ -29,39 +29,39 @@
                 </tr>
                 <tr>
                     <td class="td-label">
-                        <label><wicket:message key="ActionContributor.DataSource.url">Url</wicket:message><em>*</em></label>
+                        <label wicket:id="urlLabel"/>
                     </td>
                     <td>
                         <input wicket:id="url" name="url" type="text" size="45"/>
                     </td>
                 </tr>
-                <tr>
+                <tr class="trHide">
                     <td class="td-label">
-                        <label><wicket:message key="ActionContributor.DataSource.username">Username</wicket:message></label>
+                        <label wicket:id="usernameLabel"/>
                     </td>
                     <td>
                         <input wicket:id="username" name="username" type="text" size="45"/>
                     </td>
                 </tr>
-                <tr>
+                <tr class="trHide">
                     <td class="td-label">
-                        <label><wicket:message key="ActionContributor.DataSource.password">Password</wicket:message></label>
+                        <label wicket:id="passwordLabel"/>
                     </td>
                     <td>
                         <input wicket:id="password" name="password" type="password" size="45"/>
                     </td>
                 </tr>
-                <tr>
+                <tr class="trHide">
                     <td class="td-label">
-                        <label><wicket:message key="ActionContributor.DataSource.minPoolSize">Min</wicket:message></label>
+                        <label wicket:id="minPoolSizeLabel"/>
                     </td>
                     <td>
                         <input wicket:id="minPoolSize" name=""minPoolSize"" type="text" size="5"/>
                     </td>
                 </tr>
-                <tr>
+                <tr class="trHide">
                     <td class="td-label">
-                        <label><wicket:message key="ActionContributor.DataSource.maxPoolSize">Max</wicket:message></label>
+                        <label wicket:id="maxPoolSizeLabel"/>
                     </td>
                     <td>
                         <input wicket:id="maxPoolSize" name="maxPoolSize" type="text" size="5"/>

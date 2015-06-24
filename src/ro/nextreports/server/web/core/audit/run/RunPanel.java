@@ -46,6 +46,8 @@ import ro.nextreports.server.util.StorageUtil;
 import ro.nextreports.server.web.common.behavior.SimpleTooltipBehavior;
 import ro.nextreports.server.web.common.form.FormContentPanel;
 import ro.nextreports.server.web.common.form.FormPanel;
+import ro.nextreports.server.web.core.audit.InnerReport;
+import ro.nextreports.server.web.core.audit.rights.AuditRights;
 import ro.nextreports.server.web.core.migration.AddEntityPanel;
 import ro.nextreports.server.web.core.migration.MigrationEntityType;
 
@@ -79,7 +81,12 @@ public class RunPanel extends FormContentPanel<AuditRun> {
         runDialog = new ModalWindow("runDialog");
         add(runDialog);
 		
-		final DropDownChoice<String> ownerChoice = new DropDownChoice<String>("owner", getOwners());			
+		final DropDownChoice<String> ownerChoice = new DropDownChoice<String>("owner", getOwners()) {
+			@Override
+		    protected String getNullKeyDisplayValue() {
+		        return "-- " + getString("Section.Audit.Run.status.all") + " --";
+		    }
+		};			
 		ownerChoice.setOutputMarkupId(true);
 		add(ownerChoice);
 		
@@ -150,7 +157,7 @@ public class RunPanel extends FormContentPanel<AuditRun> {
         endField.setRequired(true);
         add(endField);    
         
-        pathField = new TextField("path");
+        pathField = new TextField("path");       
         pathField.setOutputMarkupPlaceholderTag(true);
         add(pathField);
         
@@ -244,7 +251,9 @@ public class RunPanel extends FormContentPanel<AuditRun> {
 					getString("Section.Audit.Run.duration"),
 					getString("Section.Audit.Run.end"),
 					getString("Section.Audit.Run.status"),
-					getString("Section.Audit.Rights.path"));
+					getString("Section.Audit.Rights.path"),
+					getString("type"),
+					getString("Url"));
 			result.setHeader(header);
 			Collections.sort(list, new Comparator<RunReportHistory>() {
 				@Override
@@ -268,6 +277,8 @@ public class RunPanel extends FormContentPanel<AuditRun> {
 							row.add(h.getEndDate());
 							row.add(getStatus(h));
 							row.add(getReportPath(h));
+							row.add(h.getRunnerType());
+							row.add(getUrl(h));
 							result.getData().add(row);
 						}
 					}			
@@ -323,6 +334,30 @@ public class RunPanel extends FormContentPanel<AuditRun> {
             duration = formatter.print(runTime * 1000);
         }
         return duration;
+	}
+	
+	private String getUrl(RunReportHistory h) {
+		return h.getUrl();
+	}
+	
+	protected ArrayList<Integer> getLinkColumns() {
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		list.add(8);
+		return list;
+	}
+	
+	protected String getTitle() {
+		StringBuilder sb = new StringBuilder(InnerReport.RUN.name());
+		sb.append("   ( ");
+		sb.append(getString("Section.Audit.Run.owner"));
+		sb.append(" = ");
+		if (auditRun.getOwner() == null)  {
+			sb.append(getString("Section.Audit.Run.status.all"));
+		} else {
+			sb.append(auditRun.getOwner());
+		}			
+		sb.append(" )");
+		return sb.toString();
 	}
 
 }

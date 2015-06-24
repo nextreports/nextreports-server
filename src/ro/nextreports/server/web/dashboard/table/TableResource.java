@@ -25,6 +25,7 @@ import org.apache.wicket.injection.Injector;
 import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import ro.nextreports.server.domain.DrillEntityContext;
 import ro.nextreports.server.service.DashboardService;
 import ro.nextreports.server.util.FileUtil;
 import ro.nextreports.server.util.ServerUtil;
@@ -42,14 +43,16 @@ public class TableResource extends ByteArrayResource {
 	private String widgetId;
 	private TableData data;
 	private String fileName = "table.xls";
+	private DrillEntityContext drillContext;
 
     @SpringBean
     private DashboardService dashboardService;
 
-    public TableResource(String widgetId) {
+    public TableResource(String widgetId, DrillEntityContext drillContext) {
         super("excel/ms-excel");        
         
         this.widgetId = widgetId;
+        this.drillContext = drillContext;
         Injector.get().inject(this);
     }
     
@@ -68,10 +71,9 @@ public class TableResource extends ByteArrayResource {
         	String sortPosKey = username == null ? widgetId + TableDataProvider.SORT_PROP_POS_SUFFIX : widgetId + "_" + username + TableDataProvider.SORT_PROP_POS_SUFFIX;
         	String sortDirKey = username == null ? widgetId + TableDataProvider.SORT_PROP_DIR_SUFFIX : widgetId + "_" + username + TableDataProvider.SORT_PROP_DIR_SUFFIX;
         	String pos = System.getProperty(sortPosKey);
-    		String dir = System.getProperty(sortDirKey);
-    		System.out.println(">> pos="+pos + "  dir="+dir);
+    		String dir = System.getProperty(sortDirKey);    		
         	if (widgetId != null) {
-        		data = dashboardService.getTableData(widgetId, null);
+        		data = dashboardService.getTableData(widgetId, drillContext, null);
         	}
         	if (pos != null) {
         		final int sortPos = Integer.parseInt(pos);

@@ -38,6 +38,7 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
 import javax.jcr.RepositoryException;
+import javax.naming.InitialContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,6 +68,10 @@ public class ConnectionUtil {
 	private static final Map<String, ComboPooledDataSource>  pools = new ConcurrentHashMap<String, ComboPooledDataSource>(); 
 	
     public static Connection createConnection(StorageService storageService, final DataSource dataSource) throws RepositoryException {
+    	
+    	if (DataSource.JNDI_VENDOR.equals(dataSource.getVendor())) {
+			return getJNDIConnection(storageService, dataSource);
+		}
     	
     	ComboPooledDataSource pool = null;
     	// when we first create a data source and we click test before save, path is null
@@ -115,7 +120,10 @@ public class ConnectionUtil {
     	
     	
     	final ComboPooledDataSource poolF = pool;
-    	Connection connection;
+    	if (LOG.isDebugEnabled()) {
+    		debug(poolF, dataSource);
+    	}
+    	Connection connection = null;
     	try {	
 			if (connectionTimeout <= 0) {
 				// wait as long as driver manager (not deterministic)
@@ -130,10 +138,12 @@ public class ConnectionUtil {
 				});
 				new Thread(createConnectionTask).start();
 				connection = createConnectionTask.get(connectionTimeout, TimeUnit.SECONDS);
-
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("      OK");
+				}
 			}
     	} catch (Exception e) {
-			Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
+    		Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
 			ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);		
 			throw new RepositoryException(bundle.getString("Connection.failed") + " '" + dataSource.getPath() + "'", e);
 		}    	    	
@@ -141,9 +151,26 @@ public class ConnectionUtil {
 		return connection;    	
 	}
     
+    private static void debug(ComboPooledDataSource pool, DataSource dataSource) {
+    	LOG.debug("***** Create connection for dataSource: " + dataSource.getPath());
+    	try {	    	
+	    	LOG.debug("      min=" + pool.getMinPoolSize() + 
+	    			  	   " max=" + pool.getMaxPoolSize() + 
+	    			  	   " curr=" +pool.getNumConnections() + 
+	    			  	   " busy=" + pool.getNumBusyConnections() + 
+	    			  	   " idle=" + pool.getNumIdleConnections());
+    	} catch (Exception ex) {
+    		LOG.error("      " + ex.getMessage(), ex);
+    	}
+    }
+    
     // create a connection that does not use a pool of connections
     // this is useful if we want to test the connection
     public static Connection createTempConnection(StorageService storageService, final DataSource dataSource) throws RepositoryException {    	
+    	
+    	if (DataSource.JNDI_VENDOR.equals(dataSource.getVendor())) {
+			return getJNDIConnection(storageService, dataSource);
+		}
     	
 		final String driver = dataSource.getDriver();
 
@@ -202,8 +229,20 @@ public class ConnectionUtil {
 			return connection;
 		}
 	}
+    
+    private static Connection getJNDIConnection(StorageService storageService, DataSource dataSource) throws RepositoryException {    	
+			try {
+				final InitialContext ctx = new InitialContext();
+				final javax.sql.DataSource ds = (javax.sql.DataSource) ctx.lookup(dataSource.getUrl());
+				return ds.getConnection();
+			} catch (final Exception e) {
+				LOG.error(e.getMessage(), e);
+				final Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
+				final ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);
+				throw new RepositoryException(bundle.getString("Connection.failed") + " '" + dataSource.getUrl()+ "'", e);
+			}	
+    }
         
-
     public static void closeConnection(Connection con) {
         if (con != null) {
             try {

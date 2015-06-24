@@ -71,23 +71,36 @@ public class NextPivotDataSource extends ResultSetPivotDataSource {
 		
 		if (!(entity instanceof Chart) && !(entity instanceof Report)) {
 			throw new IllegalArgumentException("Entity for NextPivotDataSource must be a report or a chart!");
-		}		
-		try {
-			init(getQueryResult(widget, urlQueryParameters));
+		}	
+					
+		DataSource dataSource = getDataSource(entity);
+		Connection connection = null;
+		try {		
+			connection = ConnectionUtil.createConnection(storageService, dataSource);
+			init(getQueryResult(connection, widget, urlQueryParameters));
 		} catch (Exception e) {
 	        throw new ReportRunnerException(e);
-	    } 
+	    } finally {
+        	ConnectionUtil.closeConnection(connection);	
+        }
 	}	
 	
-	private ResultSet getQueryResult(PivotWidget widget, Map<String, Object> urlQueryParameters) throws ReportRunnerException {	
-		Entity entity = widget.getEntity();	
-		ro.nextreports.engine.Report report =	NextUtil.getNextReport(storageService.getSettings(), entity);
+	private DataSource getDataSource(Entity entity) {		
 		DataSource dataSource;
 		if (entity instanceof Report) {
 			dataSource = ((Report)entity).getDataSource();
 		} else {
 			dataSource = ((Chart)entity).getDataSource();
 		}
+		return dataSource;
+	}
+	
+	private ResultSet getQueryResult(Connection connection, PivotWidget widget, Map<String, Object> urlQueryParameters) throws ReportRunnerException {	
+		
+		Entity entity = widget.getEntity();
+		ro.nextreports.engine.Report report =	NextUtil.getNextReport(storageService.getSettings(), entity);
+		DataSource dataSource = getDataSource(entity);
+		
 		String sql = ro.nextreports.engine.util.ReportUtil.getSql(report);
 		 // retrieves the report parameters
         Map<String, QueryParameter> parameters = new LinkedHashMap<String, QueryParameter>();
@@ -97,10 +110,9 @@ public class NextPivotDataSource extends ResultSetPivotDataSource {
                 parameters.put(param.getName(), param);
             }
         }
-        Connection connection = null;
+        
         Map<String, Object> parameterValues = new HashMap<String, Object>();
-        
-        
+              
         // pivot is running with settings parameter values
         ChartUtil.initParameterSettings(parameterValues, widget.getQueryRuntime(), dashboardService.getUserWidgetParameters(widget.getId()));      
         
@@ -114,8 +126,8 @@ public class NextPivotDataSource extends ResultSetPivotDataSource {
         
         QueryResult queryResult = null;
         try {
-        	boolean csv = dataSource.getDriver().equals(CSVDialect.DRIVER_CLASS);
-        	connection = ConnectionUtil.createConnection(storageService, dataSource);
+        	boolean csv = CSVDialect.DRIVER_CLASS.equals(dataSource.getDriver());
+        	
             Query query = new Query(sql);
             QueryExecutor executor = new QueryExecutor(query, parameters, parameterValues, connection, true, true, csv);
             executor.setMaxRows(0);
@@ -126,9 +138,7 @@ public class NextPivotDataSource extends ResultSetPivotDataSource {
             return queryResult.getResultSet();      
         } catch (Exception e) {        						
             throw new ReportRunnerException(e);
-        } finally {
-        	ConnectionUtil.closeConnection(connection);	
-        }
+        } 
 	}
 		
 

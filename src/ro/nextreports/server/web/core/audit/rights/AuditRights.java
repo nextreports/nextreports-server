@@ -32,13 +32,14 @@ public class AuditRights implements Serializable {
 			String.valueOf(PermissionUtil.SECURITY_SYMBOL));
 	
 	private String type;
-	private String name;
+	private List<String> names;
 	private List<String> entities;
 	private List<String> rights;
 	
 	public AuditRights() {	
 		type = USER_TYPE;
-		name = "admin";
+		names = new ArrayList<String>();
+		names.add("admin");
 		entities = new ArrayList<String>();
 		rights = new ArrayList<String>();
 		rights.add(String.valueOf(PermissionUtil.READ_SYMBOL));
@@ -52,12 +53,12 @@ public class AuditRights implements Serializable {
 		this.type = type;
 	}
 
-	public String getName() {
-		return name;
+	public List<String> getNames() {
+		return names;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setNames(List<String> names) {
+		this.names = names;
 	}
 
 	public List<String> getEntities() {
@@ -81,7 +82,7 @@ public class AuditRights implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result	+ ((entities == null) ? 0 : entities.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((names == null) ? 0 : names.hashCode());
 		result = prime * result + ((rights == null) ? 0 : rights.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
@@ -97,9 +98,9 @@ public class AuditRights implements Serializable {
 			if (other.entities != null) return false;
 		} else if (!entities.equals(other.entities))
 			return false;
-		if (name == null) {
-			if (other.name != null) return false;
-		} else if (!name.equals(other.name))
+		if (names == null) {
+			if (other.names != null) return false;
+		} else if (!names.equals(other.names))
 			return false;
 		if (rights == null) {
 			if (other.rights != null) return false;
@@ -114,7 +115,7 @@ public class AuditRights implements Serializable {
 
 	@Override
 	public String toString() {
-		return "AuditRights [type=" + type + ", name=" + name + ", entities="
+		return "AuditRights [type=" + type + ", name=" + names + ", entities="
 				+ entities + ", rights=" + rights + "]";
 	}
 	

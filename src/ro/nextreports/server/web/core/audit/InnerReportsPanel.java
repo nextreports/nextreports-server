@@ -1,5 +1,6 @@
 package ro.nextreports.server.web.core.audit;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -85,8 +86,8 @@ public class InnerReportsPanel extends Panel {
 			panel = new RightsPanel() {
 				@Override
 				public void onOk(AjaxRequestTarget target) {											
-					TableData data = getResults(getAuditRights());
-					displayResults(dialog, data, target);
+					TableData data = getResults(getAuditRights());					
+					displayResults(dialog, InnerReport.RIGHTS.toString(), data, getLinkColumns(), getTitle(), target);
 				}
 			};
         } else if (ir.toString().equals(InnerReport.RUN.toString())) {
@@ -94,8 +95,8 @@ public class InnerReportsPanel extends Panel {
 				panel = new RunPanel() {
 					@Override
 					public void onOk(AjaxRequestTarget target) {												
-						TableData data = getResults(getAuditRun());						
-						displayResults(dialog, data, target);
+						TableData data = getResults(getAuditRun());							
+						displayResults(dialog, InnerReport.RUN.toString(), data, getLinkColumns(), getTitle(), target);
 					}
 				};	
         } else if (ir.toString().equals(InnerReport.LIST.toString())) {
@@ -104,7 +105,7 @@ public class InnerReportsPanel extends Panel {
 				@Override
 				public void onOk(AjaxRequestTarget target) {											
 					TableData data = getResults(getAuditList());						
-					displayResults(dialog, data, target);
+					displayResults(dialog, InnerReport.LIST.toString(), data, null, getTitle(), target);
 				}
 			};			
         } else {
@@ -117,10 +118,10 @@ public class InnerReportsPanel extends Panel {
 
 	}
 	
-	private void displayResults(ModalWindow dialog, TableData data, AjaxRequestTarget target) {
+	private void displayResults(ModalWindow dialog, String type, TableData data, ArrayList<Integer> links, String title, AjaxRequestTarget target) {
 		Panel newPanel;
 		if (data.getHeader().size() > 0) {
-			newPanel = new AuditTableRendererPanel("panel", new Model(data));						
+			newPanel = new AuditTableRendererPanel("panel", type, new Model(data), new Model(links), new Model(title));						
 		} else {
 			newPanel = new EmptyPanel("panel");
 		}

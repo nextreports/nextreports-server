@@ -31,6 +31,7 @@ import ro.nextreports.server.schedule.ScheduleConstants;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.web.common.form.FormContentPanel;
 import ro.nextreports.server.web.common.form.FormPanel;
+import ro.nextreports.server.web.core.audit.InnerReport;
 import ro.nextreports.server.web.core.audit.rights.AuditRights;
 
 public class ListPanel extends FormContentPanel<AuditList> {
@@ -204,6 +205,16 @@ public class ListPanel extends FormContentPanel<AuditList> {
                     (job.getTime().getEndActivationDate().compareTo(now) >= 0);
         }
 		return active;
+	}
+	
+	protected String getTitle() {
+		StringBuilder sb = new StringBuilder(InnerReport.LIST.name());
+		sb.append("   ( ");
+		sb.append(getString("Section.Audit.Rights.entities"));
+		sb.append(" = ");
+		sb.append(auditList.getEntityType());
+		sb.append(" )");
+		return sb.toString();
 	}
 
 }
