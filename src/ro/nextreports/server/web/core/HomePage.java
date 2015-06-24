@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,32 +17,60 @@
 package ro.nextreports.server.web.core;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.markup.html.tabs.ITab;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.feedback.FeedbackMessage;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.pages.RedirectPage;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.wicketstuff.push.*;
+import org.springframework.security.authentication.encoding.PasswordEncoder;
+import org.wicketstuff.push.AbstractPushEventHandler;
+import org.wicketstuff.push.IPushEventContext;
+import org.wicketstuff.push.IPushEventHandler;
+import org.wicketstuff.push.IPushNode;
+import org.wicketstuff.push.IPushService;
 import org.wicketstuff.push.timer.TimerPushService;
-
 import ro.nextreports.engine.util.DateUtil;
 import ro.nextreports.server.domain.ReportResultEvent;
+import ro.nextreports.server.domain.User;
 import ro.nextreports.server.report.ReportConstants;
 import ro.nextreports.server.service.ReportListener;
 import ro.nextreports.server.service.ReportService;
+import ro.nextreports.server.service.SecurityService;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.util.AnalysisUtil;
 import ro.nextreports.server.web.NextServerSession;
+import ro.nextreports.server.web.common.behavior.AlertBehavior;
+import ro.nextreports.server.web.common.behavior.FontAwesomeBehavior;
 import ro.nextreports.server.web.common.jgrowl.JGrowlAjaxBehavior;
+import ro.nextreports.server.web.common.slidebar.SlidebarBehavior;
 import ro.nextreports.server.web.common.util.PreferencesHelper;
+import ro.nextreports.server.web.core.section.Section;
 import ro.nextreports.server.web.core.section.SectionManager;
-import ro.nextreports.server.web.core.section.tab.ImageTabbedPanel;
-import ro.nextreports.server.web.core.section.tab.SectionTab;
 import ro.nextreports.server.web.language.LanguageManager;
+import ro.nextreports.server.web.security.ChangePasswordPanel;
+import ro.nextreports.server.web.security.cas.CasUtil;
 
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * @author Decebal Suiu
@@ -55,36 +83,41 @@ public class HomePage extends BasePage {
 
 	private Label growlLabel;
     private JGrowlAjaxBehavior growlBehavior;
-	
+
+    private Panel sectionPanel;
+
 	@SpringBean
 	private SectionManager sectionManager;
-	
+
 	@SpringBean
 	private ReportService reportService;
-	
+
 	@SpringBean
-	private StorageService storageService;		
+	private StorageService storageService;
+
+    @SpringBean
+    private SecurityService securityService;
+
+    @SpringBean
+    private PasswordEncoder passwordEncoder;
 
     public HomePage(PageParameters parameters) {
+        super(parameters);
+
     	// clear search context
     	NextServerSession.get().setSearchContext(null);
-    	
-    	// add sections tab
-    	List<ITab> tabs = new ArrayList<ITab>();
-        for (String sectionId : sectionManager.getIds()) {        	
-        	tabs.add(new SectionTab(sectionId));
-        }                
-    	
-    	add(new ImageTabbedPanel("tabs", tabs));
-    	
+
     	growlLabel = new Label("growl", "");
     	growlLabel.setOutputMarkupId(true);
         growlBehavior = new JGrowlAjaxBehavior();
     	growlLabel.add(growlBehavior);
     	add(growlLabel);
-    }   
-    
-	@Override
+
+        // add slidebar
+        addSlidebar();
+    }
+
+    @Override
 	protected void onInitialize() {
 		super.onInitialize();
 
@@ -121,7 +154,146 @@ public class HomePage extends BasePage {
     	initPushSurvey(pushService, pushNode);
 	}
 
-	private void initPushReportResult(final IPushService pushService, final IPushNode<Message> pushNode) {
+    private void addSlidebar() {
+        add(new SlidebarBehavior());
+        add(new FontAwesomeBehavior());
+
+        add(new Label("currentUser", NextServerSession.get().getUsername()));
+        add(new Label("realName", NextServerSession.get().getRealName()));
+
+        Link<String> logoutLink = new Link<String>("logout") {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick() {
+                NextServerSession.get().signOut();
+
+                if (CasUtil.isCasUsed()) {
+                    setResponsePage(new RedirectPage(CasUtil.getLogoutUrl()));
+                } else {
+                    setResponsePage(getApplication().getHomePage());
+                }
+            }
+
+        };
+        add(logoutLink);
+
+        AjaxLink<String> changePassword = new AjaxLink<String>("changePassword") {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                dialog.setTitle(getString("ChangePassword.change"));
+                dialog.setInitialWidth(350);
+                dialog.setUseInitialHeight(false);
+                dialog.setContent(new ChangePasswordPanel(dialog.getContentId()) {
+
+                    private static final long serialVersionUID = 1L;
+
+                    @Override
+                    public void onChange(AjaxRequestTarget target) {
+                        ModalWindow.closeCurrent(target);
+                        try {
+                            User loggedUser = securityService.getUserByName(NextServerSession.get().getUsername());
+                            loggedUser.setPassword(passwordEncoder.encodePassword(confirmPassword, null));
+                            storageService.modifyEntity(loggedUser);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            add(new AlertBehavior(e.getMessage()));
+                            target.add(this);
+                        }
+                    }
+
+                    @Override
+                    public void onCancel(AjaxRequestTarget target) {
+                        ModalWindow.closeCurrent(target);
+                    }
+
+                });
+                dialog.show(target);
+            }
+        };
+        add(changePassword);
+
+        if (NextServerSession.get().isDemo()) {
+            changePassword.setEnabled(false);
+        }
+
+        List<String> sections = new ArrayList<String>();
+        for (Section section : sectionManager.getSections()) {
+            sections.add(section.getId());
+        }
+        ListView<String> view = new ListView<String>("section", sections) {
+
+            @Override
+            protected void populateItem(final ListItem<String> item) {
+//                AbstractLink link = new ExternalLink("link", "http://wwww.google.com");
+                AjaxFallbackLink link = new AjaxFallbackLink("link") {
+
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        onSlidebarClick(target, item.getModelObject());
+                    }
+
+                };
+                Section section = sectionManager.getSection(item.getModelObject());
+                link.add(new TransparentWebMarkupContainer("icon").add(AttributeModifier.append("class", "fa-" + section.getIcon())));
+
+                String key = "Section." + section.getTitle() + ".name";
+                String title = new StringResourceModel(key, null).getString();
+//                link.add(new Label("label", title).setRenderBodyOnly(true));
+                link.add(new Label("label", title));
+
+                item.setOutputMarkupId(true);
+                item.add(link);
+
+                item.add(new AttributeAppender("class", "active") {
+
+                    @Override
+                    public boolean isEnabled(Component component) {
+                        return sectionManager.getSelectedSectionId().equals(item.getModelObject());
+                    }
+
+                }.setSeparator(" "));
+            }
+
+        };
+        add(view);
+
+        Section selectedSection = sectionManager.getSelectedSection();
+        sectionPanel = selectedSection.createView("sectionPanel");
+        sectionPanel.setOutputMarkupId(true);
+        add(sectionPanel);
+    }
+
+    private void onSlidebarClick(AjaxRequestTarget target, String sectionId) {
+        String oldSectionId = sectionManager.getSelectedSectionId();
+        Section section = sectionManager.getSection(sectionId);
+        sectionManager.setSelectedSectionId(sectionId);
+        Panel newPanel = section.createView("sectionPanel");
+        newPanel.setOutputMarkupId(true);
+        sectionPanel.replaceWith(newPanel);
+        target.add(newPanel);
+        sectionPanel = newPanel;
+
+        // close slidebar
+        target.appendJavaScript("closeSlidebar();");
+
+        // refresh active class
+        ListView<String> view = (ListView<String>) get("section");
+        Iterator<Component> it= view.iterator();
+        while (it.hasNext()) {
+            ListItem<String> item = (ListItem<String>) it.next();
+            String itemId = item.getModelObject();
+            if (itemId.equals(sectionId) || itemId.equals(oldSectionId)) {
+                target.add(item);
+            }
+        }
+    }
+
+    private void initPushReportResult(final IPushService pushService, final IPushNode<Message> pushNode) {
         reportService.addReportListener(new ReportListener() {
 
             @Override
@@ -135,16 +307,16 @@ public class HomePage extends BasePage {
 	}
 
 	private Message createReportResultMessage(ReportResultEvent event) {
-		StringBuilder sb = new StringBuilder();		
-				
+		StringBuilder sb = new StringBuilder();
+
 		Locale locale = LanguageManager.getInstance().getLocale(storageService.getSettings().getLanguage());
 		ResourceBundle bundle = ResourceBundle.getBundle("ro.nextreports.server.web.NextServerApplication", locale);
-		String s = bundle.getString("ActionContributor.Run.finish");		
-		String message = MessageFormat.format(s, event.getReportName());		
-				
+		String s = bundle.getString("ActionContributor.Run.finish");
+		String message = MessageFormat.format(s, event.getReportName());
+
 		sb.append(message);
 		sb.append("<br>");
-        boolean error = false;             
+        boolean error = false;
 		if ("".equals(event.getReportUrl())) {
 			sb.append(event.getResultMessage());
             error = true;
@@ -153,25 +325,25 @@ public class HomePage extends BasePage {
 		} else if (AnalysisUtil.FREEZE_ACTION.equals(event.getReportUrl())) {
 			if (event.getResultMessage().startsWith(AnalysisUtil.FREEZE_FAILED)) {
 				error = true;
-				s = bundle.getString("Analysis.freezed.failed");		
-				message = MessageFormat.format(s, event.getReportName());		
-				sb = new StringBuilder(message + " " + event.getResultMessage().substring(AnalysisUtil.FREEZE_FAILED.length()));				
+				s = bundle.getString("Analysis.freezed.failed");
+				message = MessageFormat.format(s, event.getReportName());
+				sb = new StringBuilder(message + " " + event.getResultMessage().substring(AnalysisUtil.FREEZE_FAILED.length()));
 			} else {
 				sb = new StringBuilder(event.getResultMessage());
-			}	
+			}
 		} else if (AnalysisUtil.ANY_ACTION.equals(event.getReportUrl())) {
 			if (event.getResultMessage().startsWith(AnalysisUtil.ANY_ACTION_FAILED)) {
 				error = true;
-				message = bundle.getString("Analysis.error");								
-				sb = new StringBuilder(message + " " + event.getResultMessage().substring(AnalysisUtil.ANY_ACTION_FAILED.length()));				
-			} 	
+				message = bundle.getString("Analysis.error");
+				sb = new StringBuilder(message + " " + event.getResultMessage().substring(AnalysisUtil.ANY_ACTION_FAILED.length()));
+			}
 		} else if (!event.getReportUrl().endsWith("/report")) {
 			// indicator and alarm schedule alerts do not have a resulting report (url ends with /report)
 			sb.append("<a href=\"").
 			   append(event.getReportUrl()).
 			   append("\" target=\"_blank\">").
-			   append(bundle.getString("ActionContributor.Run.result")).		
-			   append("</a>");		
+			   append(bundle.getString("ActionContributor.Run.result")).
+			   append("</a>");
 		} else {
 			sb.append(event.getResultMessage());
 		}

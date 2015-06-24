@@ -1,0 +1,1 @@
+mySlidebar = new $.slidebars();

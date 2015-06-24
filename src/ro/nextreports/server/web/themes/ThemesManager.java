@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,32 +44,32 @@ import ro.nextreports.server.web.NextServerApplication;
 
 
 public class ThemesManager {
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(ThemesManager.class);
-	
+
 	public static final String GREEN_THEME = "green";
 	public static final String RED_THEME = "red";
-	public static final String BLUE_THEME = "blue";	
-	
+	public static final String BLUE_THEME = "blue";
+
 	public static final String GREEN_THEME_FILE_NAME = "theme-green-apple";
 	public static final String RED_THEME_FILE_NAME = "theme-red-rose";
-	public static final String BLUE_THEME_FILE_NAME = "theme-blue-sea";	
-	
+	public static final String BLUE_THEME_FILE_NAME = "theme-blue-sea";
+
 	public static List<String> THEMES = new ArrayList<String>();
-	
+
 	private String theme = GREEN_THEME;
-	
+
 	public static ThemesManager INSTANCE;
-	
+
 	@SuppressWarnings("unchecked")
-	private ThemesManager() {	
+	private ThemesManager() {
 		THEMES.add(RED_THEME);
 		THEMES.add(GREEN_THEME);
 		THEMES.add(BLUE_THEME);
 		// try to see if other theme files where added by hand
 	    // must have name like theme-<color>.properties
 		// you must add in all other i18n files the property:
-		// Settings.personalize.theme.theme-<color> to see it in seetings	
+		// Settings.personalize.theme.theme-<color> to see it in seetings
 		long start = System.currentTimeMillis();
 		File themesPath = new File("./webapps/nextreports-server/WEB-INF/classes/ro/nextreports/server/web/themes");
 		if (!themesPath.exists()) {
@@ -79,45 +79,46 @@ public class ThemesManager {
 		Collection<File> files = FileUtils.listFiles(themesPath, ThemeFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
 		Set<String> fileNames = new HashSet<String>();
 		for (File file : files) {
-			String name = file.getName();			
+			String name = file.getName();
 			String baseName = name.substring(0, name.indexOf(".properties"));
 			if (!RED_THEME_FILE_NAME.equals(baseName) && !BLUE_THEME_FILE_NAME.equals(baseName) && !GREEN_THEME_FILE_NAME.equals(baseName)) {
 				THEMES.add(baseName);
-			}			
+			}
 		}
 		long end = System.currentTimeMillis();
 		LOG.info("Found "+ THEMES.size() + " theme files in " + (end-start) + " ms.");
 	}
-	
+
 	public static synchronized ThemesManager getInstance() {
-		if (INSTANCE == null) { 
+		if (INSTANCE == null) {
 			INSTANCE = new ThemesManager();
 		}
 		return INSTANCE;
 	}
-	
+
 	public void setTheme(String theme) {
 		this.theme = theme;
 		generateStyle();
 	}
-	
+
 	private void generateStyle() {
 		generateStyle("style_template.css", "/css/style.css");
-		generateStyle("table_template.css", "/css/table.css");	
-		generateStyle("dashboard_template.css", "/WEB-INF/classes/ro/nextreports/server/web/dashboard/dashboard.css");			
+		generateStyle("table_template.css", "/css/table.css");
+		generateStyle("dashboard_template.css", "/WEB-INF/classes/ro/nextreports/server/web/dashboard/dashboard.css");
 		generateStyle("analysis_template.css", "/WEB-INF/classes/ro/nextreports/server/web/analysis/analysis.css");
+        generateStyle("slidebar_template.css", "/css/slidebar.css");
 	}
-	
+
 	private void generateStyle(String templateFile, String generatedFilePath) {
-		InputStream styleTemplateStream = getClass().getResourceAsStream(templateFile);			
-		InputStream propertiesStream = getClass().getResourceAsStream(getPropertiesFile(theme));										
-		try {		
+		InputStream styleTemplateStream = getClass().getResourceAsStream(templateFile);
+		InputStream propertiesStream = getClass().getResourceAsStream(getPropertiesFile(theme));
+		try {
 			String styleTemplate = IOUtils.toString(styleTemplateStream);
 			StrSubstitutor sub = new StrSubstitutor(createValues(propertiesStream));
-			String resolvedString = sub.replace(styleTemplate);					
+			String resolvedString = sub.replace(styleTemplate);
 			ServletContext context = NextServerApplication.get().getServletContext();
-			String fileName = context.getRealPath(generatedFilePath);			
-//			URI outputURI = new URI(("file:///"+ URIUtil.encodePath(fileName)));                		
+			String fileName = context.getRealPath(generatedFilePath);
+//			URI outputURI = new URI(("file:///"+ URIUtil.encodePath(fileName)));
 //			File styleFile = new File(outputURI);
 			File styleFile = new File(fileName);
 			FileUtils.writeStringToFile(styleFile, resolvedString);
@@ -125,25 +126,25 @@ public class ThemesManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			closeInputStream(styleTemplateStream);			
+			closeInputStream(styleTemplateStream);
 			closeInputStream(propertiesStream);
 		}
 	}
-		
+
 	private Map<String, String> createValues(InputStream is) {
-		Map<String, String> valuesMap = new HashMap<String, String>();		 
+		Map<String, String> valuesMap = new HashMap<String, String>();
 		Properties prop = new Properties();
 		try {
 			prop.load(is);
 			for (Object o : prop.keySet()) {
 				valuesMap.put((String)o, prop.getProperty((String)o));
 			}
-		} catch (Exception e) {			
+		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}
 		return valuesMap;
 	}
-	
+
 	private String getPropertiesFile(String theme) {
 		String fileName;
 		if (GREEN_THEME.equals(theme))  {
@@ -154,10 +155,10 @@ public class ThemesManager {
 			fileName = "theme-blue-sea.properties";
 		} else {
 			fileName = theme + ".properties";
-		}		
+		}
 		return fileName;
 	}
-	
+
 	private void closeInputStream(InputStream is) {
 		if (is != null) {
 			try {
@@ -167,8 +168,8 @@ public class ThemesManager {
 			}
 		}
 	}
-	
-	public static String getTickImage(String theme, NextServerApplication application ) {		
+
+	public static String getTickImage(String theme, NextServerApplication application ) {
 		if (ThemesManager.RED_THEME.equals(theme)) {
 			return "tick_red.png";
 		} else if (ThemesManager.BLUE_THEME.equals(theme)) {
@@ -176,15 +177,15 @@ public class ThemesManager {
 		} else if (ThemesManager.GREEN_THEME.equals(theme)) {
 			return "tick_green.png";
 		}
-		
+
 		String file = "tick_" + theme + ".png";
 		ServletContext context = application.getServletContext();
-    	File imgFile = new File(context.getRealPath("images/" + file));    	
+    	File imgFile = new File(context.getRealPath("images/" + file));
     	if (imgFile.exists()) {
     		return file;
     	} else {
     		return "tick_green.png";
     	}
-	}			
+	}
 
 }

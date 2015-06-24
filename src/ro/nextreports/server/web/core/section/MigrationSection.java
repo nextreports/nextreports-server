@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,22 +23,23 @@ import ro.nextreports.server.web.core.migration.MigrationPanel;
 
 
 public class MigrationSection implements Section {
-	
+
 	public static final String ID = MigrationSection.class.getName();
 
 	@Override
-	public String getId() {		
+	public String getId() {
 		return ID;
 	}
 
 	@Override
-	public String getTitle() {		
+	public String getTitle() {
 		return "Migration";
 	}
 
 	@Override
 	public String getIcon() {
-		return "images/migration.png";
+//		return "images/migration.png";
+        return "exchange";
 	}
 
 	@Override
@@ -47,7 +48,7 @@ public class MigrationSection implements Section {
 	}
 
 	@Override
-	public boolean isVisible() {		
+	public boolean isVisible() {
 		return NextServerSession.get().isAdmin();
 	}
 

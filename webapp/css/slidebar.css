@@ -1,0 +1,99 @@
+.sb-toggle-left {
+    /*width: 58px;*/
+    float: left;
+    padding: 14px;
+    cursor: pointer;
+}
+
+.sb-toggle-right {
+    /*width: 58px;*/
+    float: right;
+    padding: 14px;
+    cursor: pointer;
+}
+
+.navicon-line {
+    width: 24px;
+    height: 4px;
+    border-radius: 1px;
+    margin-bottom: 3px;
+    background-color: #779800;
+}
+
+.sb-slidebar {
+    /*background-color: #222222;*/
+    background-color: rgba(34, 34, 34, 0.95);
+    color: #e8e8e8;
+}
+
+.sb-slidebar a {
+    color: #779800;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.sb-slidebar a:hover {
+    color: #779800;
+    text-decoration: underline;
+}
+
+.sb-menu {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    text-align: left;
+}
+
+.sb-menu li {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Will lighten any background colour you set. */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Will darken any background colour you set. */
+}
+
+.sb-menu > li:first-child {
+    border-top: none; /* Removes top border from first list item.. */
+}
+
+.sb-menu > li:last-child {
+    border-bottom: none; /* Removed bottom border from last list item. */
+}
+
+.sb-menu li a {
+    display: block;
+    padding: 1em;
+    color: #f2f2f2;
+}
+
+.sb-menu li a:hover {
+    text-decoration: none;
+    background-color: rgba(255, 255, 255, 0.05); /* Will lighten any background colour you set. */
+}
+
+.sb-menu li.active > a i {
+    color: #779800;
+}
+
+/* Borders */
+.sb-left .sb-menu li a {
+    border-left: 3px solid transparent;
+}
+
+.sb-left .sb-menu li a:hover {
+    border-left: 3px solid; /* Removes transparent colour, so border colour will be the same as link hover colour. */
+}
+
+.sb-right .sb-menu li a {
+    /*border-right: 3px solid transparent;*/
+    border-left: 3px solid transparent;
+}
+
+.sb-right .sb-menu li a:hover {
+    /*border-right: 3px solid; *//* Removes transparent colour, so border colour will be the same as link hover colour. */
+    border-left: 3px solid;
+}
+
+.sb-menu [class^='fa'] + span {
+    margin-left: 10px;
+}
