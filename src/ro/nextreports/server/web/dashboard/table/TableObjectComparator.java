@@ -39,6 +39,8 @@ public class TableObjectComparator implements Comparator<Object> {
 			return ((Short) o1).compareTo((Short) o2);
 		} else if (className.equals("java.lang.Integer") || className.equals("int")) {
 			return ((Integer) o1).compareTo((Integer) o2);
+		} else if (className.equals("java.lang.Long") || className.equals("long")) {
+			return ((Long) o1).compareTo((Long) o2);	
 		} else if (className.equals("java.lang.Float") || className.equals("float")) {
 			return ((Float) o1).compareTo((Float) o2);
 		} else if (className.equals("java.lang.Double") || className.equals("double")) {
