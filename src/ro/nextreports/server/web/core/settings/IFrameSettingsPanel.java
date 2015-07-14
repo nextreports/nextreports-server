@@ -29,6 +29,7 @@ import ro.nextreports.server.domain.Settings;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.web.common.misc.NoVersionMountMapper;
 import ro.nextreports.server.web.dashboard.WidgetWebPage;
+import ro.nextreports.server.web.integration.DashboardWebPage;
 
 
 public class IFrameSettingsPanel extends AbstractSettingsPanel {
@@ -58,9 +59,11 @@ public class IFrameSettingsPanel extends AbstractSettingsPanel {
 	protected void afterChange(Form form, AjaxRequestTarget target) {	
     	Settings settings = (Settings)form.getModelObject();	     	
     	if (settings.getIframe().isEnable()) {    		
-    		((WebApplication)getApplication()).mount(new NoVersionMountMapper("/widget", WidgetWebPage.class));    		
+    		((WebApplication)getApplication()).mount(new NoVersionMountMapper("/widget", WidgetWebPage.class));   
+    		((WebApplication)getApplication()).mount(new NoVersionMountMapper("/dashboard", DashboardWebPage.class));
     	} else {    		
     		((WebApplication)getApplication()).unmount("widget");
+    		((WebApplication)getApplication()).unmount("dashboard");
     	}
 	}	
 	
