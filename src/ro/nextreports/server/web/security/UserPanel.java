@@ -176,7 +176,7 @@ public class UserPanel extends Panel {
             choice.setOutputMarkupPlaceholderTag(true);
             add(choice);
 
-            add(new AjaxCheckBox("admin") {
+            AjaxCheckBox adminCheck = new AjaxCheckBox("admin") {
             	
                 private static final long serialVersionUID = 1L;
 
@@ -186,8 +186,14 @@ public class UserPanel extends Panel {
                     ajaxRequestTarget.add(profileLabel);
                     ajaxRequestTarget.add(choice);
                 }
+				
+				@Override
+				public boolean isEnabled() {					
+					return !StorageConstants.ADMIN_USER_NAME.equals(user.getName());
+				}
                 
-            });
+            };           
+            add(adminCheck);
                                     
             final ArrayList<Group> groups = new ArrayList<Group>();
             try {
