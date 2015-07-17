@@ -16,11 +16,18 @@
  */
 package ro.nextreports.server.web.common.table;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
+import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
+import org.springframework.beans.support.MutableSortDefinition;
+import org.springframework.beans.support.PropertyComparator;
+import org.springframework.beans.support.SortDefinition;
 
 /**
  * @author Decebal Suiu
@@ -37,7 +44,24 @@ public class FakeSortableDataAdapter<T> extends SortableDataProvider<T, String> 
 	
 	@SuppressWarnings("unchecked")
 	public Iterator<T> iterator(long first, long count) {
-		return (Iterator<T>) provider.iterator(first, count);
+		// this line was used to fake (meaning doing nothing)
+		//return (Iterator<T>) provider.iterator(first, count);
+				
+		long size = provider.size();
+		List<T> resources = new ArrayList<T>((int) size);
+		Iterator<? extends T> iter = provider.iterator(0, size);
+		while (iter.hasNext()) {
+			resources.add(iter.next());
+		}		
+		SortParam<String> sortParam = getSort();
+		if (sortParam != null) {
+			String sortProperty = sortParam.getProperty();
+			if (sortProperty != null) {
+				SortDefinition sortDefinition = new MutableSortDefinition(sortProperty, true, getSort().isAscending());
+				PropertyComparator.sort(resources, sortDefinition);
+			}
+		}		
+		return Collections.unmodifiableList(resources.subList((int) first, (int) (first + count))).iterator();
 	}
 
 	@SuppressWarnings("unchecked")
