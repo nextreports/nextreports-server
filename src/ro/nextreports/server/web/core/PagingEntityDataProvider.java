@@ -16,11 +16,9 @@
  */
 package ro.nextreports.server.web.core;
 
-import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -29,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ro.nextreports.server.domain.Entity;
-import ro.nextreports.server.domain.Folder;
+import ro.nextreports.server.util.EntityComparator;
 
 
 public class PagingEntityDataProvider extends EntityDataProvider {
@@ -78,24 +76,7 @@ public class PagingEntityDataProvider extends EntityDataProvider {
 				LOG.debug("Load " + entities.length + " entities for '" + path	+ "' in " + time + " ms");
 			}
 			result = Arrays.asList(entities);
-			Collections.sort(result, new Comparator<Entity>() {
-
-				public int compare(Entity o1, Entity o2) {
-					if (o1 instanceof Folder) {
-						if (o2 instanceof Folder) {
-							return Collator.getInstance().compare(o1.getName(),	o2.getName());
-						} else {
-							return -1;
-						}
-					} else {
-						if (o2 instanceof Folder) {
-							return 1;
-						} else {
-							return Collator.getInstance().compare(o1.getName(),	o2.getName());
-						}
-					}
-				}
-			});
+	        Collections.sort(result, new EntityComparator());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
