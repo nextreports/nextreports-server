@@ -1,15 +1,30 @@
-.sb-toggle-left {
-    /*width: 58px;*/
-    float: left;
-    padding: 14px;
-    cursor: pointer;
+body{height:100%;}
+#sb-site, .sb-site-container{
+	background: 0 none;
+	padding:50px 0 30px 0;
 }
 
-.sb-toggle-right {
-    /*width: 58px;*/
-    float: right;
-    padding: 14px;
+.sb-toggle-left {
+	border-right: 1px solid #e4e5e7;
+    color: #8cb200;
     cursor: pointer;
+    float: left;
+    font-size: 20px;
+    margin: 0 10px 0 0;
+    padding: 15px;
+}
+.sb-toggle-left:hover{
+	background-color: #eaefe1;
+	color: #4c5344;
+}
+.sb-toggle-right {
+	border-left: 1px solid #e4e5e7;
+    color: #8cb200;
+    cursor: pointer;
+    float: right;
+    font-size: 20px;
+    margin: 0 0 0 10px;
+    padding: 15px;
 }
 
 .navicon-line {
@@ -96,4 +111,87 @@
 
 .sb-menu [class^='fa'] + span {
     margin-left: 10px;
+}
+
+/* Slidebar widths for browsers/devices that don't support media queries. */
+	.sb-slidebar {
+		width: 30%;
+	}
+	
+	.sb-width-thin {
+		width: 15%;
+	}
+	
+	.sb-width-wide {
+		width: 45%;
+	}
+
+@media (max-width: 480px) { /* Slidebar widths on extra small screens. */
+	.sb-slidebar {
+		width: 70%;
+	}
+	
+	.sb-width-thin {
+		width: 55%;
+	}
+	
+	.sb-width-wide {
+		width: 85%;
+	}
+}
+
+@media (min-width: 481px) { /* Slidebar widths on small screens. */
+	.sb-slidebar {
+		width: 55%;
+	}
+	
+	.sb-width-thin {
+		width: 40%;
+	}
+	
+	.sb-width-wide {
+		width: 70%;
+	}
+}
+
+@media (min-width: 768px) { /* Slidebar widths on medium screens. */
+	.sb-slidebar {
+		width: 40%;
+	}
+	
+	.sb-width-thin {
+		width: 25%;
+	}
+	
+	.sb-width-wide {
+		width: 55%;
+	}
+}
+
+@media (min-width: 992px) { /* Slidebar widths on large screens. */
+	.sb-slidebar {
+		width: 30%;
+	}
+	
+	.sb-width-thin {
+		width: 15%;
+	}
+	
+	.sb-width-wide {
+		width: 45%;
+	}
+}
+
+@media (min-width: 1200px) { /* Slidebar widths on extra large screens. */
+	.sb-slidebar {
+		width: 20%;
+	}
+	
+	.sb-width-thin {
+		width: 15%;
+	}
+	
+	.sb-width-wide {
+		width: 35%;
+	}
 }

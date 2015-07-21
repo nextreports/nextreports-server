@@ -1,16 +1,27 @@
 /** height is dynamically updated in nextserver.js in function onResize()  */
 .dashboard {
-    overflow: auto;
-    min-height: 353px;
-    border:1px solid #CACACA;
-    padding-left:5px;
-    padding-right:5px;
+	-moz-border-bottom-colors: none;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	background: #f8f8f8 none repeat scroll 0 0;
+	border-color: #e4e5e7 #e4e5e7 #e4e5e7 #d7dccc;
+	border-image: none;
+	border-style: solid;
+	border-width: 1px;
+	min-height: 353px;
+	overflow: auto;
+	padding-left: 0;
+	padding-right: 0;
+	margin-top: 15px;
 }
 
 .dashboardCapture {
 	display: inline-block;
-	width: 100%;
 	overflow: auto;
+	height: calc(100vh - 150px);
+	min-height: calc(100vh - 150px);
+	width: 100%;
 }
 
 .left {
@@ -29,12 +40,10 @@
 }
 
 .column .dragbox {
-	margin: 5px 2px 20px;
-	background: #fff;
+	background: #ffffff none repeat scroll 0 0;
+	border: 1px solid #dddddd;
+	margin: 10px;
 	position: relative;
-	border: 1px solid #ddd;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
 }
 
 .dragbox-header {
@@ -43,7 +52,6 @@
 	background: #f0f0f0;
 	color: #000;
 	border-bottom: 1px solid #eee;
-    height: 1.2em;
     cursor: move;
 }
 
@@ -53,7 +61,7 @@
 }
 
 .dragbox-toggle {
-	float: left;	
+	float: right;	
 	margin-right: 3px;
 	cursor: pointer;
 }
@@ -61,6 +69,8 @@
 .dragbox-title {
 	float: left;
     font-weight: bold;
+    line-height: 20px;
+    font-family: LatoRegular, sans-serif;
 }
 
 .dragbox-actions {
@@ -149,9 +159,10 @@ ul.column {
     border-bottom: 1px solid #CACACA;
 }
 
-.toolbar_nav {          		
-	height: 32px;	    
-	border-bottom: 1px solid #CACACA;
+.toolbar_nav {
+    background: #e4e4e4 none repeat scroll 0 0;
+    border-bottom: 1px solid #e4e5e7;
+    height: 32px;
 }
 
 .widgetDescriptor {
@@ -184,19 +195,21 @@ ul.column {
  }
  
  .dashboardLeft {
- 	border-top: 1px solid #CACACA; 
- 	border-left: 1px solid #CACACA;
- 	border-bottom: 1px solid #CACACA;
- 	padding-left: 5px; 
- 	padding-right: 5px;
- 	min-height: 320px;	
- 	overflow-x: hidden;	
+background: #f4f4f4 none repeat scroll 0 0;
+border-bottom: 1px solid #e4e5e7;
+border-left: 1px solid #e4e5e7;
+border-top: 1px solid #e4e5e7;
+min-height: 320px;
+overflow-x: hidden;
+padding-left: 0;
+padding-right: 0;
  }
  
 .dashboardNavigation  {	
-	min-height: 320px;	
+	min-height: calc(100vh - 150px);	
 	overflow-x: hidden;	
-	overflow-y: auto;	
+	overflow-y: auto;
+	height: calc(100vh - 150px);	
 }
 
 .dashboardNavigation table.actions-grid {
@@ -209,7 +222,10 @@ ul.column {
 }
 
 .dashboardNavigation table tr {		
-	border-bottom: 5px solid #fafafa;
+	border-bottom: 1px solid #e4e5e7;
+}
+.dashboardNavigation table tr > td{
+	padding: 3px 0;
 }
 
 .dashboardNavigation tr.selected {

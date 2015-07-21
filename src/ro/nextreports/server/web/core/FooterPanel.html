@@ -1,9 +1,14 @@
 <wicket:panel>
 	<div class="footer">
-		<div class="vendor">
-			<a href="#" wicket:id="home">
-			<span wicket:id="company"></span></a>
-		</div>
-		<div class="version" wicket:id="version"></div>
+		<nav class="navbar navbar-inverse navbar-fixed-bottom">
+			<div class="container-fluid clearfix">
+				<p class="navbar-text pull-left">
+					<a href="#" wicket:id="home" class="navbar-link"><span wicket:id="company"></span></a>
+				</p>
+				<p class="navbar-text pull-right">
+					<span class="version" wicket:id="version"></span>
+				</p>
+			</div>
+		</nav>
 	</div>
 </wicket:panel>

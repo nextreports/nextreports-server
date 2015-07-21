@@ -87,19 +87,19 @@ function onResize() {
 	/* --- Dynamic height --- */
 	var $height = $(window).height() - 240;
 //	alert($height);
-	$(".accordion-group").css({'height': $height});
-	$(".table-right-container").css({'height': $height});
-    $(".wizardScheduler").css({'height': $height});
+	//$(".accordion-group").css({'height': $height});
+	//$(".table-right-container").css({'height': $height});
+    //$(".wizardScheduler").css({'height': $height});
     var url = window.location.href;
     if (url.indexOf("dashboards") !== -1) {
     	// dashboards integration url -> do not take header height
-    	$(".dashboard").css({'height': $height + 238});
-    	$(".dashboardCapture").css({'height': $height + 205});
-    	$(".dashboardNavigation").css({'height': $height + 205});
+    	//$(".dashboard").css({'height': $height + 238});
+    	//$(".dashboardCapture").css({'height': $height + 205});
+    	//$(".dashboardNavigation").css({'height': $height + 205});
     } else {
-    	$(".dashboard").css({'height': $height + 65});
-    	$(".dashboardCapture").css({'height': $height + 32});
-    	$(".dashboardNavigation").css({'height': $height + 32});
+    	//$(".dashboard").css({'height': $height + 65});
+    	//$(".dashboardCapture").css({'height': $height + 32});
+    	//$(".dashboardNavigation").css({'height': $height + 32});
     }
     $(".auditSection").css({'height': $height + 55});
     $(".analysis").css({'height': $height + 65});

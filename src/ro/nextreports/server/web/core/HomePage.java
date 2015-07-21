@@ -160,78 +160,78 @@ public class HomePage extends BasePage {
         add(new SlidebarBehavior());
         add(new FontAwesomeBehavior());
 
-        add(new Label("currentUser", NextServerSession.get().getUsername()));
-        add(new Label("realName", NextServerSession.get().getRealName()));
+//        add(new Label("currentUser", NextServerSession.get().getUsername()));
+//        add(new Label("realName", NextServerSession.get().getRealName()));
 
-        Link<String> logoutLink = new Link<String>("logout") {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onClick() {
-                NextServerSession.get().signOut();
-
-                if (CasUtil.isCasUsed()) {
-                    setResponsePage(new RedirectPage(CasUtil.getLogoutUrl()));
-                } else {
-                    setResponsePage(getApplication().getHomePage());
-                }
-            }
-
-        };
-        add(logoutLink);
-
-        AjaxLink<String> changePassword = new AjaxLink<String>("changePassword") {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                dialog.setTitle(getString("ChangePassword.change"));
-                dialog.setInitialWidth(350);
-                dialog.setUseInitialHeight(false);
-                dialog.setContent(new ChangePasswordPanel(dialog.getContentId()) {
-
-                    private static final long serialVersionUID = 1L;
-
-                    @Override
-                    public void onChange(AjaxRequestTarget target) {
-                        ModalWindow.closeCurrent(target);
-                        try {
-                            User loggedUser = securityService.getUserByName(NextServerSession.get().getUsername());
-                            loggedUser.setPassword(passwordEncoder.encodePassword(confirmPassword, null));
-                            storageService.modifyEntity(loggedUser);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            add(new AlertBehavior(e.getMessage()));
-                            target.add(this);
-                        }
-                    }
-
-                    @Override
-                    public void onCancel(AjaxRequestTarget target) {
-                        ModalWindow.closeCurrent(target);
-                    }
-
-                });
-                dialog.show(target);
-            }
-        };
-        add(changePassword);
-
-        if (NextServerSession.get().isDemo()) {
-            changePassword.setEnabled(false);
-        }
-
-        ExternalLink surveyLink = new ExternalLink("survey", HomePage.surveyUrl) {
-
-            protected void onComponentTag(ComponentTag componentTag) {
-                super.onComponentTag(componentTag);
-                componentTag.put("target", "_blank");
-            }
-
-        };
-        add(surveyLink);
+//        Link<String> logoutLink = new Link<String>("logout") {
+//
+//            private static final long serialVersionUID = 1L;
+//
+//            @Override
+//            public void onClick() {
+//                NextServerSession.get().signOut();
+//
+//                if (CasUtil.isCasUsed()) {
+//                    setResponsePage(new RedirectPage(CasUtil.getLogoutUrl()));
+//                } else {
+//                    setResponsePage(getApplication().getHomePage());
+//                }
+//            }
+//
+//        };
+//        add(logoutLink);
+//
+//        AjaxLink<String> changePassword = new AjaxLink<String>("changePassword") {
+//
+//            private static final long serialVersionUID = 1L;
+//
+//            @Override
+//            public void onClick(AjaxRequestTarget target) {
+//                dialog.setTitle(getString("ChangePassword.change"));
+//                dialog.setInitialWidth(350);
+//                dialog.setUseInitialHeight(false);
+//                dialog.setContent(new ChangePasswordPanel(dialog.getContentId()) {
+//
+//                    private static final long serialVersionUID = 1L;
+//
+//                    @Override
+//                    public void onChange(AjaxRequestTarget target) {
+//                        ModalWindow.closeCurrent(target);
+//                        try {
+//                            User loggedUser = securityService.getUserByName(NextServerSession.get().getUsername());
+//                            loggedUser.setPassword(passwordEncoder.encodePassword(confirmPassword, null));
+//                            storageService.modifyEntity(loggedUser);
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                            add(new AlertBehavior(e.getMessage()));
+//                            target.add(this);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancel(AjaxRequestTarget target) {
+//                        ModalWindow.closeCurrent(target);
+//                    }
+//
+//                });
+//                dialog.show(target);
+//            }
+//        };
+//        add(changePassword);
+//
+//        if (NextServerSession.get().isDemo()) {
+//            changePassword.setEnabled(false);
+//        }
+//
+//        ExternalLink surveyLink = new ExternalLink("survey", HomePage.surveyUrl) {
+//
+//            protected void onComponentTag(ComponentTag componentTag) {
+//                super.onComponentTag(componentTag);
+//                componentTag.put("target", "_blank");
+//            }
+//
+//        };
+//        add(surveyLink);
 
         List<String> sections = new ArrayList<String>();
         for (Section section : sectionManager.getSections()) {

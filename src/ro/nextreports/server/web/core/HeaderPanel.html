@@ -1,44 +1,38 @@
 <wicket:panel>
 	<div class="header">
-	    <div wicket:id="imageContainer">
-		    <a class="logo" href="#">
-			    <img alt="logo" wicket:id="logoImage"/>
-		    </a>
-		</div>
-        <div class="sb-toggle-right" style="margin-top: 10px;">
-            <div class="navicon-line"></div>
-            <div class="navicon-line"></div>
-            <div class="navicon-line"></div>
-        </div>
-
-        <!--
-		<div class="header-right">
-			<ul>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="sb-toggle-left">
+				<i class="fa fa-bars"></i>
+			</div>
+			<div class="navbar-header pull-left" wicket:id="imageContainer">
+				<a class="navbar-brand" href="#"> <img alt="Brand"
+					wicket:id="logoImage" class="img-responsive"></a>
+			</div>
+			<ul class="nav nrs-nav navbar-right">
+				<li class="dropdown"><a aria-expanded="false"
+					data-toggle="dropdown" class="dropdown-toggle" href="#"> <span
+						class="nav-user-logo"><i class="fa fa-user"></i></span> <span
+						class="user-info"> <small>Welcome,</small>
+						<span wicket:id="currentUser"></span></span> <i class="fa fa-chevron-down"></i></a>
+					<ul class="dropdown-menu">
                 <li>
 					<a wicket:id="changePassord" wicket:message="title:HeaderPanel.editPassword">
-						<wicket:message key="HeaderPanel.changePassword">Change Password</wicket:message>
+						<i class="fa fa-key"></i><span><wicket:message key="HeaderPanel.changePassword">Change Password</wicket:message></span>
 					</a>
 				</li>
 				<li>
 					<a wicket:id="survey" wicket:message="title:HeaderPanel.survey">
-						<wicket:message key="HeaderPanel.survey">Survey</wicket:message>
+						<i class="fa fa-comments-o"></i><span><wicket:message key="HeaderPanel.survey">Survey</wicket:message></span>
 					</a>
 				</li>
 				<li class="no-border">
 					<a wicket:id="logout" wicket:message="title:HeaderPanel.logout">
-						<wicket:message key="HeaderPanel.logout">Logout</wicket:message>
+						<i class="fa fa-power-off"></i><span><wicket:message key="HeaderPanel.logout">Logout</wicket:message></span>
 					</a>
 				</li>
+					</ul></li>
 			</ul>
-
-			<span class="welcome">
-				<wicket:message key="HeaderPanel.welcome">Welcome</wicket:message> <b>
-				<span wicket:id="realName"></span>
-				</b>. <wicket:message key="HeaderPanel.loggedAs">You are logged in as</wicket:message> <b>
-				<span wicket:id="currentUser"></span></b>
-			</span>
-		</div>
-		-->
+		</nav>
 	</div>
-    <div wicket:id="modal"></div>
+	<div wicket:id="modal"></div>
 </wicket:panel>

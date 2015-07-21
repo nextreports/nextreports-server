@@ -14,11 +14,11 @@ html, body {
 table {
     border-collapse: collapse;
     border-spacing: 0;
-    font-size: 11px;    
+    font-size: 11px;
 }
 
 .table-padding {
-   margin-top: 10px; 
+   margin-top: 10px;
 }
 
 fieldset, img {
@@ -56,7 +56,7 @@ h1 {
 
 h2 {
     font-size: 17px;
-    line-height: 1.4em;    
+    line-height: 1.4em;
     padding: 5px 0px 2px;
 }
 
@@ -159,7 +159,7 @@ a {
     color: #000;
 }
 
-a:not(.button .button2 .primary .secondary):hover  {        
+a:not(.button .button2 .primary .secondary):hover {
     color: #789800;
     text-decoration: underline;
 }
@@ -193,11 +193,10 @@ br {
 
 body {
     /*background: #e4e4e4 url( ../images/tile-header.jpg ) repeat-x;*/
-	background: #e4e4e4 url( ../images/general_bg.png );
+    background: #e4e4e4 url(../images/general_bg.png);
     font-size: 11px;
     line-height: 1.5em;
     font-family: Arial, Helvetica, sans-serif;
-    text-align: center;
     color: #000;
 }
 
@@ -207,47 +206,26 @@ body {
     width: expression( document . body . clientWidth < 980 ? "980px":
     document . body . clientWidth > 1900 ? "1900px":
     "auto" );
-    overflow: visible;
-    text-align: center;
-    padding: 0px 5px;
+    overflow: auto;
+    padding: 0px;
     display: block;
     position: relative;
-    min-height: 94%;
-    height: 94%;
+    min-height: calc(100vh - 50px);
+    height: calc(100vh - 50px);
     /*height: auto !important;*/
-    margin: 0 auto -6px;    
+    margin: 0 auto;
 }
 
-.footer {
-    /*position: absolute;*/
-    width:100%;
-    height: 21px;
-    text-align: left;
-    background: url( ../images/footer.gif ) repeat-x;
-    font-size: 11px;
-    color: #666666;
-    padding-top: 6px;
-}
-
-.footer a {
-    color: #666666;
-}
-
-.footer a:hover {
-    color: ${tab-hover-color};
-    text-decoration: underline;
-    cursor: pointer;
-}
 
 .vendor {
     float: left;
-    padding-left:10px;
+    padding-left: 10px;
 }
-	
+
 .version {
     float: right;
-    padding-right:10px;
-} 
+    padding-right: 10px;
+}
 
 .push {
     height: 26px;
@@ -255,17 +233,18 @@ body {
 
 /* Header */
 
-a.logo {    
+a.logo {
     float: left;
     display: inline;
-    padding-left: 3px;    
+    padding-left: 3px;
 }
 
-.header {
-    height: 70px;
-    width: 100%;
-    overflow: hidden;
-}
+/* .header { */
+/*     height: 70px; */
+/*     width: 100%; */
+/*     overflow: hidden; */
+/*     background: #f7f9fa none repeat scroll 0 0; */
+/* } */
 
 .header-right {
     float: right;
@@ -290,18 +269,20 @@ a.logo {
     padding-right: 0px;
 }
 
-.header-right ul li a:hover{
+.header-right ul li a:hover {
 	color: #789800;
 }
+
 .welcome {
     clear: both;
     padding-top: 5px;
     float: right;
 }
 
-.welcome span{
-	color:#8cb200;
+.welcome span {
+    color: #8cb200;
 }
+
 /* Tabpane */
 
 div.tab-row ul {
@@ -328,7 +309,7 @@ div.tab-row li a {
     line-height: 20px;
     background: #eaeaea;
     border: 1px solid #cccccc;
-    font-weight:  bold;
+    font-weight: bold;
     color: #202020;
 }
 
@@ -352,12 +333,12 @@ div.tab-row li.selected {
 	margin-top: -3px;
 }
 
-div.tab-row-settings li.selected{
-	border-top: 3px solid #8cb200;	
+div.tab-row-settings li.selected {
+	border-top: 3px solid #8cb200;
 	background: #fafafa;
 }
 
-div.tab-row-settings li {          
+div.tab-row-settings li {
     background: #eaeaea;
     margin-top: 10px;
     padding: 5px;
@@ -372,19 +353,19 @@ div.tab-row-settings li a {
     text-decoration: none;
     font-size: 11px;
     line-height: 20px;
-    background: #eaeaea;    
-    font-weight:  bold;
+    background: #eaeaea;
+    font-weight: bold;
     color: #202020;
 }
 
-div.tab-row-settings li.selected a {	
+div.tab-row-settings li.selected a {
     color: #789800;
     font-weight: bold;
     line-height: 21px;
     font-size: 11px;
 	text-transform: uppercase;
 	background: #fafafa;
-}	
+}
 
 div.tab-row-settings {
 	width: 300px;
@@ -401,45 +382,35 @@ div.tabpanesettings {
 	margin-left: 10px;
 }
 
-img.left-image {    
+img.left-image {
     display: block;
     float: left;
 }
 
 .container {
-    width: 97%;
-    border: 1px solid #cccccc;
-    padding: 10px;
-    background: #fafafa;
+    background: #f3f3f4 none repeat scroll 0 0;
+    height: calc(100vh - 120px);
+    min-height: calc(100vh - 120px);
+    margin: 0;
+    overflow: auto;
+    padding: 0;
     position: relative;
-    padding-bottom: 0px;
     text-align: left;
-    margin: 30px auto 0px;
 }
 
 /* Breadcrumbs */
 
 .breadcrumbs {
-    
-    height: 24px;
-    width: 100%;
-    clear: both;
-	border: 1px solid #dfdfdf;
-	border-radius: 8px 8px 8px 8px;	
-	
-    background: -webkit-linear-gradient(#ffffff, #ffffff);    
-    background: -webkit-gradient(linear, left top, left bottom, #ffffff, #ffffff);
-    background: -moz-linear-gradient(center top , #ffffff , #ffffff);    
-    background: -ms-linear-gradient(#ffffff , #ffffff); 
-    background: -ms-linear-gradient(#ffffff , #ffffff); 
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff',GradientType=0 );    
-    background-color: #ffffff;
-	
+    border-radius: 0;
+    color: #212121;
+    height: 30px;
+    margin: 0;
+    padding: 0 15px;
 }
 
 .bread-left {
     float: left;
-    background: url( ../images/bread-left.gif ) no-repeat;
+    background: url(../images/bread-left.gif) no-repeat;
     height: 24px;
     width: 13px;
 	display: none;
@@ -447,26 +418,25 @@ img.left-image {
 
 .bread-right {
     float: right;
-    background: url( ../images/bread-right.gif ) no-repeat;
+    background: url(../images/bread-right.gif) no-repeat;
     height: 24px;
     width: 13px;
 	display: none;
 }
 
 .breadcrumbs ul {
-    float: left;
-    padding-top: 3px;
-    height: 21px;
+    display: block;
+    margin: 0;
+    padding: 0;
 }
-
 .breadcrumbs ul li {
-    float: left;
-    display: inline;    
-    padding: 0px 15px 0px 5px;
+    display: inline-block;
+    line-height: 22px;
+    padding: 5px 15px 5px 5px;
 }
 
 .breadcrumbs ul li.image {
-   background: url( ../images/bread-arrow.gif ) center right no-repeat;
+    background: url(../images/bread-arrow.gif) center right no-repeat;
 }
 
 .breadcrumbs ul li a:hover {
@@ -478,13 +448,12 @@ img.left-image {
 }
 
 .breadcrumbs ul li.bread-current a {
-    color: #8cb200;
     font-weight: bold;
 }
 
 .statusBar {
     height: 24px;
-    width: 100%;  
+    width: 100%;
     /*float: left;*/
     /*padding-top: 5px;*/
     /*color: #799e00;*/
@@ -508,35 +477,28 @@ ul.expand-colapse li {
 }
 
 li.expand-all {
-    background: url( ../images/expand-all.png ) left center no-repeat;
+    background: url(../images/expand-all.png) left center no-repeat;
     padding: 0px 50px 0px 25px
 }
 
 li.colapse-all {
-    background: url( ../images/colapse-all.png ) left center no-repeat;
+    background: url(../images/colapse-all.png) left center no-repeat;
     padding: 0px 0px 0px 25px;
 }
 
 /* Accordion */
 
 .accordion-group {
-    width: 99%;
-    float: left;
-    border: 1px solid #cacaca;
-    background: #FFFFFF;
-    min-height: 320px;
-    margin-top: 8px;
-    overflow: auto !important;
+    background: #ffffff none repeat scroll 0 0;
+    min-height: calc(100vh - 220px);
+    overflow: auto;
 }
 
-@media
-print
-{
-.accordion-group {
-    display: block !important;
-    height: auto !important;
-}
-
+@media print {
+    .accordion-group {
+        display: block !important;
+        height: auto !important;
+    }
 }
 
 .accordion-group table.wicket-tree-content.selected, .tree table.wicket-tree-content.selected {
@@ -560,17 +522,16 @@ print
 }
 
 .actions-bar {
-	
-    background: -webkit-linear-gradient(#efefef, #cfcfcf);    
+    background: -webkit-linear-gradient(#efefef, #cfcfcf);
     background: -webkit-gradient(linear, left top, left bottom, #efefef, #cfcfcf);
-    background: -moz-linear-gradient(center top , #efefef , #cfcfcf);    
-    background: -ms-linear-gradient(#efefef , #cfcfcf); 
-    background: -ms-linear-gradient(#efefef , #cfcfcf); 
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efefef', endColorstr='#cfcfcf',GradientType=0 );    
+    background: -moz-linear-gradient(center top, #efefef, #cfcfcf);
+    background: -ms-linear-gradient(#efefef, #cfcfcf);
+    background: -ms-linear-gradient(#efefef, #cfcfcf);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#efefef', endColorstr='#cfcfcf', GradientType=0);
     background-color: #efefef;
 	border: 1px solid #cccccc;
 	border-radius: 8px 8px 8px 8px;
-	
+
     height: 22px;
     clear: both;
     margin-top: 10px;
@@ -582,7 +543,6 @@ print
     width: 15px;
 	border-radius: 8px 8px 8px 8px;
 	display: none;
-	
 }
 
 .actions-bar-right {
@@ -596,6 +556,7 @@ print
 .actions-bar ul.topnav {
     padding: 0 8px;
 }
+
 .actions-bar ul.topnav li {
     position: relative
 }
@@ -604,7 +565,7 @@ print
     float: left;
     display: inline;
     height: 21px;
-    background: url( ../images/action-bar-sep.gif ) top right no-repeat;
+    background: url(../images/action-bar-sep.gif) top right no-repeat;
     margin-top: 1px;
 }
 
@@ -624,22 +585,23 @@ print
 }
 
 .actions-bar ul.topnav li.topnav-hover {
-	background: -webkit-linear-gradient(#cfcfcf, #efefef);    
+	background: -webkit-linear-gradient(#cfcfcf, #efefef);
     background: -webkit-gradient(linear, left top, left bottom, #cfcfcf, #efefef);
-    background: -moz-linear-gradient(center top , #cfcfcf , #efefef);    
-    background: -ms-linear-gradient(#cfcfcf , #efefef); 
-    background: -ms-linear-gradient(#cfcfcf , #efefef); 
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cfcfcf', endColorstr='#efefef',GradientType=0 );    
-    background-color: #cfcfcf;	
+    background: -moz-linear-gradient(center top, #cfcfcf, #efefef);
+    background: -ms-linear-gradient(#cfcfcf, #efefef);
+    background: -ms-linear-gradient(#cfcfcf, #efefef);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#cfcfcf', endColorstr='#efefef', GradientType=0);
+    background-color: #cfcfcf;
 }
 
 .actions-bar ul.topnav li a.action-bar-actions {
-    background: url( ../images/actions.png ) 0px 2px no-repeat;
+    background: url(../images/actions.png) 0px 2px no-repeat;
     cursor: pointer;
 	border-right: 1px solid #EEEEEE;
 }
 
-/*ul.subnav {
+/*
+ul.subnav {
     position: absolute;
     left: -2px;
     top: 21px;
@@ -655,6 +617,7 @@ print
     border-top: none;
 }
 */
+
 ul.subnav li {
     margin: 0;
     padding: 0;
@@ -663,7 +626,8 @@ ul.subnav li {
     width: 150px;
 }
 
-/*ul.subnav li a {
+/*
+ul.subnav li a {
     float: left;
     width: 120px;
     background: ${action-hover-color};
@@ -671,6 +635,7 @@ ul.subnav li {
     border-top: 1px solid #b4cdef;
 }
 */
+
 ul.subnav li a:hover {
     background: #edf4ff;
     text-decoration: none;
@@ -695,20 +660,16 @@ ul.subnav li a:hover {
 }
 
 .table-right-container {
-    min-height: 320px;
+	height: calc(100vh - 190px);
     overflow: auto;
-    margin-top: 8px;
-    padding-right: 0px;
-    border: 1px solid #cacaca;
-    background: #F4F4F4;
+    width: 100%;
 }
 
 .table-actions {
-	width: 38px;
-	float: left; 		
-	margin-top: -3px;
-	margin-left: 10px;
-	/*display: none;*/
+	float: left;
+	margin-right: 10px;
+	width: 24px;
+	display: block;
 }
 
 .table-actions table.actions-grid ul.subnav {
@@ -718,16 +679,16 @@ ul.subnav li a:hover {
 
 .table-actions img {
 	padding: 1px 4px 1px 4px !important;
-}	
+}
 
-.table-actions table.actions-grid tr td.actions-col-hover {	
-	background: #F0F0F0 url( ../images/actions-col-arrow-green.gif ) top right  no-repeat !important;
+.table-actions table.actions-grid tr td.actions-col-hover {
+    background: #F0F0F0 url(../images/actions-col-arrow-green.gif) top right no-repeat !important;
 	border-left: none !important;
 }
 
 .table-actions table.actions-grid tr td.actions-col ul.subnav {
-	width: 140px !important;	
-}	
+	width: 140px !important;
+}
 
 .wicket_orderDown a {
     background-image: url(../images/arrow_down.png);
@@ -755,12 +716,12 @@ ul.subnav li a:hover {
     /*width: 100%;*/
 }
 
-.form-container-dialog {	
+.form-container-dialog {
 	margin-top: 0px !important;
 	padding-top: 8px;
 	padding-left: 10px;
 	/* width: 96% !important;  horizontal scroll bar will always be seen if this is not set */
-}	
+}
 
 .form-container table {
     /*display: block;*/
@@ -769,7 +730,7 @@ ul.subnav li a:hover {
 }
 
 .form-container form table td {
-    padding-bottom: 6px;    
+    padding-bottom: 6px;
 }
 
 .form-container td.td-label {
@@ -779,7 +740,7 @@ ul.subnav li a:hover {
     padding: 5px 10px 0px 5px;
 	margin-bottom: 5px !important;
     vertical-align: top;
-    white-space:nowrap;
+    white-space: nowrap;
 }
 
 .form-container td.td-label-login {
@@ -787,7 +748,7 @@ ul.subnav li a:hover {
     text-align: left;
     padding: 4px 10px 0px 50px;
     vertical-align: top;
-    white-space:nowrap;
+    white-space: nowrap;
 }
 
 .form-container td.td-name {
@@ -819,7 +780,7 @@ ul.subnav li a:hover {
 }
 
 .form-container table select {
-    padding: 1px 3px 1px;       
+    padding: 1px 3px 1px;
 }
 
 .form-container table select.entityList {
@@ -834,23 +795,23 @@ ul.subnav li a:hover {
     height: 80px;
 }
 
-.manualListButton {    
-    margin-bottom : 2px;
+.manualListButton {
+    margin-bottom: 2px;
     height: 20px;
     width: 40px;
     font-weight: bold;
     border-spacing: 0;
     cursor: pointer;
-	
+
     border: 1px solid #779800;
     color: #ffffff;
     border-radius: 4px 4px 4px 4px;
-	
-    background: -webkit-linear-gradient(#8cb200, #789800);    
+
+    background: -webkit-linear-gradient(#8cb200, #789800);
     background: -webkit-gradient(linear, left top, left bottom, #8cb200, #789800);
-    background: -moz-linear-gradient(center top , #8cb200 , #789800);    
-    background: -ms-linear-gradient(#8cb200 , #789800); 
-    background: -ms-linear-gradient(#8cb200 , #789800); 
+    background: -moz-linear-gradient(center top, #8cb200, #789800);
+    background: -ms-linear-gradient(#8cb200, #789800);
+    background: -ms-linear-gradient(#8cb200, #789800);
     background-color: #8cb200;
 }
 
@@ -872,7 +833,7 @@ ul.subnav li a:hover {
 }
 
 .button, .secondary, .primary {
-    float: left;    
+    float: left;
     padding: 0px 10px;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -885,16 +846,16 @@ ul.subnav li a:hover {
     font-weight: bold;
     cursor: pointer;
     border-spacing: 0;
-	
+
 	border: 1px solid #779800;
     color: #ffffff;
     border-radius: 4px 4px 4px 4px;
 	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-	
-    background: -webkit-linear-gradient(#8cb200, #789800);        
+
+    background: -webkit-linear-gradient(#8cb200, #789800);
     background: -webkit-gradient(linear, left top, left bottom, #8cb200, #789800);
-    background: -moz-linear-gradient(center top , #8cb200, #789800);
-    background: -ms-linear-gradient(#8cb200 , #789800); 
+    background: -moz-linear-gradient(center top, #8cb200, #789800);
+    background: -ms-linear-gradient(#8cb200, #789800);
     background-color: #8cb200;
 }
 
@@ -903,11 +864,11 @@ input.button, input.secondary, input.primary {
 	padding: 0px 10px 2px !important;
 }
 
-.button2 {    	        
+.button2 {
     margin-top: 5px;
     margin-bottom: 5px;
     height: 15px;
-    line-height: 20px;    
+    line-height: 20px;
     font-size: 11px;
     outline: none;
     border-collapse: collapse;
@@ -918,28 +879,28 @@ input.button, input.secondary, input.primary {
 	border: 1px solid #779800;
     color: #ffffff;
     border-radius: 4px 4px 4px 4px;
-	
-    background: -webkit-linear-gradient(#8cb200, #789800);        
+
+    background: -webkit-linear-gradient(#8cb200, #789800);
     background: -webkit-gradient(linear, left top, left bottom, #8cb200, #789800);
-    background: -moz-linear-gradient(center top , #8cb200, #789800);
-    background: -ms-linear-gradient(#8cb200 , #789800); 
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8cb200', endColorstr='#789800',GradientType=0 ); 
+    background: -moz-linear-gradient(center top, #8cb200, #789800);
+    background: -ms-linear-gradient(#8cb200, #789800);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#8cb200', endColorstr='#789800', GradientType=0);
     background-color: #8cb200;
 }
 
 element.style {
     margin-left: 5px;
     margin-top: -50px !important;
-}    
+}
 
 .link {
-    background:none;
-    height: 20px;    
+    background: none;
+    height: 20px;
     line-height: 20px;
     border: none;
     font-size: 11px;
     font-style: italic;
-    font-weight:  bold;
+    font-weight: bold;
     color: #789800;
     cursor: pointer;
 }
@@ -954,22 +915,23 @@ element.style {
     border-collapse: collapse;
 }
 
-.button:hover, .secondary:hover, .primary:hover, .manualListButton:hover, .button2:hover, 
+.button:hover, .secondary:hover, .primary:hover, .manualListButton:hover, .button2:hover,
 .paletteContainer table.palette td.buttons button:hover,
-.wizardScheduler .wicketExtensionsWizardButtonBar input:hover, 
-.wizardScheduler td a.wizardButton:hover  {
+.wizardScheduler .wicketExtensionsWizardButtonBar input:hover,
+.wizardScheduler td a.wizardButton:hover {
     text-decoration: none !important;
 	border: 1px solid #779800;
     color: #ffffff;
     border-radius: 4px 4px 4px 4px;
-	
-    background: -webkit-linear-gradient(#afc951, #8cb200);        
+
+    background: -webkit-linear-gradient(#afc951, #8cb200);
     background: -webkit-gradient(linear, left top, left bottom, #afc951, #8cb200);
-    background: -moz-linear-gradient(center top , #afc951, #8cb200);
-    background: -ms-linear-gradient(#afc951 , #8cb200); 
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#afc951', endColorstr='#8cb200',GradientType=0 ); 
-    background-color: #8cb200;	
+    background: -moz-linear-gradient(center top, #afc951, #8cb200);
+    background: -ms-linear-gradient(#afc951, #8cb200);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#afc951', endColorstr='#8cb200', GradientType=0);
+    background-color: #8cb200;
 }
+
 .wizardScheduler .wicketExtensionsWizardViewRow {
 	height: 110px;
 }
@@ -984,7 +946,7 @@ ul.form-btns li {
 .form-container h1 {
     font-size: 13px;
     line-height: 20px;
-    background: url( ../images/thead.gif ) repeat-x;
+    background: url(../images/thead.gif) repeat-x;
     padding: 0px 10px;
     height: 20px;
     line-height: 20px;
@@ -998,6 +960,7 @@ body#body-edit .big-container {
     margin: 0px auto 10px !important;
     height: auto !important;
 }
+
 
 .form-container fieldset {
     /*border-top: 1px solid #bcc1c1;*/
@@ -1078,11 +1041,11 @@ body#body-login {
 }
 
 /* Tree */
-.tree {       
+.tree {
     border: 1px solid #cacaca;
-    background: #FFFFFF;       
+    background: #FFFFFF;
     height: 300px;
-    min-width: 305px; /** IE */    
+    min-width: 305px; /** IE */
     margin-top: 8px;
     margin-right: 8px;
     overflow: auto !important;
@@ -1093,8 +1056,7 @@ body#body-login {
 	padding: 2px 4px;
 }
 
-
-.accordion-group table.wicket-tree-content.selected table.icon-panel a, 
+.accordion-group table.wicket-tree-content.selected table.icon-panel a,
 .tree table.wicket-tree-content.selected table.icon-panel a {
     background-color: #8cb200;
 	color: #ffffff;
@@ -1141,36 +1103,37 @@ span.tree-content .selected span.tree-label {
 }
 
 .paletteContainer table.palette td.pane select.choicesSelect {
-    min-width:170px;    
+    min-width: 170px;
     width: 100%;
 }
 
 .paletteContainer table.palette td.buttons {
     text-align: center;
     padding-left: 10px;
-    padding-right: 10px;        
+    padding-right: 10px;
 }
 
 .paletteContainer table.palette td.buttons button {
     width: 40px;
-    height: 22px;    
+    height: 22px;
     padding: 0 14px 5px;
 	border: 1px solid #779800;
     color: #ffffff;
     border-radius: 4px 4px 4px 4px;
-	
-    background: -webkit-linear-gradient(#8cb200, #789800);        
+
+    background: -webkit-linear-gradient(#8cb200, #789800);
     background: -webkit-gradient(linear, left top, left bottom, #8cb200, #789800);
-    background: -moz-linear-gradient(center top , #8cb200, #789800);
-    background: -ms-linear-gradient(#8cb200 , #789800); 
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8cb200', endColorstr='#789800',GradientType=0 ); 
+    background: -moz-linear-gradient(center top, #8cb200, #789800);
+    background: -ms-linear-gradient(#8cb200, #789800);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#8cb200', endColorstr='#789800', GradientType=0);
     background-color: #8cb200;
 }
+
 /* Palette End */
 
 
 /* Wizard Start */
-.wizardScheduler  {
+.wizardScheduler {
     overflow: auto;
     min-height: 320px;
     border: 1px solid black;
@@ -1178,10 +1141,10 @@ span.tree-content .selected span.tree-label {
 }
 
 .wizardScheduler .wicketExtensionsWizardOuterTable {
-    width: 100%;    
+    width: 100%;
 }
 
-.wizardScheduler .wicketExtensionsWizardInnerTable {    
+.wizardScheduler .wicketExtensionsWizardInnerTable {
     top: 0px;
     right: 0px;
     left: 0px;
@@ -1212,9 +1175,9 @@ span.tree-content .selected span.tree-label {
 }
 
 .wizardScheduler .wicketExtensionsWizardHeaderSummary {
-    font-style:normal;
+    font-style: normal;
     font-size: 11px;
-    margin:10px 15px 5px;
+    margin: 10px 15px 5px;
     color: #000000;
 }
 
@@ -1225,7 +1188,7 @@ span.tree-content .selected span.tree-label {
     padding-bottom: 2px;
     /*vertical-align: top;*/
     font-size: 10px;
-    color: #999;    
+    color: #999;
 }
 
 .wizardScheduler .top {
@@ -1233,7 +1196,7 @@ span.tree-content .selected span.tree-label {
     vertical-align: top;
 }
 
-.wizardScheduler table td label , .wizardScheduler table td.label {
+.wizardScheduler table td label, .wizardScheduler table td.label {
     font-weight: bold;
     /*display: block;*/
     padding: 2px;
@@ -1264,7 +1227,7 @@ span.tree-content .selected span.tree-label {
 
 .wizardScheduler .wicketExtensionsWizardButtonBar input, .wizardScheduler td a.wizardButton {
     float: left;
-    margin-right: 5px;    
+    margin-right: 5px;
     padding: 0px 10px;
     height: 22px;
     line-height: 20px;
@@ -1274,21 +1237,21 @@ span.tree-content .selected span.tree-label {
     border-collapse: collapse;
     font-weight: bold;
     border-spacing: 0;
-    cursor: pointer;  
-    
+    cursor: pointer;
+
 	border: 1px solid #779800;
     color: #ffffff;
     border-radius: 4px 4px 4px 4px;
-	
-    background: -webkit-linear-gradient(#8cb200, #789800);        
+
+    background: -webkit-linear-gradient(#8cb200, #789800);
     background: -webkit-gradient(linear, left top, left bottom, #8cb200, #789800);
-    background: -moz-linear-gradient(center top , #8cb200, #789800);
-    background: -ms-linear-gradient(#8cb200 , #789800); 
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8cb200', endColorstr='#789800',GradientType=0 ); 
+    background: -moz-linear-gradient(center top, #8cb200, #789800);
+    background: -ms-linear-gradient(#8cb200, #789800);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#8cb200', endColorstr='#789800', GradientType=0);
     background-color: #8cb200;
 }
 
-.wizardScheduler .wicketExtensionsWizardButtonBar input[disabled='disabled']  {
+.wizardScheduler .wicketExtensionsWizardButtonBar input[disabled='disabled'] {
     background: #e9e8e8;
     color: #bdbdbd;
     cursor: default;
@@ -1296,11 +1259,11 @@ span.tree-content .selected span.tree-label {
 }
 
 .wizardScheduler .wicketExtensionsWizardButtonBar {
-    float: right;        
+    float: right;
 }
 
 .wizardScheduler .wicketExtensionsWizardViewInner .small {
-    white-space:nowrap;
+    white-space: nowrap;
 }
 
 /* Wizard End */
@@ -1318,7 +1281,7 @@ span.tree-content .selected span.tree-label {
     /*border: 1px solid #bcc1c1;*/
 }
 
-.feedbackPanelINFO {    
+.feedbackPanelINFO {
     list-style: none;
     display: block;
     font-size: 12px;
@@ -1329,18 +1292,19 @@ span.tree-content .selected span.tree-label {
     width: 100%;
     /*border: 1px solid #bcc1c1;*/
 }
+
 /* Feedback End */
 
 /* Dashboard */
 .dashboard-widget-container {
 	padding-bottom: 10px;
 	margin-bottom: 10px;
-	border-bottom: 1px dashed #000;	
+	border-bottom: 1px dashed #000;
 	float: left;
 	width: 100%;
 }
 
-.dashboard-widget-container-no-border {			
+.dashboard-widget-container-no-border {
 	float: left;
 	width: 100%;
 }
@@ -1351,31 +1315,30 @@ span.tree-content .selected span.tree-label {
 	text-transform: uppercase;
 	font-size: 14px;
     height: 28px;
-	line-height: 28px
-    width: 100%;
+    line-height: 28px width : 100 %;
     clear: both;
 }
 
 .dashboard-widget-header-left {
     float: left;
-    background: url( ../images/widget-left.gif ) no-repeat;
+    background: url(../images/widget-left.gif) no-repeat;
     height: 24px;
     width: 13px;
-	display:none;
+    display: none;
 }
 
 .dashboard-widget-header-right {
     float: right;
-    background: url( ../images/widget-right.gif ) no-repeat;
+    background: url(../images/widget-right.gif) no-repeat;
     height: 24px;
     width: 13px;
-	display:none;
+    display: none;
 }
 
 /* Ajax Busy Indicator */
 .wicket-ajax-indicator table {
-    align: center; 
-    width: 100%; 
+    align: center;
+    width: 100%;
     height: 100%;
     cursor: wait;
 }
@@ -1385,8 +1348,8 @@ span.tree-content .selected span.tree-label {
     /*line-height: 20px;*/
     background: #f4f4f4;
     border: 1px solid #aaa;
-    color: #333333;	 
-    font-weight: bold; 
+    color: #333333;
+    font-weight: bold;
     width: 12em;
 }
 
@@ -1395,7 +1358,6 @@ span.tree-content .selected span.tree-label {
     bottom: 1px !important;
     height: 12px !important;
 }
-
 
 /*  Licence Page */
 body#body-license {
@@ -1409,17 +1371,17 @@ body#body-license {
 
 .license hr {
     height: 0px;
-    border-top: 1px solid#8cb200;
+    border-top: 1px solid #8cb200;
     border-bottom: 1px solid #ffffff;
-    border-left:0;
-    border-right:0;
+    border-left: 0;
+    border-right: 0;
 }
 
-.license td label{
+.license td label {
     color: #8cb200;
 }
-/*  end Licence Page */
 
+/*  end Licence Page */
 
 .yui-skin-sam img {
     padding-bottom: 7px;
@@ -1447,7 +1409,7 @@ body#body-license {
 
 .toolbar-button {
     font-weight: bold;
-    padding-right: 5px;    
+    padding-right: 5px;
 }
 
 .details-title {
@@ -1471,17 +1433,17 @@ body#body-license {
     padding-left: 5px;
 }
 
-.embed-label {	
+.embed-label {
     font-weight: bold;
 	background-color: #F7F7F7;
-	padding: 5px 10px 5px 10px;	
+	padding: 5px 10px 5px 10px;
 	text-align: left;
 }
 
 .embed-code {
 	font-style: italic;
 	background-color: #FFFFD4;
-	padding: 20px 10px 60px 10px;	
+	padding: 20px 10px 60px 10px;
 	text-align: left;
 	border-top: 1px solid #aaa;
 	border-bottom: 1px solid #aaa;
@@ -1494,23 +1456,23 @@ body#body-license {
 
 .global-message {
 	position: fixed;
-	display: block;	
+	display: block;
 	color: green;
 	background-color: #d4ffd4;
 	border: 1px solid #99a452;
 	font-size: 14px;
 	top: 10px;
-	left: 400px;	
+	left: 400px;
 	width: 40%;
 	padding-top: 5px;
-	height: 24px;	
+	height: 24px;
 	text-align: center;
 	z-index: 9999;
 }
 
 /* modal window */
 div.wicket-modal div.w_caption {
-	height: 1.9em !important;	
+	height: 1.9em !important;
 }
 
 /*  these two classes are needed to make the date picker be shown over the dialog */
@@ -1522,6 +1484,7 @@ div.wicket-modal div.w_content_container {
 .yui-calcontainer {
 	width: 140px;
 }
+
 /* end - date picker over dialog   */
 
 h3.w_captionText {
@@ -1529,11 +1492,11 @@ h3.w_captionText {
 }
 
 div.w_content {
-	background: none repeat scroll 0 0 #F4F4F4 !important;	
+	background: none repeat scroll 0 0 #F4F4F4 !important;
 }
 
 .sql {
-	margin-top: 5px; 
+	margin-top: 5px;
 }
 
 .sql p {
@@ -1541,11 +1504,11 @@ div.w_content {
 	text-align: left !important;
 }
 
-.row {
-	float: left;
-	clear: both;
-	margin-left: 5px;	
-}
+/* .row { */
+/* 	float: left; */
+/* 	clear: both; */
+/* 	margin-left: 5px; */
+/* } */
 
 .row-label {
 	display: inline-block;
@@ -1557,17 +1520,16 @@ div.w_content {
 }
 
 .errorMaintenance {
-	display: block; 
+	display: block;
 	padding-top: 100px;
-	padding-bottom: 20px; 
+	padding-bottom: 20px;
 	font-size:200%;
 }
 
 .errorMaintenanceLink {
-	display: block; 
-	margin-bottom: 60px; 
+	display: block;
+	margin-bottom: 60px;
 }
-
 
 /* Navigator Pagination */
 
@@ -1576,55 +1538,55 @@ div.w_content {
 }
 
 .navigator {
-	padding: 2px 2px 0px 1px;	
-	float: left;	
+	padding: 2px 2px 0px 1px;
+	float: left;
 }
 
 .navigatorLabel {
 	float: right;
     font-weight: bold;
-    padding: 3px;		
+    padding: 3px;
 }
 
-.navigator .first , .navigator .prev, .navigator .goto, .navigator .next, .navigator .last {	
-	font-size: 14px;				
+.navigator .first, .navigator .prev, .navigator .goto, .navigator .next, .navigator .last {
+	font-size: 14px;
 	display: inline-block;
     font-size: 11px;
     text-align: center;
-    min-width: 30px;        
-    border-collapse: collapse;    
-    border-spacing: 0;    
+    min-width: 30px;
+    border-collapse: collapse;
+    border-spacing: 0;
     cursor: pointer;
-    
+
     border: 1px solid #779800;
     color: #ffffff;
     border-radius: 4px 4px 4px 4px;
 	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-	
-    background: -webkit-linear-gradient(#8cb200, #789800);        
+
+    background: -webkit-linear-gradient(#8cb200, #789800);
     background: -webkit-gradient(linear, left top, left bottom, #8cb200, #789800);
-    background: -moz-linear-gradient(center top , #8cb200, #789800);
-    background: -ms-linear-gradient(#8cb200 , #789800); 
-    background-color: #8cb200;    
+    background: -moz-linear-gradient(center top, #8cb200, #789800);
+    background: -ms-linear-gradient(#8cb200, #789800);
+    background-color: #8cb200;
 }
 
 .navigator .prev, .navigator .last {
 	margin-left: -2px !important;
 }
 
-.navigator .first:hover , .navigator .prev:hover, .navigator .goto:hover, .navigator .next:hover, .navigator .last:hover {
-	text-decoration: none !important;	            
+.navigator .first:hover, .navigator .prev:hover, .navigator .goto:hover, .navigator .next:hover, .navigator .last:hover {
+	text-decoration: none !important;
     border: 1px solid #779800;
     color: #ffffff;
     border-radius: 4px 4px 4px 4px;
-	
-    background: -webkit-linear-gradient(#afc951, #8cb200);        
+
+    background: -webkit-linear-gradient(#afc951, #8cb200);
     background: -webkit-gradient(linear, left top, left bottom, #afc951, #8cb200);
-    background: -moz-linear-gradient(center top , #afc951, #8cb200);
-    background: -ms-linear-gradient(#afc951 , #8cb200); 
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#afc951', endColorstr='#8cb200',GradientType=0 ); 
-    background-color: #8cb200;	        
-}    
+    background: -moz-linear-gradient(center top, #afc951, #8cb200);
+    background: -ms-linear-gradient(#afc951, #8cb200);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#afc951', endColorstr='#8cb200', GradientType=0);
+    background-color: #8cb200;
+}
 
 .navigator .goto {
 	margin-left: 1px;
@@ -1642,7 +1604,7 @@ div.w_content {
 	font-weight: bold;
 	color: #ffffff !important;
 	text-decoration: underline;
-	display: block;	
+	display: block;
 }
 
 table.actions-grid tr.navigation td.actions-col a, .actions-grid .navigation a {
@@ -1653,23 +1615,23 @@ table.actions-grid tr.navigation td.actions-col a, .actions-grid .navigation a {
 	overflow: auto;
 }
 
-.auditTable {	
-	border: 1px solid rgb(202, 202, 202); 
+.auditTable {
+	border: 1px solid rgb(202, 202, 202);
 	float: left;
     margin: 0 10px 10px 10px;
     width: 98%;
 }
 
 .audit {
-    margin-top: 20px;    
+    margin-top: 20px;
 }
 
 .audit ul li {
     font-size: 14px;
-    padding: 0px 10px 0px 10px;    
+    padding: 0px 10px 0px 10px;
 }
 
-.audit ul li:hover{
+.audit ul li:hover {
 	color: #789800;
 	cursor: pointer;
 }
@@ -1681,7 +1643,7 @@ table.actions-grid tr.navigation td.actions-col a, .actions-grid .navigation a {
 	margin-bottom: 10px;
 }
 
-.auditDesc {	
+.auditDesc {
 	color: #999;
 	margin-left: 10px;
 }
@@ -1689,4 +1651,40 @@ table.actions-grid tr.navigation td.actions-col a, .actions-grid .navigation a {
 .auditToolbar {
 	margin-right: 20px;
 	clear: left;
+}
+
+.profile .info {
+    background: #779800 none repeat scroll 0 0;
+    padding: 8px 0 9px;
+    text-align: left;
+    width: 100%;
+}
+
+.profile .info .user-icon {
+    color: #ffffff;
+    display: inline-block;
+    padding: 0 5px 0 15px;
+}
+
+.profile .info .user-details {
+    display: inline-block;
+}
+
+.profile .info .userName {
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.hr {
+    display: block;
+    height: 0px;
+    overflow: hidden;
+    font-size: 0;
+    border-top: 1px dashed #779800;
+    margin: 10px 0;
+    border-width: 1px 0 0 0;
+}
+#splitter{
+	margin: 0 15px;
 }

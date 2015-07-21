@@ -107,6 +107,8 @@ public class ThemesManager {
 		generateStyle("dashboard_template.css", "/WEB-INF/classes/ro/nextreports/server/web/dashboard/dashboard.css");
 		generateStyle("analysis_template.css", "/WEB-INF/classes/ro/nextreports/server/web/analysis/analysis.css");
         generateStyle("slidebar_template.css", "/css/slidebar.css");
+     // @TODO - remove after develop
+        generateStyle2("dashboard_template.css", "/target/classes/ro/nextreports/server/web/dashboard/dashboard.css");
 	}
 
 	private void generateStyle(String templateFile, String generatedFilePath) {
@@ -130,6 +132,25 @@ public class ThemesManager {
 			closeInputStream(propertiesStream);
 		}
 	}
+	// @TODO - remove after develop
+	private void generateStyle2(String templateFile, String generatedFilePath) {
+        InputStream styleTemplateStream = getClass().getResourceAsStream(templateFile);
+        InputStream propertiesStream = getClass().getResourceAsStream(getPropertiesFile(theme));
+        try {              
+               String styleTemplate = IOUtils.toString(styleTemplateStream);
+               StrSubstitutor sub = new StrSubstitutor(createValues(propertiesStream));
+               String resolvedString = sub.replace(styleTemplate);        
+               String fileName = new File(".").getAbsolutePath() + File.separator + generatedFilePath;
+               File styleFile = new File(fileName);
+               FileUtils.writeStringToFile(styleFile, resolvedString);
+               LOG.info("Generated style file " + templateFile + " in folder " + styleFile.getAbsolutePath());
+        } catch (Exception e) {
+               e.printStackTrace();
+        } finally {
+               closeInputStream(styleTemplateStream);
+               closeInputStream(propertiesStream);
+        }
+  }
 
 	private Map<String, String> createValues(InputStream is) {
 		Map<String, String> valuesMap = new HashMap<String, String>();
