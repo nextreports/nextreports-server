@@ -19,19 +19,23 @@ package ro.nextreports.server.web.dashboard.table;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.util.ServerUtil;
-
 import ro.nextreports.engine.exporter.util.TableData;
 
 /**
@@ -43,6 +47,9 @@ public class TableDataExporter {
 
     @SpringBean
     private StorageService storageService;
+        
+    private static String datePattern = ((SimpleDateFormat)DateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM,SimpleDateFormat.SHORT, Locale.getDefault())).toPattern();
+    private static CellStyle dateCellStyle;
 
     public TableDataExporter() {
         Injector.get().inject(this);
@@ -52,6 +59,8 @@ public class TableDataExporter {
 
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.createSheet("NextReports");
+        dateCellStyle = wb.createCellStyle();
+        dateCellStyle.setDataFormat( wb.getCreationHelper().createDataFormat().getFormat(datePattern));
 
         HSSFRow headerRow = sheet.createRow(0);
         int col = 0;
@@ -81,11 +90,25 @@ public class TableDataExporter {
 				if ( (data.getExcludedColumns() == null) ||
 					 ((data.getExcludedColumns() != null) && !data.getExcludedColumns().contains(j))) {							
 					HSSFCell cell = detailRow.createCell(col);
-					cell.setCellType(HSSFCell.CELL_TYPE_STRING);
 					if (obj == null) {
 						obj = "";
 					}
-					cell.setCellValue(new HSSFRichTextString(obj.toString()));
+					if ((obj instanceof java.sql.Date) || (obj instanceof java.sql.Timestamp)) { 
+                    	Date date;
+                    	if (obj instanceof java.sql.Date) {                    		
+                    		date = new Date(((java.sql.Date)obj).getTime());
+                    	} else {
+                    		date = (java.sql.Timestamp)obj;
+                    	}                                       	
+                    	cell.setCellStyle(dateCellStyle);
+                    	cell.setCellValue(date);
+					} else if (obj instanceof Number) {
+	                    cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+	                    cell.setCellValue(((Number)obj).doubleValue());
+					} else {
+						cell.setCellType(HSSFCell.CELL_TYPE_STRING);									
+						cell.setCellValue(new HSSFRichTextString(obj.toString()));
+					}
 					col++;
 				}				
 			}
@@ -112,7 +135,7 @@ public class TableDataExporter {
         return file;
 
     }
-
+     
     public String getFile() {
         StringBuilder sb = new StringBuilder(storageService.getSettings().getReportsHome());
         sb.append("/table/");
