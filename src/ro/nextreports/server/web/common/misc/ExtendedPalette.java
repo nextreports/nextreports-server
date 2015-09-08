@@ -17,17 +17,25 @@
 package ro.nextreports.server.web.common.misc;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.form.palette.Palette;
+import org.apache.wicket.extensions.markup.html.form.palette.component.AbstractOptions;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.util.string.AppendingStringBuffer;
+import org.apache.wicket.util.string.Strings;
 
 /**
  * User: mihai.panaitescu
@@ -224,5 +232,78 @@ public class ExtendedPalette<T> extends Palette<T> {
         };
     }
 
+    @Override
+    protected Component newChoicesComponent(){
+        return new ConditionCodeChoices<T>("choices", this);
+    } 
+    
+    //overriding the choices class wicket Palette uses so we can inject
+    //tooltips into the palettes options.
+    private class ConditionCodeChoices<T> extends AbstractOptions{
+       
+        public ConditionCodeChoices(String id, Palette palette){
+           super(id, palette);
+        }
+       
+        @Override
+        protected Iterator getOptionsIterator(){
+            return getPalette().getUnselectedChoices();
+        }
+       
+		@Override
+		public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+			final AppendingStringBuffer buffer = new AppendingStringBuffer(128);
+			Iterator<T> options = getOptionsIterator();
+			IChoiceRenderer<T> renderer = getPalette().getChoiceRenderer();
 
+			boolean localizeDisplayValues = localizeDisplayValues();
+
+			while (options.hasNext()) {
+				final T choice = options.next();
+
+				final CharSequence id;
+				{
+					String value = renderer.getIdValue(choice, 0);
+
+					if (getEscapeModelStrings()) {
+						id = Strings.escapeMarkup(value);
+					} else {
+						id = value;
+					}
+				}
+
+				final CharSequence value;
+				{
+					Object displayValue = renderer.getDisplayValue(choice);
+					Class<?> displayClass = displayValue == null ? null : displayValue.getClass();
+
+					@SuppressWarnings("unchecked")
+					IConverter<Object> converter = (IConverter<Object>) getConverter(displayClass);
+					String displayString = converter.convertToString(displayValue, getLocale());
+					if (localizeDisplayValues) {
+						displayString = getLocalizer().getString(displayString, this, displayString);
+					}
+
+					if (getEscapeModelStrings()) {
+						value = Strings.escapeMarkup(displayString);
+					} else {
+						value = displayString;
+					}
+				}
+
+				buffer.append("\n<option title='" + value + "' value=\"").append(id).append("\"");
+
+				Map<String, String> additionalAttributesMap = getAdditionalAttributes(choice);
+				if (additionalAttributesMap != null) {
+					for (Map.Entry<String, String> entry : additionalAttributesMap.entrySet()) {
+						buffer.append(' ').append(entry.getKey()).append("=\"").append(entry.getValue()).append("\"");
+					}
+				}
+				buffer.append(">").append(value).append("</option>");
+			}
+			buffer.append("\n");
+			replaceComponentTagBody(markupStream, openTag, buffer);
+		}
+       
+    } 
 }
