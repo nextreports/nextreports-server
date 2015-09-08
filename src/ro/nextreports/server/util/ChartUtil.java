@@ -71,6 +71,7 @@ public class ChartUtil {
     public static final String CHART_NONE = "None";
     public static final String CHART_LINE = "Line";
     public static final String CHART_BAR = "Bar";
+    public static final String CHART_NEGATIVE_BAR = "Negative Bar";
     public static final String CHART_BAR_COMBO = "Bar Line";
     public static final String CHART_HORIZONTAL_BAR = "Horizontal Bar";
     public static final String CHART_STACKED_BAR = "Stacked Bar";
@@ -79,7 +80,7 @@ public class ChartUtil {
     public static final String CHART_PIE = "Pie";
     public static final String CHART_AREA = "Area";    
     public static final String CHART_BUBBLE = "Bubble";
-    public static final List<String> CHART_TYPES = Arrays.asList(CHART_LINE, CHART_BAR, CHART_BAR_COMBO, CHART_HORIZONTAL_BAR, CHART_HORIZONTAL_STACKED_BAR, CHART_STACKED_BAR, CHART_STACKED_BAR_COMBO, CHART_PIE, CHART_AREA, CHART_BUBBLE);
+    public static final List<String> CHART_TYPES = Arrays.asList(CHART_LINE, CHART_BAR, CHART_NEGATIVE_BAR, CHART_BAR_COMBO, CHART_HORIZONTAL_BAR, CHART_HORIZONTAL_STACKED_BAR, CHART_STACKED_BAR, CHART_STACKED_BAR_COMBO, CHART_PIE, CHART_AREA, CHART_BUBBLE);
     public static final List<String> FLASH_UNSUPPORTED = Arrays.asList(CHART_BAR_COMBO, CHART_STACKED_BAR_COMBO, CHART_HORIZONTAL_STACKED_BAR, CHART_BUBBLE);
 
     public static WidgetRuntimeModel getStoredRuntimeModel(Settings settings, ChartWidget chartWidget, ReportService reportService,
@@ -507,6 +508,8 @@ public class ChartUtil {
     public static byte getChartType(String type) {
         if (CHART_BAR.equals(type)) {
             return ChartType.BAR;
+        } else if (CHART_NEGATIVE_BAR.equals(type)) {
+            return ChartType.NEGATIVE_BAR;        
         } else if (CHART_BAR_COMBO.equals(type)) {
             return ChartType.BAR_COMBO;    
         }  else if (CHART_HORIZONTAL_BAR.equals(type)) {
@@ -533,6 +536,8 @@ public class ChartUtil {
     public static String getChartType(byte type) {
         if (ChartType.BAR == type) {
             return CHART_BAR;
+        }  else if (ChartType.NEGATIVE_BAR == type) {
+            return CHART_NEGATIVE_BAR;    
         }  else if (ChartType.BAR_COMBO == type) {
             return CHART_BAR_COMBO;
         }  else if (ChartType.HORIZONTAL_BAR == type) {
