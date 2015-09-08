@@ -69,6 +69,8 @@ public class ChartRuntimePanel extends DynamicParameterRuntimePanel {
                 	return ChartUtil.CHART_NONE;
                 } else if (chartType.equals(ChartUtil.CHART_BAR)) {
                 	return getString("chart.bar");
+                } else if (chartType.equals(ChartUtil.CHART_NEGATIVE_BAR)) {
+                	return getString("chart.negativebar");	
                 } else if (chartType.equals(ChartUtil.CHART_BAR_COMBO)) {
                 	return getString("chart.barcombo");	
                 } else if (chartType.equals(ChartUtil.CHART_HORIZONTAL_BAR)) {
