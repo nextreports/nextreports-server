@@ -122,7 +122,7 @@
   position: relative;
 }
 .nrs .panel-default > .panel-heading .panel-title {
-  color: #8cb200;
+  color: #222;
   display: inline-block;
   font-size: 14px;
   font-weight: 600;
@@ -224,6 +224,45 @@
 }
 .nrs .topnav > li {
   display: inline-block;
+  margin-right: 5px;
+}
+.nrs .topnav > li:last-child {
+  margin-right: 0;
+}
+.nrs .topnav > li > a {
+  background-color: #ffffff;
+  border: 1px solid #dfdfdf;
+  border-radius: 3px;
+  display: block;
+  padding: 3px 6px;
+  color: #4a4a4a;
+  text-decoration: none;
+  box-shadow: none;
+}
+.nrs .topnav > li > a:hover {
+  border-color: #D1E0A9;
+  background-color: #F3F7E7;
+  text-decoration: none;
+}
+.nrs .topnav > li > a .left-image {
+  display: block;
+  float: left;
+  margin: 0;
+  padding: 0;
+}
+@media (min-width: 480px) and (max-width: 1199px) {
+  .nrs .topnav > li > a .left-image {
+    float: none;
+  }
+}
+.nrs .topnav > li > a .left-image + span {
+  margin-left: 6px;
+  clear: left;
+}
+@media (min-width: 480px) and (max-width: 1199px) {
+  .nrs .topnav > li > a .left-image + span {
+    display: none;
+  }
 }
 .nrs .btn-primary {
   background-color: #8cb200;
