@@ -1,0 +1,199 @@
+// main: style.less
+
+body{height:100%;}
+#sb-site, .sb-site-container{
+	background: 0 none;
+	padding:50px 0 30px 0;
+}
+
+.sb-toggle-left {
+	border-right: 1px solid #e4e5e7;
+    color: #8cb200;
+    cursor: pointer;
+    float: left;
+    font-size: 20px;
+    margin: 0 10px 0 0;
+    padding: 15px;
+}
+.sb-toggle-left:hover{
+	background-color: #eaefe1;
+	color: #4c5344;
+}
+.sb-toggle-right {
+	border-left: 1px solid #e4e5e7;
+    color: #8cb200;
+    cursor: pointer;
+    float: right;
+    font-size: 20px;
+    margin: 0 0 0 10px;
+    padding: 15px;
+}
+
+.navicon-line {
+    width: 24px;
+    height: 4px;
+    border-radius: 1px;
+    margin-bottom: 3px;
+    background-color: #779800;
+}
+
+.sb-slidebar {
+    /*background-color: #222222;*/
+    background-color: rgba(34, 34, 34, 0.95);
+    color: #e8e8e8;
+}
+
+.sb-slidebar a {
+    color: #779800;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.sb-slidebar a:hover {
+    color: #779800;
+    text-decoration: underline;
+}
+
+.sb-menu {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    text-align: left;
+}
+
+.sb-menu li {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Will lighten any background colour you set. */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Will darken any background colour you set. */
+}
+
+.sb-menu > li:first-child {
+    border-top: none; /* Removes top border from first list item.. */
+}
+
+.sb-menu > li:last-child {
+    border-bottom: none; /* Removed bottom border from last list item. */
+}
+
+.sb-menu li a {
+    display: block;
+    padding: 1em;
+    color: #f2f2f2;
+}
+
+.sb-menu li a:hover {
+    text-decoration: none;
+    background-color: rgba(255, 255, 255, 0.05); /* Will lighten any background colour you set. */
+}
+
+.sb-menu li.active > a i {
+    color: #779800;
+}
+
+/* Borders */
+.sb-left .sb-menu li a {
+    border-left: 3px solid transparent;
+}
+
+.sb-left .sb-menu li a:hover {
+    border-left: 3px solid; /* Removes transparent colour, so border colour will be the same as link hover colour. */
+}
+
+.sb-right .sb-menu li a {
+    /*border-right: 3px solid transparent;*/
+    border-left: 3px solid transparent;
+}
+
+.sb-right .sb-menu li a:hover {
+    /*border-right: 3px solid; *//* Removes transparent colour, so border colour will be the same as link hover colour. */
+    border-left: 3px solid;
+}
+
+.sb-menu [class^='fa'] + span {
+    margin-left: 10px;
+}
+
+/* Slidebar widths for browsers/devices that don't support media queries. */
+	.sb-slidebar {
+		width: 30%;
+	}
+	
+	.sb-width-thin {
+		width: 15%;
+	}
+	
+	.sb-width-wide {
+		width: 45%;
+	}
+
+@media (max-width: 480px) { /* Slidebar widths on extra small screens. */
+	.sb-slidebar {
+		width: 70%;
+	}
+	
+	.sb-width-thin {
+		width: 55%;
+	}
+	
+	.sb-width-wide {
+		width: 85%;
+	}
+}
+
+@media (min-width: 481px) { /* Slidebar widths on small screens. */
+	.sb-slidebar {
+		width: 55%;
+	}
+	
+	.sb-width-thin {
+		width: 40%;
+	}
+	
+	.sb-width-wide {
+		width: 70%;
+	}
+}
+
+@media (min-width: 768px) { /* Slidebar widths on medium screens. */
+	.sb-slidebar {
+		width: 40%;
+	}
+	
+	.sb-width-thin {
+		width: 25%;
+	}
+	
+	.sb-width-wide {
+		width: 55%;
+	}
+}
+
+@media (min-width: 992px) { /* Slidebar widths on large screens. */
+	.sb-slidebar {
+		width: 30%;
+	}
+	
+	.sb-width-thin {
+		width: 15%;
+	}
+	
+	.sb-width-wide {
+		width: 45%;
+	}
+}
+
+@media (min-width: 1200px) { /* Slidebar widths on extra large screens. */
+	.sb-slidebar {
+		width: 20%;
+	}
+	
+	.sb-width-thin {
+		width: 15%;
+	}
+	
+	.sb-width-wide {
+		width: 35%;
+	}
+}

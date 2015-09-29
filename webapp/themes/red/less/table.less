@@ -1,0 +1,180 @@
+// main: style.less
+
+table tr td.date {
+	/*
+    width: 135px;
+    */
+}
+
+table.grid {
+    width: 100%;     
+    background: #FFFFFF;
+    /*border-collapse: inherit;*/
+    border-bottom: 1px solid #cacaca;
+}
+
+table.grid tr.tr-even {
+    background: #f4f4f4;
+}
+
+table.grid tr.tr-selected {
+    background: @dash-selected-color;
+}
+
+table.grid tr.tr-hover {
+    background: @table-row-hover;
+}
+
+table.grid tr.tr-checked {
+    background: #e4e4e4;
+}
+
+table.grid th {
+    background: @table-header-bg;
+    line-height: 20px;
+    border-bottom: 1px solid #d4d4d4;
+    border-left: 1px solid #d4d4d4;
+}
+
+table.grid tr td {
+    border-left: 1px solid #e4e4e4;
+}
+
+table.grid th a, table th span {
+    padding: 0px 20px 0px 5px;
+    display: inline-block;
+    background-position: right center;
+	color: @table-header-text;
+	font-weight: bold;
+}
+
+table.grid th.th-hover {
+    background: @table-header-bg-hover;
+    text-decoration: none;
+    color: @table-header-text-hover;
+}
+
+table.grid th.th-hover a {
+    background-color: @table-header-bg-hover;
+    text-decoration: none;
+    color: @table-header-text-hover;
+}
+
+table.grid tbody td {
+    padding: 1px 4px 1px 5px;
+    color: #2a2a2a;
+    line-height: 21px;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+table.actions-grid {
+    /*
+    margin-bottom: 160px;
+    */
+}
+        
+table.actions-grid tr .name-col {
+	/*
+    width: 30%;
+    */
+    color: #000;
+    border-left: none !important;
+}
+
+table.actions-grid tr td.actions-col {
+    width: 60px;
+    padding: 0px !important;
+    text-align: center;
+    height: 20px;
+}
+
+table.actions-grid tbody tr.tr-last td {
+    border-bottom: none;
+}
+
+table.actions-grid tr td.actions-col ul .li-relative {
+    position: relative;
+}
+
+/* table grid actions and bulk menu actions */ 
+table.actions-grid tr td.actions-col ul.subnav , .actions-grid ul.subnav {
+    position: absolute;
+    left: 25px;
+    top: -6px;
+    background: @menu-act-pnl-bg;
+    margin: 0;
+    padding: 0;
+    display: none;
+    float: left;
+    /*width: 150px;*/
+    border: 1px solid @menu-act-pnl-border;
+    z-index: 99999;
+    /* overflow: hidden; */
+	box-shadow: 1px 2px 2px @menu-act-pnl-shadow;
+}
+
+.actions-grid ul.subnav {
+    left: -1px;
+    top: 20px;
+}
+
+table.actions-grid tr td.actions-col ul.subnav li , .actions-grid ul.subnav li {
+    margin: 0;
+    padding: 0;
+    clear: both;
+    width: 150px;
+    text-align: left;
+}
+
+table.actions-grid tr td.actions-col ul.subnav li a , .actions-grid ul.subnav li a {
+    /*float: left;
+    width: 150px;    */
+	padding: 2px;
+	display: block;
+	line-height: 18px;
+}
+
+table.actions-grid tr td.actions-col ul.subnav li a:hover , .actions-grid ul.subnav li a:hover {
+    background-color: @menu-act-pnl-bg-hover;
+	color: @menu-act-pnl-text-hover;
+}
+
+table.actions-grid tr td.actions-col a , .actions-grid a {
+    padding-top: 2px;
+}
+
+table.actions-grid tr td.actions-col-hover {
+    border-left: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    background: @table-row-hover url( ../images/@actions-image ) top right
+    no-repeat;
+}
+
+.checkboxColumn {
+    width: 30px;
+}
+
+.checkboxColumn input[type=checkbox]{
+	display: block;
+}
+.tableWidgetView {
+	border: 1px solid rgb(202, 202, 202); 
+	max-height: 300px;
+}
+
+.tableWidgetViewFull {
+	border: 1px solid rgb(202, 202, 202);
+	max-height: 100% !important;
+}
+
+.filter-td {
+	padding: 1px !important;
+}
+
+.filter-td input {
+	width: 99%;
+}	
+
+tr.navigation td {
+	padding-bottom: 0px !important;
+}
