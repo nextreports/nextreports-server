@@ -205,15 +205,15 @@ body {
 .big-container {
     min-width: 1024px;
     max-width: 1900px;
-    width: expression( document . body . clientWidth < 980 ? "980px":
+    /*width: expression( document . body . clientWidth < 980 ? "980px":
     document . body . clientWidth > 1900 ? "1900px":
-    "auto" );
+    "auto" );*/
     overflow: auto;
     padding: 0px;
     display: block;
     position: relative;
-    min-height: calc(100vh - 50px);
-    height: calc(100vh - 50px);
+    min-height: ~'calc(100vh - 50px)';
+    height: ~'calc(100vh - 50px)';
     /*height: auto !important;*/
     margin: 0 auto;
 }
@@ -391,8 +391,8 @@ img.left-image {
 
 .container {
     background: #f3f3f4 none repeat scroll 0 0;
-    height: calc(100vh - 120px);
-    min-height: calc(100vh - 120px);
+    height: ~'calc(100vh - 120px)';
+    min-height: ~'calc(100vh - 120px)';
     margin: 0;
     overflow: auto;
     padding: 0;
@@ -492,7 +492,7 @@ li.colapse-all {
 
 .accordion-group {
     background: #ffffff none repeat scroll 0 0;
-    min-height: calc(100vh - 220px);
+    min-height: ~'calc(100vh - 220px)';
     overflow: auto;
 }
 
@@ -662,7 +662,7 @@ ul.subnav li a:hover {
 }
 
 .table-right-container {
-	height: calc(100vh - 190px);
+	height: ~'calc(100vh - 190px)';
     overflow: auto;
     width: 100%;
 }
