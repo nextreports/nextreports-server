@@ -6,6 +6,36 @@
 @tree-container: ~'calc(100vh - 190px)';
 @sidebar-width: 220px;
 
+
+//== Media queries breakpoints
+//
+//## Define the breakpoints at which your layout will change, adapting to different screen sizes.
+
+// Extra small screen / phone
+@screen-xs:                  480px;
+@screen-xs-min:              @screen-xs;
+@screen-phone:               @screen-xs-min;
+
+// Small screen / tablet
+@screen-sm:                  768px;
+@screen-sm-min:              @screen-sm;
+@screen-tablet:              @screen-sm-min;
+
+// Medium screen / desktop
+@screen-md:                  992px;
+@screen-md-min:              @screen-md;
+@screen-desktop:             @screen-md-min;
+
+// Large screen / wide desktop
+@screen-lg:                  1200px;
+@screen-lg-min:              @screen-lg;
+@screen-lg-desktop:          @screen-lg-min;
+
+// So media queries don't overlap when required, provide a maximum
+@screen-xs-max:              (@screen-sm-min - 1);
+@screen-sm-max:              (@screen-md-min - 1);
+@screen-md-max:              (@screen-lg-min - 1);
+
 .nrs {
     padding: 0;
 
@@ -148,7 +178,7 @@
             position: relative;
 
             .panel-title {
-                color: #8cb200;
+                color: #222;
                 display: inline-block;
                 font-size: 14px;
                 font-weight: 600;
@@ -262,6 +292,47 @@
         
         > li {
             display: inline-block;
+            margin-right: 5px;
+            
+            &:last-child{
+                margin-right: 0;
+            }
+            > a{
+                background-color: #ffffff;
+                border: 1px solid #dfdfdf;
+                border-radius: 3px;
+                display: block;
+                padding: 3px 6px;
+                color: #4a4a4a;
+                text-decoration: none;
+                box-shadow: none;
+                
+                &:hover{
+                    border-color: #D1E0A9;
+                    background-color: #F3F7E7;
+                    text-decoration: none;
+                }
+                
+                .left-image{
+                    display: block;
+                    float: left;
+                    margin: 0;
+                    padding: 0;
+                    
+                    @media (min-width: @screen-xs-min) and (max-width: @screen-md-max) {
+                        float: none;
+                    }
+                    
+                    & + span{
+                        margin-left: 6px;
+                        clear: left;
+                        
+                        @media (min-width: @screen-xs-min) and (max-width: @screen-md-max) {
+                            display: none;
+                        }
+                    }
+                }
+            }
         }
     }
     
