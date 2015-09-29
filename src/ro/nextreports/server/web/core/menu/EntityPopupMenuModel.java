@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,7 +40,7 @@ import ro.nextreports.server.web.core.section.SectionManager;
 public class EntityPopupMenuModel extends LoadableDetachableModel<List<MenuItem>> {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private IModel<Entity> entityModel;
 	private String sectionId;
 
@@ -49,34 +49,36 @@ public class EntityPopupMenuModel extends LoadableDetachableModel<List<MenuItem>
 
 	public EntityPopupMenuModel(IModel<Entity> entityModel, String sectionId) {
 		Injector.get().inject(this);
-		
+
 		this.entityModel = entityModel;
 		this.sectionId = sectionId;
 	}
-	
+
 	@Override
 	protected List<MenuItem> load() {
-        List<MenuItem> menuItems = new ArrayList<MenuItem>();
-        
+        List<MenuItem> menuItems = new ArrayList<>();
+
         Entity entity = entityModel.getObject();
         DefaultActionContext actionContext = new DefaultActionContext();
         actionContext.setLinkId(MenuPanel.LINK_ID);
         actionContext.setEntity(entity);
-        
+
         EntitySection entitySection = (EntitySection) sectionManager.getSection(sectionId);
         List<ActionContributor> popupContributors = entitySection.getPopupContributors();
         if (popupContributors != null) {
         	for (ActionContributor contributor : popupContributors) {
         		if (contributor.isVisible() && contributor.support(actionContext.getEntities())) {
-        			menuItems.add(new MenuItem(contributor.getLink(actionContext), 
+        			menuItems.add(new MenuItem(contributor.getLink(actionContext),
         					contributor.getActionName(),  contributor.getActionImage()));
         		}
         	}
         }
-                
-        MenuItem menuItem = new MenuItem("images/actions.png", null);
+
+        // TODO bootstrap
+//        MenuItem menuItem = new MenuItem("images/actions.png", null);
+        MenuItem menuItem = new MenuItem("cog", null);
         menuItem.setMenuItems(menuItems);
-        
+
         return Arrays.asList(menuItem);
 	}
 
