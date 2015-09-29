@@ -25,3 +25,5 @@ derby.log
 licences/
 src/*.zip
 /bin/
+/data.big/
+/data.small/
