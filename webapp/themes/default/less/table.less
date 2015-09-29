@@ -18,11 +18,11 @@ table.grid tr.tr-even {
 }
 
 table.grid tr.tr-selected {
-    background: ${dash-selected-color};
+    background: @dash-selected-color;
 }
 
 table.grid tr.tr-hover {
-    background: ${table-row-hover};
+    background: @table-row-hover;
 }
 
 table.grid tr.tr-checked {
@@ -30,7 +30,7 @@ table.grid tr.tr-checked {
 }
 
 table.grid th {
-    background: ${table-header-bg};
+    background: @table-header-bg;
     line-height: 20px;
     border-bottom: 1px solid #d4d4d4;
     border-left: 1px solid #d4d4d4;
@@ -44,20 +44,20 @@ table.grid th a, table th span {
     padding: 0px 20px 0px 5px;
     display: inline-block;
     background-position: right center;
-	color: ${table-header-text};
+	color: @table-header-text;
 	font-weight: bold;
 }
 
 table.grid th.th-hover {
-    background: ${table-header-bg-hover};
+    background: @table-header-bg-hover;
     text-decoration: none;
-    color: ${table-header-text-hover};
+    color: @table-header-text-hover;
 }
 
 table.grid th.th-hover a {
-    background-color: ${table-header-bg-hover};
+    background-color: @table-header-bg-hover;
     text-decoration: none;
-    color: ${table-header-text-hover};
+    color: @table-header-text-hover;
 }
 
 table.grid tbody td {
@@ -101,16 +101,16 @@ table.actions-grid tr td.actions-col ul.subnav , .actions-grid ul.subnav {
     position: absolute;
     left: 25px;
     top: -6px;
-    background: ${menu-act-pnl-bg};
+    background: @menu-act-pnl-bg;
     margin: 0;
     padding: 0;
     display: none;
     float: left;
     /*width: 150px;*/
-    border: 1px solid ${menu-act-pnl-border};
+    border: 1px solid @menu-act-pnl-border;
     z-index: 99999;
     */ overflow: hidden; */
-	box-shadow: 1px 2px 2px ${menu-act-pnl-shadow};
+	box-shadow: 1px 2px 2px @menu-act-pnl-shadow;
 }
 
 .actions-grid ul.subnav {
@@ -135,8 +135,8 @@ table.actions-grid tr td.actions-col ul.subnav li a , .actions-grid ul.subnav li
 }
 
 table.actions-grid tr td.actions-col ul.subnav li a:hover , .actions-grid ul.subnav li a:hover {
-    background-color: ${menu-act-pnl-bg-hover};
-	color: ${menu-act-pnl-text-hover};
+    background-color: @menu-act-pnl-bg-hover;
+	color: @menu-act-pnl-text-hover;
 }
 
 table.actions-grid tr td.actions-col a , .actions-grid a {
@@ -146,7 +146,7 @@ table.actions-grid tr td.actions-col a , .actions-grid a {
 table.actions-grid tr td.actions-col-hover {
     border-left: 1px solid #fff;
     border-bottom: 1px solid #fff;
-    background: ${table-row-hover} url( ../images/${actions-image} ) top right
+    background: @table-row-hover url( ../images/@actions-image ) top right
     no-repeat;
 }
 

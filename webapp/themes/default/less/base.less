@@ -46,7 +46,7 @@ caption, th, .align-left {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: ${header-color};
+    color: @header-color;
     letter-spacing: 0px;
 }
 
@@ -162,7 +162,7 @@ a {
 }
 
 a:not(.button .button2 .primary .secondary):hover {
-    color: ${link-hover-color};
+    color: @link-hover-color;
     text-decoration: underline;
 }
 
@@ -272,7 +272,7 @@ a.logo {
 }
 
 .header-right ul li a:hover {
-	color: ${link-hover-color};
+	color: @link-hover-color;
 }
 
 .welcome {
@@ -282,7 +282,7 @@ a.logo {
 }
 
 .welcome span {
-    color: ${main-color};
+    color: @main-color;
 }
 
 /* Tabpane */
@@ -312,17 +312,17 @@ div.tab-row li a {
     background: #eaeaea;
     border: 1px solid #cccccc;
     font-weight: bold;
-    color: ${link-color};
+    color: @link-color;
 }
 
 div.tab-row li a:hover, div.tab-row-settings li a:hover {
-    color: ${link-hover-color};
+    color: @link-hover-color;
     text-decoration: none;
 }
 
 div.tab-row li.selected a {
     border-bottom: none;
-    color: ${link-hover-color};
+    color: @link-hover-color;
     font-weight: bold;
     line-height: 21px;
     font-size: 11px;
@@ -331,12 +331,12 @@ div.tab-row li.selected a {
 }
 
 div.tab-row li.selected {
-	border-top: 3px solid ${main-color};
+	border-top: 3px solid @main-color;
 	margin-top: -3px;
 }
 
 div.tab-row-settings li.selected {
-	border-top: 3px solid ${main-color};
+	border-top: 3px solid @main-color;
 	background: #fafafa;
 }
 
@@ -357,11 +357,11 @@ div.tab-row-settings li a {
     line-height: 20px;
     background: #eaeaea;
     font-weight: bold;
-    color: ${link-color};
+    color: @link-color;
 }
 
 div.tab-row-settings li.selected a {
-    color: ${link-hover-color};
+    color: @link-hover-color;
     font-weight: bold;
     line-height: 21px;
     font-size: 11px;
@@ -442,7 +442,7 @@ img.left-image {
 }
 
 .breadcrumbs ul li a:hover {
-    color: ${bcrb-text-hover};
+    color: @bcrb-text-hover;
 }
 
 .breadcrumbs ul li.bread-current {
@@ -509,7 +509,7 @@ li.colapse-all {
 }
 
 .accordion-group table.wicket-tree-content table.icon-panel a:hover {
-    color: ${link-hover-color};
+    color: @link-hover-color;
 	text-decoration: none;
 	font-weight: bold;
 }
@@ -524,15 +524,15 @@ li.colapse-all {
 }
 
 .actions-bar {
-    background: -webkit-linear-gradient(${act-bar-top-color}, ${act-bar-bottom-color});
-    background: -webkit-gradient(linear, left top, left bottom, ${act-bar-top-color}, ${act-bar-bottom-color});
-    background: -moz-linear-gradient(center top, ${act-bar-top-color}, ${act-bar-bottom-color});
-    background: -ms-linear-gradient(${act-bar-top-color}, ${act-bar-bottom-color});
-    background: -ms-linear-gradient(${act-bar-top-color}, ${act-bar-bottom-color});
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='${act-bar-top-color}', endColorstr='${act-bar-bottom-color}', GradientType=0);
-    background-color: ${act-bar-top-color};
-	border: 1px solid ${act-bar-border-color};
-	border-radius: ${act-bar-border-radius} ${act-bar-border-radius} ${act-bar-border-radius} ${act-bar-border-radius};
+    background: -webkit-linear-gradient(@act-bar-top-color, @act-bar-bottom-color);
+    background: -webkit-gradient(linear, left top, left bottom, @act-bar-top-color, @act-bar-bottom-color);
+    background: -moz-linear-gradient(center top, @act-bar-top-color, @act-bar-bottom-color);
+    background: -ms-linear-gradient(@act-bar-top-color, @act-bar-bottom-color);
+    background: -ms-linear-gradient(@act-bar-top-color, @act-bar-bottom-color);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@act-bar-top-color', endColorstr='@act-bar-bottom-color', GradientType=0);
+    background-color: @act-bar-top-color;
+	border: 1px solid @act-bar-border-color;
+	border-radius: @act-bar-border-radius @act-bar-border-radius @act-bar-border-radius @act-bar-border-radius;
 
     height: 22px;
     clear: both;
@@ -543,7 +543,7 @@ li.colapse-all {
     float: left;
     height: 22px;
     width: 15px;
-	border-radius: ${act-bar-border-radius} ${act-bar-border-radius} ${act-bar-border-radius} ${act-bar-border-radius};
+	border-radius: @act-bar-border-radius @act-bar-border-radius @act-bar-border-radius @act-bar-border-radius;
 	display: none;
 }
 
@@ -551,7 +551,7 @@ li.colapse-all {
     float: right;
     height: 22px;
     width: 15px;
-	border-radius: ${act-bar-border-radius} ${act-bar-border-radius} ${act-bar-border-radius} ${act-bar-border-radius};
+	border-radius: @act-bar-border-radius @act-bar-border-radius @act-bar-border-radius @act-bar-border-radius;
 	display: none;
 }
 
@@ -587,13 +587,13 @@ li.colapse-all {
 }
 
 .actions-bar ul.topnav li.topnav-hover {
-	background: -webkit-linear-gradient(${act-bar-bottom-color}, ${act-bar-top-color});
-    background: -webkit-gradient(linear, left top, left bottom, ${act-bar-bottom-color}, ${act-bar-top-color});
-    background: -moz-linear-gradient(center top, ${act-bar-bottom-color}, ${act-bar-top-color});
-    background: -ms-linear-gradient(${act-bar-bottom-color}, ${act-bar-top-color});
-    background: -ms-linear-gradient(${act-bar-bottom-color}, ${act-bar-top-color});
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='${act-bar-bottom-color}', endColorstr='${act-bar-top-color}', GradientType=0);
-    background-color: ${act-bar-bottom-color};
+	background: -webkit-linear-gradient(@act-bar-bottom-color, @act-bar-top-color);
+    background: -webkit-gradient(linear, left top, left bottom, @act-bar-bottom-color, @act-bar-top-color);
+    background: -moz-linear-gradient(center top, @act-bar-bottom-color, @act-bar-top-color);
+    background: -ms-linear-gradient(@act-bar-bottom-color, @act-bar-top-color);
+    background: -ms-linear-gradient(@act-bar-bottom-color, @act-bar-top-color);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@act-bar-bottom-color', endColorstr='@act-bar-top-color', GradientType=0);
+    background-color: @act-bar-bottom-color;
 }
 
 .actions-bar ul.topnav li a.action-bar-actions {
@@ -607,7 +607,7 @@ ul.subnav {
     position: absolute;
     left: -2px;
     top: 21px;
-    background: ${action-hover-color};
+    background: @action-hover-color;
     margin: 0;
     padding: 0;
     display: none;
@@ -632,7 +632,7 @@ ul.subnav li {
 ul.subnav li a {
     float: left;
     width: 120px;
-    background: ${action-hover-color};
+    background: @action-hover-color;
     padding-left: 30px !important;
     border-top: 1px solid #b4cdef;
 }
@@ -684,7 +684,7 @@ ul.subnav li a:hover {
 }
 
 .table-actions table.actions-grid tr td.actions-col-hover {
-    background: #F0F0F0 url(../images/${actions-image}) top right no-repeat !important;
+    background: #F0F0F0 url(../images/@actions-image) top right no-repeat !important;
 	border-left: none !important;
 }
 
@@ -805,16 +805,16 @@ ul.subnav li a:hover {
     border-spacing: 0;
     cursor: pointer;
 
-    border: 1px solid ${btn-border-color};
-    color: ${btn-text-color};
-    border-radius: ${btn-radius} ${btn-radius} ${btn-radius} ${btn-radius};
+    border: 1px solid @btn-border-color;
+    color: @btn-text-color;
+    border-radius: @btn-radius @btn-radius @btn-radius @btn-radius;
 
-    background: -webkit-linear-gradient(${btn-top-color}, ${btn-bottom-color});
-    background: -webkit-gradient(linear, left top, left bottom, ${btn-top-color}, ${btn-bottom-color});
-    background: -moz-linear-gradient(center top, ${btn-top-color}, ${btn-bottom-color});
-    background: -ms-linear-gradient(${btn-top-color}, ${btn-bottom-color});
-    background: -ms-linear-gradient(${btn-top-color}, ${btn-bottom-color});
-    background-color: ${btn-background};
+    background: -webkit-linear-gradient(@btn-top-color, @btn-bottom-color);
+    background: -webkit-gradient(linear, left top, left bottom, @btn-top-color, @btn-bottom-color);
+    background: -moz-linear-gradient(center top, @btn-top-color, @btn-bottom-color);
+    background: -ms-linear-gradient(@btn-top-color, @btn-bottom-color);
+    background: -ms-linear-gradient(@btn-top-color, @btn-bottom-color);
+    background-color: @btn-background;
 }
 
 .form-container table input.textFile {
@@ -849,16 +849,16 @@ ul.subnav li a:hover {
     cursor: pointer;
     border-spacing: 0;
 
-	border: 1px solid ${btn-border-color};
-    color: ${btn-text-color};
-    border-radius: ${btn-radius} ${btn-radius} ${btn-radius} ${btn-radius};
+	border: 1px solid @btn-border-color;
+    color: @btn-text-color;
+    border-radius: @btn-radius @btn-radius @btn-radius @btn-radius;
 	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
 
-    background: -webkit-linear-gradient(${btn-top-color}, ${btn-bottom-color});
-    background: -webkit-gradient(linear, left top, left bottom, ${btn-top-color}, ${btn-bottom-color});
-    background: -moz-linear-gradient(center top, ${btn-top-color}, ${btn-bottom-color});
-    background: -ms-linear-gradient(${btn-top-color}, ${btn-bottom-color});
-    background-color: ${btn-background};
+    background: -webkit-linear-gradient(@btn-top-color, @btn-bottom-color);
+    background: -webkit-gradient(linear, left top, left bottom, @btn-top-color, @btn-bottom-color);
+    background: -moz-linear-gradient(center top, @btn-top-color, @btn-bottom-color);
+    background: -ms-linear-gradient(@btn-top-color, @btn-bottom-color);
+    background-color: @btn-background;
 }
 
 input.button, input.secondary, input.primary {
@@ -878,16 +878,16 @@ input.button, input.secondary, input.primary {
     border-spacing: 0;
     cursor: pointer;
     padding: 2px 10px 3px 10px;
-	border: 1px solid ${btn-border-color};
-    color: ${btn-text-color};
-    border-radius: ${btn-radius} ${btn-radius} ${btn-radius} ${btn-radius};
+	border: 1px solid @btn-border-color;
+    color: @btn-text-color;
+    border-radius: @btn-radius @btn-radius @btn-radius @btn-radius;
 
-    background: -webkit-linear-gradient(${btn-top-color}, ${btn-bottom-color});
-    background: -webkit-gradient(linear, left top, left bottom, ${btn-top-color}, ${btn-bottom-color});
-    background: -moz-linear-gradient(center top, ${btn-top-color}, ${btn-bottom-color});
-    background: -ms-linear-gradient(${btn-top-color}, ${btn-bottom-color});
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='${btn-top-color}', endColorstr='${btn-bottom-color}', GradientType=0);
-    background-color: ${btn-background};
+    background: -webkit-linear-gradient(@btn-top-color, @btn-bottom-color);
+    background: -webkit-gradient(linear, left top, left bottom, @btn-top-color, @btn-bottom-color);
+    background: -moz-linear-gradient(center top, @btn-top-color, @btn-bottom-color);
+    background: -ms-linear-gradient(@btn-top-color, @btn-bottom-color);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@btn-top-color', endColorstr='@btn-bottom-color', GradientType=0);
+    background-color: @btn-background;
 }
 
 element.style {
@@ -903,7 +903,7 @@ element.style {
     font-size: 11px;
     font-style: italic;
     font-weight: bold;
-    color: ${link-hover-color};
+    color: @link-hover-color;
     cursor: pointer;
 }
 
@@ -922,16 +922,16 @@ element.style {
 .wizardScheduler .wicketExtensionsWizardButtonBar input:hover,
 .wizardScheduler td a.wizardButton:hover {
     text-decoration: none !important;
-	border: 1px solid ${btn-border-color-hover};
-    color: ${btn-text-color-hover};
-    border-radius: ${btn-radius} ${btn-radius} ${btn-radius} ${btn-radius};
+	border: 1px solid @btn-border-color-hover;
+    color: @btn-text-color-hover;
+    border-radius: @btn-radius @btn-radius @btn-radius @btn-radius;
 
-    background: -webkit-linear-gradient(${btn-background-hover}, ${btn-top-color});
-    background: -webkit-gradient(linear, left top, left bottom, ${btn-background-hover}, ${btn-top-color});
-    background: -moz-linear-gradient(center top, ${btn-background-hover}, ${btn-top-color});
-    background: -ms-linear-gradient(${btn-background-hover}, ${btn-top-color});
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='${btn-background-hover}', endColorstr='${btn-top-color}', GradientType=0);
-    background-color: ${btn-background};
+    background: -webkit-linear-gradient(@btn-background-hover, @btn-top-color);
+    background: -webkit-gradient(linear, left top, left bottom, @btn-background-hover, @btn-top-color);
+    background: -moz-linear-gradient(center top, @btn-background-hover, @btn-top-color);
+    background: -ms-linear-gradient(@btn-background-hover, @btn-top-color);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@btn-background-hover', endColorstr='@btn-top-color', GradientType=0);
+    background-color: @btn-background;
 }
 
 .wizardScheduler .wicketExtensionsWizardViewRow {
@@ -977,7 +977,7 @@ body#body-edit .big-container {
     font-weight: bold;
     font-size: 12px;
     color: #202020;
-    border-bottom: 1px solid ${main-color};
+    border-bottom: 1px solid @main-color;
     margin: 5px 0 10px;
     padding: 5px 0;
 	text-transform: uppercase;
@@ -1027,7 +1027,7 @@ body#body-login {
     margin-left: 10px;
     margin-right: 10px;
     font-weight: bold;
-    color: ${link-color};
+    color: @link-color;
 }
 
 .login-logo {
@@ -1054,19 +1054,19 @@ body#body-login {
 }
 
 .accordion-group table.wicket-tree-content table.icon-panel a, .tree table.wicket-tree-content table.icon-panel a {
-    color: ${link-color};
+    color: @link-color;
 	padding: 2px 4px;
 }
 
 .accordion-group table.wicket-tree-content.selected table.icon-panel a,
 .tree table.wicket-tree-content.selected table.icon-panel a {
-    background-color: ${main-color};
+    background-color: @main-color;
 	color: #ffffff;
 	padding: 2px 4px;
 }
 
 span.tree-content .selected span.tree-label {
-    background-color: ${main-color} !important;
+    background-color: @main-color !important;
 	color: #ffffff;
 	padding: 2px 4px;
 }
@@ -1119,16 +1119,16 @@ span.tree-content .selected span.tree-label {
     width: 40px;
     height: 22px;
     padding: 0 14px 5px;
-	border: 1px solid ${btn-border-color};
-    color: ${btn-text-color};
-    border-radius: ${btn-radius} ${btn-radius} ${btn-radius} ${btn-radius};
+	border: 1px solid @btn-border-color;
+    color: @btn-text-color;
+    border-radius: @btn-radius @btn-radius @btn-radius @btn-radius;
 
-    background: -webkit-linear-gradient(${btn-top-color}, ${btn-bottom-color});
-    background: -webkit-gradient(linear, left top, left bottom, ${btn-top-color}, ${btn-bottom-color});
-    background: -moz-linear-gradient(center top, ${btn-top-color}, ${btn-bottom-color});
-    background: -ms-linear-gradient(${btn-top-color}, ${btn-bottom-color});
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='${btn-top-color}', endColorstr='${btn-bottom-color}', GradientType=0);
-    background-color: ${btn-background};
+    background: -webkit-linear-gradient(@btn-top-color, @btn-bottom-color);
+    background: -webkit-gradient(linear, left top, left bottom, @btn-top-color, @btn-bottom-color);
+    background: -moz-linear-gradient(center top, @btn-top-color, @btn-bottom-color);
+    background: -ms-linear-gradient(@btn-top-color, @btn-bottom-color);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@btn-top-color', endColorstr='@btn-bottom-color', GradientType=0);
+    background-color: @btn-background;
 }
 
 /* Palette End */
@@ -1218,13 +1218,13 @@ span.tree-content .selected span.tree-label {
     font-weight: bold;
     font-size: 12px;
     color: #fff;
-    background: ${header-color};
+    background: @header-color;
     border: 1px solid #781351;
     padding: 4px 6px
 }
 
 .wizardScheduler h3 {
-    color: ${header-color};
+    color: @header-color;
 }
 
 .wizardScheduler .wicketExtensionsWizardButtonBar input, .wizardScheduler td a.wizardButton {
@@ -1241,16 +1241,16 @@ span.tree-content .selected span.tree-label {
     border-spacing: 0;
     cursor: pointer;
 
-	border: 1px solid ${btn-border-color};
-    color: ${btn-text-color};
-    border-radius: ${btn-radius} ${btn-radius} ${btn-radius} ${btn-radius};
+	border: 1px solid @btn-border-color;
+    color: @btn-text-color;
+    border-radius: @btn-radius @btn-radius @btn-radius @btn-radius;
 
-    background: -webkit-linear-gradient(${btn-top-color}, ${btn-bottom-color});
-    background: -webkit-gradient(linear, left top, left bottom, ${btn-top-color}, ${btn-bottom-color});
-    background: -moz-linear-gradient(center top, ${btn-top-color}, ${btn-bottom-color});
-    background: -ms-linear-gradient(${btn-top-color}, ${btn-bottom-color});
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='${btn-top-color}', endColorstr='${btn-bottom-color}', GradientType=0);
-    background-color: ${btn-background};
+    background: -webkit-linear-gradient(@btn-top-color, @btn-bottom-color);
+    background: -webkit-gradient(linear, left top, left bottom, @btn-top-color, @btn-bottom-color);
+    background: -moz-linear-gradient(center top, @btn-top-color, @btn-bottom-color);
+    background: -ms-linear-gradient(@btn-top-color, @btn-bottom-color);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@btn-top-color', endColorstr='@btn-bottom-color', GradientType=0);
+    background-color: @btn-background;
 }
 
 .wizardScheduler .wicketExtensionsWizardButtonBar input[disabled='disabled'] {
@@ -1313,7 +1313,7 @@ span.tree-content .selected span.tree-label {
 
 .dashboard-widget-header {
     /*background: url( ../images/bread-middle.gif ) repeat-x;*/
-    border-bottom: 1px solid ${wdg-border-color};
+    border-bottom: 1px solid @wdg-border-color;
 	text-transform: uppercase;
 	font-size: 14px;
     height: 28px;
@@ -1373,14 +1373,14 @@ body#body-license {
 
 .license hr {
     height: 0px;
-    border-top: 1px solid ${main-color};
+    border-top: 1px solid @main-color;
     border-bottom: 1px solid #ffffff;
     border-left: 0;
     border-right: 0;
 }
 
 .license td label {
-    color: ${main-color};
+    color: @main-color;
 }
 
 /*  end Licence Page */
@@ -1560,16 +1560,16 @@ div.w_content {
     border-spacing: 0;
     cursor: pointer;
 
-    border: 1px solid ${btn-border-color};
-    color: ${btn-text-color};
-    border-radius: ${btn-radius} ${btn-radius} ${btn-radius} ${btn-radius};
+    border: 1px solid @btn-border-color;
+    color: @btn-text-color;
+    border-radius: @btn-radius @btn-radius @btn-radius @btn-radius;
 	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
 
-    background: -webkit-linear-gradient(${btn-top-color}, ${btn-bottom-color});
-    background: -webkit-gradient(linear, left top, left bottom, ${btn-top-color}, ${btn-bottom-color});
-    background: -moz-linear-gradient(center top, ${btn-top-color}, ${btn-bottom-color});
-    background: -ms-linear-gradient(${btn-top-color}, ${btn-bottom-color});
-    background-color: ${btn-background};
+    background: -webkit-linear-gradient(@btn-top-color, @btn-bottom-color);
+    background: -webkit-gradient(linear, left top, left bottom, @btn-top-color, @btn-bottom-color);
+    background: -moz-linear-gradient(center top, @btn-top-color, @btn-bottom-color);
+    background: -ms-linear-gradient(@btn-top-color, @btn-bottom-color);
+    background-color: @btn-background;
 }
 
 .navigator .prev, .navigator .last {
@@ -1578,16 +1578,16 @@ div.w_content {
 
 .navigator .first:hover, .navigator .prev:hover, .navigator .goto:hover, .navigator .next:hover, .navigator .last:hover {
 	text-decoration: none !important;
-    border: 1px solid ${btn-border-color-hover};
-    color: ${btn-text-color-hover};
-    border-radius: ${btn-radius} ${btn-radius} ${btn-radius} ${btn-radius};
+    border: 1px solid @btn-border-color-hover;
+    color: @btn-text-color-hover;
+    border-radius: @btn-radius @btn-radius @btn-radius @btn-radius;
 
-    background: -webkit-linear-gradient(${btn-background-hover}, ${btn-top-color});
-    background: -webkit-gradient(linear, left top, left bottom, ${btn-background-hover}, ${btn-top-color});
-    background: -moz-linear-gradient(center top, ${btn-background-hover}, ${btn-top-color});
-    background: -ms-linear-gradient(${btn-background-hover}, ${btn-top-color});
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='${btn-background-hover}', endColorstr='${btn-top-color}', GradientType=0);
-    background-color: ${btn-background};
+    background: -webkit-linear-gradient(@btn-background-hover, @btn-top-color);
+    background: -webkit-gradient(linear, left top, left bottom, @btn-background-hover, @btn-top-color);
+    background: -moz-linear-gradient(center top, @btn-background-hover, @btn-top-color);
+    background: -ms-linear-gradient(@btn-background-hover, @btn-top-color);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@btn-background-hover', endColorstr='@btn-top-color', GradientType=0);
+    background-color: @btn-background;
 }
 
 .navigator .goto {
@@ -1595,7 +1595,7 @@ div.w_content {
 }
 
 .navigator .goto a {
-	color: ${btn-text-color} !important;
+	color: @btn-text-color !important;
 }
 
 .navigator .goto a span {
@@ -1604,7 +1604,7 @@ div.w_content {
 
 .navigator .goto > span {
 	font-weight: bold;
-	color: ${btn-text-color} !important;
+	color: @btn-text-color !important;
 	text-decoration: underline;
 	display: block;
 }
@@ -1634,7 +1634,7 @@ table.actions-grid tr.navigation td.actions-col a, .actions-grid .navigation a {
 }
 
 .audit ul li:hover {
-	color: ${link-hover-color};
+	color: @link-hover-color;
 	cursor: pointer;
 }
 
