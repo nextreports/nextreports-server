@@ -165,7 +165,7 @@ a {
   color: #000;
 }
 a:not(.button .button2 .primary .secondary):hover {
-  color: #789800;
+  color: #00aeef;
   text-decoration: underline;
 }
 br {
@@ -254,7 +254,7 @@ a.logo {
   padding-right: 0px;
 }
 .header-right ul li a:hover {
-  color: #789800;
+  color: #00aeef;
 }
 .welcome {
   clear: both;
@@ -262,7 +262,7 @@ a.logo {
   float: right;
 }
 .welcome span {
-  color: #8cb200;
+  color: #00aeef;
 }
 /* Tabpane */
 div.tab-row ul {
@@ -292,12 +292,12 @@ div.tab-row li a {
 }
 div.tab-row li a:hover,
 div.tab-row-settings li a:hover {
-  color: #789800;
+  color: #00aeef;
   text-decoration: none;
 }
 div.tab-row li.selected a {
   border-bottom: none;
-  color: #789800;
+  color: #00aeef;
   font-weight: bold;
   line-height: 21px;
   font-size: 11px;
@@ -305,11 +305,11 @@ div.tab-row li.selected a {
   background: #fafafa;
 }
 div.tab-row li.selected {
-  border-top: 3px solid #8cb200;
+  border-top: 3px solid #00aeef;
   margin-top: -3px;
 }
 div.tab-row-settings li.selected {
-  border-top: 3px solid #8cb200;
+  border-top: 3px solid #00aeef;
   background: #fafafa;
 }
 div.tab-row-settings li {
@@ -331,7 +331,7 @@ div.tab-row-settings li a {
   color: #202020;
 }
 div.tab-row-settings li.selected a {
-  color: #789800;
+  color: #00aeef;
   font-weight: bold;
   line-height: 21px;
   font-size: 11px;
@@ -400,7 +400,7 @@ img.left-image {
   background: url(../images/bread-arrow.gif) center right no-repeat;
 }
 .breadcrumbs ul li a:hover {
-  color: #8cb200;
+  color: #00aeef;
 }
 .breadcrumbs ul li.bread-current {
   background: none;
@@ -454,7 +454,7 @@ li.colapse-all {
   background: none scroll 0 0 transparent;
 }
 .accordion-group table.wicket-tree-content table.icon-panel a:hover {
-  color: #789800;
+  color: #00aeef;
   text-decoration: none;
   font-weight: bold;
 }
@@ -706,14 +706,14 @@ ul.subnav li a:hover {
   font-weight: bold;
   border-spacing: 0;
   cursor: pointer;
-  border: 1px solid #779800;
+  border: 1px solid #0080af;
   color: #ffffff;
   border-radius: 4px 4px 4px 4px;
-  background: -webkit-linear-gradient(#8cb200, #789800);
-  background: -webkit-gradient(linear, left top, left bottom, #8cb200, #789800);
-  background: -moz-linear-gradient(center top, #8cb200, #789800);
-  background: -ms-linear-gradient(#8cb200, #789800);
-  background-color: #8cb200;
+  background: -webkit-linear-gradient(#00aeef, #009bd5);
+  background: -webkit-gradient(linear, left top, left bottom, #00aeef, #009bd5);
+  background: -moz-linear-gradient(center top, #00aeef, #009bd5);
+  background: -ms-linear-gradient(#00aeef, #009bd5);
+  background-color: #00aeef;
 }
 .form-container table input.textFile {
   float: left;
@@ -745,15 +745,15 @@ ul.subnav li a:hover {
   font-weight: bold;
   cursor: pointer;
   border-spacing: 0;
-  border: 1px solid #779800;
+  border: 1px solid #0080af;
   color: #ffffff;
   border-radius: 4px 4px 4px 4px;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-  background: -webkit-linear-gradient(#8cb200, #789800);
-  background: -webkit-gradient(linear, left top, left bottom, #8cb200, #789800);
-  background: -moz-linear-gradient(center top, #8cb200, #789800);
-  background: -ms-linear-gradient(#8cb200, #789800);
-  background-color: #8cb200;
+  background: -webkit-linear-gradient(#00aeef, #009bd5);
+  background: -webkit-gradient(linear, left top, left bottom, #00aeef, #009bd5);
+  background: -moz-linear-gradient(center top, #00aeef, #009bd5);
+  background: -ms-linear-gradient(#00aeef, #009bd5);
+  background-color: #00aeef;
 }
 input.button,
 input.secondary,
@@ -773,15 +773,15 @@ input.primary {
   border-spacing: 0;
   cursor: pointer;
   padding: 2px 10px 3px 10px;
-  border: 1px solid #779800;
+  border: 1px solid #0080af;
   color: #ffffff;
   border-radius: 4px 4px 4px 4px;
-  background: -webkit-linear-gradient(#8cb200, #789800);
-  background: -webkit-gradient(linear, left top, left bottom, #8cb200, #789800);
-  background: -moz-linear-gradient(center top, #8cb200, #789800);
-  background: -ms-linear-gradient(#8cb200, #789800);
+  background: -webkit-linear-gradient(#00aeef, #009bd5);
+  background: -webkit-gradient(linear, left top, left bottom, #00aeef, #009bd5);
+  background: -moz-linear-gradient(center top, #00aeef, #009bd5);
+  background: -ms-linear-gradient(#00aeef, #009bd5);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@btn-top-color', endColorstr='@btn-bottom-color', GradientType=0);
-  background-color: #8cb200;
+  background-color: #00aeef;
 }
 element.style {
   margin-left: 5px;
@@ -795,7 +795,7 @@ element.style {
   font-size: 11px;
   font-style: italic;
   font-weight: bold;
-  color: #789800;
+  color: #00aeef;
   cursor: pointer;
 }
 .link:hover {
@@ -815,15 +815,15 @@ element.style {
 .wizardScheduler .wicketExtensionsWizardButtonBar input:hover,
 .wizardScheduler td a.wizardButton:hover {
   text-decoration: none !important;
-  border: 1px solid #779800;
+  border: 1px solid #0080af;
   color: #ffffff;
   border-radius: 4px 4px 4px 4px;
-  background: -webkit-linear-gradient(#afc951, #8cb200);
-  background: -webkit-gradient(linear, left top, left bottom, #afc951, #8cb200);
-  background: -moz-linear-gradient(center top, #afc951, #8cb200);
-  background: -ms-linear-gradient(#afc951, #8cb200);
+  background: -webkit-linear-gradient(#00b7fc, #00aeef);
+  background: -webkit-gradient(linear, left top, left bottom, #00b7fc, #00aeef);
+  background: -moz-linear-gradient(center top, #00b7fc, #00aeef);
+  background: -ms-linear-gradient(#00b7fc, #00aeef);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@btn-background-hover', endColorstr='@btn-top-color', GradientType=0);
-  background-color: #8cb200;
+  background-color: #00aeef;
 }
 .wizardScheduler .wicketExtensionsWizardViewRow {
   height: 110px;
@@ -861,7 +861,7 @@ body#body-edit .big-container {
   font-weight: bold;
   font-size: 12px;
   color: #202020;
-  border-bottom: 1px solid #8cb200;
+  border-bottom: 1px solid #00aeef;
   margin: 5px 0 10px;
   padding: 5px 0;
   text-transform: uppercase;
@@ -936,12 +936,12 @@ body#body-login {
 }
 .accordion-group table.wicket-tree-content.selected table.icon-panel a,
 .tree table.wicket-tree-content.selected table.icon-panel a {
-  background-color: #8cb200;
+  background-color: #00aeef;
   color: #ffffff;
   padding: 2px 4px;
 }
 span.tree-content .selected span.tree-label {
-  background-color: #8cb200 !important;
+  background-color: #00aeef !important;
   color: #ffffff;
   padding: 2px 4px;
 }
@@ -985,15 +985,15 @@ span.tree-content .selected span.tree-label {
   width: 40px;
   height: 22px;
   padding: 0 14px 5px;
-  border: 1px solid #779800;
+  border: 1px solid #0080af;
   color: #ffffff;
   border-radius: 4px 4px 4px 4px;
-  background: -webkit-linear-gradient(#8cb200, #789800);
-  background: -webkit-gradient(linear, left top, left bottom, #8cb200, #789800);
-  background: -moz-linear-gradient(center top, #8cb200, #789800);
-  background: -ms-linear-gradient(#8cb200, #789800);
+  background: -webkit-linear-gradient(#00aeef, #009bd5);
+  background: -webkit-gradient(linear, left top, left bottom, #00aeef, #009bd5);
+  background: -moz-linear-gradient(center top, #00aeef, #009bd5);
+  background: -ms-linear-gradient(#00aeef, #009bd5);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@btn-top-color', endColorstr='@btn-bottom-color', GradientType=0);
-  background-color: #8cb200;
+  background-color: #00aeef;
 }
 /* Palette End */
 /* Wizard Start */
@@ -1090,15 +1090,15 @@ span.tree-content .selected span.tree-label {
   font-weight: bold;
   border-spacing: 0;
   cursor: pointer;
-  border: 1px solid #779800;
+  border: 1px solid #0080af;
   color: #ffffff;
   border-radius: 4px 4px 4px 4px;
-  background: -webkit-linear-gradient(#8cb200, #789800);
-  background: -webkit-gradient(linear, left top, left bottom, #8cb200, #789800);
-  background: -moz-linear-gradient(center top, #8cb200, #789800);
-  background: -ms-linear-gradient(#8cb200, #789800);
+  background: -webkit-linear-gradient(#00aeef, #009bd5);
+  background: -webkit-gradient(linear, left top, left bottom, #00aeef, #009bd5);
+  background: -moz-linear-gradient(center top, #00aeef, #009bd5);
+  background: -ms-linear-gradient(#00aeef, #009bd5);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@btn-top-color', endColorstr='@btn-bottom-color', GradientType=0);
-  background-color: #8cb200;
+  background-color: #00aeef;
 }
 .wizardScheduler .wicketExtensionsWizardButtonBar input[disabled='disabled'] {
   background: #e9e8e8;
@@ -1151,7 +1151,7 @@ span.tree-content .selected span.tree-label {
 }
 .dashboard-widget-header {
   /*background: url( ../images/bread-middle.gif ) repeat-x;*/
-  border-bottom: 1px solid #8cb200;
+  border-bottom: 1px solid #00aeef;
   text-transform: uppercase;
   font-size: 14px;
   height: 28px;
@@ -1204,13 +1204,13 @@ body#body-license {
 }
 .license hr {
   height: 0px;
-  border-top: 1px solid #8cb200;
+  border-top: 1px solid #00aeef;
   border-bottom: 1px solid #ffffff;
   border-left: 0;
   border-right: 0;
 }
 .license td label {
-  color: #8cb200;
+  color: #00aeef;
 }
 /*  end Licence Page */
 .yui-skin-sam img {
@@ -1361,15 +1361,15 @@ div.w_content {
   border-collapse: collapse;
   border-spacing: 0;
   cursor: pointer;
-  border: 1px solid #779800;
+  border: 1px solid #0080af;
   color: #ffffff;
   border-radius: 4px 4px 4px 4px;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-  background: -webkit-linear-gradient(#8cb200, #789800);
-  background: -webkit-gradient(linear, left top, left bottom, #8cb200, #789800);
-  background: -moz-linear-gradient(center top, #8cb200, #789800);
-  background: -ms-linear-gradient(#8cb200, #789800);
-  background-color: #8cb200;
+  background: -webkit-linear-gradient(#00aeef, #009bd5);
+  background: -webkit-gradient(linear, left top, left bottom, #00aeef, #009bd5);
+  background: -moz-linear-gradient(center top, #00aeef, #009bd5);
+  background: -ms-linear-gradient(#00aeef, #009bd5);
+  background-color: #00aeef;
 }
 .navigator .prev,
 .navigator .last {
@@ -1381,15 +1381,15 @@ div.w_content {
 .navigator .next:hover,
 .navigator .last:hover {
   text-decoration: none !important;
-  border: 1px solid #779800;
+  border: 1px solid #0080af;
   color: #ffffff;
   border-radius: 4px 4px 4px 4px;
-  background: -webkit-linear-gradient(#afc951, #8cb200);
-  background: -webkit-gradient(linear, left top, left bottom, #afc951, #8cb200);
-  background: -moz-linear-gradient(center top, #afc951, #8cb200);
-  background: -ms-linear-gradient(#afc951, #8cb200);
+  background: -webkit-linear-gradient(#00b7fc, #00aeef);
+  background: -webkit-gradient(linear, left top, left bottom, #00b7fc, #00aeef);
+  background: -moz-linear-gradient(center top, #00b7fc, #00aeef);
+  background: -ms-linear-gradient(#00b7fc, #00aeef);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@btn-background-hover', endColorstr='@btn-top-color', GradientType=0);
-  background-color: #8cb200;
+  background-color: #00aeef;
 }
 .navigator .goto {
   margin-left: 1px;
@@ -1427,7 +1427,7 @@ table.actions-grid tr.navigation td.actions-col a,
   padding: 0px 10px 0px 10px;
 }
 .audit ul li:hover {
-  color: #789800;
+  color: #00aeef;
   cursor: pointer;
 }
 .auditRow {
@@ -1520,7 +1520,7 @@ table.actions-grid tr.navigation td.actions-col a,
   white-space: nowrap;
 }
 .analysisNavigation tr.selected {
-  background-color: #d9e3b6;
+  background-color: #cff0fc;
 }
 .analysisNavigation tr.selected a {
   color: #000000;
@@ -1542,7 +1542,7 @@ table.actions-grid tr.navigation td.actions-col a,
   /* chrome requires the most space */
 }
 .analysisNavigation table tr.tr-hover {
-  background-color: #d9e3b6;
+  background-color: #cff0fc;
 }
 .analysisNavigation table.actions-grid tr td.actions-col-hover {
   border-left: none;
@@ -1837,7 +1837,7 @@ ul.column {
   padding: 3px 0;
 }
 .dashboardNavigation tr.selected {
-  background-color: #d9e3b6;
+  background-color: #cff0fc;
 }
 .dashboardNavigation tr.selected a {
   color: #000000;
@@ -1859,7 +1859,7 @@ ul.column {
   /* chrome requires the most space */
 }
 .dashboardNavigation table tr.tr-hover {
-  background-color: #d9e3b6;
+  background-color: #cff0fc;
 }
 .dashboardNavigation table.actions-grid tr td.actions-col-hover {
   border-left: none;
@@ -1894,16 +1894,16 @@ table.grid tr.tr-even {
   background: #f4f4f4;
 }
 table.grid tr.tr-selected {
-  background: #d9e3b6;
+  background: #cff0fc;
 }
 table.grid tr.tr-hover {
-  background: #d9e3b6;
+  background: #cff0fc;
 }
 table.grid tr.tr-checked {
   background: #e4e4e4;
 }
 table.grid th {
-  background: #8cb200;
+  background: #00aeef;
   line-height: 20px;
   border-bottom: 1px solid #d4d4d4;
   border-left: 1px solid #d4d4d4;
@@ -1920,12 +1920,12 @@ table th span {
   font-weight: bold;
 }
 table.grid th.th-hover {
-  background: #789800;
+  background: #0080af;
   text-decoration: none;
   color: #ffffff;
 }
 table.grid th.th-hover a {
-  background-color: #789800;
+  background-color: #0080af;
   text-decoration: none;
   color: #ffffff;
 }
@@ -1998,7 +1998,7 @@ table.actions-grid tr td.actions-col ul.subnav li a,
 }
 table.actions-grid tr td.actions-col ul.subnav li a:hover,
 .actions-grid ul.subnav li a:hover {
-  background-color: #d9e3b6;
+  background-color: #cff0fc;
   color: #202020;
 }
 table.actions-grid tr td.actions-col a,
@@ -2008,7 +2008,7 @@ table.actions-grid tr td.actions-col a,
 table.actions-grid tr td.actions-col-hover {
   border-left: 1px solid #fff;
   border-bottom: 1px solid #fff;
-  background: #d9e3b6 url(../images/@actions-image ) top right no-repeat;
+  background: #cff0fc url(../images/@actions-image ) top right no-repeat;
 }
 .checkboxColumn {
   width: 30px;
