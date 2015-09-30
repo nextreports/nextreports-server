@@ -16,11 +16,11 @@ table.grid tr.tr-even {
 }
 
 table.grid tr.tr-selected {
-    background: #d9e3b6;
+    background: #fcd0ca;
 }
 
 table.grid tr.tr-hover {
-    background: #d9e3b6 ;
+    background: #fcd0ca ;
 }
 
 table.grid tr.tr-checked {
@@ -28,7 +28,7 @@ table.grid tr.tr-checked {
 }
 
 table.grid th {
-    background: #8cb200;
+    background: #d7402e;
     line-height: 20px;
     border-bottom: 1px solid #d4d4d4;
     border-left: 1px solid #d4d4d4;
@@ -47,13 +47,13 @@ table.grid th a, table th span {
 }
 
 table.grid th.th-hover {
-    background: #789800 ;
+    background: #b13526 ;
     text-decoration: none;
     color: #ffffff;
 }
 
 table.grid th.th-hover a {
-    background-color: #789800 ;
+    background-color: #b13526 ;
     text-decoration: none;
     color: #ffffff;
 }
@@ -133,7 +133,7 @@ table.actions-grid tr td.actions-col ul.subnav li a , .actions-grid ul.subnav li
 }
 
 table.actions-grid tr td.actions-col ul.subnav li a:hover , .actions-grid ul.subnav li a:hover {
-    background-color: #d9e3b6;
+    background-color: #fcd0ca;
 	color: #202020;
 }
 
@@ -144,7 +144,7 @@ table.actions-grid tr td.actions-col a , .actions-grid a {
 table.actions-grid tr td.actions-col-hover {
     border-left: 1px solid #fff;
     border-bottom: 1px solid #fff;
-    background: #d9e3b6  url( ../images/actions-col-arrow-green.gif ) top right
+    background: #fcd0ca  url( ../images/actions-col-arrow-red.gif ) top right
     no-repeat;
 }
 

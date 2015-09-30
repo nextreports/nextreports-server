@@ -160,7 +160,7 @@ a {
 }
 
 a:not(.button .button2 .primary .secondary):hover {
-    color: #789800;
+    color: #d7402e;
     text-decoration: underline;
 }
 
@@ -270,7 +270,7 @@ a.logo {
 }
 
 .header-right ul li a:hover {
-	color: #789800;
+	color: #d7402e;
 }
 
 .welcome {
@@ -280,7 +280,7 @@ a.logo {
 }
 
 .welcome span {
-    color: #8cb200;
+    color: #d7402e;
 }
 
 /* Tabpane */
@@ -314,13 +314,13 @@ div.tab-row li a {
 }
 
 div.tab-row li a:hover, div.tab-row-settings li a:hover {
-    color: #789800;
+    color: #d7402e;
     text-decoration: none;
 }
 
 div.tab-row li.selected a {
     border-bottom: none;
-    color: #789800;
+    color: #d7402e;
     font-weight: bold;
     line-height: 21px;
     font-size: 11px;
@@ -329,12 +329,12 @@ div.tab-row li.selected a {
 }
 
 div.tab-row li.selected {
-	border-top: 3px solid #8cb200;
+	border-top: 3px solid #d7402e;
 	margin-top: -3px;
 }
 
 div.tab-row-settings li.selected {
-	border-top: 3px solid #8cb200;
+	border-top: 3px solid #d7402e;
 	background: #fafafa;
 }
 
@@ -359,7 +359,7 @@ div.tab-row-settings li a {
 }
 
 div.tab-row-settings li.selected a {
-    color: #789800;
+    color: #d7402e;
     font-weight: bold;
     line-height: 21px;
     font-size: 11px;
@@ -440,7 +440,7 @@ img.left-image {
 }
 
 .breadcrumbs ul li a:hover {
-    color: #8cb200;
+    color: #d7402e;
 }
 
 .breadcrumbs ul li.bread-current {
@@ -507,7 +507,7 @@ li.colapse-all {
 }
 
 .accordion-group table.wicket-tree-content table.icon-panel a:hover {
-    color: #789800;
+    color: #d7402e;
 	text-decoration: none;
 	font-weight: bold;
 }
@@ -682,7 +682,7 @@ ul.subnav li a:hover {
 }
 
 .table-actions table.actions-grid tr td.actions-col-hover {
-    background: #F0F0F0 url(../images/actions-col-arrow-green.gif) top right no-repeat !important;
+    background: #F0F0F0 url(../images/actions-col-arrow-red.gif) top right no-repeat !important;
 	border-left: none !important;
 }
 
@@ -803,16 +803,16 @@ ul.subnav li a:hover {
     border-spacing: 0;
     cursor: pointer;
 
-    border: 1px solid #779800;
+    border: 1px solid #b13526;
     color: #ffffff;
     border-radius: 4px 4px 4px 4px;
 
-    background: -webkit-linear-gradient(#8cb200, #789800);
-    background: -webkit-gradient(linear, left top, left bottom, #8cb200, #789800);
-    background: -moz-linear-gradient(center top, #8cb200, #789800);
-    background: -ms-linear-gradient(#8cb200, #789800);
-    background: -ms-linear-gradient(#8cb200, #789800);
-    background-color: #8cb200;
+    background: -webkit-linear-gradient(#f14833, #d7402e);
+    background: -webkit-gradient(linear, left top, left bottom, #f14833, #d7402e);
+    background: -moz-linear-gradient(center top, #f14833, #d7402e);
+    background: -ms-linear-gradient(#f14833, #d7402e);
+    background: -ms-linear-gradient(#f14833, #d7402e);
+    background-color: #d7402e;
 }
 
 .form-container table input.textFile {
@@ -847,16 +847,16 @@ ul.subnav li a:hover {
     cursor: pointer;
     border-spacing: 0;
 
-	border: 1px solid #779800;
+	border: 1px solid #b13526;
     color: #ffffff;
     border-radius: 4px 4px 4px 4px;
 	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
 
-    background: -webkit-linear-gradient(#8cb200, #789800);
-    background: -webkit-gradient(linear, left top, left bottom, #8cb200, #789800);
-    background: -moz-linear-gradient(center top, #8cb200, #789800);
-    background: -ms-linear-gradient(#8cb200, #789800);
-    background-color: #8cb200;
+    background: -webkit-linear-gradient(#f14833, #d7402e);
+    background: -webkit-gradient(linear, left top, left bottom, #f14833, #d7402e);
+    background: -moz-linear-gradient(center top, #f14833, #d7402e);
+    background: -ms-linear-gradient(#f14833, #d7402e);
+    background-color: #d7402e;
 }
 
 input.button, input.secondary, input.primary {
@@ -876,16 +876,16 @@ input.button, input.secondary, input.primary {
     border-spacing: 0;
     cursor: pointer;
     padding: 2px 10px 3px 10px;
-	border: 1px solid #779800;
+	border: 1px solid #b13526;
     color: #ffffff;
     border-radius: 4px 4px 4px 4px;
 
-    background: -webkit-linear-gradient(#8cb200, #789800);
-    background: -webkit-gradient(linear, left top, left bottom, #8cb200, #789800);
-    background: -moz-linear-gradient(center top, #8cb200, #789800);
-    background: -ms-linear-gradient(#8cb200, #789800);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#8cb200', endColorstr='#789800', GradientType=0);
-    background-color: #8cb200;
+    background: -webkit-linear-gradient(#f14833, #d7402e);
+    background: -webkit-gradient(linear, left top, left bottom, #f14833, #d7402e);
+    background: -moz-linear-gradient(center top, #f14833, #d7402e);
+    background: -ms-linear-gradient(#f14833, #d7402e);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f14833', endColorstr='#d7402e', GradientType=0);
+    background-color: #d7402e;
 }
 
 element.style {
@@ -901,7 +901,7 @@ element.style {
     font-size: 11px;
     font-style: italic;
     font-weight: bold;
-    color: #789800;
+    color: #d7402e;
     cursor: pointer;
 }
 
@@ -920,16 +920,16 @@ element.style {
 .wizardScheduler .wicketExtensionsWizardButtonBar input:hover,
 .wizardScheduler td a.wizardButton:hover {
     text-decoration: none !important;
-	border: 1px solid #779800;
+	border: 1px solid #b13526;
     color: #ffffff;
     border-radius: 4px 4px 4px 4px;
 
-    background: -webkit-linear-gradient(#afc951, #8cb200);
-    background: -webkit-gradient(linear, left top, left bottom, #afc951, #8cb200);
-    background: -moz-linear-gradient(center top, #afc951, #8cb200);
-    background: -ms-linear-gradient(#afc951, #8cb200);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#afc951', endColorstr='#8cb200', GradientType=0);
-    background-color: #8cb200;
+    background: -webkit-linear-gradient(#fe4c36, #f14833);
+    background: -webkit-gradient(linear, left top, left bottom, #fe4c36, #f14833);
+    background: -moz-linear-gradient(center top, #fe4c36, #f14833);
+    background: -ms-linear-gradient(#fe4c36, #f14833);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fe4c36', endColorstr='#f14833', GradientType=0);
+    background-color: #d7402e;
 }
 
 .wizardScheduler .wicketExtensionsWizardViewRow {
@@ -975,7 +975,7 @@ body#body-edit .big-container {
     font-weight: bold;
     font-size: 12px;
     color: #202020;
-    border-bottom: 1px solid #8cb200;
+    border-bottom: 1px solid #d7402e;
     margin: 5px 0 10px;
     padding: 5px 0;
 	text-transform: uppercase;
@@ -1058,13 +1058,13 @@ body#body-login {
 
 .accordion-group table.wicket-tree-content.selected table.icon-panel a,
 .tree table.wicket-tree-content.selected table.icon-panel a {
-    background-color: #8cb200;
+    background-color: #d7402e;
 	color: #ffffff;
 	padding: 2px 4px;
 }
 
 span.tree-content .selected span.tree-label {
-    background-color: #8cb200 !important;
+    background-color: #d7402e !important;
 	color: #ffffff;
 	padding: 2px 4px;
 }
@@ -1117,16 +1117,16 @@ span.tree-content .selected span.tree-label {
     width: 40px;
     height: 22px;
     padding: 0 14px 5px;
-	border: 1px solid #779800;
+	border: 1px solid #b13526;
     color: #ffffff;
     border-radius: 4px 4px 4px 4px;
 
-    background: -webkit-linear-gradient(#8cb200, #789800);
-    background: -webkit-gradient(linear, left top, left bottom, #8cb200, #789800);
-    background: -moz-linear-gradient(center top, #8cb200, #789800);
-    background: -ms-linear-gradient(#8cb200, #789800);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#8cb200', endColorstr='#789800', GradientType=0);
-    background-color: #8cb200;
+    background: -webkit-linear-gradient(#f14833, #d7402e);
+    background: -webkit-gradient(linear, left top, left bottom, #f14833, #d7402e);
+    background: -moz-linear-gradient(center top, #f14833, #d7402e);
+    background: -ms-linear-gradient(#f14833, #d7402e);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f14833', endColorstr='#d7402e', GradientType=0);
+    background-color: #d7402e;
 }
 
 /* Palette End */
@@ -1239,16 +1239,16 @@ span.tree-content .selected span.tree-label {
     border-spacing: 0;
     cursor: pointer;
 
-	border: 1px solid #779800;
+	border: 1px solid #b13526;
     color: #ffffff;
     border-radius: 4px 4px 4px 4px;
 
-    background: -webkit-linear-gradient(#8cb200, #789800);
-    background: -webkit-gradient(linear, left top, left bottom, #8cb200, #789800);
-    background: -moz-linear-gradient(center top, #8cb200, #789800);
-    background: -ms-linear-gradient(#8cb200, #789800);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#8cb200', endColorstr='#789800', GradientType=0);
-    background-color: #8cb200;
+    background: -webkit-linear-gradient(#f14833, #d7402e);
+    background: -webkit-gradient(linear, left top, left bottom, #f14833, #d7402e);
+    background: -moz-linear-gradient(center top, #f14833, #d7402e);
+    background: -ms-linear-gradient(#f14833, #d7402e);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f14833', endColorstr='#d7402e', GradientType=0);
+    background-color: #d7402e;
 }
 
 .wizardScheduler .wicketExtensionsWizardButtonBar input[disabled='disabled'] {
@@ -1311,7 +1311,7 @@ span.tree-content .selected span.tree-label {
 
 .dashboard-widget-header {
     /*background: url( ../images/bread-middle.gif ) repeat-x;*/
-    border-bottom: 1px solid #8cb200;
+    border-bottom: 1px solid #d7402e;
 	text-transform: uppercase;
 	font-size: 14px;
     height: 28px;
@@ -1371,14 +1371,14 @@ body#body-license {
 
 .license hr {
     height: 0px;
-    border-top: 1px solid #8cb200;
+    border-top: 1px solid #d7402e;
     border-bottom: 1px solid #ffffff;
     border-left: 0;
     border-right: 0;
 }
 
 .license td label {
-    color: #8cb200;
+    color: #d7402e;
 }
 
 /*  end Licence Page */
@@ -1558,16 +1558,16 @@ div.w_content {
     border-spacing: 0;
     cursor: pointer;
 
-    border: 1px solid #779800;
+    border: 1px solid #b13526;
     color: #ffffff;
     border-radius: 4px 4px 4px 4px;
 	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
 
-    background: -webkit-linear-gradient(#8cb200, #789800);
-    background: -webkit-gradient(linear, left top, left bottom, #8cb200, #789800);
-    background: -moz-linear-gradient(center top, #8cb200, #789800);
-    background: -ms-linear-gradient(#8cb200, #789800);
-    background-color: #8cb200;
+    background: -webkit-linear-gradient(#f14833, #d7402e);
+    background: -webkit-gradient(linear, left top, left bottom, #f14833, #d7402e);
+    background: -moz-linear-gradient(center top, #f14833, #d7402e);
+    background: -ms-linear-gradient(#f14833, #d7402e);
+    background-color: #d7402e;
 }
 
 .navigator .prev, .navigator .last {
@@ -1576,16 +1576,16 @@ div.w_content {
 
 .navigator .first:hover, .navigator .prev:hover, .navigator .goto:hover, .navigator .next:hover, .navigator .last:hover {
 	text-decoration: none !important;
-    border: 1px solid #779800;
+    border: 1px solid #b13526;
     color: #ffffff;
     border-radius: 4px 4px 4px 4px;
 
-    background: -webkit-linear-gradient(#afc951, #8cb200);
-    background: -webkit-gradient(linear, left top, left bottom, #afc951, #8cb200);
-    background: -moz-linear-gradient(center top, #afc951, #8cb200);
-    background: -ms-linear-gradient(#afc951, #8cb200);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#afc951', endColorstr='#8cb200', GradientType=0);
-    background-color: #8cb200;
+    background: -webkit-linear-gradient(#fe4c36, #f14833);
+    background: -webkit-gradient(linear, left top, left bottom, #fe4c36, #f14833);
+    background: -moz-linear-gradient(center top, #fe4c36, #f14833);
+    background: -ms-linear-gradient(#fe4c36, #f14833);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fe4c36', endColorstr='#f14833', GradientType=0);
+    background-color: #d7402e;
 }
 
 .navigator .goto {
@@ -1632,7 +1632,7 @@ table.actions-grid tr.navigation td.actions-col a, .actions-grid .navigation a {
 }
 
 .audit ul li:hover {
-	color: #789800;
+	color: #d7402e;
 	cursor: pointer;
 }
 

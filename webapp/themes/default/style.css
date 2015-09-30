@@ -1660,8 +1660,8 @@ table.actions-grid tr.navigation td.actions-col a,
 .dashboardCapture {
   display: inline-block;
   overflow: auto;
-  height: calc(-50vh);
-  min-height: calc(-50vh);
+  height: calc(100vh - 150px);
+  min-height: calc(100vh - 150px);
   width: 100%;
 }
 .left {
@@ -1818,10 +1818,10 @@ ul.column {
   padding-right: 0;
 }
 .dashboardNavigation {
-  min-height: calc(-50vh);
+  min-height: calc(100vh - 150px);
   overflow-x: hidden;
   overflow-y: auto;
-  height: calc(-50vh);
+  height: calc(100vh - 150px);
 }
 .dashboardNavigation table.actions-grid {
   margin-top: 5px;
