@@ -17,10 +17,12 @@
 package ro.nextreports.server.web.themes;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,6 +32,8 @@ import java.util.Properties;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
+
+
 
 //import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.commons.io.FileUtils;
@@ -47,6 +51,7 @@ public class ThemesManager {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ThemesManager.class);
 
+	public static final String DEFAULT_THEME = "default";
 	public static final String GREEN_THEME = "green";
 	public static final String RED_THEME = "red";
 	public static final String BLUE_THEME = "blue";
@@ -57,34 +62,34 @@ public class ThemesManager {
 
 	public static List<String> THEMES = new ArrayList<String>();
 
-	private String theme = GREEN_THEME;
+	private String theme = DEFAULT_THEME;
 
 	public static ThemesManager INSTANCE;
 
 	@SuppressWarnings("unchecked")
 	private ThemesManager() {
-		THEMES.add(RED_THEME);
-		THEMES.add(GREEN_THEME);
+		THEMES.add(DEFAULT_THEME);
+		THEMES.add(RED_THEME);		
 		THEMES.add(BLUE_THEME);
 		// try to see if other theme files where added by hand
 	    // must have name like theme-<color>.properties
 		// you must add in all other i18n files the property:
 		// Settings.personalize.theme.theme-<color> to see it in seetings
 		long start = System.currentTimeMillis();
-		File themesPath = new File("./webapps/nextreports-server/WEB-INF/classes/ro/nextreports/server/web/themes");
+		File themesPath = new File("./webapp/themes");
 		if (!themesPath.exists()) {
 			themesPath = new File(".");
 		}
 		LOG.info("Check directory '" + themesPath.getAbsolutePath() + " for themes ...");
-		Collection<File> files = FileUtils.listFiles(themesPath, ThemeFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
-		Set<String> fileNames = new HashSet<String>();
-		for (File file : files) {
-			String name = file.getName();
-			String baseName = name.substring(0, name.indexOf(".properties"));
-			if (!RED_THEME_FILE_NAME.equals(baseName) && !BLUE_THEME_FILE_NAME.equals(baseName) && !GREEN_THEME_FILE_NAME.equals(baseName)) {
-				THEMES.add(baseName);
-			}
-		}
+		String[] directories = themesPath.list(new FilenameFilter() {
+			  @Override
+			  public boolean accept(File current, String name) {
+			    return new File(current, name).isDirectory();
+			  }
+			});
+		
+		System.out.println(Arrays.asList(directories));
+		System.out.println("----------------- " +  getThemeRelativePathCss());
 		long end = System.currentTimeMillis();
 		LOG.info("Found "+ THEMES.size() + " theme files in " + (end-start) + " ms.");
 	}
@@ -98,7 +103,11 @@ public class ThemesManager {
 
 	public void setTheme(String theme) {
 		this.theme = theme;
-		generateStyle();
+		//generateStyle();
+	}
+	
+	public String getThemeRelativePathCss() {
+		return "themes/" + theme + "/style.css";
 	}
 
 	private void generateStyle() {
