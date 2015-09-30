@@ -1,48 +1,40 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:wicket="http://wicket.apache.org/" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/" xml:lang="en" lang="en">
 
 <head>
 <title>NextReports Server</title>
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
 	<!-- Font awesome -->
-	<link rel="stylesheet"
-		href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-		<!-- Font Roboto -->
-		<link href="fonts/Roboto/stylesheet.css" rel="stylesheet">
-			<!-- Font Simple-Line-Icons -->
-			<link href="fonts/Simple-Line-Icons/stylesheet.css" rel="stylesheet">
-				<!-- Font Ubuntu -->
-				<link rel="stylesheet" type="text/css" media="screen"
-					href="fonts/Ubuntu/ubuntu.css" />
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+	
+	<!-- Font Roboto -->
+	<link href="fonts/Roboto/stylesheet.css" rel="stylesheet">
+	
+	<!-- Font Simple-Line-Icons -->
+	<link href="fonts/Simple-Line-Icons/stylesheet.css" rel="stylesheet">
+	
+	<!-- Font Ubuntu -->
+	<link rel="stylesheet" type="text/css" media="screen" href="fonts/Ubuntu/ubuntu.css" />
 
-				<link rel="stylesheet" type="text/css" media="screen"
-					href="css/bootstrap.min.css" />
-				<link rel="stylesheet" type="text/css" media="screen" href="themes/default/style.css" />	
-<!-- 				<link rel="stylesheet" type="text/css" media="screen" -->
-<!-- 					href="css/style.css" /> -->
-<!-- 				<link rel="stylesheet" type="text/css" media="screen" -->
-<!-- 					href="css/table.css" /> -->
+	<!-- Bootstrap Base Style -->
+	<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css" />
+	
+	<!-- Style Theme -->
+	<link rel="stylesheet" type="text/css" media="screen" href="themes/default/style.css" />
 
-<!-- 				<link rel="stylesheet" type="text/css" media="screen" -->
-<!-- 					href="css/layout.css" /> -->
+	<link rel="SHORTCUT ICON" href="images/favicon.ico" />
 
-
-				<link rel="SHORTCUT ICON" href="images/favicon.ico" />
-
-				<script type="text/javascript" src="js/jquery.json-2.2.min.js"></script>
-				<script type="text/javascript" src="js/bootstrap.min.js"></script>
-				<!-- Bootstrap core JavaScript
-    ================================================== -->
-				<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-				<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="js/jquery.json-2.2.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	
+	<!-- Bootstrap core JavaScript ================================================== -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js" type="text/javascript"></script>
 </head>
 
 <body class="nrs">
-	
 	<div id="sb-site" class="wrapper">
 		<div wicket:id="headerPanel"></div>
 		<div class="content">
@@ -55,53 +47,28 @@
 		<div wicket:id="footerPanel"></div>
 		<div wicket:id="dialog"></div>
 	</div>
+
 	<!-- SB Slider -->
 	<div class="sb-slidebar sb-left sb-style-push sb-width-thin">
-<!-- 		<div class="profile"> -->
-<!-- 			<div class="info"> -->
-<!-- 				<div class="user-icon"> -->
-<!-- 					<i class="fa fa-user fa-4x"></i> -->
-<!-- 				</div> -->
-<!-- 				<div class="user-details"> -->
-<!-- 					<span class="userName" wicket:id="currentUser"></span><br> <span -->
-<!-- 						class="realName" wicket:id="realName"></span> -->
-<!-- 				</div> -->
-<!-- 			</div> -->
-<!-- 		</div> -->
-		
 		<div class="profile">
 			<div class="info">
 				<div class="user-icon">
 					<i class="fa fa-pie-chart fa-3x"></i>
 				</div>
 				<div class="user-details">
-					<span class="userName">NextReports</span><br> <span class="realName">SERVER</span>
+					<span class="userName">NextReports</span><br>
+					<span class="realName">SERVER</span>
 				</div>
 			</div>
 		</div>
 
-<!-- 		<ul class="sb-menu"> -->
-<!-- 			<li class="sb-close"><a href="#" wicket:id="changePassword"><i -->
-<!-- 					class="fa fa-fw fa-lg fa-key"></i><span><wicket:message -->
-<!-- 							key="HeaderPanel.changePassword">Change Password</wicket:message></span></a> -->
-<!-- 			</li> -->
-<!-- 			<li class="sb-close"><a href="#" wicket:id="survey"><i -->
-<!-- 					class="fa fa-fw fa-lg fa-comment-o"></i><span><wicket:message -->
-<!-- 							key="HeaderPanel.survey">Survey</wicket:message></span></a></li> -->
-<!-- 			<li class="sb-close"><a href="#" wicket:id="logout"><i -->
-<!-- 					class="fa fa-fw fa-lg fa-power-off"></i><span><wicket:message -->
-<!-- 							key="HeaderPanel.logout">Logout</wicket:message></span></a></li> -->
-<!-- 		</ul> -->
-<!-- 		<hr class="hr"> -->
-
-			<ul class="sb-menu">
-				<li class="sb-close" wicket:id="section">
-					<a href="#" wicket:id="link">
-						<i wicket:id="icon" class="fa fa-fw fa-lg"></i>
-						<span wicket:id="label"></span>
-					</a>
-				</li>
-			</ul>
+		<ul class="sb-menu">
+			<li class="sb-close" wicket:id="section"><a href="#"
+				wicket:id="link"> <i wicket:id="icon" class="fa fa-fw fa-lg"></i>
+					<span wicket:id="label"></span>
+			</a></li>
+		</ul>
 	</div>
+	
 </body>
 </html>
