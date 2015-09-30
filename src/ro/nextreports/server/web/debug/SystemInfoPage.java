@@ -18,11 +18,15 @@ package ro.nextreports.server.web.debug;
 
 import java.util.List;
 
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PropertyListView;
+
+import ro.nextreports.server.web.themes.ThemesManager;
 
 /**
  * @author Decebal Suiu
@@ -33,6 +37,10 @@ public class SystemInfoPage extends WebPage {
 	
 	public SystemInfoPage() {
 		super();
+		
+		WebMarkupContainer cssContainer = new WebMarkupContainer("cssPath");
+        cssContainer.add(new AttributeModifier("href", ThemesManager.getInstance().getThemeRelativePathCss()));
+        add(cssContainer);
 		
 		// show system properties
 		List<String> names = InfoUtil.getSystemProperties();

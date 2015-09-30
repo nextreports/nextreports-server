@@ -107,7 +107,7 @@ public class ThemesManager {
 	}
 	
 	public String getThemeRelativePathCss() {
-		return "themes/" + theme + "/style.css";
+		return "../themes/" + theme + "/style.css";
 	}
 
 	private void generateStyle() {

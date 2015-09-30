@@ -109,10 +109,9 @@ public class HomePage extends BasePage {
     public HomePage(PageParameters parameters) {
         super(parameters);
         
-        WebMarkupContainer cssContainer = new WebMarkupContainer("cssPath");
-        System.out.println("****************** Current theme = " + ThemesManager.getInstance().getThemeRelativePathCss());
-        cssContainer.add(new AttributeModifier("href", ThemesManager.getInstance().getThemeRelativePathCss()));
-        add(cssContainer);
+//        WebMarkupContainer cssContainer = new WebMarkupContainer("cssPath");
+//        cssContainer.add(new AttributeModifier("href", ThemesManager.getInstance().getThemeRelativePathCss()));
+//        add(cssContainer);
 
     	// clear search context
     	NextServerSession.get().setSearchContext(null);

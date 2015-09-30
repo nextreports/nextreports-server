@@ -16,14 +16,18 @@
  */
 package ro.nextreports.server.web.core;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
+
 import ro.nextreports.server.web.NextServerSession;
 import ro.nextreports.server.web.common.misc.AjaxBusyIndicator;
+import ro.nextreports.server.web.themes.ThemesManager;
 
 /**
  * @author Decebal Suiu
@@ -42,6 +46,10 @@ public abstract class BasePage extends SecurePage {
 
 	public BasePage(PageParameters parameters) {
 		super(parameters);
+		
+		WebMarkupContainer cssContainer = new WebMarkupContainer("cssPath");       
+        cssContainer.add(new AttributeModifier("href", ThemesManager.getInstance().getThemeRelativePathCss()));
+        add(cssContainer);
 
 		headerPanel = new HeaderPanel("headerPanel");
 		headerPanel.setRenderBodyOnly(true);

@@ -23,16 +23,19 @@ import java.util.Date;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.LogManager;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.settings.IJavaScriptLibrarySettings;
 
 import ro.nextreports.server.web.NextServerApplication;
+import ro.nextreports.server.web.themes.ThemesManager;
 
 /**
  * @author Decebal Suiu
@@ -43,6 +46,10 @@ public class SystemLogPage extends WebPage {
 	
 	public SystemLogPage() {
 		super();
+		
+		WebMarkupContainer cssContainer = new WebMarkupContainer("cssPath");
+        cssContainer.add(new AttributeModifier("href", ThemesManager.getInstance().getThemeRelativePathCss()));
+        add(cssContainer);
 		
 		FileAppender appender = (FileAppender) LogManager.getRootLogger().getAppender("FILE");
 		File logFile = new File(appender.getFile());
