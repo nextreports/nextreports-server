@@ -16,14 +16,17 @@
  */
 package ro.nextreports.server.web.pivot;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.settings.IJavaScriptLibrarySettings;
 
 import ro.nextreports.server.pivot.PivotDataSource;
 import ro.nextreports.server.web.NextServerApplication;
+import ro.nextreports.server.web.themes.ThemesManager;
 
 /**
  * @author Decebal Suiu
@@ -34,6 +37,10 @@ public class PivotPage extends WebPage {
 
 	public PivotPage() {
 		super();
+		
+		WebMarkupContainer cssContainer = new WebMarkupContainer("cssPath");
+        cssContainer.add(new AttributeModifier("href", ThemesManager.getInstance().getThemeRelativePathCss()));
+        add(cssContainer);
 
 		PivotDataSource pivotDataSource = PivotDataSourceHandler.getPivotDataSource();
 		add(new PivotPanel("pivot", pivotDataSource));

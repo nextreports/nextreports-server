@@ -1,5 +1,7 @@
 package ro.nextreports.server.web.integration;
 
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -14,6 +16,7 @@ import ro.nextreports.server.web.dashboard.DashboardPanel;
 import ro.nextreports.server.web.dashboard.WidgetErrorView;
 import ro.nextreports.server.web.dashboard.model.DashboardModel;
 import ro.nextreports.server.web.security.SecurityUtil;
+import ro.nextreports.server.web.themes.ThemesManager;
 
 public class DashboardWebPage extends WebPage {
 
@@ -30,6 +33,10 @@ public class DashboardWebPage extends WebPage {
 
 	public DashboardWebPage(PageParameters pageParameters) {
 		super(pageParameters);
+		
+		WebMarkupContainer cssContainer = new WebMarkupContainer("cssPath");
+        cssContainer.add(new AttributeModifier("href", ThemesManager.getInstance().getThemeRelativePathCss()));
+        add(cssContainer);
 		
 		String dashboardId = pageParameters.get("dashboardId").toString();
 		

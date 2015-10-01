@@ -16,14 +16,17 @@
  */
 package ro.nextreports.server.web.integration;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.settings.IJavaScriptLibrarySettings;
 
 import ro.nextreports.server.web.NextServerApplication;
 import ro.nextreports.server.web.core.BasePage;
+import ro.nextreports.server.web.themes.ThemesManager;
 
 /**
  * @author Decebal Suiu

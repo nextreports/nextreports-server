@@ -20,6 +20,8 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 
+import ro.nextreports.server.web.themes.ThemesManager;
+
 /**
  * @author Decebal Suiu
  */
@@ -29,6 +31,10 @@ public class CasLoginErrorPage extends WebPage {
 
 	public CasLoginErrorPage() {
     	super();
+    	
+    	WebMarkupContainer cssContainer = new WebMarkupContainer("cssPath");
+        cssContainer.add(new AttributeModifier("href", ThemesManager.getInstance().getThemeRelativePathCss()));
+        add(cssContainer);
     	
         String logoutUrl = CasUtil.getLogoutUrl();
         add(new WebMarkupContainer("casLogin").add(AttributeModifier.replace("href", logoutUrl)));

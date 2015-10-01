@@ -16,9 +16,11 @@
  */
 package ro.nextreports.server.web.dashboard;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.settings.IJavaScriptLibrarySettings;
@@ -31,6 +33,7 @@ import ro.nextreports.server.service.DashboardService;
 import ro.nextreports.server.util.WidgetUtil;
 import ro.nextreports.server.web.NextServerApplication;
 import ro.nextreports.server.web.dashboard.model.WidgetModel;
+import ro.nextreports.server.web.themes.ThemesManager;
 
 /**
  * @author Decebal Suiu
@@ -46,6 +49,11 @@ public class WidgetZoomPage extends WebPage {
 	private DashboardService dashboardService;
 	
 	public WidgetZoomPage(String wicketId) {
+		
+		WebMarkupContainer cssContainer = new WebMarkupContainer("cssPath");
+        cssContainer.add(new AttributeModifier("href", ThemesManager.getInstance().getThemeRelativePathCss()));
+        add(cssContainer);
+		
 		this.widgetId = wicketId;
 		
 		String title = "NextServer";

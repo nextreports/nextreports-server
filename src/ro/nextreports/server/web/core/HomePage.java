@@ -27,6 +27,7 @@ import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -44,6 +45,7 @@ import org.wicketstuff.push.IPushEventHandler;
 import org.wicketstuff.push.IPushNode;
 import org.wicketstuff.push.IPushService;
 import org.wicketstuff.push.timer.TimerPushService;
+
 import ro.nextreports.engine.util.DateUtil;
 import ro.nextreports.server.domain.ReportResultEvent;
 import ro.nextreports.server.domain.User;
@@ -64,6 +66,7 @@ import ro.nextreports.server.web.core.section.SectionManager;
 import ro.nextreports.server.web.language.LanguageManager;
 import ro.nextreports.server.web.security.ChangePasswordPanel;
 import ro.nextreports.server.web.security.cas.CasUtil;
+import ro.nextreports.server.web.themes.ThemesManager;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -105,6 +108,10 @@ public class HomePage extends BasePage {
 
     public HomePage(PageParameters parameters) {
         super(parameters);
+        
+//        WebMarkupContainer cssContainer = new WebMarkupContainer("cssPath");
+//        cssContainer.add(new AttributeModifier("href", ThemesManager.getInstance().getThemeRelativePathCss()));
+//        add(cssContainer);
 
     	// clear search context
     	NextServerSession.get().setSearchContext(null);
