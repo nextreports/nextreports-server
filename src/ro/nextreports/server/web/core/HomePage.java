@@ -238,7 +238,9 @@ public class HomePage extends BasePage {
 
         List<String> sections = new ArrayList<String>();
         for (Section section : sectionManager.getSections()) {
-            sections.add(section.getId());
+        	if (section.isVisible()) {
+        		sections.add(section.getId());
+        	}
         }
         ListView<String> view = new ListView<String>("section", sections) {
 
