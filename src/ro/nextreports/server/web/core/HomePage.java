@@ -107,11 +107,7 @@ public class HomePage extends BasePage {
     private PasswordEncoder passwordEncoder;
 
     public HomePage(PageParameters parameters) {
-        super(parameters);
-        
-//        WebMarkupContainer cssContainer = new WebMarkupContainer("cssPath");
-//        cssContainer.add(new AttributeModifier("href", ThemesManager.getInstance().getThemeRelativePathCss()));
-//        add(cssContainer);
+        super(parameters);        
 
     	// clear search context
     	NextServerSession.get().setSearchContext(null);
