@@ -146,11 +146,7 @@ public class DashboardPanel extends GenericPanel<Dashboard> {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		
-        response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(DashboardPanel.class, "dashboard.js")));
-        response.render(CssHeaderItem.forReference(new PackageResourceReference(DashboardPanel.class, "dashboard.css")));
-        if (isInternetExplorer()) {
-        	response.render(CssHeaderItem.forReference(new PackageResourceReference(DashboardPanel.class, "dashboard-ie.css")));
-        }
+        response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(DashboardPanel.class, "dashboard.js")));       
         response.render(JavaScriptHeaderItem.forReference(HTML2CANVAS_JS));
         response.render(JavaScriptHeaderItem.forReference(JSPDF_JS));
         response.render(JavaScriptHeaderItem.forReference(NEXTCHARTS_JS));

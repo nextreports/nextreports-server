@@ -109,8 +109,7 @@ public class AnalysisPanel extends GenericPanel<Analysis> {
     @Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);		
-		response.render(JavaScriptHeaderItem.forReference(SortableJavaScriptResourceReference.get()));
-        response.render(CssHeaderItem.forReference(new PackageResourceReference(AnalysisPanel.class, "analysis.css")));        
+		response.render(JavaScriptHeaderItem.forReference(SortableJavaScriptResourceReference.get()));                
 	}
     
     private void addToolbar() {
