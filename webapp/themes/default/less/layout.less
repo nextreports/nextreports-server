@@ -1,41 +1,5 @@
 // main: style.less
 
-@header-height: 50px;
-@footer-height: 30px;
-@content-substract: @header-height + @footer-height;
-@content-height: ~'calc(100vh - @{content-substract})';
-@tree-container: ~'calc(100vh - 190px)';
-@sidebar-width: 220px;
-
-//== Media queries breakpoints
-//
-//## Define the breakpoints at which your layout will change, adapting to different screen sizes.
-
-// Extra small screen / phone
-@screen-xs:                  480px;
-@screen-xs-min:              @screen-xs;
-@screen-phone:               @screen-xs-min;
-
-// Small screen / tablet
-@screen-sm:                  768px;
-@screen-sm-min:              @screen-sm;
-@screen-tablet:              @screen-sm-min;
-
-// Medium screen / desktop
-@screen-md:                  992px;
-@screen-md-min:              @screen-md;
-@screen-desktop:             @screen-md-min;
-
-// Large screen / wide desktop
-@screen-lg:                  1200px;
-@screen-lg-min:              @screen-lg;
-@screen-lg-desktop:          @screen-lg-min;
-
-// So media queries don't overlap when required, provide a maximum
-@screen-xs-max:              (@screen-sm-min - 1);
-@screen-sm-max:              (@screen-md-min - 1);
-@screen-md-max:              (@screen-lg-min - 1);
-
 .nrs {
     padding: 0;
 
@@ -113,19 +77,19 @@
         }
 
         .navbar-inverse {
-            background-color: #4c5344;
+            background-color: @bg-inverse;
             border: 0 none;
-            color: #aeb99c;
+            color: @secondary-light-color;
 
             .navbar-text {
-                color: #aeb99c;
+                color: @secondary-light-color;
                 line-height: @footer-height;
                 margin: 0;
                 padding: 0;
             }
 
             .navbar-link {
-                color: #aeb99c;
+                color: @secondary-light-color;
 
                 &:hover {
                     text-decoration: none;
@@ -218,8 +182,8 @@
             position: relative;
             
             > a {
-                border-left: 1px solid #e4e5e7;
-                border-right: 1px solid #e4e5e7;
+                border-left: 1px solid @hr-borders-color;
+                border-right: 1px solid @hr-borders-color;
                 color: #444444;
                 display: block;
                 height: 100%;
@@ -231,10 +195,10 @@
                 width: auto;
                 
                 &:hover, &:focus, &:active {
-                    background: #eaefe1 none repeat scroll 0 0;
+                    background: @main-lightest-color none repeat scroll 0 0;
                     text-decoration: none;
                     outline: none;
-                    border-color: #e4e5e7;
+                    border-color: @hr-borders-color;
                 }
                 
                 > [class*="icon-"] {
@@ -265,8 +229,8 @@
         }
         
         .nav-user-logo {
-            background: #f4f4f4 none repeat scroll 0 0;
-            border: 2px solid #8cb200;
+            background: #ffffff none repeat scroll 0 0;
+            border: 2px solid @main-color;
             border-radius: 100%;
             display: inline-block;
             font-size: 2em;
@@ -278,7 +242,7 @@
             width: 36px;
             
             > .fa-user{
-                color: #8cb200;
+                color: @main-color;
                 left: 0;
                 position: relative;
                 top: 4px;
@@ -298,18 +262,19 @@
                 margin-right: 0;
             }
             > a{
-                background-color: #ffffff;
-                border: 1px solid #dfdfdf;
-                border-radius: 3px;
+                background-color: @btn-default-bg-color;
+                border: 1px solid @btn-default-border-color;
+                color: @btn-default-text-color;
+                border-radius: @btn-radius;
                 display: block;
-                padding: 3px 6px;
-                color: #4a4a4a;
+                padding: 3px 6px;                
                 text-decoration: none;
                 box-shadow: none;
                 
                 &:hover{
-                    border-color: #D1E0A9;
-                    background-color: #F3F7E7;
+                    border-color: @btn-default-hover-border-color;
+                    background-color: @btn-default-hover-bg-color;
+                    color: @btn-default-hover-text-color;
                     text-decoration: none;
                 }
                 
@@ -338,12 +303,14 @@
     
     /* Butoane */
     .btn-primary{
-        background-color: #8cb200;
-        border-color: darken(#8cb200, 5%);
+        background-color: @btn-primary-bg-color;
+        border-color: @btn-primary-border-color;
+        color: @btn-primary-text-color;
         
         &:hover{
-            background-color: darken(#8cb200, 5%);
-            border-color: darken(#8cb200, 10%);
+            background-color: @btn-primary-hover-bg-color;
+            border-color: @btn-primary-hover-border-color;
+            color: @btn-primary-hover-text-color;
         }
     }
     .toolbar_nav > .btn{

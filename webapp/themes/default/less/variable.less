@@ -2,14 +2,60 @@
 
 @actions-image: 'actions-col-arrow-green.gif';
 
-/*   GENERAL
-----------------------------------------------------------------*/
-@main-color:                  #8cb200;
-@link-color:                  #202020;
-@link-hover-color:            #789800;
+//  COLORS
+// --------------------------------------------------------------
 
-/*   BUTTONS
-----------------------------------------------------------------*/
+// Theme Greys
+@dark-headings-color:         #1f1f1f;
+@general-text-color:          #575757;
+@light-headings-color:        #8e8e8e;
+@hr-borders-color:            #e5e5e5;
+@dark-grey-bg-color:          #f4f4f4;
+@light-grey-bg-color:         #fafafa;
+@disabled-color:              #B8B8B8;
+
+// Theme Colors
+@main-color:                  #92BA3D;
+@main-light-color:            #E4EECE;
+@main-lightest-color:         #F4F8EC;
+@main-dark-color:             #81A335;
+@main-darkest-color:          #5C7526;
+@secondary-color:             #505446;
+@secondary-light-color:       #CFD4C5;
+@secondary-dark-color:        #383B31; 
+
+// Other colors
+@link-color:                  @main-color;
+@link-hover-color:            @dark-headings-color;
+@bg-inverse:                  @secondary-dark-color;
+    
+//   BUTTONS
+// --------------------------------------------------------------
+@btn-primary-bg-color: @main-color;
+@btn-primary-border-color: @main-dark-color;
+@btn-primary-text-color: @main-lightest-color;
+@btn-primary-hover-bg-color: @main-dark-color;
+@btn-primary-hover-border-color: @main-dark-color;
+@btn-primary-hover-text-color: #ffffff;
+
+@btn-secondary-bg-color: @secondary-color;
+@btn-secondary-border-color: @secondary-dark-color;
+@btn-secondary-text-color: @secondary-light-color;
+@btn-secondary-hover-bg-color: @secondary-dark-color;
+@btn-secondary-hover-border-color: @secondary-dark-color;
+@btn-secondary-hover-text-color: #ffffff;
+
+@btn-default-bg-color: #ffffff;
+@btn-default-border-color: @secondary-light-color;
+@btn-default-text-color: @secondary-color;
+@btn-default-hover-bg-color: @main-light-color;
+@btn-default-hover-border-color: @main-dark-color;
+@btn-default-hover-text-color: @main-darkest-color;
+
+@btn-disabled-bg-color: @dark-grey-bg-color;
+@btn-disabled-border-color: @hr-borders-color;
+@btn-disabled-text-color: @disabled-color;
+
 @btn-border-color:            #779800;
 @btn-text-color:              #ffffff;
 @btn-top-color:               #8cb200;
@@ -20,22 +66,18 @@
 @btn-text-color-hover:        #ffffff;
 @btn-radius:                  4px;
 
-/*   HEADINGS
-----------------------------------------------------------------*/
-@header-color:               	#202020;
-
-/* TABLE
-----------------------------------------------------------------*/
+// TABLE
+//----------------------------------------------------------------
 @table-normal-text:           #808080;
 @table-border-color:          #dfdfdf;
 @table-row-hover:             #d9e3b6;
-@table-header-bg:             #8cb200;
-@table-header-bg-hover:       #789800;
-@table-header-text:           #ffffff;
+@table-header-bg:             @main-color;
+@table-header-bg-hover:       @main-dark-color;
+@table-header-text:           @main-lightest-color;
 @table-header-text-hover:     #ffffff;
 	
-/*   LOCATION (BREADCRUMB)
-----------------------------------------------------------------*/
+//  LOCATION (BREADCRUMB)
+//----------------------------------------------------------------
 @bcrb-text-color:             #6a6a6a;
 @bcrb-text-hover:             #8cb200;
 @bcrb-text-activ:             #8cb200;
@@ -44,8 +86,8 @@
 @bcrb-border-color:           #dfdfdf;
 @bcrb-border-radius:          8px;
     
-/*  MENIU ACTION PANEL
-----------------------------------------------------------------*/
+//  MENIU ACTION PANEL
+//----------------------------------------------------------------
 @menu-act-pnl-bg:             #f8f8f8;
 @menu-act-pnl-text:           #484848;
 @menu-act-pnl-border:         #cccccc;
@@ -53,19 +95,61 @@
 @menu-act-pnl-bg-hover:       #d9e3b6;
 @menu-act-pnl-text-hover:     #202020;
 
-/*   ACTION BAR
-----------------------------------------------------------------*/
+//   ACTION BAR
+//----------------------------------------------------------------
 @act-bar-top-color:           #efefef;
 @act-bar-bottom-color:        #cfcfcf;
 @act-bar-border-radius:       8px;
 @act-bar-border-color:        #cccccc;
     
-/*  WIDGET HEADER
-----------------------------------------------------------------*/
+//  WIDGET HEADER
+//----------------------------------------------------------------
 @wdg-text-color:              #202020;
 @wdg-border-color:            #8cb200;
 
-/*   DASHBOARD
-----------------------------------------------------------------*/	
+//   DASHBOARD
+//----------------------------------------------------------------	
 @dash-selected-color:         #d9e3b6;
 @dash-selected-text:          #000000;
+
+
+/*   LAYOUT
+----------------------------------------------------------------*/	
+@header-height: 50px;
+@footer-height: 30px;
+@content-substract: @header-height + @footer-height;
+@content-height: ~'calc(100vh - @{content-substract})';
+@tree-container: ~'calc(100vh - 190px)';
+@sidebar-width: 220px;
+
+
+//   HEADINGS
+//----------------------------------------------------------------
+@header-color:               	#202020;
+
+//== Media queries breakpoints
+//----------------------------------------------------------------
+// Extra small screen / phone
+@screen-xs:                  480px;
+@screen-xs-min:              @screen-xs;
+@screen-phone:               @screen-xs-min;
+
+// Small screen / tablet
+@screen-sm:                  768px;
+@screen-sm-min:              @screen-sm;
+@screen-tablet:              @screen-sm-min;
+
+// Medium screen / desktop
+@screen-md:                  992px;
+@screen-md-min:              @screen-md;
+@screen-desktop:             @screen-md-min;
+
+// Large screen / wide desktop
+@screen-lg:                  1200px;
+@screen-lg-min:              @screen-lg;
+@screen-lg-desktop:          @screen-lg-min;
+
+// So media queries don't overlap when required, provide a maximum
+@screen-xs-max:              (@screen-sm-min - 1);
+@screen-sm-max:              (@screen-md-min - 1);
+@screen-md-max:              (@screen-lg-min - 1);
