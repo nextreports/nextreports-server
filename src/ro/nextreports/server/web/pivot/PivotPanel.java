@@ -141,7 +141,7 @@ public class PivotPanel extends Panel {
 		super.renderHead(response);
 		
         response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(PivotPanel.class, "pivot.js")));
-        response.render(CssHeaderItem.forReference(new PackageResourceReference(PivotPanel.class, "pivot.css")));
+        //response.render(CssHeaderItem.forReference(new PackageResourceReference(PivotPanel.class, "pivot.css")));
 	}
 
     protected PivotModel createPivotModel(PivotDataSource pivotDataSource) {

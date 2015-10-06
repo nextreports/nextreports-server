@@ -79,8 +79,7 @@ public abstract class BasePage extends SecurePage {
         // add busy-indicator.js
 		response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(BasePage.class, "busy-indicator.js")));
 
-        if (isInternetExplorer()) {
-        	response.render(CssHeaderItem.forUrl("css/style-ie.css"));
+        if (isInternetExplorer()) {        	
             response.render(JavaScriptHeaderItem.forUrl("js/jquery.pngFix.js"));
             response.render(JavaScriptHeaderItem.forUrl("js/pngFix.js"));
         }
