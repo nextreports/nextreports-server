@@ -61,8 +61,8 @@ public class UpdateActionContributor extends SingleActionContributor {
 
     public String getActionImage() {
         // TODO bootstrap
-//        return "images/update.png";
-        return "exchange";
+        return "images/update.png";
+//        return "exchange";
     }
 
     public String getActionName() {

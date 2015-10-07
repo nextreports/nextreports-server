@@ -62,8 +62,8 @@ public class SecurityActionContributor extends SingleActionContributor {
 
 	public String getActionImage() {
         // TODO bootstrap
-//		return "images/shield.png";
-        return "lock";
+		return "images/shield.png";
+//        return "lock";
 	}
 
 	public String getActionName() {

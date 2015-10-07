@@ -67,8 +67,8 @@ public class CutActionContributor extends AbstractActionContributor {
 
     public String getActionImage() {
         // TODO bootstrap
-//        return "images/cut.gif";
-        return "cut";
+        return "images/cut.gif";
+//        return "cut";
     }
 
     public String getActionName() {

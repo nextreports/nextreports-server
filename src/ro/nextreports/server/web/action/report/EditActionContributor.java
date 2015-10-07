@@ -62,8 +62,8 @@ public class EditActionContributor extends SingleActionContributor {
 
     public String getActionImage() {
         // TODO bootstrap
-//        return "images/edit_report.png";
-        return "pencil";
+        return "images/edit_report.png";
+//        return "pencil";
     }
 
     public String getActionName() {

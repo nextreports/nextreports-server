@@ -67,8 +67,8 @@ public class ChangeDataSourceActionContributor extends AbstractActionContributor
 
 	public String getActionImage() {
         // TODO bootstrap
-//		return "images/datasource_edit.png";
-        return "database";
+		return "images/datasource_edit.png";
+//        return "database";
 	}
 
 	public String getActionName() {

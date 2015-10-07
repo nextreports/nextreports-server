@@ -42,8 +42,8 @@ public class InfoActionContributor extends SingleActionContributor {
 
 	public String getActionImage() {
         // TODO bootstrap
-//		return "images/info.png";
-        return "info";
+		return "images/info.png";
+//        return "info";
 	}
 
 	public String getActionName() {

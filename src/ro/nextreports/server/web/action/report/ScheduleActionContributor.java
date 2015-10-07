@@ -61,8 +61,8 @@ public class ScheduleActionContributor extends SingleActionContributor {
 
     public String getActionImage() {
         // TODO bootstrap
-//        return "images/schedule.png";
-        return "clock-o";
+        return "images/schedule.png";
+//        return "clock-o";
     }
 
     public String getActionName() {

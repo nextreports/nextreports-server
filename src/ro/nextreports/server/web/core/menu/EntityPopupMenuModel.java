@@ -75,8 +75,8 @@ public class EntityPopupMenuModel extends LoadableDetachableModel<List<MenuItem>
         }
 
         // TODO bootstrap
-//        MenuItem menuItem = new MenuItem("images/actions.png", null);
-        MenuItem menuItem = new MenuItem("cog", null);
+        MenuItem menuItem = new MenuItem("images/actions.png", null);
+//        MenuItem menuItem = new MenuItem("cog", null);
         menuItem.setMenuItems(menuItems);
 
         return Arrays.asList(menuItem);

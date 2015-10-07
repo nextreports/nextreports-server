@@ -59,8 +59,8 @@ public class RunActionContributor extends SingleActionContributor {
 
     public String getActionImage() {
         // TODO bootstrap
-//        return "images/run.gif";
-        return "rocket";
+        return "images/run.gif";
+//        return "rocket";
     }
 
     public String getActionName() {

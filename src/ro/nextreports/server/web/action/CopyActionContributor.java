@@ -45,8 +45,8 @@ public class CopyActionContributor extends AbstractActionContributor {
 
     public String getActionImage() {
         // TODO bootstrap
-//        return "images/copy.gif";
-        return "copy";
+        return "images/copy.gif";
+//        return "copy";
     }
 
     public String getActionName() {

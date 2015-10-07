@@ -87,8 +87,8 @@ public class DeleteActionContributor extends AbstractActionContributor {
 
     public String getActionImage() {
         // TODO bootstrap
-//        return "images/delete.gif";
-        return "remove";
+        return "images/delete.gif";
+//        return "remove";
     }
 
     public String getActionName() {

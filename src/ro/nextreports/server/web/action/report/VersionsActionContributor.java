@@ -42,8 +42,8 @@ public class VersionsActionContributor extends SingleActionContributor {
 
 	public String getActionImage() {
         // TODO bootstrap
-//		return "images/versions.png";
-        return "github";
+		return "images/versions.png";
+//        return "github";
 	}
 
 	public String getActionName() {

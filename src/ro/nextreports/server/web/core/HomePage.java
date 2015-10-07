@@ -23,9 +23,12 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.head.CssReferenceHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -120,6 +123,22 @@ public class HomePage extends BasePage {
 
         // add slidebar
         addSlidebar();
+
+        // add css
+        /*
+        add(new Behavior() {
+
+            @Override
+            public void renderHead(Component component, IHeaderResponse response) {
+                super.renderHead(component, response);
+
+                response.render(CssReferenceHeaderItem.forUrl("css/style.css"));
+                response.render(CssReferenceHeaderItem.forUrl("css/table.css"));
+                response.render(CssReferenceHeaderItem.forUrl("css/layout.css"));
+            }
+
+        });
+        */
     }
 
     @Override

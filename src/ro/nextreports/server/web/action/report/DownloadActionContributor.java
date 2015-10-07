@@ -49,8 +49,8 @@ public class DownloadActionContributor extends AbstractActionContributor {
 
     public String getActionImage() {
         // TODO bootstrap
-//        return "images/download.png";
-        return "download";
+        return "images/download.png";
+//        return "download";
     }
 
     public String getActionName() {

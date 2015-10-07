@@ -41,8 +41,8 @@ public class RunHistoryActionContributor extends SingleActionContributor {
 
 	public String getActionImage() {
         // TODO bootstrap
-//		return "images/history.png";
-        return "history";
+		return "images/history.png";
+//        return "history";
 	}
 
 	public String getActionName() {
