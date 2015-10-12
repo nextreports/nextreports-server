@@ -9,16 +9,15 @@ table tr td.date {
 table.grid {
     width: 100%;     
     background: #FFFFFF;
-    /*border-collapse: inherit;*/
-    border-bottom: 1px solid #cacaca;
+    border-bottom: 1px solid @hr-borders-color;
 }
 
 table.grid tr.tr-even {
-    background: #f4f4f4;
+    background: @table-striped-color;
 }
 
 table.grid tr.tr-selected {
-    background: @dash-selected-color;
+    background: @table-row-selected;
 }
 
 table.grid tr.tr-hover {
@@ -26,29 +25,33 @@ table.grid tr.tr-hover {
 }
 
 table.grid tr.tr-checked {
-    background: #e4e4e4;
+    background: @table-row-checked;
 }
 
 table.grid th {
     background: @table-header-bg;
-    line-height: 20px;
-    border-bottom: 1px solid #d4d4d4;
-    border-left: 1px solid #d4d4d4;
+    border-bottom: 1px solid @table-border-color;
+    border-left: 1px solid @table-border-color;
+    padding: 4px;
 }
 
 table.grid tr td {
-    border-left: 1px solid #e4e4e4;
+    border-left: 1px solid @table-border-color;
 }
 
 table.grid th a, table th span {
-    padding: 0px 20px 0px 5px;
-    display: inline-block;
+    padding: 0px;
+    display: block;
     background-position: right center;
 	color: @table-header-text;
 	font-weight: bold;
 }
 
-table.grid th.th-hover {
+table.grid th[class^="wicket"] a, table th[class^="wicket"] span {
+    padding: 0px 20px 0px 0;
+}
+
+table.grid th[class^="wicket"].th-hover {
     background: @table-header-bg-hover;
     text-decoration: none;
     color: @table-header-text-hover;
@@ -64,7 +67,18 @@ table.grid tbody td {
     padding: 1px 4px 1px 5px;
     color: #2a2a2a;
     line-height: 21px;
-    border-bottom: 1px solid #e4e4e4;
+    border-bottom: 1px solid @table-border-color;
+}
+table.grid td a, table.grid th a {
+    &, &:hover, &:focus, &:active{
+         text-decoration: none;   
+    }
+}
+
+table.grid{
+    input[type="radio"], input[type="checkbox"] {
+      margin: 0;
+    }
 }
 
 table.actions-grid {
@@ -99,18 +113,17 @@ table.actions-grid tr td.actions-col ul .li-relative {
 /* table grid actions and bulk menu actions */ 
 table.actions-grid tr td.actions-col ul.subnav , .actions-grid ul.subnav {
     position: absolute;
-    left: 25px;
-    top: -6px;
-    background: @menu-act-pnl-bg;
+    left: 100%;
+    top: -3px;
+    background: #fff;
     margin: 0;
     padding: 0;
     display: none;
     float: left;
-    /*width: 150px;*/
-    border: 1px solid @menu-act-pnl-border;
+    min-width: 140px;
+    border: 1px solid rgba(0,0,0,0.15);
     z-index: 99999;
-    /* overflow: hidden; */
-	box-shadow: 1px 2px 2px @menu-act-pnl-shadow;
+	box-shadow: 0px 4px 8px rgba(0,0,0,0.176);
 }
 
 .actions-grid ul.subnav {
@@ -122,16 +135,15 @@ table.actions-grid tr td.actions-col ul.subnav li , .actions-grid ul.subnav li {
     margin: 0;
     padding: 0;
     clear: both;
-    width: 150px;
     text-align: left;
 }
 
 table.actions-grid tr td.actions-col ul.subnav li a , .actions-grid ul.subnav li a {
-    /*float: left;
-    width: 150px;    */
+    width: 150px;
 	padding: 2px;
 	display: block;
 	line-height: 18px;
+    white-space: nowrap;
 }
 
 table.actions-grid tr td.actions-col ul.subnav li a:hover , .actions-grid ul.subnav li a:hover {
@@ -140,7 +152,7 @@ table.actions-grid tr td.actions-col ul.subnav li a:hover , .actions-grid ul.sub
 }
 
 table.actions-grid tr td.actions-col a , .actions-grid a {
-    padding-top: 2px;
+    //padding-top: 2px;
 }
 
 table.actions-grid tr td.actions-col-hover {
