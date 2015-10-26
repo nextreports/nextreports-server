@@ -19,6 +19,7 @@ package ro.nextreports.server.web.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 import org.apache.wicket.AttributeModifier;
@@ -29,10 +30,10 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
-import org.apache.wicket.extensions.markup.html.repeater.tree.AbstractTree.State;
 import org.apache.wicket.extensions.markup.html.repeater.tree.content.Folder;
 import org.apache.wicket.extensions.markup.html.repeater.tree.theme.WindowsTheme;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -57,6 +58,7 @@ import ro.nextreports.server.web.common.table.SortableDataAdapter;
 import ro.nextreports.server.web.core.event.SelectEntityEvent;
 import ro.nextreports.server.web.core.menu.EntityBulkMenuPanel;
 import ro.nextreports.server.web.core.menu.EntityMenuPanel;
+import ro.nextreports.server.web.core.menu.EntityTreeExpansionState;
 import ro.nextreports.server.web.core.menu.EntityTreeMenuPanel;
 import ro.nextreports.server.web.core.section.EntitySection;
 import ro.nextreports.server.web.core.section.SectionContext;
@@ -169,7 +171,14 @@ public class EntityBrowserPanel extends StackPanel implements AjaxUpdateListener
     		
     	};
     	
-        return new EntityTree("tree", treeProvider);
+        return new EntityTree("tree", treeProvider, new EntityTreeStateModel());
+    }
+    
+    private class EntityTreeStateModel extends AbstractReadOnlyModel<Set<Entity>> {
+        @Override
+        public Set<Entity> getObject() {
+            return EntityTreeExpansionState.get();
+        }
     }
 
     protected AjaxCheckTablePanel<Entity> createTablePanel(ISortableDataProvider<Entity, String> dataProvider) {
@@ -353,8 +362,8 @@ public class EntityBrowserPanel extends StackPanel implements AjaxUpdateListener
 
     	private static final long serialVersionUID = 1L;
 
-    	public EntityTree(String id, ITreeProvider<Entity> provider) {
-    		super(id, provider);
+    	public EntityTree(String id, ITreeProvider<Entity> provider, IModel<Set<Entity>> state) {
+    		super(id, provider, state);
     		
     		add(new WindowsTheme());
         }
