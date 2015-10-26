@@ -42,6 +42,15 @@
         overflow: hidden;
         padding: 0;
         transition: all 0.3s ease;
+        
+        .left-section, .right-section{
+            margin: @section-space 0;
+            height: @section-height;
+            
+            .panel{
+                height: 100%;
+            }
+        }
     }
 
     .slider-menu {
@@ -110,13 +119,13 @@
     .panel {
         .panel-body {
             &.tree-container {
-                height: @tree-container;
+                height: @section-content-height;
                 overflow: auto;
                 padding: 5px;
             }
 
             &.form-container {
-                height: @tree-container;
+                height: @section-content-height;
                 overflow: auto;
                 padding: 0;
             }

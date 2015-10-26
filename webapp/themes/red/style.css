@@ -569,7 +569,7 @@ ul.subnav li a:hover {
   padding: 2px 2px;
 }
 .table-right-container {
-  height: calc(100vh - 190px);
+  height: 100%;
   overflow: auto;
   width: 100%;
 }
@@ -2242,6 +2242,15 @@ tr.navigation td {
   padding: 0;
   transition: all 0.3s ease;
 }
+.nrs .content .left-section,
+.nrs .content .right-section {
+  margin: 10px 0;
+  height: calc(100vh - 130px);
+}
+.nrs .content .left-section .panel,
+.nrs .content .right-section .panel {
+  height: 100%;
+}
 .nrs .slider-menu {
   position: absolute;
   left: 0;
@@ -2299,12 +2308,12 @@ tr.navigation td {
   transition: all 0.3s ease;
 }
 .nrs .panel .panel-body.tree-container {
-  height: calc(100vh - 190px);
+  height: calc(100% - 73px);
   overflow: auto;
   padding: 5px;
 }
 .nrs .panel .panel-body.form-container {
-  height: calc(100vh - 190px);
+  height: calc(100% - 73px);
   overflow: auto;
   padding: 0;
 }

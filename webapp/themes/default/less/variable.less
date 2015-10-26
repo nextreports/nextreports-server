@@ -120,10 +120,17 @@
 ----------------------------------------------------------------*/	
 @header-height: 50px;
 @footer-height: 30px;
+@breadcrumb-height: 30px;
+
 @content-substract: @header-height + @footer-height;
 @content-height: ~'calc(100vh - @{content-substract})';
 @tree-container: ~'calc(100vh - 190px)';
 @sidebar-width: 220px;
+
+@section-space: 10px;
+@section-substract: @header-height + @footer-height + @breadcrumb-height + 2*@section-space;
+@section-height:  ~'calc(100vh - @{section-substract})';
+@section-content-height: ~'calc(100% - 73px)';
 
 
 //   HEADINGS
