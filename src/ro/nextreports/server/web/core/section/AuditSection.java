@@ -5,7 +5,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import ro.nextreports.server.web.NextServerSession;
 import ro.nextreports.server.web.core.audit.AuditPanel;
 
-public class AuditSection implements Section {
+public class AuditSection extends AbstractSection {
 	
 	public static final String ID = AuditSection.class.getName();
 
