@@ -17,6 +17,7 @@
 package ro.nextreports.server.web.common.table;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.wicket.core.util.lang.PropertyResolver;
@@ -45,6 +46,16 @@ public class DateColumn<T> extends PropertyColumn<T, String> {
         	return new Model<String>("");
         }
         
+        // By default locale pattern may not contain two digits for months, days, hours
+        // meaning in a column table the dates may look ugly (not aligned)
+        // To show Locale specific short date with two digits for months, days, hours
+        // we need to take the pattern and modify it
+        if (DATE_FORMAT instanceof SimpleDateFormat) {
+            SimpleDateFormat sdf = (SimpleDateFormat) DATE_FORMAT;                   
+            String pattern = sdf.toPattern().replaceAll("M+","MM").replaceAll("d+", "dd").replaceAll("h+", "hh").replaceAll("H+", "HH");
+            sdf.applyPattern(pattern); 
+            return new Model<String>(sdf.format(date));
+        }
         return new Model<String>(DATE_FORMAT.format(date));
 	}
 
