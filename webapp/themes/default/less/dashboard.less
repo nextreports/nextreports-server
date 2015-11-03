@@ -43,7 +43,7 @@
 
 .column .dragbox {
 	background: #ffffff none repeat scroll 0 0;
-	border: 1px solid #dddddd;
+	border: 1px solid @hr-borders-color;
 	margin: 10px;
 	position: relative;
 }
@@ -51,15 +51,15 @@
 .dragbox-header {
 	margin: 0;
 	padding: 5px;
-	background: #f0f0f0;
+	background: @dark-grey-bg-color;
 	color: #000;
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid @hr-borders-color;
     cursor: move;
 }
 
 .dragbox-header img {
     margin: 0 0 0 3px;
-    padding: 0 3px 0 0px !important;
+    padding: 0 3px 0 0px;
 }
 
 .dragbox-toggle {
@@ -69,10 +69,13 @@
 }
 
 .dragbox-title {
-	float: left;
-    font-weight: bold;
-    line-height: 20px;
-    font-family: LatoRegular, sans-serif;
+  color: @general-text-color;
+  float: left;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 20px;
+  text-transform: uppercase;
 }
 
 .dragbox-actions {
@@ -270,11 +273,6 @@ padding-right: 0;
 	margin-right: 3px;
     margin-top: 7px;
     cursor: pointer;
-}
-
-.tableWidgetView {
-	border: 1px solid rgb(202, 202, 202); 
-	max-height: 300px;
 }
 
 .drillHeader {

@@ -126,7 +126,7 @@ function showPopup() {
 	var xb = xt + xh;
 
 	if (xb > tb) {
-		x.css({ "top":  + (tb - xb + 5) + "px" });
+		x.css({ "top":  + (tb - xb - 2) + "px" });
 	/*
 	} else {
 		x.css({ "top": pos.top + "px" });

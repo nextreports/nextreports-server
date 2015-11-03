@@ -262,6 +262,7 @@
     .topnav {
         display: block;
         margin: 0;
+        position: relative;
         
         > li {
             display: inline-block;
@@ -288,21 +289,13 @@
                 }
                 
                 .left-image{
-                    display: block;
-                    float: left;
+                    display: inline-block;
                     margin: 0;
                     padding: 0;
                     
-                    @media (min-width: @screen-xs-min) and (max-width: @screen-md-max) {
-                        float: none;
-                        margin: 0;
-                    }
-                    
                     & + span{
-                        margin-left: 6px;
-                        clear: left;
                         
-                        @media (min-width: @screen-xs-min) and (max-width: @screen-md-max) {
+                        @media (max-width: @screen-md-max) {
                             display: none;
                         }
                     }
@@ -326,5 +319,19 @@
     .toolbar_nav > .btn{
         margin: 5px 0;
     }
+    .actions-col .topnav > li{
+        display: block;
+        height: 20px;
+    }
 }
 
+.subnav img.left-image {
+    background: @dark-grey-bg-color none repeat scroll 0 0;
+    border-right: 1px solid @main-light-color;
+    display: inline-block;
+    margin: 0 3px 0 0;
+    padding: 4px 5px;
+    border-left: 0 none;
+    border-bottom: 0 none;
+    border-top: 0 none;
+}
