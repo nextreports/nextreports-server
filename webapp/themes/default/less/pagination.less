@@ -1,0 +1,97 @@
+// main: style.less
+
+/* Navigator Pagination */
+
+.navigation{
+    border: none !important;
+    background: transparent !important;
+    
+    .grid & > td{
+        padding: 0px;
+        border: 0 none; 
+    }
+}
+
+.navigator {
+    float: left;
+    margin: 0;
+    padding: 5px 10px 5px 0;
+    
+    em{ 
+        font-style: normal;
+        display: block;
+    }
+    
+    .first, .prev, .goto, .next, .last{
+        font-size: 12px;
+        font-weight: 400;
+        display: inline-block;
+        text-align: center;
+        cursor: pointer;
+        min-width: 22px;
+        height: 22px;
+        line-height: 20px;
+        border-radius: @btn-radius @btn-radius @btn-radius @btn-radius;
+        
+    }
+    
+    .goto {
+        margin: 0 1px;
+        background: @btn-default-hover-bg-color;
+        border: 1px solid @btn-default-hover-border-color;
+        color: @btn-default-hover-text-color;
+
+    
+        &:hover{
+            text-decoration: none !important;
+            background: @btn-default-bg-color;
+            border: 1px solid @btn-default-border-color;
+            color: @btn-default-text-color;
+        }
+        
+        > a{
+            display: block;
+            color: inherit;
+        }
+    }
+    
+    .first, .last{
+        background: @btn-secondary-bg-color;
+        border: 1px solid @btn-secondary-border-color;
+        color: @btn-secondary-text-color;
+        
+        &:hover{
+            background: @btn-secondary-hover-bg-color;
+            border: 1px solid @btn-secondary-hover-border-color;
+            color: @btn-secondary-hover-text-color;
+        }
+    }
+    
+    .prev, .next{
+        background: @btn-primary-bg-color;
+        border: 1px solid @btn-primary-border-color;
+        color: @btn-primary-text-color;
+        
+        &:hover{
+            background: @btn-primary-hover-bg-color;
+            border: 1px solid @btn-primary-hover-border-color;
+            color: @btn-primary-hover-text-color;
+        }
+    }
+}
+
+.navigatorLabel {
+  float: left;
+  font-weight: 400;
+  line-height: 22px;
+  padding: 5px;
+}
+
+.tableWidgetView{
+    .grid{
+        border: 1px solid @hr-borders-color;
+    }
+}
+table.actions-grid tr.navigation td.actions-col a, .actions-grid .navigation a {
+    padding-top: 0px !important;
+}
