@@ -2,16 +2,15 @@
     <div wicket:id="header" class="dragbox-header clearfix"></div>
     <div wicket:id="settings"></div>
     <div wicket:id="content" class="dragbox-content"></div>
-<script>
-
-<!-- 
-	When we have a dashboard with a single column and with only one table
-	we want to expand the table height as big as it is
-	See TableRendererPanel.java where this class is added
--->
-$(document).ready(function() {
-	$(".tableWidgetViewFull").parents(".dragbox-content").css("overflow","visible");
-});
-</script>
+    <!-- 
+		When we have a dashboard with a single column and with only one table
+		we want to expand the table height as big as it is
+		See TableRendererPanel.java where this class is added
+	-->
+	<script>
+		$(document).ready(function() {
+			$(".tableWidgetViewFull").parents(".dragbox-content").css("overflow","visible");
+		});
+	</script>
 </wicket:panel>
     
