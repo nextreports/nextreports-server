@@ -144,6 +144,7 @@ public class TableRendererPanel extends GenericPanel<Report> {
 		boolean single = dashboardService.isSingleWidget(widgetId);		
 		// table is the single widget in a dashboard with one column
 		// make the height 100%
+		// see WidgetPanel.html where we make the parent with overflow visible!
 		if (single) {		
 			container.add(AttributeModifier.replace("class", "tableWidgetViewFull"));
 		}
