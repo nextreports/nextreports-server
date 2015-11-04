@@ -104,7 +104,8 @@ public class ChangeLogoPanel extends Panel {
 				try {
 					storageService.personalizeSettings(fileName, content, theme, language);
 					getSession().setLocale(LanguageManager.getInstance().getLocale(language));
-					DateColumn.DATE_FORMAT = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT); 
+					DateColumn.DATE_FORMAT = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+					DateColumn.LOCALE_DATE_FORMAT = DateColumn.getAlignedFormat();
 					ThemesManager.getInstance().setTheme(theme);
 					ok = true;
 					getRequestCycle().scheduleRequestHandlerAfterCurrent(new RenderPageRequestHandler(new PageProvider(getPage())));

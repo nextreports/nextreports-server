@@ -17,6 +17,7 @@
 package ro.nextreports.server.web.common.table;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.wicket.core.util.lang.PropertyResolver;
@@ -33,6 +34,7 @@ public class DateColumn<T> extends PropertyColumn<T, String> {
 
 //    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
 	public static DateFormat DATE_FORMAT= DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+	public static DateFormat LOCALE_DATE_FORMAT = getAlignedFormat();
     
 	public DateColumn(IModel<String> displayModel, String sortProperty, String propertyExpression) {
 		super(displayModel, sortProperty, propertyExpression);
@@ -43,14 +45,32 @@ public class DateColumn<T> extends PropertyColumn<T, String> {
         Date date = (Date) PropertyResolver.getValue(getPropertyExpression(), rowModel.getObject());
         if (date == null) {
         	return new Model<String>("");
-        }
-        
-        return new Model<String>(DATE_FORMAT.format(date));
+        }        
+        return new Model<String>(LOCALE_DATE_FORMAT.format(date));
 	}
 
 	@Override
 	public String getCssClass() {
 		return "date";
+	}
+	
+	// By default locale pattern may not contain two digits for months, days, hours
+    // meaning in a column table the dates may look ugly (not aligned)
+    // To show Locale specific short date with two digits for months, days, hours
+    // we need to take the pattern and modify it
+	public static DateFormat getAlignedFormat() {
+		if (DATE_FORMAT instanceof SimpleDateFormat) {
+			SimpleDateFormat sdf = (SimpleDateFormat) DATE_FORMAT;
+			String pattern = sdf.toPattern()
+					.replaceAll("M+", "MM")
+					.replaceAll("d+", "dd")
+					.replaceAll("h+", "hh")
+					.replaceAll("H+", "HH");
+			sdf.applyPattern(pattern);
+			return sdf;
+		} else {
+			return DATE_FORMAT;
+		}
 	}
 
 }
