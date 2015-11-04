@@ -2,5 +2,10 @@
     <div wicket:id="header" class="dragbox-header clearfix"></div>
     <div wicket:id="settings"></div>
     <div wicket:id="content" class="dragbox-content"></div>
+<script>
+$(document).ready(function() {
+	$(".tableWidgetViewFull").parents(".dragbox-content").css("overflow","visible");
+});
+</script>
 </wicket:panel>
     

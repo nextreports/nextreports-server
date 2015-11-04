@@ -1878,9 +1878,7 @@ table.actions-grid {
     */
 }
 table.actions-grid tr .name-col {
-  /*
-    width: 30%;
-    */
+  min-width: 150px;
   color: #000;
   border-left: none !important;
 }
@@ -1933,8 +1931,8 @@ table.actions-grid tr td.actions-col ul.subnav li a,
 }
 table.actions-grid tr td.actions-col ul.subnav li a:hover,
 .actions-grid ul.subnav li a:hover {
-  background-color: #e4eece;
-  color: #1f1f1f;
+  background-color: #92ba3d;
+  color: #f4f8ec;
 }
 table.actions-grid tr td.actions-col-hover {
   background: #e4eece url(../../images/@actions-image ) top right no-repeat;
@@ -1989,7 +1987,6 @@ tr.navigation td {
 }
 .actions-grid > tbody .name-col > span {
   display: block;
-  min-width: 130px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2405,7 +2402,7 @@ table.actions-grid tr.navigation td.actions-col a,
   width: 100%;
 }
 .nrs .panel-default {
-  border-color: #d7dccc;
+  border-color: #e5e5e5;
 }
 .nrs .panel-default > .panel-heading {
   border-top-left-radius: 3px;
@@ -2419,7 +2416,7 @@ table.actions-grid tr.navigation td.actions-col a,
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 0;
-  margin-top: 3px;
+  margin-top: 5px;
 }
 .nrs .panel-default > .panel-footer {
   border-bottom-left-radius: 3px;
@@ -2566,7 +2563,7 @@ table.actions-grid tr.navigation td.actions-col a,
   height: 20px;
 }
 .subnav img.left-image {
-  background: #f4f4f4 none repeat scroll 0 0;
+  background: #e4eece none repeat scroll 0 0;
   border-right: 1px solid #e4eece;
   display: inline-block;
   margin: 0 3px 0 0;
