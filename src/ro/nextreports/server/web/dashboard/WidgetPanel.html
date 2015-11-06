@@ -1,21 +1,6 @@
 <wicket:panel>
     <div wicket:id="header" class="dragbox-header clearfix"></div>
     <div wicket:id="settings"></div>
-    <div wicket:id="content" class="dragbox-content"></div>
-    <!-- 
-		When we have a dashboard with a single column and with only one table
-		we want to expand the table height as big as it is
-		See TableRendererPanel.java where this class is added
-		
-		Also the submit button from filter form must be set with position fixed
-		(because position relative on tableWidgetView makes scrollbar to show)
-	-->
-	<script>
-		$(document).ready(function() {
-			$(".tableWidgetViewFull").parents(".dragbox-content").css("overflow","visible");			
-			$(".tableWidgetView form table + div").css("position","fixed");			
-		});
-		
-	</script>
+    <div wicket:id="content" class="dragbox-content"></div>   
 </wicket:panel>
     
