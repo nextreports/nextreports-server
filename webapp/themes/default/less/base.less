@@ -101,6 +101,15 @@ a img {
     vertical-align: top;
 }
 
+a{
+    text-decoration: none;
+    color: @link-color;
+    &:hover, &:focus, &:active{
+        text-decoration: none;
+        color: @link-hover-color;
+    }
+}
+
 .clear {
     clear: both;
     display: block;

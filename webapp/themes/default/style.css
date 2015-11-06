@@ -132,6 +132,16 @@ a img {
   border: 0 none;
   vertical-align: top;
 }
+a {
+  text-decoration: none;
+  color: #1f1f1f;
+}
+a:hover,
+a:focus,
+a:active {
+  text-decoration: none;
+  color: #5c7526;
+}
 .clear {
   clear: both;
   display: block;
@@ -178,7 +188,7 @@ a {
   color: #000;
 }
 a:not(.button .button2 .primary .secondary):hover {
-  color: #1f1f1f;
+  color: #5c7526;
   text-decoration: underline;
 }
 br {
@@ -269,7 +279,7 @@ a.logo {
   padding-right: 0px;
 }
 .header-right ul li a:hover {
-  color: #1f1f1f;
+  color: #5c7526;
 }
 .welcome {
   clear: both;
@@ -303,16 +313,16 @@ div.tab-row li a {
   background: #eaeaea;
   border: 1px solid #cccccc;
   font-weight: bold;
-  color: #92ba3d;
+  color: #1f1f1f;
 }
 div.tab-row li a:hover,
 div.tab-row-settings li a:hover {
-  color: #1f1f1f;
+  color: #5c7526;
   text-decoration: none;
 }
 div.tab-row li.selected a {
   border-bottom: none;
-  color: #1f1f1f;
+  color: #5c7526;
   font-weight: bold;
   line-height: 21px;
   font-size: 11px;
@@ -343,10 +353,10 @@ div.tab-row-settings li a {
   line-height: 20px;
   background: #eaeaea;
   font-weight: bold;
-  color: #92ba3d;
+  color: #1f1f1f;
 }
 div.tab-row-settings li.selected a {
-  color: #1f1f1f;
+  color: #5c7526;
   font-weight: bold;
   line-height: 21px;
   font-size: 11px;
@@ -469,7 +479,7 @@ li.colapse-all {
   background: none scroll 0 0 transparent;
 }
 .accordion-group table.wicket-tree-content table.icon-panel a:hover {
-  color: #1f1f1f;
+  color: #5c7526;
   text-decoration: none;
   font-weight: bold;
 }
@@ -807,7 +817,7 @@ element.style {
   font-size: 11px;
   font-style: italic;
   font-weight: bold;
-  color: #1f1f1f;
+  color: #5c7526;
   cursor: pointer;
 }
 .link:hover {
@@ -918,7 +928,7 @@ body#body-login {
   margin-left: 10px;
   margin-right: 10px;
   font-weight: bold;
-  color: #92ba3d;
+  color: #1f1f1f;
 }
 .login-logo {
   background: #FFFFFF;
@@ -943,7 +953,7 @@ body#body-login {
 }
 .accordion-group table.wicket-tree-content table.icon-panel a,
 .tree table.wicket-tree-content table.icon-panel a {
-  color: #92ba3d;
+  color: #1f1f1f;
   padding: 2px 4px;
 }
 .accordion-group table.wicket-tree-content.selected table.icon-panel a,
@@ -1364,7 +1374,7 @@ div.w_content {
   padding: 0px 10px 0px 10px;
 }
 .audit ul li:hover {
-  color: #1f1f1f;
+  color: #5c7526;
   cursor: pointer;
 }
 .auditRow {
@@ -1577,7 +1587,8 @@ div.w_content {
 }
 .dashboardCapture {
   display: inline-block;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   height: calc(100vh - 150px);
   min-height: calc(100vh - 150px);
   width: 100%;
@@ -1647,26 +1658,29 @@ div.w_content {
 .dragbox-content {
   background: #fff;
   min-height: 60px;
-  margin: 5px 5px 3px 5px;
+  margin: 0;
+  padding: 5px;
   line-height: 1.5em;
   overflow: auto;
   /* padding-bottom is needed for IE otherwise the vertical 
 	   scrollbar is allways present for overflow=auto
-	   because we have a margin we put only 3 (5-2) to bottom margin */
-  padding-bottom: 2px;
-  padding-left: 1px;
-  padding-right: 1px;
+	   because we have a margin we put only 3 (5-2) to bottom margin 
+	padding-bottom: 2px;
+	padding-left: 1px;
+	padding-right: 1px;*/
 }
 .drill-dragbox-content {
   background: #fff;
   min-height: 60px;
   line-height: 1.5em;
   overflow: auto;
+  padding: 5px;
   /* padding-bottom is needed for IE otherwise the vertical 
-	   scrollbar is allways present for overflow=auto */
-  padding-bottom: 2px;
-  padding-left: 1px;
-  padding-right: 1px;
+	   scrollbar is allways present for overflow=auto 
+	padding-bottom: 2px;
+	padding-left: 1px;
+	padding-right: 1px;
+    */
 }
 .dragbox-content-alarm {
   min-height: 122px !important;
@@ -1814,6 +1828,7 @@ table.grid tr.tr-selected {
 }
 table.grid tr.tr-hover {
   background: #e4eece;
+  color: #5c7526;
 }
 table.grid tr.tr-checked {
   background: #cfd4c5;
@@ -1928,6 +1943,7 @@ table.actions-grid tr td.actions-col ul.subnav li a,
   padding: 0 10px 0 0;
   white-space: nowrap;
   width: 100%;
+  text-transform: none;
 }
 table.actions-grid tr td.actions-col ul.subnav li a:hover,
 .actions-grid ul.subnav li a:hover {
@@ -1999,6 +2015,87 @@ tr.navigation td {
   white-space: nowrap;
 }
 /* Navigator Pagination */
+.navigator {
+  float: left;
+  margin: 0;
+  padding: 5px 10px 5px 0;
+  cursor: default;
+}
+.navigator .first,
+.navigator .prev,
+.navigator .next,
+.navigator .last,
+.navigator .goto > a,
+.navigator .goto > span {
+  font-size: 12px;
+  font-weight: 400;
+  display: inline-block;
+  text-align: center;
+  min-width: 22px;
+  height: 22px;
+  line-height: 20px;
+  border-radius: 4px 4px 4px 4px;
+  background: #ffffff;
+  border: 1px solid #cfd4c5;
+  color: #505446;
+}
+.navigator span.first,
+.navigator span.prev,
+.navigator span.last,
+.navigator span.next {
+  cursor: default;
+  background: #f4f4f4;
+  border: 1px solid #e5e5e5;
+  color: #b8b8b8;
+}
+.navigator a.first,
+.navigator a.last {
+  cursor: pointer;
+  background: #505446;
+  border: 1px solid #383b31;
+  color: #cfd4c5;
+}
+.navigator a.first:hover,
+.navigator a.last:hover {
+  background: #383b31;
+  border: 1px solid #383b31;
+  color: #ffffff;
+}
+.navigator a.prev,
+.navigator a.next {
+  cursor: pointer;
+  background: #92ba3d;
+  border: 1px solid #81a335;
+  color: #f4f8ec;
+}
+.navigator a.prev:hover,
+.navigator a.next:hover {
+  background: #81a335;
+  border: 1px solid #81a335;
+  color: #ffffff;
+}
+.navigator .goto em {
+  font-style: normal;
+  display: block;
+}
+.navigator .goto > span {
+  background: #e4eece;
+  border: 1px solid #81a335;
+  color: #5c7526;
+  cursor: default;
+}
+.navigator .goto > a:hover {
+  text-decoration: none !important;
+  background: #e4eece;
+  border: 1px solid #81a335;
+  color: #5c7526;
+}
+.navigatorLabel {
+  float: left;
+  font-weight: 400;
+  line-height: 22px;
+  padding: 5px;
+}
 .navigation {
   border: none !important;
   background: transparent !important;
@@ -2006,76 +2103,6 @@ tr.navigation td {
 .grid .navigation > td {
   padding: 0px;
   border: 0 none;
-}
-.navigator {
-  float: left;
-  margin: 0;
-  padding: 5px 10px 5px 0;
-}
-.navigator em {
-  font-style: normal;
-  display: block;
-}
-.navigator .first,
-.navigator .prev,
-.navigator .goto,
-.navigator .next,
-.navigator .last {
-  font-size: 12px;
-  font-weight: 400;
-  display: inline-block;
-  text-align: center;
-  cursor: pointer;
-  min-width: 22px;
-  height: 22px;
-  line-height: 20px;
-  border-radius: 4px 4px 4px 4px;
-}
-.navigator .goto {
-  margin: 0 1px;
-  background: #e4eece;
-  border: 1px solid #81a335;
-  color: #5c7526;
-}
-.navigator .goto:hover {
-  text-decoration: none !important;
-  background: #ffffff;
-  border: 1px solid #cfd4c5;
-  color: #505446;
-}
-.navigator .goto > a {
-  display: block;
-  color: inherit;
-}
-.navigator .first,
-.navigator .last {
-  background: #505446;
-  border: 1px solid #383b31;
-  color: #cfd4c5;
-}
-.navigator .first:hover,
-.navigator .last:hover {
-  background: #383b31;
-  border: 1px solid #383b31;
-  color: #ffffff;
-}
-.navigator .prev,
-.navigator .next {
-  background: #92ba3d;
-  border: 1px solid #81a335;
-  color: #f4f8ec;
-}
-.navigator .prev:hover,
-.navigator .next:hover {
-  background: #81a335;
-  border: 1px solid #81a335;
-  color: #ffffff;
-}
-.navigatorLabel {
-  float: left;
-  font-weight: 400;
-  line-height: 22px;
-  padding: 5px;
 }
 .tableWidgetView .grid {
   border: 1px solid #e5e5e5;

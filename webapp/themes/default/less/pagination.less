@@ -2,72 +2,49 @@
 
 /* Navigator Pagination */
 
-.navigation{
-    border: none !important;
-    background: transparent !important;
-    
-    .grid & > td{
-        padding: 0px;
-        border: 0 none; 
-    }
-}
-
+// Style for navigation between pages
 .navigator {
     float: left;
     margin: 0;
     padding: 5px 10px 5px 0;
+    cursor: default;
     
-    em{ 
-        font-style: normal;
-        display: block;
-    }
-    
-    .first, .prev, .goto, .next, .last{
+    // Pagination buttons general style
+    .first, .prev, .next, .last, .goto > a, .goto > span{
         font-size: 12px;
         font-weight: 400;
         display: inline-block;
         text-align: center;
-        cursor: pointer;
         min-width: 22px;
         height: 22px;
         line-height: 20px;
         border-radius: @btn-radius @btn-radius @btn-radius @btn-radius;
-        
+        background: @btn-default-bg-color;
+        border: 1px solid @btn-default-border-color;
+        color: @btn-default-text-color;
     }
-    
-    .goto {
-        margin: 0 1px;
-        background: @btn-default-hover-bg-color;
-        border: 1px solid @btn-default-hover-border-color;
-        color: @btn-default-hover-text-color;
-
-    
-        &:hover{
-            text-decoration: none !important;
-            background: @btn-default-bg-color;
-            border: 1px solid @btn-default-border-color;
-            color: @btn-default-text-color;
-        }
-        
-        > a{
-            display: block;
-            color: inherit;
-        }
+    // Style for disabled next, prev, first, last buttons 
+    span.first, span.prev, span.last, span.next{
+        cursor: default;
+        background: @btn-disabled-bg-color;
+        border: 1px solid @btn-disabled-border-color;
+        color: @btn-disabled-text-color;
     }
-    
-    .first, .last{
+    // Style for active first, last buttons
+    a.first, a.last{
+        cursor: pointer;
         background: @btn-secondary-bg-color;
         border: 1px solid @btn-secondary-border-color;
         color: @btn-secondary-text-color;
-        
         &:hover{
             background: @btn-secondary-hover-bg-color;
             border: 1px solid @btn-secondary-hover-border-color;
             color: @btn-secondary-hover-text-color;
         }
     }
-    
-    .prev, .next{
+    // Style for active next, prev buttons
+    a.prev, a.next{
+        cursor: pointer;
         background: @btn-primary-bg-color;
         border: 1px solid @btn-primary-border-color;
         color: @btn-primary-text-color;
@@ -78,14 +55,51 @@
             color: @btn-primary-hover-text-color;
         }
     }
-}
+    // Style for page buttons
+    .goto{
+        
+        em{ 
+            font-style: normal;
+            display: block;
+        }
+        // Style for curent page
+        & > span{
+            background: @btn-default-hover-bg-color;
+            border: 1px solid @btn-default-hover-border-color;
+            color: @btn-default-hover-text-color;
+            cursor: default;
+        }
 
+        // Style for normal buttons
+        & > a{
+            &:hover{
+                text-decoration: none !important;
+                background: @btn-default-hover-bg-color;
+                border: 1px solid @btn-default-hover-border-color;
+                color: @btn-default-hover-text-color;
+            }
+        }
+    }
+}
+// Style for label that display the no of item displayed
 .navigatorLabel {
   float: left;
   font-weight: 400;
   line-height: 22px;
   padding: 5px;
 }
+
+.navigation{
+    border: none !important;
+    background: transparent !important;
+    
+    .grid & > td{
+        padding: 0px;
+        border: 0 none; 
+    }
+}
+
+
 
 .tableWidgetView{
     .grid{

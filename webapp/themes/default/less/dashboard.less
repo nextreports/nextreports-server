@@ -20,7 +20,8 @@
 
 .dashboardCapture {
 	display: inline-block;
-	overflow: auto;
+	overflow-y: auto;
+    overflow-x: hidden;
 	height: ~'calc(100vh - 150px)';
 	min-height: ~'calc(100vh - 150px)';
 	width: 100%;
@@ -102,16 +103,18 @@
 
 .dragbox-content {
 	background: #fff;
-	min-height: 60px;	
-	margin: 5px 5px 3px 5px;
+	min-height: 60px;
+    margin: 0;
+    padding: 5px;
 	line-height: 1.5em;
 	overflow: auto;
+    //margin: 5px 5px 3px 5px;
 	/* padding-bottom is needed for IE otherwise the vertical 
 	   scrollbar is allways present for overflow=auto
-	   because we have a margin we put only 3 (5-2) to bottom margin */
+	   because we have a margin we put only 3 (5-2) to bottom margin 
 	padding-bottom: 2px;
 	padding-left: 1px;
-	padding-right: 1px;
+	padding-right: 1px;*/
 }
 
 .drill-dragbox-content {
@@ -119,11 +122,13 @@
 	min-height: 60px;		
 	line-height: 1.5em;
 	overflow: auto;
-	/* padding-bottom is needed for IE otherwise the vertical 
-	   scrollbar is allways present for overflow=auto */
+	padding: 5px;
+    /* padding-bottom is needed for IE otherwise the vertical 
+	   scrollbar is allways present for overflow=auto 
 	padding-bottom: 2px;
 	padding-left: 1px;
 	padding-right: 1px;
+    */
 }
 
 .dragbox-content-alarm {
