@@ -51,7 +51,7 @@ public class WidgetZoomPage extends WebPage {
 	public WidgetZoomPage(String wicketId) {
 		
 		WebMarkupContainer cssContainer = new WebMarkupContainer("cssPath");
-        cssContainer.add(new AttributeModifier("href", ThemesManager.getInstance().getThemeRelativePathCss()));
+        cssContainer.add(new AttributeModifier("href", ThemesManager.getInstance().getOutsideThemeRelativePathCss()));
         add(cssContainer);
 		
 		this.widgetId = wicketId;
