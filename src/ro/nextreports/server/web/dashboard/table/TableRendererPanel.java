@@ -160,7 +160,7 @@ public class TableRendererPanel extends GenericPanel<Report> {
 		we want to expand the table height as big as it is
 		See TableRendererPanel.java where this class is added
 	
-		Also the submit button from filter form must be set with position fixed
+		Also the submit button from filter form must be set with top 0
 		(because position relative on tableWidgetView makes scrollbar to show)
 	*/
 	@Override
