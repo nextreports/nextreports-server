@@ -138,7 +138,7 @@ public class DashboardPanel extends GenericPanel<Dashboard> {
         toolbarContainer.setVisible(viewToolbar);
         addColumnsPanel();
         
-        add(AttributeModifier.replace("class", "dashboard"));        
+       // add(AttributeModifier.replace("class", "dashboard"));        
     }
 	
     @Override

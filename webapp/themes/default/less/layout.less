@@ -29,7 +29,7 @@
     }
 
     .header .navbar-default {
-        background-color: #fafbf8;
+        background-color: @main-lightest-bg-color;
         box-shadow: 0 0 3px rgba(0,0,0,0.15);
         border: 0 none;
     }
@@ -42,13 +42,17 @@
         overflow: hidden;
         padding: 0;
         transition: all 0.3s ease;
+    }
+    .main-section {
+        height: @section-height;
+        margin: @section-space 0;
         
         .left-section, .right-section{
-            margin: @section-space 0;
-            height: @section-height;
-            
+            height: 100%;
+
             .panel{
                 height: 100%;
+                margin: 0;
             }
         }
     }
@@ -132,7 +136,7 @@
         }
 
         .statusBar {
-            background: #fafafa none repeat scroll 0 0;
+            background: #f8f8f8 none repeat scroll 0 0;
             border-radius: 0 3px 3px 0;
             border-top: 1px solid #efefef;
             height: 24px;
@@ -147,8 +151,10 @@
         > .panel-heading {
             border-top-left-radius: 3px;
             border-top-right-radius: 3px;
+            border-color: darken(@main-lightest-color,15%);
             padding: 10px 15px;
             position: relative;
+            background: @dark-grey-bg-color;
 
             .panel-title {
                 color: #222;
@@ -163,14 +169,17 @@
         > .panel-footer {
             border-bottom-left-radius: 3px;
             border-bottom-right-radius: 3px;
-            border-top: 1px solid #dddddd;
+            border-top: 1px solid darken(@main-lightest-color,10%);
             padding: 5px 15px;
+            border-left: 0 none;
+            border-right: 0 none;
+            border-bottom: 0 none;
+            background: @main-lightest-bg-color;
         }
     }
 
     [class^="col-"] {
         &.left-section { padding-right: 5px; }
-
         &.right-section { padding-left: 5px; }
     }
     
@@ -316,6 +325,18 @@
             color: @btn-primary-hover-text-color;
         }
     }
+    
+    .btn-secondary{
+        background-color: @btn-secondary-bg-color;
+        border-color: @btn-secondary-border-color;
+        color: @btn-secondary-text-color;
+        
+        &:hover{
+            background-color: @btn-secondary-hover-bg-color;
+            border-color: @btn-secondary-hover-border-color;
+            color: @btn-secondary-hover-text-color;
+        }
+    }
     .toolbar_nav > .btn{
         margin: 5px 0;
     }
@@ -334,4 +355,21 @@
     border-left: 0 none;
     border-bottom: 0 none;
     border-top: 0 none;
+}
+
+// Integration with other app
+// =======================================
+
+.nrs-integration{
+    .dashboard-section{
+        height: ~'calc(100vh - 30px)';
+    }
+    
+    .left-section, .right-section{
+        height: ~'calc(100vh - 30px)';
+    }
+    
+    .main-section {
+        height: @section-integration-height;
+    }
 }

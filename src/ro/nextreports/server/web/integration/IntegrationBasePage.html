@@ -1,26 +1,27 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:wicket="http://wicket.apache.org/" 
-      xml:lang="en" 
-      lang="en">
+	xmlns:wicket="http://wicket.apache.org/" xml:lang="en" lang="en">
 
-	<head>
-        <title>NextReports Server</title>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-		<link rel="stylesheet" type="text/css" media="screen" href="" wicket:id="cssPath"/>		
-		
-		<link rel="SHORTCUT ICON" href="images/favicon.ico"/>
-		
-		<script type="text/javascript" src="js/jquery.json-2.2.min.js"></script>
-	</head>
+<head>
+<title>NextReports Server</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<!-- Bootstrap Base Style -->
+<link rel="stylesheet" type="text/css" media="screen"
+	href="css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" media="screen" href=""
+	wicket:id="cssPath" />
 
-	<body>
-		<div class="big-container">
-			<div wicket:id="headerPanel"></div>
-			<div class="container"><wicket:child/></div>
-		</div>
-		<div class="push"></div>
-        <div wicket:id="footerPanel"></div>
-        <div wicket:id="dialog"></div> 
-	</body>
+<link rel="SHORTCUT ICON" href="images/favicon.ico" />
+
+<script type="text/javascript" src="js/jquery.json-2.2.min.js"></script>
+</head>
+
+<body class="nrs nrs-integration" style="background: #f4f4f4;">
+	<div wicket:id="headerPanel"></div>
+	<div class="container-fluid">
+		<wicket:child />
+	</div>
+	<div wicket:id="footerPanel"></div>
+	<div wicket:id="dialog"></div>
+</body>
 </html>

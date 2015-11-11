@@ -12,5 +12,13 @@
         	<div wicket:id="column"></div>
     	</div>
     </div>
+    <script>
+    $(document).ready(function(){
+    	$(".dragbox-toggle").on("click",function(){
+    		$(window).trigger('resize');
+    	})
+    });
+    
+    </script>
 </wicket:panel>
     

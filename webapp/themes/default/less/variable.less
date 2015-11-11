@@ -1,8 +1,6 @@
 //main: style.less
 
-@actions-image: 'actions-col-arrow-green.gif';
-
-//  COLORS
+//  GREEN THEME - COLORS
 // --------------------------------------------------------------
 
 // Theme Greys
@@ -13,16 +11,20 @@
 @dark-grey-bg-color:          #f4f4f4;
 @light-grey-bg-color:         #fafafa;
 @disabled-color:              #B8B8B8;
+@body-color:                  #edecec;
 
 // Theme Colors
 @main-color:                  #92BA3D;
 @main-light-color:            #E4EECE;
 @main-lightest-color:         #F4F8EC;
+@main-lightest-bg-color:      #fafbf8;
+
 @main-dark-color:             #81A335;
 @main-darkest-color:          #5C7526;
 @secondary-color:             #505446;
 @secondary-light-color:       #CFD4C5;
 @secondary-dark-color:        #383B31; 
+
 
 // Other colors
 @link-color:                  @dark-headings-color;
@@ -119,18 +121,19 @@
 
 /*   LAYOUT
 ----------------------------------------------------------------*/	
+@sidebar-width: 220px;
 @header-height: 50px;
 @footer-height: 30px;
-@breadcrumb-height: 30px;
+@breadcrumb-height: 27px;
+@section-space: 15px;
 
 @content-substract: @header-height + @footer-height;
 @content-height: ~'calc(100vh - @{content-substract})';
-@tree-container: ~'calc(100vh - 190px)';
-@sidebar-width: 220px;
 
-@section-space: 10px;
 @section-substract: @header-height + @footer-height + @breadcrumb-height + 2*@section-space;
-@section-height:  ~'calc(100vh - @{section-substract})';
+@section-height: ~'calc(100vh - @{section-substract})';
+@section-integration-substract: @breadcrumb-height + 2*@section-space;
+@section-integration-height: ~'calc(100vh - @{section-integration-substract})';
 @section-content-height: ~'calc(100% - 73px)';
 
 

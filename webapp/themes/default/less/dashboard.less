@@ -1,29 +1,29 @@
 // main: style.less
 
 /** height is dynamically updated in nextserver.js in function onResize()  */
+
+.dashboard-section{
+    border: 1px solid darken(@main-lightest-color,15%);
+    margin: 15px 0;
+    height: ~'calc(100vh - 110px)';
+    .clearfix();
+}
+
 .dashboard {
-	-moz-border-bottom-colors: none;
-	-moz-border-left-colors: none;
-	-moz-border-right-colors: none;
-	-moz-border-top-colors: none;
-	background: #f8f8f8 none repeat scroll 0 0;
-	border-color: #e4e5e7 #e4e5e7 #e4e5e7 #d7dccc;
-	border-image: none;
-	border-style: solid;
-	border-width: 1px;
+	background: @body-color;
 	min-height: 353px;
 	overflow: auto;
-	padding-left: 0;
-	padding-right: 0;
-	margin-top: 15px;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
 }
 
 .dashboardCapture {
 	display: inline-block;
 	overflow-y: auto;
     overflow-x: hidden;
-	height: ~'calc(100vh - 150px)';
-	min-height: ~'calc(100vh - 150px)';
+	height: ~'calc(100% - 32px)';
 	width: 100%;
 }
 
@@ -42,20 +42,21 @@
 	float: left;
 }
 
-.column .dragbox {
+.dragbox {
 	background: #ffffff none repeat scroll 0 0;
-	border: 1px solid @hr-borders-color;
 	margin: 10px;
 	position: relative;
+    box-shadow: 0 0px 1px rgba(0, 0, 0, 0.1);
 }
 
 .dragbox-header {
 	margin: 0;
 	padding: 5px;
-	background: @dark-grey-bg-color;
-	color: #000;
-	border-bottom: 1px solid @hr-borders-color;
+	background: #f8f8f8;
+	color: @general-text-color;
+	border-bottom: 1px solid @main-light-color;
     cursor: move;
+    .clearfix();
 }
 
 .dragbox-header img {
@@ -73,8 +74,8 @@
   color: @general-text-color;
   float: left;
   font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.02em;
+  font-weight: 500;
+  letter-spacing: 0.1em;
   line-height: 20px;
   text-transform: uppercase;
 }
@@ -122,7 +123,6 @@
 	min-height: 60px;		
 	line-height: 1.5em;
 	overflow: auto;
-	padding: 5px;
     /* padding-bottom is needed for IE otherwise the vertical 
 	   scrollbar is allways present for overflow=auto 
 	padding-bottom: 2px;
@@ -152,8 +152,8 @@
 }
 
 .placeholder {
-	background: #f0f0f0;
-	border: 1px dashed #ddd;
+	background: @main-lightest-bg-color;
+	border: 1px dashed @secondary-light-color;
 }
 
 ul.column {
@@ -170,8 +170,8 @@ ul.column {
 }
 
 .toolbar_nav {
-    background: #e4e4e4 none repeat scroll 0 0;
-    border-bottom: 1px solid #e4e5e7;
+    background: darken(@main-lightest-color,5%);
+    border-bottom: 1px solid darken(@main-lightest-color,15%);
     height: 32px;
 }
 
@@ -205,25 +205,30 @@ ul.column {
  }
  
  .dashboardLeft {
-background: #f4f4f4 none repeat scroll 0 0;
-border-bottom: 1px solid #e4e5e7;
-border-left: 1px solid #e4e5e7;
-border-top: 1px solid #e4e5e7;
-min-height: 320px;
-overflow-x: hidden;
-padding-left: 0;
-padding-right: 0;
+    background: @body-color;
+    border-right: 1px solid darken(@main-lightest-color,10%);
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 200px;
+    float:left;
  }
+
+.dashboardLeft + .dashboard{
+    float: left;
+    width: ~'calc(100% - 200px)';
+}
  
 .dashboardNavigation  {	
-	min-height: ~'calc(100vh - 150px)';	
 	overflow-x: hidden;	
 	overflow-y: auto;
-	height: ~'calc(100vh - 150px)';	
+    background: @main-lightest-bg-color;
+	height: ~'calc(100% - 32px)';	
 }
 
 .dashboardNavigation table.actions-grid {
-	margin-top: 5px;
+	width: 100%;
 }	
 
 .dashboardNavigation table.actions-grid ul.subnav {
@@ -261,7 +266,8 @@ padding-right: 0;
 }
 
 .dashboardNavigation table.actions-grid tr a {
-	width: 175px; /* chrome requires the most space */
+	display: block;
+    width: 100%;
 }	
 
 .dashboardNavigation table tr.tr-hover {
