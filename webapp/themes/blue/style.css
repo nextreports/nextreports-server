@@ -1368,6 +1368,9 @@ div.w_content {
   border-right: 10px solid #00aeef;
   content: '';
 }
+.actions-col .topnav > li:hover {
+  cursor: pointer;
+}
 .breadcrumbs {
   border-radius: 0;
   height: 27px;
@@ -2640,12 +2643,11 @@ table.actions-grid tr.navigation td.actions-col a,
 .nrs-integration .dashboard-section {
   height: calc(100vh - 30px);
 }
-.nrs-integration .left-section,
-.nrs-integration .right-section {
-  height: calc(100vh - 30px);
-}
 .nrs-integration .main-section {
   height: calc(100vh - 57px);
+}
+.nrs-integration .actions-col .topnav > li:hover::before {
+  display: none;
 }
 .pivot {
   margin-top: 5px;

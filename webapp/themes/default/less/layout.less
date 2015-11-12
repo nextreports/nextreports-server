@@ -365,11 +365,11 @@
         height: ~'calc(100vh - 30px)';
     }
     
-    .left-section, .right-section{
-        height: ~'calc(100vh - 30px)';
-    }
-    
     .main-section {
         height: @section-integration-height;
+    }
+    // cand fac detach la un dashboard vreau sa nu mai am meniul contextual vizibil    
+    .actions-col .topnav > li:hover::before{
+        display: none;
     }
 }
