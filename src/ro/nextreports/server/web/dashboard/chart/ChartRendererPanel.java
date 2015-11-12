@@ -16,7 +16,6 @@
  */
 package ro.nextreports.server.web.dashboard.chart;
 
-import java.io.IOException;
 import java.util.Map;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -42,7 +41,6 @@ import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -371,9 +369,9 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 					protected void onInitialize() {
 						super.onInitialize();
 
-						if (chartModel.getObject() == null) {
+						if (chartModel.getObject() == null) {							
 							if (chartModel.getError() instanceof NoDataFoundException) {
-								setDefaultModelObject("No Data Found");
+								setDefaultModelObject(getString("ActionContributor.Run.nodata"));
 							} else {
 								setDefaultModelObject(ExceptionUtils.getRootCauseMessage(chartModel.getError()));
 							}
