@@ -69,7 +69,7 @@ public class DisplayWidgetView extends WidgetView  {
 				
 				if (displayModel.getObject() == null) {
 					if (displayModel.getError() instanceof NoDataFoundException) {
-						setDefaultModelObject("No Data Found");
+						setDefaultModelObject(getString("ActionContributor.Run.nodata"));
 					} else {
 						setDefaultModelObject(ExceptionUtils.getRootCauseMessage(displayModel.getError()));
 					}

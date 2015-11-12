@@ -46,7 +46,7 @@ public class TableWidgetView extends WidgetView {
 		try {
 			add(new TableRendererPanel("renderer", null, ((TableWidget)model.getObject()).getId(), null, zoom, urlQueryParameters));
 		} catch (NoDataFoundException e) {
-			add(new Label("renderer", "No Data Found"));
+			add(new Label("renderer", getString("ActionContributor.Run.nodata")));
 		}
 	}	
 	

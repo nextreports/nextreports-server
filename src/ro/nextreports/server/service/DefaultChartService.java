@@ -22,6 +22,7 @@ import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -46,7 +47,6 @@ import ro.nextreports.server.util.StorageUtil;
 import ro.nextreports.server.util.WidgetUtil;
 import ro.nextreports.server.web.dashboard.EntityWidget;
 import ro.nextreports.server.web.dashboard.chart.ChartWidget;
-
 import ro.nextreports.engine.ReportRunnerException;
 import ro.nextreports.engine.chart.ChartRunner;
 import ro.nextreports.engine.chart.ChartType;
@@ -350,7 +350,18 @@ public class DefaultChartService implements ChartService {
 			if (e instanceof TimeoutException) {
 				throw new TimeoutException("Timeout of " + timeout + " seconds ellapsed.");
 			} else {
-				throw new ReportRunnerException(e);
+				if (e instanceof ExecutionException) {
+					Throwable cause = ((ExecutionException)e).getCause();
+					if (cause instanceof NoDataFoundException) {
+						throw (NoDataFoundException)cause;
+					} else {
+						throw new ReportRunnerException(cause);
+					}
+				}else if (e instanceof NoDataFoundException) {
+					throw (NoDataFoundException)e;
+				} else {
+					throw new ReportRunnerException(e);
+				}
 			}
 		} finally {
 			ConnectionUtil.closeConnection(connection);
