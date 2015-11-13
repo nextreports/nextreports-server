@@ -88,11 +88,13 @@ public class SmtpDistributor implements Distributor {
                         
             if ((context.getBatchValue() != null) && (context.getBatchMailMap() != null)) {
             	String batchEmail = context.getBatchMailMap().get(context.getBatchValue()); 
-            	String[] emails = batchEmail.split(";");
-            	for (String email : emails) {
-            		if (MailUtil.isEmailValid(email) && !mails.contains(email)) {
-            			mails.add(email);
-            		}
+            	if (batchEmail != null) {
+	            	String[] emails = batchEmail.split(";");
+	            	for (String email : emails) {
+	            		if (MailUtil.isEmailValid(email) && !mails.contains(email)) {
+	            			mails.add(email);
+	            		}
+	            	}
             	}
             }
 
