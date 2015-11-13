@@ -1700,20 +1700,28 @@ div.w_content {
     */
 }
 .dragbox-content-alarm {
-  min-height: 122px !important;
+  min-height: 134px !important;
   /*overflow-y: hidden !important;*/
 }
 .dragbox-content-indicator {
-  min-height: 122px !important;
+  min-height: 134px !important;
   /*overflow-y: hidden !important;*/
 }
 .dragbox-content-display {
-  min-height: 122px !important;
+  min-height: 134px !important;
   /*overflow-y: hidden !important;*/
 }
 .dragbox-content-chart {
   min-height: 300px !important;
   /*overflow-y: hidden !important;*/
+}
+.noChartData {
+  height: 300px;
+}
+.noAlarmData,
+.noIndicatorData,
+.noDisplayData {
+  height: 134px;
 }
 .placeholder {
   background: #faf8f7;
