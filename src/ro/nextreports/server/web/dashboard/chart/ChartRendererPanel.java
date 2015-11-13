@@ -375,6 +375,8 @@ public class ChartRendererPanel extends GenericPanel<Chart> {
 							} else {
 								setDefaultModelObject(ExceptionUtils.getRootCauseMessage(chartModel.getError()));
 							}
+							error.add(AttributeAppender.replace("class", "noChartData"));
+							container.setVisible(false);
 						}
 					}
 
