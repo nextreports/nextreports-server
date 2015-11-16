@@ -139,7 +139,7 @@ public class UploadNextReportPanel extends Panel {
             setModel(new CompoundPropertyModel<Report>(report));
             setOutputMarkupId(true);
             setMultiPart(true);
-            setMaxSize(Bytes.megabytes(1)); // !?
+            setMaxSize(Bytes.megabytes(storageService.getSettings().getUploadSize())); 
             //add(new UploadProgressBar("progress", this));
 
             final TextField<String> name = new TextField<String>("name") {

@@ -59,6 +59,9 @@ public class Settings extends Entity {
 	
 	@JcrProperty
 	private String language;
+	
+	@JcrProperty
+	private Integer uploadSize;	
 
     @JcrProperty
     private boolean autoOpen;
@@ -129,6 +132,17 @@ public class Settings extends Entity {
 		this.updateInterval = updateInterval;
 	}		
 	
+	public Integer getUploadSize() {
+		if ((uploadSize == null) || (uploadSize < 1)) {
+			uploadSize = 1;
+		}
+		return uploadSize;
+	}
+
+	public void setUploadSize(Integer uploadSize) {
+		this.uploadSize = uploadSize;
+	}
+
 	public JcrFile getLogo() {
 		return logo;
 	}
@@ -246,7 +260,8 @@ public class Settings extends Entity {
                 "\n" + (mailServer != null ? mailServer.toString() : "") +
                 "\nconnectionTimeout=" + connectionTimeout +                
                 "\nqueryTimeout=" + queryTimeout +
-                "\nupdateInterval=" + updateInterval +   
+                "\nupdateInterval=" + updateInterval +  
+                 "\nuploadSize=" + uploadSize +   
                 "\n" + (jasper != null ? jasper.toString() : "") +
                 "\n" + (synchronizer != null ? synchronizer.toString() : "") +
                 "\n" + (scheduler != null ? scheduler.toString() : "") +

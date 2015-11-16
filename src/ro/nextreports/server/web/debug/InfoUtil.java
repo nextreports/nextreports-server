@@ -79,6 +79,7 @@ public class InfoUtil {
 		infos.add(new Info("Connect Timeout", String.valueOf(settings.getConnectionTimeout())));
 		infos.add(new Info("Query Timeout", String.valueOf(settings.getQueryTimeout())));
 		infos.add(new Info("Update Interval", String.valueOf(settings.getUpdateInterval())));
+		infos.add(new Info("Upload Size", String.valueOf(settings.getUploadSize())));
 		infos.add(new Info("Jasper Home", settings.getJasper().getHome()));
 		infos.add(new Info("Jasper Detect Cell Type", String.valueOf(settings.getJasper().isDetectCellType())));
 		infos.add(new Info("Jasper White Page Background", String.valueOf(settings.getJasper().isWhitePageBackground())));
