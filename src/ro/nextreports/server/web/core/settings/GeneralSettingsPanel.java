@@ -101,6 +101,11 @@ public class GeneralSettingsPanel extends AbstractSettingsPanel {
         form.add(tlsCheckField);        
         form.add(new MailServerValidator(new FormComponent[] {mailServerIpField, mailServerPortField, mailServerSenderField}));
         
+        final TextField<String> distributorDatePatternField = new TextField<String>("distributor.datePattern");
+        form.add(distributorDatePatternField);
+        final TextField<String> distributorTimePatternField = new TextField<String>("distributor.timePattern");
+        form.add(distributorTimePatternField);
+        
         final TextField<Integer> conTimeoutField = new TextField<Integer>("connectionTimeout");
         conTimeoutField.setRequired(true);
         form.add(conTimeoutField);

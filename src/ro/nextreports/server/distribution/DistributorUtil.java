@@ -3,6 +3,7 @@ package ro.nextreports.server.distribution;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
@@ -10,6 +11,7 @@ import org.apache.wicket.util.file.Files;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ro.nextreports.server.domain.DistributorSettings;
 import ro.nextreports.server.report.util.ReportUtil;
 
 public class DistributorUtil {
@@ -64,14 +66,44 @@ public class DistributorUtil {
 	
 	public static String replaceTemplates(String s, DistributionContext context) {
 		Date local = new Date();
-		if (s.contains(DATE_TEMPLATE)) {			
-			DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault());
-	    	String formattedDate = df.format(local);	    		    	
+		if (s.contains(DATE_TEMPLATE)) {
+			String datePattern = null;
+			DistributorSettings ds = context.getStorageService().getSettings().getDistributor();
+			if (ds != null) {
+				datePattern = ds.getDatePattern();
+			}
+			String formattedDate = null;
+			if (datePattern != null) {
+				try {
+					formattedDate = new SimpleDateFormat(datePattern).format(local);
+				} catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			if (formattedDate == null) {
+				DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault());
+		    	formattedDate = df.format(local);
+			}				    		    
 	    	s = s.replaceAll(DATE_TEMPLATE_ESC, formattedDate);
 		}
 		if (s.contains(TIME_TEMPLATE)) {
-			DateFormat df = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
-	    	String formattedTime = df.format(local);
+			String timePattern = null;
+			DistributorSettings ds = context.getStorageService().getSettings().getDistributor();
+			if (ds != null) {
+				timePattern = ds.getTimePattern();
+			}
+			String formattedTime = null;
+			if (timePattern != null) {
+				try {
+					formattedTime = new SimpleDateFormat(timePattern).format(local);
+				} catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			if (formattedTime == null) {
+				DateFormat df = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
+				formattedTime = df.format(local);
+			}
 	    	s = s.replaceAll(TIME_TEMPLATE_ESC, formattedTime);
 		}
 		if (s.contains(REPORT_NAME_TEMPLATE)) {

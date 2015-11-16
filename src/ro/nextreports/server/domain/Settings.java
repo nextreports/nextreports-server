@@ -42,6 +42,9 @@ public class Settings extends Entity {
 	@JcrChildNode(createContainerNode = false)
 	private MailServer mailServer;
 	
+	@JcrChildNode(createContainerNode = false)
+	private DistributorSettings distributor;
+	
 	@JcrProperty
 	private Integer connectionTimeout;	
 	
@@ -106,6 +109,14 @@ public class Settings extends Entity {
 
 	public void setMailServer(MailServer mailServer) {
 		this.mailServer = mailServer;
+	}
+	
+	public DistributorSettings getDistributor() {
+		return distributor;
+	}
+
+	public void setDistributor(DistributorSettings distributor) {
+		this.distributor = distributor;
 	}
 
 	public Integer getConnectionTimeout() {
@@ -258,6 +269,7 @@ public class Settings extends Entity {
                 "\ncolorTheme='" + colorTheme + '\'' +
                 "\nlanguage='" + language + '\'' +
                 "\n" + (mailServer != null ? mailServer.toString() : "") +
+                "\n" + (distributor != null ? distributor.toString() : "") +
                 "\nconnectionTimeout=" + connectionTimeout +                
                 "\nqueryTimeout=" + queryTimeout +
                 "\nupdateInterval=" + updateInterval +  
