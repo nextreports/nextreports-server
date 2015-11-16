@@ -95,6 +95,8 @@ public class SmtpDistributor implements Distributor {
 	            			mails.add(email);
 	            		}
 	            	}
+            	} else {
+            		LOG.error("Please check your batch email SQL! Batch Email SQL obtained null email string for value (id) = '" + context.getBatchValue() + "'");
             	}
             }
 
