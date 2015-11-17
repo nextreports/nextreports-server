@@ -101,6 +101,11 @@ public class GeneralSettingsPanel extends AbstractSettingsPanel {
         form.add(tlsCheckField);        
         form.add(new MailServerValidator(new FormComponent[] {mailServerIpField, mailServerPortField, mailServerSenderField}));
         
+        final TextField<String> distributorDatePatternField = new TextField<String>("distributor.datePattern");
+        form.add(distributorDatePatternField);
+        final TextField<String> distributorTimePatternField = new TextField<String>("distributor.timePattern");
+        form.add(distributorTimePatternField);
+        
         final TextField<Integer> conTimeoutField = new TextField<Integer>("connectionTimeout");
         conTimeoutField.setRequired(true);
         form.add(conTimeoutField);
@@ -121,6 +126,13 @@ public class GeneralSettingsPanel extends AbstractSettingsPanel {
         ContextImage updateImage = new ContextImage("updateImage","images/information.png");        
         updateImage.add(new SimpleTooltipBehavior(getString("Settings.general.updateIntervalTooltip")));
         form.add(updateImage);
+        
+        final TextField<Integer> uploadSizeField = new TextField<Integer>("uploadSize");
+        uploadSizeField.setRequired(true);
+        form.add(uploadSizeField);      
+        ContextImage uploadSizeImage = new ContextImage("uploadSizeImage","images/information.png");        
+        uploadSizeImage.add(new SimpleTooltipBehavior(getString("Settings.general.uploadSizeTooltip")));
+        form.add(uploadSizeImage);
 
         final CheckBox autoOpenField = new CheckBox("autoOpen");
         form.add(autoOpenField);

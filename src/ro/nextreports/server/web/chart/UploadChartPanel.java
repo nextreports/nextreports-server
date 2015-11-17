@@ -128,7 +128,7 @@ public class UploadChartPanel extends Panel {
             setModel(new CompoundPropertyModel<Chart>(chart));
             setOutputMarkupId(true);
             setMultiPart(true);
-            setMaxSize(Bytes.megabytes(1)); // !?
+            setMaxSize(Bytes.megabytes(storageService.getSettings().getUploadSize())); 
             //add(new UploadProgressBar("progress", this));
 
             final TextField<String> name = new TextField<String>("name") {

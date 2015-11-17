@@ -85,6 +85,24 @@
                 </tr>
                 <tr>
                     <td class="td-label">
+                        <label><strong><wicket:message key="Settings.general.distributorDatePattern">Distributor Date Pattern</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="distributor.datePattern" name="distributor.datePattern" type="text" style="width: 200px; !important"/>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.general.distributorTimePattern">Distributor Time Pattern</wicket:message></strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="distributor.timePattern" name="distributor.timePattern" type="text" style="width: 200px; !important"/>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-label">
                         <label><strong><wicket:message key="Settings.general.connectTimeout">Connect Timeout (s)</wicket:message>*</strong></label>
                     </td>
                     <td>
@@ -110,6 +128,16 @@
                     <td>
                         <input wicket:id="updateInterval" name="updateInterval" type="text" style="width: 50px; !important; margin-top: 5px;"/>
                         <img wicket:id="updateImage" style="margin-bottom: 5px; margin-left: -3px;"/>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label><strong><wicket:message key="Settings.general.uploadSize">Upload Size (MB)</wicket:message>*</strong></label>
+                    </td>
+                    <td>
+                        <input wicket:id="uploadSize" name="uploadSize" type="text" style="width: 50px; !important; margin-top: 5px;"/>
+                        <img wicket:id="uploadSizeImage" style="margin-bottom: 5px; margin-left: -3px;"/>
                     </td>
                     <td></td>
                 </tr>
