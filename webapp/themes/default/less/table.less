@@ -90,7 +90,10 @@ table.actions-grid {
     margin-bottom: 160px;
     */
 }
-        
+
+.actions-grid tr > td{
+    padding: 5px;
+}
 table.actions-grid tr .name-col {
     min-width: 150px;
     color: #000;
@@ -227,4 +230,18 @@ tr.navigation td {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+//no border table
+table.grid {
+    &.no-borders {
+        th, td{
+            &:first-child{
+                border-left: 0 none;
+            }
+            &:last-child{
+                border-right: 0 none;
+            }
+        }
+    }
 }

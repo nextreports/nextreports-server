@@ -23,7 +23,8 @@ public class AnalysisBrowserPanel extends GenericPanel<Entity> {
 		setOutputMarkupId(true);
 		
 		workContainer = new WebMarkupContainer("workContainer");
-        workContainer.setOutputMarkupId(true);		
+        workContainer.setOutputMarkupId(true);
+        workContainer.setRenderBodyOnly(true);
         
         analysisNavigationPanel = new AnalysisNavigationPanel("navigation");
 		add(analysisNavigationPanel);

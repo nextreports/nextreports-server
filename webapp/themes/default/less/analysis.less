@@ -1,33 +1,55 @@
 // main: style.less
+
+// Analysis section
+.analysis-section{
+    border: 1px solid darken(@main-lightest-color,15%);
+    margin: 15px 0;
+    height: ~'calc(100vh - 110px)';
+    .clearfix();
+}
+
 .analysis {
-    overflow: auto;
-    min-height: 353px;
-    border: 1px solid #CACACA;
+	background: @body-color;
+	min-height: 353px;
+	overflow: inherit;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
 }
 
-.left {
+.analysisPanel {
+	display: inline-block;
+	overflow: auto;
+	height: ~'calc(100% - 67px)';
+	width: 100%;
+}
+
+ .analysisLeft {
+    background: @body-color;
+    border-right: 1px solid darken(@main-lightest-color,10%);
+    overflow: inherit;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 200px;
+    float:left;
+ }
+
+.analysisLeft + .analysis{
     float: left;
+    width: ~'calc(100% - 200px)';
 }
 
-.analysisLeft {
-    border-top: 1px solid #CACACA;
-    border-left: 1px solid #CACACA;
-    border-bottom: 1px solid #CACACA;
-    padding-left: 5px;
-    padding-right: 5px;
-    min-height: 353px;
-    min-width: 200px;
-    overflow-x: hidden;
-}
-
-.analysisNavigation {
-    min-height: 320px;
-    overflow-x: hidden;
-    overflow-y: auto;
+.analysisNavigation  {	
+	overflow-x: hidden;	
+	overflow-y: auto;
+    background: @main-lightest-bg-color;
+	height: ~'calc(100% - 32px)';	
 }
 
 .analysisNavigation table.actions-grid {
-    margin-top: 5px;
+    width: 100%;
 }
 
 .analysisNavigation table.actions-grid ul.subnav {
@@ -36,8 +58,7 @@
 }
 
 .analysisNavigation table tr {
-    border-bottom: 5px solid #f4f4f4;
-    white-space: nowrap;
+    border-bottom: 1px solid #e4e5e7;
 }
 
 .analysisNavigation tr.selected {
@@ -64,10 +85,16 @@
 }
 
 .analysisNavigation table.actions-grid tr a {
-    width: 175px;
-    /* chrome requires the most space */
+	display: block;
+    width: 160px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
+.analysisNavigation table tr > td {
+  padding: 5px 0;
+}
 .analysisNavigation table tr.tr-hover {
     background-color:@table-row-hover;
 }
@@ -79,28 +106,21 @@
 
 .analysis-toggle {
     float: left;
-    margin: 7px 3px 3px 0px;
+    margin: 8px 5px 8px 0;
     cursor: pointer;
-}
-
-.toolbar {
-    width: 100%;
-    float: left;
-    font-weight: bold;
-    border-bottom: 1px solid #CACACA;
-}
-
-.toolbar_nav {
-    height: 32px;
-    border-bottom: 1px solid #CACACA;
 }
 
 .analysis-title {
     display: block;
-    padding-top: 7px;
     font-size: 14px;
-    font-weight: bold;
-    height: 1.8em;
+    font-weight: 500;
+    line-height: 22px;
+    padding: 5px;
+    color: @main-darkest-color;
+    min-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 /* for empty row cells*/
 
@@ -179,7 +199,8 @@
 }
 
 .analysisToolbar {
-    padding-left: 1px;
+    padding: 5px 10px;
+    .clearfix();
 }
 
 .analysisToolbar a.button {

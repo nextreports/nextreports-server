@@ -274,10 +274,11 @@
         position: relative;
         
         > li {
-            display: inline-block;
-            margin-right: 5px;
+            display: block;
+            margin: 0;
+            float: left;
             
-            &:last-child{
+            &:last-child a{
                 margin-right: 0;
             }
             > a{
@@ -286,7 +287,8 @@
                 color: @btn-default-text-color;
                 border-radius: @btn-radius;
                 display: block;
-                padding: 3px 6px;                
+                padding: 3px 6px; 
+                margin: 0 5px 0 0;
                 text-decoration: none;
                 box-shadow: none;
                 
@@ -303,9 +305,14 @@
                     padding: 0;
                     
                     & + span{
+                        display: inline-block;
                         
                         @media (max-width: @screen-md-max) {
-                            display: none;
+                            text-indent: -99999px;
+                            display: inline-block;
+                            visibility: hidden;
+                            width: 0px;
+                            height: 0px;
                         }
                     }
                 }
@@ -339,10 +346,12 @@
     }
     .toolbar_nav > .btn{
         margin: 5px 0;
+        vertical-align: top;
     }
     .actions-col .topnav > li{
         display: block;
         height: 20px;
+        float: none;
     }
 }
 
