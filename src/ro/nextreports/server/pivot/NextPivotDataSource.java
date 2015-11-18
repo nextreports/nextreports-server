@@ -124,21 +124,25 @@ public class NextPivotDataSource extends ResultSetPivotDataSource {
 			LOG.error(e1.getMessage(), e1);
 		}
         
-        QueryResult queryResult = null;
+        QueryExecutor executor = null;
         try {
         	boolean csv = CSVDialect.DRIVER_CLASS.equals(dataSource.getDriver());
         	
             Query query = new Query(sql);
-            QueryExecutor executor = new QueryExecutor(query, parameters, parameterValues, connection, true, true, csv);
+            executor = new QueryExecutor(query, parameters, parameterValues, connection, true, true, csv);
             executor.setMaxRows(0);
             executor.setTimeout(storageService.getSettings().getQueryTimeout());
 
-            queryResult = executor.execute();
+            QueryResult queryResult = executor.execute();
 
             return queryResult.getResultSet();      
         } catch (Exception e) {        						
             throw new ReportRunnerException(e);
-        } 
+        } finally {
+        	if (executor != null) {
+        		executor.closeCursors();
+        	}
+        }
 	}
 		
 
