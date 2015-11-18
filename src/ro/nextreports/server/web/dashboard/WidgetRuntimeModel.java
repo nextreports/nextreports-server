@@ -30,6 +30,7 @@ public class WidgetRuntimeModel extends ParameterRuntimeModel {
     private int refreshTime;
     private int timeout;
     private int rowsPerPage;
+    private boolean enableFilter;
 
      public WidgetRuntimeModel() {
         super();
@@ -68,5 +69,13 @@ public class WidgetRuntimeModel extends ParameterRuntimeModel {
 	public void setRowsPerPage(int rowsPerPage) {
 		this.rowsPerPage = rowsPerPage;
 	}
+
+	public boolean isEnableFilter() {
+		return enableFilter;
+	}
+
+	public void setEnableFilter(boolean enableFilter) {
+		this.enableFilter = enableFilter;
+	}	
         
 }

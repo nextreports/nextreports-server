@@ -201,6 +201,12 @@ public class ChartUtil {
             	rowsPerPage = String.valueOf(TableWidget.DEFAULT_ROWS_PER_PAGE);
             }
             runtimeModel.setRowsPerPage(Integer.parseInt(rowsPerPage));
+            
+            String enableFilter = widgetSettings.get(TableWidget.ENABLE_FILTER);        
+            if (enableFilter == null) {
+            	enableFilter = "false";
+            }
+            runtimeModel.setEnableFilter(Boolean.parseBoolean(enableFilter));
         }
 
         runtimeModel.setEdit(true);
@@ -397,7 +403,8 @@ public class ChartUtil {
     
     private static void updateDrillDownWidget(DrillDownWidget widget, WidgetRuntimeModel runtimeModel) {
         widget.setChartType(runtimeModel.getChartType()); 
-        widget.setRowsPerPage(runtimeModel.getRowsPerPage());    
+        widget.setRowsPerPage(runtimeModel.getRowsPerPage()); 
+        widget.setEnableFilter(runtimeModel.isEnableFilter());
         updateBasicWidget(widget, runtimeModel, null);
     }
 
@@ -407,7 +414,8 @@ public class ChartUtil {
     }
     
     private static void updateTableWidget(TableWidget widget, WidgetRuntimeModel runtimeModel) {
-        widget.setRowsPerPage(runtimeModel.getRowsPerPage());        
+        widget.setRowsPerPage(runtimeModel.getRowsPerPage());     
+        widget.setEnableFilter(runtimeModel.isEnableFilter());
         updateBasicWidget(widget, runtimeModel, null);
     }
 

@@ -24,6 +24,14 @@
                 <input type="text" wicket:id="rowsPerPage" style="width:80px;"/>
             </td>
 		</tr>
+		<tr>
+			<td class="td-label">
+                 <label class="small"><wicket:message key="Table.enableFilter">Enable Filter</wicket:message></label>
+            </td>
+			<td>
+                <input wicket:id="enableFilter" name="enableFilter" type="checkbox"/>
+            </td>				
+		</tr>
         <tr wicket:id="params">
             <td class="td-label">
                 <label class="small" wicket:id="name">[]</label>

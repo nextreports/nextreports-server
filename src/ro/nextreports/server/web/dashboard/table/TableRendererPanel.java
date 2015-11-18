@@ -191,10 +191,11 @@ public class TableRendererPanel extends GenericPanel<Report> {
 				throw new RuntimeException(ExceptionUtils.getRootCauseMessage(e));
 			}
 		}
-		int rowsPerPage = Integer.MAX_VALUE;				
+		int rowsPerPage = Integer.MAX_VALUE;			
 		try {
 			Widget widget = dashboardService.getWidgetById(widgetId);
-			rowsPerPage = WidgetUtil.getRowsPerPage(dashboardService, widget);						
+			rowsPerPage = WidgetUtil.getRowsPerPage(dashboardService, widget);
+			enableFilter = WidgetUtil.isEnableFilter(dashboardService, widget);
 		} catch (NotFoundException e) {
 			LOG.error(e.getMessage(), e);
 		}

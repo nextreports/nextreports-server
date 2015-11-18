@@ -78,6 +78,18 @@ public class WidgetUtil {
         return rowsPerPage;
 	}
 	
+	public static boolean isEnableFilter(DashboardService dashboardService, Widget widget) {
+		if (widget == null) {
+			return false;
+		}
+		boolean enableFilter = widget.isEnableFilter();
+		UserWidgetParameters wp = dashboardService.getUserWidgetParameters(widget.getId());
+		if (wp != null) {
+			enableFilter = Boolean.parseBoolean(wp.getSettings().get(TableWidget.ENABLE_FILTER));
+		}
+        return enableFilter;
+	}
+	
 	public static String getUserWidgetParametersPath(String user) {
 		return StorageConstants.USERS_DATA_ROOT + "/" + user + StorageConstants.USERS_WIDGET_STATES_PATH;
 	}

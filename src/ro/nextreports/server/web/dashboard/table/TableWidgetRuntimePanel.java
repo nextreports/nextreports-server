@@ -16,6 +16,7 @@
  */
 package ro.nextreports.server.web.dashboard.table;
 
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -53,7 +54,10 @@ public class TableWidgetRuntimePanel extends GeneralWidgetRuntimePanel {
         TextField<Integer> rowsPerPageText = new TextField<Integer>("rowsPerPage", new PropertyModel(runtimeModel, "rowsPerPage"));
         rowsPerPageText.setRequired(true);
         rowsPerPageText.add(new RangeValidator<Integer>(5, 100));
-        add(rowsPerPageText);             
+        add(rowsPerPageText);  
+        
+        final CheckBox filterChkBox = new CheckBox("enableFilter", new PropertyModel(runtimeModel, "enableFilter"));
+        add(filterChkBox);        
     }  
     
 }
