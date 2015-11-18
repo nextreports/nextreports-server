@@ -597,84 +597,6 @@ ul.subnav li a:hover {
   background-image: url(../../images/arrow_off.png);
   background-repeat: no-repeat;
 }
-/* Form Start */
-.form-container {
-  /*margin-top: 8px;*/
-  background: none repeat scroll 0 0 transparent;
-  /*border: 1px solid #cacaca;*/
-  /*padding: 10px;*/
-  text-align: left;
-  /*float:left;*/
-  /*width: 100%;*/
-}
-.form-container-dialog {
-  margin-top: 0px !important;
-  padding-top: 8px;
-  padding-left: 10px;
-  /* width: 96% !important;  horizontal scroll bar will always be seen if this is not set */
-}
-.form-container table {
-  /*display: block;*/
-  clear: both;
-  /*padding: 0px 0px 10px;*/
-}
-.form-container form table td {
-  padding-bottom: 6px;
-}
-.form-container td.td-label {
-  /*width: 110px;*/
-  display: block;
-  text-align: left;
-  padding: 5px 10px 0px 5px;
-  margin-bottom: 5px !important;
-  vertical-align: top;
-  white-space: nowrap;
-}
-.form-container td.td-label-login {
-  display: block;
-  text-align: left;
-  padding: 4px 10px 0px 50px;
-  vertical-align: top;
-  white-space: nowrap;
-}
-.form-container td.td-name {
-  padding: 4px 10px 5px 0px;
-  vertical-align: top;
-  font-weight: bold;
-}
-.form-container td.checkbox {
-  padding-top: 4px;
-}
-.form-container table input.textInput,
-.form-container table textarea,
-.form-container table select {
-  /*float: left;*/
-  /*width: 97%;*/
-  /*display: block;*/
-  padding: 2px 3px 0px;
-  /*border: 1px solid #cacaca !important;*/
-  /*height: 20px*/
-}
-.form-container table input.checkbox {
-  margin-top: 4px;
-  margin-bottom: 4px;
-}
-.form-container table textarea {
-  height: auto;
-}
-.form-container table select {
-  padding: 1px 3px 1px;
-}
-.form-container table select.entityList {
-  padding: 2px 3px 1px;
-  width: 380px;
-  height: 160px;
-}
-.form-container table select.manualList {
-  padding: 2px 3px 1px;
-  width: 160px;
-  height: 80px;
-}
 .manualListButton {
   margin-bottom: 2px;
   height: 20px;
@@ -690,20 +612,6 @@ ul.subnav li a:hover {
   background: -moz-linear-gradient(center top, #f14833, #d7402e);
   background: -ms-linear-gradient(#f14833, #d7402e);
   background-color: #d7402e;
-}
-.form-container table input.textFile {
-  float: left;
-  width: 100%;
-  display: inline-block;
-  padding: 2px 3px 0px;
-  position: relative;
-  height: 25px;
-}
-.form-container table input.textInput {
-  height: 18px;
-}
-.form-container td.padding {
-  padding-top: 4px;
 }
 .button,
 .secondary,
@@ -804,54 +712,10 @@ element.style {
 .wizardScheduler .wicketExtensionsWizardViewRow {
   height: 110px;
 }
-ul.form-btns li {
-  width: auto;
-  float: left;
-  margin-right: 10px;
-  display: inline;
-}
-.form-container h1 {
-  font-size: 13px;
-  background: url(../../images/thead.gif) repeat-x;
-  padding: 0px 10px;
-  height: 20px;
-  line-height: 20px;
-  display: block;
-  border: 1px solid #cacaca;
-  margin-bottom: 10px;
-  color: #333333;
-}
 body#body-edit .big-container {
   margin: 0px auto 10px !important;
   height: auto !important;
 }
-.form-container fieldset {
-  /*border-top: 1px solid #bcc1c1;*/
-  /*width: 100%;
-    margin-bottom: 4px;*/
-  padding: 0 10px;
-  /*background-color: #e9f4ff;*/
-}
-.form-container legend {
-  display: block;
-  font-weight: bold;
-  font-size: 12px;
-  color: #202020;
-  border-bottom: 1px solid #ff5722;
-  margin: 5px 0 10px;
-  padding: 5px 0;
-  text-transform: uppercase;
-  width: 100%;
-}
-.form-container h2,
-h3,
-h4 {
-  color: #000000;
-}
-.fieldset-panel-right {
-  /*margin-top: 10px;*/
-}
-/* Form End */
 /*Login page*/
 body#body-login {
   background: #e4e4e4;
@@ -1370,6 +1234,151 @@ div.w_content {
 .actions-col .topnav > li:hover {
   cursor: pointer;
 }
+/* Form Start */
+.form-container {
+  /*margin-top: 8px;*/
+  background: none repeat scroll 0 0 transparent;
+  /*border: 1px solid #cacaca;*/
+  /*padding: 10px;*/
+  text-align: left;
+  /*float:left;*/
+  /*width: 100%;*/
+}
+.form-container-dialog {
+  margin-top: 0px !important;
+  padding-top: 8px;
+  padding-left: 10px;
+  /* width: 96% !important;  horizontal scroll bar will always be seen if this is not set */
+}
+.form-container table {
+  /*display: block;*/
+  clear: both;
+  /*padding: 0px 0px 10px;*/
+}
+.form-container form table td {
+  padding-bottom: 6px;
+}
+.form-container td.td-label {
+  /*width: 110px;*/
+  display: block;
+  text-align: left;
+  padding: 5px 10px 0px 5px;
+  margin-bottom: 5px !important;
+  vertical-align: top;
+  white-space: nowrap;
+}
+.form-container td.td-label-login {
+  display: block;
+  text-align: left;
+  padding: 4px 10px 0px 50px;
+  vertical-align: top;
+  white-space: nowrap;
+}
+.form-container td.td-name {
+  padding: 4px 10px 5px 0px;
+  vertical-align: top;
+  font-weight: bold;
+}
+.form-container td.checkbox {
+  padding-top: 4px;
+}
+.form-container table input.textInput,
+.form-container table textarea,
+.form-container table select {
+  /*float: left;*/
+  /*width: 97%;*/
+  /*display: block;*/
+  padding: 2px 3px 0px;
+  /*border: 1px solid #cacaca !important;*/
+  /*height: 20px*/
+}
+.form-container table input.checkbox {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+.form-container table textarea {
+  height: auto;
+}
+.form-container table select {
+  padding: 1px 3px 1px;
+}
+.form-container table select.entityList {
+  padding: 2px 3px 1px;
+  width: 380px;
+  height: 160px;
+}
+.form-container table select.manualList {
+  padding: 2px 3px 1px;
+  width: 160px;
+  height: 80px;
+}
+.form-container table input.textFile {
+  float: left;
+  width: 100%;
+  display: inline-block;
+  padding: 2px 3px 0px;
+  position: relative;
+  height: 25px;
+}
+.form-container table input.textInput {
+  height: 18px;
+}
+.form-container td.padding {
+  padding-top: 4px;
+}
+.form-btns {
+  margin: 0;
+}
+.form-btns:before,
+.form-btns:after {
+  content: " ";
+  display: table;
+}
+.form-btns:after {
+  clear: both;
+}
+.form-btns li {
+  width: auto;
+  float: left;
+  margin-right: 5px;
+  display: block;
+}
+.form-container h1 {
+  font-size: 13px;
+  background: url(../../images/thead.gif) repeat-x;
+  padding: 0px 10px;
+  height: 20px;
+  line-height: 20px;
+  display: block;
+  border: 1px solid #cacaca;
+  margin-bottom: 10px;
+  color: #333333;
+}
+.form-container fieldset {
+  /*border-top: 1px solid #bcc1c1;*/
+  /*width: 100%;
+    margin-bottom: 4px;*/
+  padding: 0 10px;
+  /*background-color: #e9f4ff;*/
+}
+.form-container legend {
+  display: block;
+  font-weight: bold;
+  font-size: 12px;
+  color: #202020;
+  border-bottom: 1px solid #ff5722;
+  margin: 5px 0 10px;
+  padding: 5px 0;
+  width: 100%;
+}
+.form-container h2,
+h3,
+h4 {
+  color: #000000;
+}
+.fieldset-panel-right {
+  /*margin-top: 10px;*/
+}
 .breadcrumbs {
   border-radius: 0;
   height: 27px;
@@ -1455,9 +1464,13 @@ div.w_content {
   width: 200px;
   float: left;
 }
-.analysisLeft + .analysis {
+.analysisLeft + .form-container {
   float: left;
   width: calc(100% - 200px);
+  height: 100%;
+}
+.analysisLeft + .form-container > .analysis {
+  background: #fff;
 }
 .analysisNavigation {
   overflow-x: hidden;
@@ -1819,9 +1832,10 @@ ul.column {
   width: 200px;
   float: left;
 }
-.dashboardLeft + .dashboard {
+.dashboardLeft + .form-container {
   float: left;
   width: calc(100% - 200px);
+  height: 100%;
 }
 .dashboardNavigation {
   overflow-x: hidden;

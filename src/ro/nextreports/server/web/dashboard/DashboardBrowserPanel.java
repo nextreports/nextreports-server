@@ -42,7 +42,6 @@ public class DashboardBrowserPanel extends GenericPanel<Entity> {
 		
 		workContainer = new WebMarkupContainer("workContainer");
         workContainer.setOutputMarkupId(true);		
-        workContainer.setRenderBodyOnly(true);
         
         dashboardNavigationPanel = new DashboardNavigationPanel("navigation");
 		add(dashboardNavigationPanel);

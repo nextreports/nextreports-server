@@ -104,7 +104,7 @@ function onResize() {
     //$(".auditSection").css({'height': $height + 55});
     //$(".analysis").css({'height': $height + 65});
 	//$(".analysisNavigation").css({'height': $height + 32});
-    $(".fieldset-panel-right").css({'height': $height + 32});
+    //$(".fieldset-panel-right").css({'height': $height + 32});
 
 }
 
