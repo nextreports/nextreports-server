@@ -54,6 +54,9 @@ public class Settings extends Entity {
 	@JcrProperty
 	private Integer updateInterval;
 	
+	@JcrProperty
+	private Integer pollingInterval;	
+	
 	@JcrFileNode(loadType = LoadType.BYTES)
 	private JcrFile logo;
 	
@@ -142,7 +145,18 @@ public class Settings extends Entity {
 	public void setUpdateInterval(Integer updateInterval) {
 		this.updateInterval = updateInterval;
 	}		
-	
+		
+	public Integer getPollingInterval() {
+		if ((pollingInterval == null) || (pollingInterval < 2)) {
+			pollingInterval = 2;
+		}
+		return pollingInterval;
+	}
+
+	public void setPollingInterval(Integer pollingInterval) {
+		this.pollingInterval = pollingInterval;
+	}
+
 	public Integer getUploadSize() {
 		if ((uploadSize == null) || (uploadSize < 1)) {
 			uploadSize = 1;
@@ -272,7 +286,8 @@ public class Settings extends Entity {
                 "\n" + (distributor != null ? distributor.toString() : "") +
                 "\nconnectionTimeout=" + connectionTimeout +                
                 "\nqueryTimeout=" + queryTimeout +
-                "\nupdateInterval=" + updateInterval +  
+                "\nupdateInterval=" + updateInterval +
+                "\npollingInterval=" + pollingInterval +  
                  "\nuploadSize=" + uploadSize +   
                 "\n" + (jasper != null ? jasper.toString() : "") +
                 "\n" + (synchronizer != null ? synchronizer.toString() : "") +

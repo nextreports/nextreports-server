@@ -21,26 +21,17 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.feedback.FeedbackMessage;
-import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.head.CssReferenceHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.pages.RedirectPage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.time.Duration;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.wicketstuff.push.AbstractPushEventHandler;
 import org.wicketstuff.push.IPushEventContext;
@@ -51,7 +42,6 @@ import org.wicketstuff.push.timer.TimerPushService;
 
 import ro.nextreports.engine.util.DateUtil;
 import ro.nextreports.server.domain.ReportResultEvent;
-import ro.nextreports.server.domain.User;
 import ro.nextreports.server.report.ReportConstants;
 import ro.nextreports.server.service.ReportListener;
 import ro.nextreports.server.service.ReportService;
@@ -59,7 +49,6 @@ import ro.nextreports.server.service.SecurityService;
 import ro.nextreports.server.service.StorageService;
 import ro.nextreports.server.util.AnalysisUtil;
 import ro.nextreports.server.web.NextServerSession;
-import ro.nextreports.server.web.common.behavior.AlertBehavior;
 import ro.nextreports.server.web.common.behavior.FontAwesomeBehavior;
 import ro.nextreports.server.web.common.jgrowl.JGrowlAjaxBehavior;
 import ro.nextreports.server.web.common.slidebar.SlidebarBehavior;
@@ -67,9 +56,6 @@ import ro.nextreports.server.web.common.util.PreferencesHelper;
 import ro.nextreports.server.web.core.section.Section;
 import ro.nextreports.server.web.core.section.SectionManager;
 import ro.nextreports.server.web.language.LanguageManager;
-import ro.nextreports.server.web.security.ChangePasswordPanel;
-import ro.nextreports.server.web.security.cas.CasUtil;
-import ro.nextreports.server.web.themes.ThemesManager;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -146,7 +132,9 @@ public class HomePage extends BasePage {
 		super.onInitialize();
 
         // obtain a reference to a Push service implementation
-        final IPushService pushService = TimerPushService.get();;
+        final IPushService pushService = TimerPushService.get();       
+        ((TimerPushService)pushService).setDefaultPollingInterval(Duration.seconds(storageService.getSettings().getPollingInterval()));
+        
 
         // instantiate push event handler
         IPushEventHandler<Message> handler = new AbstractPushEventHandler<Message>() {

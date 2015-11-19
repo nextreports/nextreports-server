@@ -127,6 +127,13 @@ public class GeneralSettingsPanel extends AbstractSettingsPanel {
         updateImage.add(new SimpleTooltipBehavior(getString("Settings.general.updateIntervalTooltip")));
         form.add(updateImage);
         
+        final TextField<Integer> pollingIntervalField = new TextField<Integer>("pollingInterval");
+        pollingIntervalField.setRequired(true);
+        form.add(pollingIntervalField);      
+        ContextImage poolingImage = new ContextImage("pollingImage","images/information.png");        
+        poolingImage.add(new SimpleTooltipBehavior(getString("Settings.general.pollingIntervalTooltip")));
+        form.add(poolingImage);
+        
         final TextField<Integer> uploadSizeField = new TextField<Integer>("uploadSize");
         uploadSizeField.setRequired(true);
         form.add(uploadSizeField);      
@@ -170,7 +177,6 @@ public class GeneralSettingsPanel extends AbstractSettingsPanel {
    		mailSender.setPassword(settings.getMailServer().getPassword());
    		mailSender.setUsername(settings.getMailServer().getUsername());
 		mailSender.getJavaMailProperties().put("mail.smtp.starttls.enable", settings.getMailServer().getEnableTls());
-
 	}
 
 	public void setStorageService(StorageService storageService) {
