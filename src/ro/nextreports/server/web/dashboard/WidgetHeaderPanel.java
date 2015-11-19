@@ -18,6 +18,8 @@ package ro.nextreports.server.web.dashboard;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -26,6 +28,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.time.Duration;
 import org.odlabs.wiquery.core.events.Event;
 import org.odlabs.wiquery.core.events.MouseEvent;
 import org.odlabs.wiquery.core.events.WiQueryAjaxEventBehavior;
@@ -55,10 +58,12 @@ class WidgetHeaderPanel extends GenericPanel<Widget> {
 	
 	@SpringBean
 	private StorageService storageService;
+	
+	private Label refreshLabel;
 
-    public WidgetHeaderPanel(String id, IModel<Widget> model) {
+    public WidgetHeaderPanel(String id, final IModel<Widget> model) {
 		super(id, model);
-		
+						
         IModel<String> toggleImageModel = new LoadableDetachableModel<String>() {
 
             private static final long serialVersionUID = 1L;
@@ -151,10 +156,26 @@ class WidgetHeaderPanel extends GenericPanel<Widget> {
 					throw new RuntimeException(e);
 				}
 				
+				// when collapse / uncollapse we must also look for AjaxSelfUpdatingTimerBehavior
+				// to stop or start it
 				if (!widget.isCollapsed()) {
 					WidgetPanel widgetPanel = findParent(WidgetPanel.class);
-					widgetPanel.refresh(target);
-				}							
+					int refreshTime = model.getObject().getRefreshTime();
+					if (refreshTime > 0) {
+						widgetPanel.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(refreshTime)));
+					}
+					widgetPanel.refresh(target);					
+				} else {
+					WidgetPanel widgetPanel = findParent(WidgetPanel.class);
+					for (Behavior behavior : widgetPanel.getBehaviors()) {
+						if (behavior instanceof AjaxSelfUpdatingTimerBehavior) {
+							((AjaxSelfUpdatingTimerBehavior) behavior).stop(target);
+							// do not remove the behavior : after changing , the event is called one more time 
+							// on the client so it has to be present ...
+						}
+					}			
+				}
+				target.add(refreshLabel);
 			}
 
 			@Override
@@ -181,6 +202,26 @@ class WidgetHeaderPanel extends GenericPanel<Widget> {
         };
 		toggle.add(new AttributeModifier("title", toggleTooltipModel));
         add(toggle);
+        
+        refreshLabel = new Label("refreshLabel",  new LoadableDetachableModel<String>() {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected String load() {
+				
+				String result = "";
+				if (!getWidget().isCollapsed()) {
+					int refreshTime = model.getObject().getRefreshTime();
+					if (refreshTime > 0) {
+						result = getFormattedRefreshTime(refreshTime);
+					}	
+				}		        
+		        return result;
+			}        	
+        });
+        refreshLabel.setOutputMarkupId(true);
+        add(refreshLabel);
         
 		if (hasWritePermission(model.getObject())) {
 
@@ -255,6 +296,33 @@ class WidgetHeaderPanel extends GenericPanel<Widget> {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	private String getFormattedRefreshTime(int seconds) {
+		StringBuilder sb = new StringBuilder();
+		if (seconds < 60) {
+			sb.append(seconds).append(" (s)");			
+		} else if (seconds < 3600) {
+			int minutes = seconds / 60;
+			int secs = seconds % 60;			
+			sb.append(minutes).append(" (m)");
+			if (secs > 0) {
+				sb.append(" ").append(secs).append(" (s)");
+			}	
+		} else {
+			int hours = seconds / 3600;
+			int minsec = seconds % 3600;
+			int minutes = minsec / 60;
+			int secs = minsec % 60;
+			sb.append(hours).append(" (h)");
+			if (minutes > 0) {
+				sb.append(" ").append(minutes).append(" (m)");
+			}
+			if (secs > 0) {
+				sb.append(" ").append(secs).append(" (s)");
+			}	
+		}
+		return sb.toString();
 	}
 		
 }
