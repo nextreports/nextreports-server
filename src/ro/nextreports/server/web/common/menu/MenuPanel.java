@@ -29,6 +29,8 @@ import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
+import ro.nextreports.server.web.common.behavior.SimpleTooltipBehavior;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -175,6 +177,7 @@ public class MenuPanel extends GenericPanel<List<MenuItem>> {
             } else {
                 link.add(new ContextImage(LINK_IMAGE_ID, image));
             }
+            link.add(new SimpleTooltipBehavior(label));
 			link.add(new Label(LINK_TEXT_ID, label));
 			add(link);
 		}
