@@ -39,6 +39,7 @@ public abstract class BasePage extends SecurePage {
 	protected HeaderPanel headerPanel;
 	protected FooterPanel footerPanel;
 	protected ModalWindow dialog;
+	protected WebMarkupContainer cssContainer;
 
     public BasePage() {
 		this(new PageParameters());
@@ -47,7 +48,7 @@ public abstract class BasePage extends SecurePage {
 	public BasePage(PageParameters parameters) {
 		super(parameters);
 		
-		WebMarkupContainer cssContainer = new WebMarkupContainer("cssPath");       
+		cssContainer = new WebMarkupContainer("cssPath");       
         cssContainer.add(new AttributeModifier("href", ThemesManager.getInstance().getThemeRelativePathCss()));
         add(cssContainer);
 

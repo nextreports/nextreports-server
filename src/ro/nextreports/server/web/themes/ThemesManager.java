@@ -91,6 +91,10 @@ public class ThemesManager {
 	public String getOutsideThemeRelativePathCss() {
 		return "../../themes/" + theme + "/style.css";
 	}
+	
+	public String get3rdThemeRelativePathCss() {
+		return "../../../themes/" + theme + "/style.css";
+	}
 
 	
 	public static String getTickImage(String theme, NextServerApplication application ) {

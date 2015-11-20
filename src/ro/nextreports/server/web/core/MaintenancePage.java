@@ -16,16 +16,21 @@
  */
 package ro.nextreports.server.web.core;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import ro.nextreports.server.web.themes.ThemesManager;
 
 public class MaintenancePage extends BasePage {
 
 	private static final long serialVersionUID = 1L;
 
 	public MaintenancePage(PageParameters parameters) {
+		
+		cssContainer.add(AttributeModifier.replace("href", ThemesManager.getInstance().get3rdThemeRelativePathCss()));
 
 		add(new Label("maintenance", getString("Maintenance.message")));
 		add(new BookmarkablePageLink<HomePage>("home", getApplication().getHomePage()));
