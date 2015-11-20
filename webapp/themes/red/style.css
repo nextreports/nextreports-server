@@ -1327,7 +1327,7 @@ div.w_content {
   padding-top: 4px;
 }
 .form-btns {
-  margin: 0;
+  margin: 10px 0;
 }
 .form-btns:before,
 .form-btns:after {
@@ -2734,85 +2734,145 @@ table.actions-grid tr.navigation td.actions-col a,
 .nrs-integration .actions-col .topnav > li:hover::before {
   display: none;
 }
-.pivot {
-  margin-top: 5px;
-  border: 1px solid #eee;
-}
-.pivot .row-header {
-  font-weight: bold;
-  white-space: nowrap;
-}
-.pivot .col {
-  white-space: nowrap;
-}
-.pivot .grand-total {
-  color: #3A87AD;
-  font-weight: bold;
-  white-space: nowrap;
-}
-.pivot th {
-  padding-left: 5px;
-  padding-right: 5px;
-}
-.areas {
-  padding: 5px;
-  margin: 0px 0px 10px 0px;
-  border: 1px solid #eee;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-}
-.area .name {
-  font-weight: bold;
-  padding: 5px;
-  margin: 3px;
-  float: left;
-  width: 100px;
-  text-align: left;
-}
-.area .value-container {
-  float: left;
-  padding: 3px;
-  margin: 3px;
-  border: 1px solid #eee;
-  background-color: #f5f5f5;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-}
-.area .value {
-  margin-right: 8px;
-  margin-left: 2px;
-}
-.area .initiate {
-  margin-right: 3px;
-  background: url(../images/initiate.gif) no-repeat center center;
-  cursor: move;
-}
-.area .drop-here {
-  color: gray;
-  width: 100%;
-  text-align: center;
-}
-.area .fields-container {
-  height: 1.2em;
-  min-width: 500px;
-}
-.pivot-placeholder {
-  background: #f0f0f0;
-  border: 1px dashed #ddd;
-  margin: 3px;
-  height: 22px !important;
-  float: left;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-}
 .pivotHeight {
   height: 440px;
 }
 .pivotHeightFull {
   height: 100% !important;
+}
+.areas {
+  margin: 0px 0px 10px 0px;
+}
+.areas .area {
+  background: #fafafa none repeat scroll 0 0;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.18);
+  margin: 0 0 5px 0;
+  padding: 5px;
+}
+.areas .area:before,
+.areas .area:after {
+  content: " ";
+  display: table;
+}
+.areas .area:after {
+  clear: both;
+}
+.areas .area .area-name {
+  color: #8e8e8e;
+  display: block;
+  float: left;
+  font-weight: bold;
+  margin: 0 10px 0 0;
+  padding: 5px;
+  text-align: left;
+  width: 70px;
+}
+.areas .area .fields-container {
+  display: block;
+}
+.areas .area .fields-container:before,
+.areas .area .fields-container:after {
+  content: " ";
+  display: table;
+}
+.areas .area .fields-container:after {
+  clear: both;
+}
+.areas .area .fields-container .value-container {
+  background-color: #ffefe9;
+  border: 1px solid #ffddd3;
+  border-radius: 3px;
+  color: #df4c1e;
+  display: block;
+  float: left;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 15px;
+  margin: 0 10px 0 0;
+  padding: 0px;
+  position: relative;
+  text-transform: uppercase;
+}
+.areas .area .fields-container .value-container .initiate {
+  background: rgba(0, 0, 0, 0) url("../../images/initiate.gif") no-repeat scroll center center;
+  cursor: move;
+  display: inline-block;
+  height: 14px;
+  left: 5px;
+  margin-right: 5px;
+  position: absolute;
+  top: 5px;
+  width: 6px;
+}
+.areas .area .fields-container .value-container .value {
+  padding: 5px 8px 5px 16px;
+  display: block;
+  cursor: default;
+}
+.areas .area .fields-container .value-container .value.aggregator {
+  color: #1f1f1f;
+  font-weight: 500;
+}
+.areas .area .pivot-placeholder {
+  background: #f4f4f4;
+  border: 1px dashed #e5e5e5;
+  height: 27px;
+  display: block;
+  float: left;
+  border-radius: 3px;
+  margin-right: 10px;
+}
+.pivot {
+  margin-top: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #e5e5e5;
+}
+.pivot.grid th {
+  background: #edecec;
+  font-weight: 600;
+  color: #4d433f;
+}
+.pivot.grid th.grand-total {
+  background: #ffefe9;
+  color: #df4c1e;
+  text-align: right;
+  font-weight: 600;
+  border-bottom-color: #ffddd3;
+  white-space: nowrap;
+}
+.pivot.grid th.col {
+  white-space: nowrap;
+  text-align: right;
+}
+.pivot.grid td.data {
+  text-align: right;
+}
+.pivot.grid td.data.grand-total {
+  background: #ffefe9;
+  text-align: right;
+  font-weight: 600;
+  color: #df4c1e;
+  border-bottom-color: #ffddd3;
+}
+.pivot.grid tr.grand-total td {
+  text-align: right;
+  font-weight: 600;
+  color: #df4c1e;
+  background: #ffefe9;
+  border-left-color: #ffddd3;
+}
+.pivot.grid tr.grand-total td:first-child {
+  text-align: left;
+}
+.pivot.grid tr.grand-total td:last-child {
+  background: #ff5722;
+  color: #ffefe9;
+  font-size: 12px;
+}
+.area .drop-here {
+  color: #575757;
+  width: 100%;
+  text-align: center;
 }
 /*   BUTTONS
 ----------------------------------------------------------------*/

@@ -4,23 +4,26 @@
 	<div wicket:id="areas" class="areas">
 	   <div wicket:id="area" class="area"></div>
 	</div>
-	<div style="clear: both;"></div>
 	<div>
 		<form>
-		   <span style="margin-left: 5px; float:left;">
-		       <label class="checkbox">
+		   <span>
+		       <label class="checkbox-inline">
 		           <input wicket:id="showGrandTotalForColumn" type="checkbox"/>
 		           <wicket:message key="pivot.showGrandTotalForColumn">[]</wicket:message>
 		       </label>
-		       &nbsp;&nbsp;&nbsp;
-		       <label class="checkbox">
+		       <label class="checkbox-inline">
 		           <input wicket:id="showGrandTotalForRow" type="checkbox"/>
 		           <wicket:message key="pivot.showGrandTotalForRow">[]</wicket:message>
 		       </label>
 		   </span>
 		</form>
     </div>
-	<a wicket:id="compute" href="#" class="button" style="margin-left: 5px; clear: both;"><wicket:message key="pivot.compute">[]</wicket:message></a>      
+	<div>
+		 <ul class="form-btns">
+		     <li><a wicket:id="compute" class="btn btn-primary btn-xs"><wicket:message key="pivot.compute">Compute</wicket:message></a></li>
+		 </ul>
+	</div>
+	<!-- <a wicket:id="compute" href="#" class="button" style="margin-left: 5px; clear: both;"><wicket:message key="pivot.compute">[]</wicket:message></a>   -->    
 	<div style="overflow-x: auto; clear:both;">    
 	   <table wicket:id="pivotTable" class="pivot grid"></table>
 	</div>

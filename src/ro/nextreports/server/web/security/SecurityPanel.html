@@ -2,12 +2,7 @@
 
 <fieldset class="fieldset-panel-right">
         <legend>
-        <span><wicket:message key="SecurityPanel.title">Security</wicket:message></span>
-        <ul class="form-btns pull-right">
-            <li><a wicket:id="cancel" class="btn btn-primary btn-xs"><wicket:message key="back">Back</wicket:message></a></li>
-            <li><a wicket:id="addUser" class="btn btn-primary btn-xs"><wicket:message key="SecurityPanel.addUser">Add User</wicket:message></a></li>
-            <li><a wicket:id="addGroup" class="btn btn-primary btn-xs"><wicket:message key="SecurityPanel.addGroup">Add Group</wicket:message></a></li>
-        </ul>
+        	<span><wicket:message key="SecurityPanel.title">Security</wicket:message></span>
         </legend>
 
         <table>
@@ -19,13 +14,13 @@
         <div class="table-container">
             <table wicket:id="table" class="grid actions-grid"></table>
         </div>
-<!--         <table class="table-padding">
-            <tr>
-                <td>
-
-                </td>
-            </tr>
-        </table> -->
+        <div>
+	        <ul class="form-btns">
+	            <li><a wicket:id="cancel" class="btn btn-primary btn-xs"><wicket:message key="back">Back</wicket:message></a></li>
+	            <li><a wicket:id="addUser" class="btn btn-primary btn-xs"><wicket:message key="SecurityPanel.addUser">Add User</wicket:message></a></li>
+	            <li><a wicket:id="addGroup" class="btn btn-primary btn-xs"><wicket:message key="SecurityPanel.addGroup">Add Group</wicket:message></a></li>
+	        </ul>
+        </div>
         <div wicket:id="dialog"></div>
         <span wicket:id="feedback" class="feedbackPanelERROR"/>
     </fieldset>    
