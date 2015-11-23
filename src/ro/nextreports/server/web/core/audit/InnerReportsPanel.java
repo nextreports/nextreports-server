@@ -50,7 +50,7 @@ public class InnerReportsPanel extends Panel {
 			@Override
 			protected void populateItem(ListItem<InnerReport> item) {
 				item.add(createLink("report", item.getModel()));
-				item.add(new Label("description", getString("Section.Audit.innerReports." + item.getModelObject().getDescription() + ".desc")));
+				//item.add(new Label("description", getString("Section.Audit.innerReports." + item.getModelObject().getDescription() + ".desc")));
 			}			
 		};		
 		
@@ -72,7 +72,8 @@ public class InnerReportsPanel extends Panel {
 				click(model.getObject(), target);
 			}
 		};
-		link.add(new Label("label", getString("Section.Audit.innerReports." + model.getObject().toString())));		
+		link.add(new Label("label", getString("Section.Audit.innerReports." + model.getObject().toString())));	
+		link.add(new Label("description", getString("Section.Audit.innerReports." + model.getObject().getDescription() + ".desc")));
 		return link;
 	}
 	
