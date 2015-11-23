@@ -1469,9 +1469,6 @@ h4 {
   width: calc(100% - 200px);
   height: 100%;
 }
-.analysisLeft + .form-container > .analysis {
-  background: #fff;
-}
 .analysisNavigation {
   overflow-x: hidden;
   overflow-y: auto;
