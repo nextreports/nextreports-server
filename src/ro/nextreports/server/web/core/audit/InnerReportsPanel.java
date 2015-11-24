@@ -75,7 +75,7 @@ public class InnerReportsPanel extends Panel {
 		};
 		link.add(new Label("label", getString("Section.Audit.innerReports." + model.getObject().toString())));	
 		link.add(new Label("description", getString("Section.Audit.innerReports." + model.getObject().getDescription() + ".desc")));
-		link.add(AttributeModifier.append("class", model.getObject().toString()));
+		link.add(AttributeModifier.append("class", "section-" + model.getObject().toString().toLowerCase()));
 		return link;
 	}
 	
