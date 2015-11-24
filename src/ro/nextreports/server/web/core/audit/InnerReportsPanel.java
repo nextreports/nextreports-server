@@ -3,6 +3,7 @@ package ro.nextreports.server.web.core.audit;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
@@ -74,6 +75,7 @@ public class InnerReportsPanel extends Panel {
 		};
 		link.add(new Label("label", getString("Section.Audit.innerReports." + model.getObject().toString())));	
 		link.add(new Label("description", getString("Section.Audit.innerReports." + model.getObject().getDescription() + ".desc")));
+		link.add(AttributeModifier.append("class", model.getObject().toString()));
 		return link;
 	}
 	
