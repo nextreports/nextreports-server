@@ -47,10 +47,10 @@ public class DistributionSettingsPanel extends AbstractSettingsPanel {
         form.add(new MailServerValidator(new FormComponent[] {mailServerIpField, mailServerPortField, mailServerSenderField}));
         
         final TextField<String> distributorDatePatternField = new TextField<String>("distributor.datePattern");
-        distributorDatePatternField.add(new JcrNameValidator());
+        distributorDatePatternField.add(new JcrNameValidator(getString("Settings.general.distributorDatePattern.error")));
         form.add(distributorDatePatternField);
         final TextField<String> distributorTimePatternField = new TextField<String>("distributor.timePattern");
-        distributorTimePatternField.add(new JcrNameValidator());
+        distributorTimePatternField.add(new JcrNameValidator(getString("Settings.general.distributorTimePattern.error")));
         form.add(distributorTimePatternField);
         
         Settings settings = storageService.getSettings();
