@@ -43,7 +43,7 @@ import javax.mail.internet.MimeMessage;
  */
 public class SmtpDistributor implements Distributor {
 			
-    private List<String> users;
+    private List<String> users =  new ArrayList<String>();
 
     private static final Logger LOG = LoggerFactory.getLogger(SmtpDistributor.class);
 
@@ -54,7 +54,11 @@ public class SmtpDistributor implements Distributor {
         	exportedFile = DistributorUtil.getFileCopy(exportedFile, fileName);
 		}
 
-        users = new ArrayList<String>(smtpDestination.getUserRecipients());
+        if (smtpDestination.getUserRecipients() != null) {
+        	users = new ArrayList<String>(smtpDestination.getUserRecipients());
+        } else {
+        	users = new ArrayList<String>();
+        }
         String body = smtpDestination.getMailBody();
         if (body == null) {
             body = "";
