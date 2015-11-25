@@ -7,6 +7,7 @@ import org.apache.wicket.model.StringResourceModel;
 import ro.nextreports.server.web.common.tab.ImageTab;
 import ro.nextreports.server.web.core.settings.ChangeLogoPanel;
 import ro.nextreports.server.web.core.settings.CleanHistorySettingsPanel;
+import ro.nextreports.server.web.core.settings.DistributionSettingsPanel;
 import ro.nextreports.server.web.core.settings.GeneralSettingsPanel;
 import ro.nextreports.server.web.core.settings.IFrameSettingsPanel;
 import ro.nextreports.server.web.core.settings.IntegrationSettingsPanel;
@@ -24,6 +25,7 @@ public class SettingsTab implements ImageTab {
 	public static final byte IFRAME_SETTINGS = 6;
 	public static final byte HISTORY_SETTINGS = 7;
 	public static final byte INTEGRATION_SETTINGS = 8;
+	public static final byte DISTRIBUTION_SETTINGS = 9;
 
 	private static final long serialVersionUID = 1L;
 	
@@ -53,6 +55,8 @@ public class SettingsTab implements ImageTab {
 	public Panel getPanel(String panelId) {
 		if (type == GENERAL_SETTINGS) {
 			return new GeneralSettingsPanel("panel");
+		} else if (type == DISTRIBUTION_SETTINGS) {
+			return new DistributionSettingsPanel("panel");	
 		} else if (type == JASPER_SETTINGS) {
 			return new JasperSettingsPanel("panel");
 		} else if (type == LOOK_SETTINGS) {

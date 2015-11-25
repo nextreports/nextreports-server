@@ -35,8 +35,7 @@ public class JcrNameValidator extends BaseMessageStringValidator {
     public JcrNameValidator(String errorMessage) {
         super(errorMessage);
     }
-
-    // TODO wicket-6
+    
 	@Override
 	public void validate(IValidatable<String> validatable) {
         // check rawValue is a valid jcr name
@@ -46,6 +45,7 @@ public class JcrNameValidator extends BaseMessageStringValidator {
         } catch (IllegalNameException e) {
             if (errorMessage == null) {
             	ValidationError error = new ValidationError();
+            	error.addKey("JcrNameValidator");
         		validatable.error(error);
             } else {
                 ValidationError error = new ValidationError();

@@ -27,6 +27,7 @@ public class FullSettingsPanel extends Panel {
 		
 		add(new ChangeLogoPanel("changeLogo"));		
 		add(new GeneralSettingsPanel("generalSettings"));
+		add(new DistributionSettingsPanel("distributionSettings"));
 		add(new JasperSettingsPanel("jasperSettings"));
 		add(new SynchronizerSettingsPanel("synchronizerSettings"));
 		add(new SchedulerSettingsPanel("schedulerSettings"));
