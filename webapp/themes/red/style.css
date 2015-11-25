@@ -1175,40 +1175,6 @@ div.w_content {
   display: block;
   margin-bottom: 60px;
 }
-.auditSection {
-  overflow: auto;
-}
-.auditTable {
-  border: 1px solid #cacaca;
-  float: left;
-  margin: 0 10px 10px 10px;
-  width: 98%;
-}
-.audit {
-  margin-top: 20px;
-}
-.audit ul li {
-  font-size: 14px;
-  padding: 0px 10px 0px 10px;
-}
-.audit ul li:hover {
-  color: #a03715;
-  cursor: pointer;
-}
-.auditRow {
-  display: inline-block;
-  float: left;
-  margin-right: 20px;
-  margin-bottom: 10px;
-}
-.auditDesc {
-  color: #999;
-  margin-left: 10px;
-}
-.auditToolbar {
-  margin-right: 20px;
-  clear: left;
-}
 .hr {
   display: block;
   height: 0px;
@@ -1614,6 +1580,138 @@ h4 {
 }
 .analysisForm .feedbackPanelERROR {
   float: left;
+}
+.auditSection {
+  height: calc(100vh - 110px);
+  margin: 15px 0;
+  padding: 0;
+}
+.audit {
+  margin-top: 20px;
+}
+.audit ul li {
+  font-size: 14px;
+  padding: 0px 10px 0px 10px;
+}
+.audit ul li:hover {
+  color: #a03715;
+  cursor: pointer;
+}
+.auditRow {
+  display: inline-block;
+  float: left;
+  margin-right: 20px;
+  margin-bottom: 10px;
+}
+.auditDesc {
+  color: #999;
+  margin-left: 10px;
+}
+.sections-list {
+  margin: 10px 0;
+}
+.sections-list:before,
+.sections-list:after {
+  content: " ";
+  display: table;
+}
+.sections-list:after {
+  clear: both;
+}
+.sections-list .audit-section {
+  float: left;
+  padding: 0 15px;
+  position: relative;
+  width: 33.3333%;
+}
+.sections-list .audit-section .section-item {
+  display: block;
+  border: 1px solid #fff;
+  box-shadow: 0 1px 1px #ffddd3;
+  background: #fff none repeat scroll 0% 0%;
+  padding: 10px;
+  position: relative;
+}
+.sections-list .audit-section .section-item .section-title {
+  font-weight: 500;
+  color: #1f1f1f;
+  margin: 0;
+  padding: 0;
+}
+.sections-list .audit-section .section-item .section-desc {
+  color: #8e8e8e;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 11px;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+}
+.sections-list .audit-section .section-item.with-icon {
+  padding-left: 64px;
+}
+.sections-list .audit-section .section-item.with-icon[class^='section-']::after {
+  color: #ffddd3;
+  content: " ";
+  display: block;
+  font-family: FontAwesome;
+  font-size: 36px;
+  left: 0;
+  line-height: 60px;
+  padding: 0;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  width: 64px;
+}
+.sections-list .audit-section .section-item.with-icon.section-rights::after {
+  content: "\f0c0";
+}
+.sections-list .audit-section .section-item.with-icon.section-run::after {
+  content: "\f04b";
+}
+.sections-list .audit-section .section-item.with-icon.section-list::after {
+  content: "\f0ae";
+}
+.sections-list .audit-section .section-item:hover {
+  box-shadow: none;
+  border: 1px solid #ffddd3;
+  background: #faf8f7 none repeat scroll 0% 0%;
+}
+.section-container {
+  height: calc(100% - 36px);
+}
+.section-content {
+  height: calc(100% - 71px);
+  padding: 0 15px;
+}
+.auditToolbar {
+  color: #1f1f1f;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 10px 0;
+  padding: 0 10px;
+}
+.auditToolbar:before,
+.auditToolbar:after {
+  content: " ";
+  display: table;
+}
+.auditToolbar:after {
+  clear: both;
+}
+.auditToolbar > span {
+  display: inline-block;
+  margin-top: 5px;
+}
+.auditTable {
+  border: 1px solid #e5e5e5;
+  height: calc(100% - 32px);
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  width: 100%;
 }
 /** height is dynamically updated in nextserver.js in function onResize()  */
 .left {
@@ -2203,10 +2301,19 @@ table.actions-grid tr.navigation td.actions-col a,
 .actions-grid .navigation a {
   padding-top: 0px !important;
 }
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
 #sb-site,
 .sb-site-container {
   background: 0 none;
   padding: 50px 0 30px 0;
+  min-height: 100vh;
+  position: relative;
+  width: 100%;
+  z-index: 1;
 }
 .header .sb-toggle-left {
   border-right: 1px solid #e5e5e5;
@@ -2730,6 +2837,19 @@ table.actions-grid tr.navigation td.actions-col a,
 }
 .nrs-integration .actions-col .topnav > li:hover::before {
   display: none;
+}
+.block-header {
+  margin: 0 0 15px 0;
+  padding: 0 15px;
+  position: relative;
+}
+.block-header > h2 {
+  color: #8e8e8e;
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+  text-transform: uppercase;
 }
 .pivotHeight {
   height: 440px;

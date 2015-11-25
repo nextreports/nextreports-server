@@ -1,13 +1,11 @@
-<wicket:panel>
-	<div class="audit">
-		<ul wicket:id="listReports">
-			<span class="auditRow">
-		   		<li wicket:id="report">
-		   			<span wicket:id="label"></span>
-		   			<span wicket:id="description" class="auditDesc"></span>	
-		   		</li>		   		
-	   		</span>	   		
-		</ul>
-	</div>
-	<div wicket:id="panel"/>
+<wicket:panel> 
+   <div class="sections-list">
+		<div wicket:id="listReports" class="audit-section">
+            <a wicket:id="report" class="section-item with-icon">
+                <h4 wicket:id="label" class="section-title">[]</h4>
+                <p wicket:id="description" class="section-desc">[]</p>
+            </a>
+        </div>
+    </div>
+	<div class="section-content" wicket:id="panel"/>
 </wicket:panel>
