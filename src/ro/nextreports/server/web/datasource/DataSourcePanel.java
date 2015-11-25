@@ -182,7 +182,7 @@ public class DataSourcePanel extends Panel {
             add(password);
             
             minPool = new TextField<Integer>("minPoolSize");
-            minPool.add(RangeValidator.minimum(1));
+            minPool.add(RangeValidator.minimum(0));
             add(minPool);
             maxPool = new TextField<Integer>("maxPoolSize");
             maxPool.add(RangeValidator.minimum(1));
