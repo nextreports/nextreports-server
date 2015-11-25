@@ -8,7 +8,6 @@ html,body{
 	background: 0 none;
 	padding:50px 0 30px 0;
     min-height: 100vh;
-    position: relative;
     width: 100%;
     z-index: 1;
 }
@@ -184,4 +183,16 @@ html,body{
 	.sb-slidebar { width: 20%; }
 	.sb-width-thin { width: 15%; }
 	.sb-width-wide { width: 35%; }
+}
+
+// Exista un bug la Boostrap pentru modala atunci cand se afla intr-un container avand setat "position: relative"
+// Am vazut ca se comporta la fel de ciudat cand am transform
+.nrs{
+    #sb-site {
+        position: initial!important;
+        -webkit-transform: none;
+           -moz-transform: none;
+             -o-transform: none;
+                transform: none;
+      }
 }
