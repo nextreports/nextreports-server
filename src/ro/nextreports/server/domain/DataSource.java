@@ -30,6 +30,8 @@ public class DataSource extends Entity {
 	
 	private static final int DEFAULT_MIN_POOL_SIZE = 0;
 	private static final int DEFAULT_MAX_POOL_SIZE = 20;
+	private static final int DEFAULT_IDLE_TIME = 300;
+	private static final int DEFAULT_INCREMENT = 5;
 	
 	public static final String JNDI_VENDOR = "JNDI";
 
@@ -56,6 +58,12 @@ public class DataSource extends Entity {
     
     @JcrProperty
     private Integer maxPoolSize;
+    
+    @JcrProperty
+    private Integer incrementPoolCon;
+    
+    @JcrProperty
+    private Integer idleTimePoolCon;
 
     public DataSource() {
     	super();
@@ -141,6 +149,28 @@ public class DataSource extends Entity {
 		} else {
 			this.maxPoolSize = maxPoolSize;
 		}
+	}		
+
+	public Integer getIncrementPoolCon() {
+		if ((incrementPoolCon == null) || (incrementPoolCon < 1)) {
+			return DEFAULT_INCREMENT;
+		}
+		return incrementPoolCon;
+	}
+
+	public void setIncrementPoolCon(Integer incrementPoolCon) {
+		this.incrementPoolCon = incrementPoolCon;
+	}
+
+	public Integer getIdleTimePoolCon() {
+		if ((idleTimePoolCon == null) || (idleTimePoolCon < 1)) {
+			return DEFAULT_IDLE_TIME;
+		}
+		return idleTimePoolCon;
+	}
+
+	public void setIdleTimePoolCon(Integer idleTimePoolCon) {
+		this.idleTimePoolCon = idleTimePoolCon;
 	}
 
 	@Override
