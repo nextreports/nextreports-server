@@ -321,29 +321,43 @@
     }
     
     /* Butoane */
+    
+    .btn-default{
+        .button-variant(
+            @btn-default-text-color;
+            @btn-default-bg-color;
+            @btn-default-border-color;
+            @btn-default-hover-text-color;
+            @btn-default-hover-bg-color;
+            @btn-default-hover-border-color
+        );
+    }
     .btn-primary{
-        background-color: @btn-primary-bg-color;
-        border-color: @btn-primary-border-color;
-        color: @btn-primary-text-color;
-        
-        &:hover{
-            background-color: @btn-primary-hover-bg-color;
-            border-color: @btn-primary-hover-border-color;
-            color: @btn-primary-hover-text-color;
-        }
+        .button-variant(
+            @btn-primary-text-color;
+            @btn-primary-bg-color;
+            @btn-primary-border-color;
+            @btn-primary-hover-text-color;
+            @btn-primary-hover-bg-color;
+            @btn-primary-hover-border-color
+        );
+    }
+    .btn-secondary{
+        .button-variant(
+            @btn-secondary-text-color;
+            @btn-secondary-bg-color;
+            @btn-secondary-border-color;
+            @btn-secondary-hover-text-color;
+            @btn-secondary-hover-bg-color;
+            @btn-secondary-hover-border-color
+        );
     }
     
-    .btn-secondary{
-        background-color: @btn-secondary-bg-color;
-        border-color: @btn-secondary-border-color;
-        color: @btn-secondary-text-color;
-        
-        &:hover{
-            background-color: @btn-secondary-hover-bg-color;
-            border-color: @btn-secondary-hover-border-color;
-            color: @btn-secondary-hover-text-color;
-        }
-    }
+
+
+
+
+    
     .toolbar_nav > .btn{
         margin: 5px 0;
         vertical-align: top;

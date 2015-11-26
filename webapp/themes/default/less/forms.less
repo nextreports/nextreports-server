@@ -159,3 +159,121 @@
 }
 
 /* Form End */
+
+
+/* Checkbox & Radio */
+input[type=checkbox].nrs , input[type=radio].nrs {
+	opacity:0;
+	position:absolute;
+	z-index:12;
+	width:18px; 
+    height:18px;
+	cursor:pointer;
+    margin: 0;
+	
+	&:checked, &:focus {
+		outline:none !important;
+	}
+	
+	+ .lbl {
+		position: relative; 
+        z-index:11;
+		display:inline-block;
+		margin:0;
+		line-height:18px;
+		min-height:18px;
+		min-width:18px;
+		font-weight:normal;
+		
+		
+		.checkbox-paddings() {// a little paddings for .lbl
+			 .checkbox-paddingX (@index) when (@index >= 0) {
+				&.padding-@{index}::before {
+					margin-right:unit(@index,px);
+				}
+			   .checkbox-paddingX(@index - 4);
+			  }
+			  .checkbox-paddingX(16);
+		}
+		.checkbox-paddings();
+
+
+		&::before {
+			content:"\a0";
+            font-family:FontAwesome; 
+            font-weight:normal;
+			font-size: 12px; 
+            color:@input-checkbox-color;
+			display:inline-block;
+			background-color: #FAFAFA;
+			border: 1px solid @input-checkbox-border;
+			box-shadow: 0 1px 2px rgba(0,0,0,0.05);/*, inset 0px -15px 10px -12px rgba(0,0,0,0.05);*/
+			border-radius: 4px;
+			display: inline-block;
+			text-align:center;
+			vertical-align:middle;
+			height:16px; 
+            line-height:13px;
+			min-width:16px;	
+			margin-right:5px;
+		}
+	}//.lbl
+	
+	&:checked + .lbl::before {
+		display:inline-block;
+		content: '\f00c';
+		background-color: #F5F8FC;
+		border-color:@input-checkbox-checked-border;
+		box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05), inset 15px 10px -12px rgba(255,255,255,0.1);
+	}
+	&:hover + .lbl::before , + .lbl:hover::before {
+		border-color:@input-checkbox-hover-border;
+	}
+
+	
+	&:active , &:checked:active {
+		+ .lbl::before {
+			box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+		}
+	}
+	
+	
+	&.nrs-checkbox-2 + .lbl::before {
+		box-shadow: none;
+	}
+	&.nrs-checkbox-2:checked + .lbl::before {
+		background-color: @input-checkbox2-bg;
+		border-color: @input-checkbox2-bg;
+		color: #FFF;
+	}
+
+	&:disabled + .lbl::before ,
+	&[disabled] + .lbl::before ,
+	&.disabled + .lbl::before {
+		background-color:@btn-disabled-bg-color !important;
+		border-color:@btn-disabled-border-color !important;
+		box-shadow:none !important;
+		color:@btn-disabled-text-color;
+	}
+}
+
+input[type=radio].nrs + .lbl::before {
+	border-radius: 100%;
+	font-size: 11px;
+	font-family: FontAwesome;//let's use a fonts that's available everywhere
+	text-shadow: 0 0 1px @input-checkbox-color;
+
+	line-height: 13px;	
+	height: 16px;
+	min-width: 16px;
+}
+input[type=radio].nrs:checked + .lbl::before {
+	content:"\f111";
+}
+
+.nrs-checkbox{
+    margin-bottom: 0;
+    &.radio-inline, &.checkbox-inline{
+        padding-left: 0;
+    }
+}

@@ -6,16 +6,17 @@
 	</div>
 	<div>
 		<form>
-		   <span>
-		       <label class="checkbox-inline">
-		           <input wicket:id="showGrandTotalForColumn" type="checkbox"/>
-		           <wicket:message key="pivot.showGrandTotalForColumn">[]</wicket:message>
+		   
+		   <div class="form-group">
+		   	  <label class="nrs-checkbox checkbox-inline">
+		   	  	<input class="nrs" type="checkbox" wicket:id="showGrandTotalForColumn"/>
+		   	  	<span class="lbl"><wicket:message key="pivot.showGrandTotalForColumn">[]</wicket:message> </span>
+		   	  </label>
+		       <label class="nrs-checkbox checkbox-inline">
+		           <input class="nrs" type="checkbox" wicket:id="showGrandTotalForRow" />
+		           <span class="lbl"><wicket:message key="pivot.showGrandTotalForRow">[]</wicket:message> </span>
 		       </label>
-		       <label class="checkbox-inline">
-		           <input wicket:id="showGrandTotalForRow" type="checkbox"/>
-		           <wicket:message key="pivot.showGrandTotalForRow">[]</wicket:message>
-		       </label>
-		   </span>
+		   </div>
 		</form>
     </div>
 	<div>

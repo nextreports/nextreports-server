@@ -1,25 +1,44 @@
 // main: style.less
 .clearfix() {
-  &:before,
-  &:after {
-    content: " ";
-    display: table;
-  }
-  &:after {
-    clear: both;
-  }
+    &:before, &:after {
+        content: " ";
+        display: table;
+    }
+
+    &:after { clear: both; }
 }
 
-
-.font-face(@family, @name, @weight: 300, @style){
-    @font-face{
+.font-face(@family, @name, @weight: 300, @style) {
+    @font-face {
         font-family: @family;
-        src:url('../../fonts/@{family}/@{name}.eot');
-        src:url('../../fonts/@{family}/@{name}.eot?#iefix') format('embedded-opentype'),
-            url('../../fonts/@{family}/@{name}.woff') format('woff'),
-            url('../../fonts/@{family}/@{name}.ttf') format('truetype'),
-            url('../../fonts/@{family}/@{name}.svg#icon') format('svg');
+        src: url('../../fonts/@{family}/@{name}.eot');
+        src: url('../../fonts/@{family}/@{name}.eot?#iefix') format('embedded-opentype'), url('../../fonts/@{family}/@{name}.woff') format('woff'), url('../../fonts/@{family}/@{name}.ttf') format('truetype'), url('../../fonts/@{family}/@{name}.svg#icon') format('svg');
         font-weight: @weight;
         font-style: @style;
+    }
+}
+
+/* Override Bootstrap Button Mixin
+ -------------------------------------*/
+.button-variant(@n-color; @n-background; @n-border; @h-color; @h-background; @h-border) {
+    color: @n-color;
+    background-color: @n-background;
+    border-color: @n-border;
+    font-weight: 500;
+
+    &:hover, &:focus, &.focus, &:active {
+        color: @h-color;
+        background-color: @h-background;
+        border-color: @h-border;
+    }
+
+    &:active, &.active { background-image: none; }
+
+    &.disabled, &[disabled] {
+        &, &:hover, &:focus, &.focus, &:active {
+            color: @btn-disabled-text-color;
+            background-color: @btn-disabled-bg-color;
+            border-color: @btn-disabled-border-color;
+        }
     }
 }
