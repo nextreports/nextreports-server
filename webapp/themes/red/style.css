@@ -2311,7 +2311,6 @@ body {
   background: 0 none;
   padding: 50px 0 30px 0;
   min-height: 100vh;
-  position: relative;
   width: 100%;
   z-index: 1;
 }
@@ -2504,6 +2503,13 @@ body {
   .sb-width-wide {
     width: 35%;
   }
+}
+.nrs #sb-site {
+  position: initial!important;
+  -webkit-transform: none;
+  -moz-transform: none;
+  -o-transform: none;
+  transform: none;
 }
 .nrs {
   padding: 0;
