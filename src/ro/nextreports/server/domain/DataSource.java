@@ -121,7 +121,7 @@ public class DataSource extends Entity {
 	}
 
 	public void setMinPoolSize(Integer minPoolSize) {
-		if ((minPoolSize == null) || (minPoolSize < 1)) {
+		if ((minPoolSize == null) || (minPoolSize < 0)) {
 			this.minPoolSize = DEFAULT_MIN_POOL_SIZE;
 		} else {
 			this.minPoolSize = minPoolSize;
