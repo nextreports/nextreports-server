@@ -469,14 +469,6 @@ ul.subnav li a:hover {
   padding-right: 0px;
   background: #F4F4F4;
 }
-.table-container .navigator,
-.table-right-container .navigator {
-  height: 20px;
-}
-.table-container .navigatorLabel,
-.table-right-container .navigatorLabel {
-  padding: 2px 2px;
-}
 .table-right-container {
   height: 100%;
   overflow: auto;
@@ -1495,7 +1487,7 @@ input[type=radio].nrs:checked + .lbl::before {
   border-bottom: 1px solid #e4e5e7;
 }
 .analysisNavigation tr.selected {
-  background-color: #d9e3b6;
+  background-color: #ffddd3;
 }
 .analysisNavigation tr.selected a {
   color: #000000;
@@ -1995,7 +1987,7 @@ ul.column {
   padding: 5px 0;
 }
 .dashboardNavigation tr.selected {
-  background-color: #d9e3b6;
+  background-color: #ffddd3;
 }
 .dashboardNavigation tr.selected a {
   color: #000000;
@@ -2336,6 +2328,12 @@ table.grid.no-borders td:last-child {
 .grid .navigation > td {
   padding: 0px;
   border: 0 none;
+}
+.grid .navigation > td:last-child {
+  border-right: none;
+}
+.grid .navigation > td:first-child {
+  border-left: none;
 }
 .tableWidgetView .grid {
   border: 1px solid #e5e5e5;
@@ -3133,6 +3131,7 @@ body {
   position: relative;
   width: 200px;
   z-index: 1500;
+  margin-right: -1px;
   margin-top: 10px;
   height: calc(100% - 10px);
   overflow: auto;
@@ -3142,6 +3141,7 @@ body {
   display: block;
   margin-bottom: 5px;
   padding: 0;
+  margin-right: 1px;
 }
 .tabpanesettings .tab-row-settings li a {
   background: #edecec;
@@ -3160,10 +3160,18 @@ body {
   background: #ffdccf;
   color: #a03715;
   text-decoration: none;
+  border-left: 5px solid #ff5722;
 }
 .tabpanesettings .tab-row-settings li a .left-image {
   display: inline-block;
   padding: 3px 6px 3px 3px;
+}
+.tabpanesettings .tab-row-settings li.selected {
+  border-color: #ffb79c transparent #ffb79c #ffb79c;
+  border-image: none;
+  border-style: solid none solid solid;
+  border-width: 1px 0 1px 1px;
+  margin-right: 0;
 }
 .tabpanesettings .tab-row-settings li.selected a {
   background: #ffffff none repeat scroll 0 0;
@@ -3171,7 +3179,7 @@ body {
   color: #df4c1e;
   font-weight: 600;
   letter-spacing: 0.05em;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.08);
 }
 .tabpanesettings .tab-panel-settings {
   background: #ffffff none repeat scroll 0 0;
@@ -3182,6 +3190,7 @@ body {
   width: calc(100% - 215px);
   z-index: 1400;
   overflow: auto;
+  border: 1px solid #ffb79c;
 }
 .tab-row ul {
   position: absolute;

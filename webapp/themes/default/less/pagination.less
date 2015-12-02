@@ -99,7 +99,10 @@
     
     .grid & > td{
         padding: 0px;
-        border: 0 none; 
+        border: 0 none;
+        
+        &:last-child{ border-right: none; }
+        &:first-child{ border-left: none; }
     }
 }
 
