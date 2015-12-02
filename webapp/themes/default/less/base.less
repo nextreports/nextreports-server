@@ -658,6 +658,7 @@ element.style {
     border-collapse: collapse;
 }
 
+/*
 .button:hover, .secondary:hover, .primary:hover, .manualListButton:hover, .button2:hover,
 .paletteContainer table.palette td.buttons button:hover,
 .wizardScheduler .wicketExtensionsWizardButtonBar input:hover,
@@ -674,7 +675,7 @@ element.style {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@btn-background-hover', endColorstr='@btn-top-color', GradientType=0);
     background-color: @btn-background;
 }
-
+*/
 .wizardScheduler .wicketExtensionsWizardViewRow {
 	height: 110px;
 }
@@ -808,6 +809,11 @@ span.tree-content .selected span.tree-label {
 }
 
 .paletteContainer table.palette td.buttons button {
+    height: auto;
+    width: 100%;
+}
+/* 
+.paletteContainer table.palette td.buttons button {
     width: 40px;
     height: 22px;
     padding: 0 14px 5px;
@@ -822,6 +828,7 @@ span.tree-content .selected span.tree-label {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@btn-top-color', endColorstr='@btn-bottom-color', GradientType=0);
     background-color: @btn-background;
 }
+*/
 
 /* Palette End */
 
@@ -991,16 +998,25 @@ span.tree-content .selected span.tree-label {
 
 /* Dashboard */
 .dashboard-widget-container {
-	padding-bottom: 10px;
-	margin-bottom: 10px;
-	border-bottom: 1px dashed #000;
-	float: left;
-	width: 100%;
+	margin: 0 0 15px;
+    display: block;
+    padding: 0 0 15px;
+    border-bottom: 1px dashed darken(@main-light-color,15%);
+}
+
+.dashboard-widget-container:last-child{
+    margin: 0;
+    padding: 0;
+    border: 0 none;
+}
+
+.dashboard-widget-container .block-header{
+    padding: 0;
 }
 
 .dashboard-widget-container-no-border {
-	float: left;
-	width: 100%;
+	margin-bottom: 10px;
+    display: block;
 }
 
 .dashboard-widget-header {
@@ -1013,21 +1029,6 @@ span.tree-content .selected span.tree-label {
     clear: both;
 }
 
-.dashboard-widget-header-left {
-    float: left;
-    background: url(../../images/widget-left.gif) no-repeat;
-    height: 24px;
-    width: 13px;
-    display: none;
-}
-
-.dashboard-widget-header-right {
-    float: right;
-    background: url(../../images/widget-right.gif) no-repeat;
-    height: 24px;
-    width: 13px;
-    display: none;
-}
 
 /* Ajax Busy Indicator */
 .wicket-ajax-indicator table {

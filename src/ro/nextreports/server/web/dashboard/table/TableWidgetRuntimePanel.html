@@ -2,7 +2,7 @@
     <table>
         <tr>
 		    <td class="td-label">
-                 <label class="small"><wicket:message key="Runtime.refreshTime">Refresh Time (sec)</wicket:message></label>
+                 <label><wicket:message key="Runtime.refreshTime">Refresh Time (sec)</wicket:message></label>
             </td>
 			<td>
                 <input type="text" wicket:id="refreshTime" style="width:80px;"/>
@@ -10,7 +10,7 @@
 		</tr>
 		<tr>
 		    <td class="td-label">
-                 <label class="small"><wicket:message key="Runtime.timeout">Timeout (sec)</wicket:message></label>
+                 <label><wicket:message key="Runtime.timeout">Timeout (sec)</wicket:message></label>
             </td>
 			<td>
                 <input type="text" wicket:id="timeout" style="width:80px;"/>
@@ -18,7 +18,7 @@
 		</tr>
 		<tr>
 		    <td class="td-label">
-                 <label class="small"><wicket:message key="Runtime.rowsPerPage">Rows per page</wicket:message></label>
+                 <label><wicket:message key="Runtime.rowsPerPage">Rows per page</wicket:message></label>
             </td>
 			<td>
                 <input type="text" wicket:id="rowsPerPage" style="width:80px;"/>
@@ -26,7 +26,7 @@
 		</tr>
 		<tr>
 			<td class="td-label">
-                 <label class="small"><wicket:message key="Table.enableFilter">Enable Filter</wicket:message></label>
+                 <label><wicket:message key="Table.enableFilter">Enable Filter</wicket:message></label>
             </td>
 			<td>
                 <input wicket:id="enableFilter" name="enableFilter" type="checkbox"/>
@@ -34,10 +34,10 @@
 		</tr>
         <tr wicket:id="params">
             <td class="td-label">
-                <label class="small" wicket:id="name">[]</label>
+                <label wicket:id="name">[]</label>
             </td>
             <td>
-                <ul class="form-btns">
+                <ul>
                     <li><input type="text" wicket:id="txtValue"/></li>
                     <li><div wicket:id="txtTime" class="left"/></li>
                     <li><div wicket:id="txtDate" class="left"/></li>

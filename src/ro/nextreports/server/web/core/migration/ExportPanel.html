@@ -1,16 +1,14 @@
 <wicket:panel>	
-	<div class="form-container form-container-dialog">
+	<div class="form-container">
 		<form wicket:id="exportForm">
             <table>                                
                 <tr>              
                 	<td class="td-label">
-                		<label><strong><wicket:message key="Settings.migration.export.entities">Entities</wicket:message><em>*</em></strong></label>
+                		<strong><wicket:message key="Settings.migration.export.entities">Entities</wicket:message><em>*</em></strong>
                 	</td>
                 	<td>
-                        <ul class="form-btns">
-                            <li><input wicket:id="addElement" type="submit" value="+" class="manualListButton"/></li>
-                            <li><input wicket:id="removeElement" type="submit" value="-" class="manualListButton"/></li>
-                        </ul>
+                        <input wicket:id="addElement" type="submit" value="+" class="btn btn-primary btn-xs"/>
+                        <input wicket:id="removeElement" type="submit" value="-" class="btn btn-primary btn-xs"/>
                     </td>
                 </tr>  
                 <tr>
@@ -34,7 +32,6 @@
                             </li>
                         </ul>
                     </td>
-                    <td></td>                    
                 </tr>
             </table>            
         </form>

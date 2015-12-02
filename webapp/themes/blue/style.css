@@ -596,25 +596,24 @@ element.style {
   text-transform: uppercase;
   border-collapse: collapse;
 }
-.button:hover,
-.secondary:hover,
-.primary:hover,
-.manualListButton:hover,
-.button2:hover,
+/*
+.button:hover, .secondary:hover, .primary:hover, .manualListButton:hover, .button2:hover,
 .paletteContainer table.palette td.buttons button:hover,
 .wizardScheduler .wicketExtensionsWizardButtonBar input:hover,
 .wizardScheduler td a.wizardButton:hover {
-  text-decoration: none !important;
-  border: 1px solid #779800;
-  color: #ffffff;
-  border-radius: 4px 4px 4px 4px;
-  background: -webkit-linear-gradient(#afc951, #8cb200);
-  background: -webkit-gradient(linear, left top, left bottom, #afc951, #8cb200);
-  background: -moz-linear-gradient(center top, #afc951, #8cb200);
-  background: -ms-linear-gradient(#afc951, #8cb200);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@btn-background-hover', endColorstr='@btn-top-color', GradientType=0);
-  background-color: #8cb200;
+    text-decoration: none !important;
+	border: 1px solid @btn-border-color-hover;
+    color: @btn-text-color-hover;
+    border-radius: @btn-radius @btn-radius @btn-radius @btn-radius;
+
+    background: -webkit-linear-gradient(@btn-background-hover, @btn-top-color);
+    background: -webkit-gradient(linear, left top, left bottom, @btn-background-hover, @btn-top-color);
+    background: -moz-linear-gradient(center top, @btn-background-hover, @btn-top-color);
+    background: -ms-linear-gradient(@btn-background-hover, @btn-top-color);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@btn-background-hover', endColorstr='@btn-top-color', GradientType=0);
+    background-color: @btn-background;
 }
+*/
 .wizardScheduler .wicketExtensionsWizardViewRow {
   height: 110px;
 }
@@ -728,19 +727,26 @@ span.tree-content .selected span.tree-label {
   padding-right: 10px;
 }
 .paletteContainer table.palette td.buttons button {
-  width: 40px;
-  height: 22px;
-  padding: 0 14px 5px;
-  border: 1px solid #779800;
-  color: #ffffff;
-  border-radius: 4px 4px 4px 4px;
-  background: -webkit-linear-gradient(#8cb200, #789800);
-  background: -webkit-gradient(linear, left top, left bottom, #8cb200, #789800);
-  background: -moz-linear-gradient(center top, #8cb200, #789800);
-  background: -ms-linear-gradient(#8cb200, #789800);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@btn-top-color', endColorstr='@btn-bottom-color', GradientType=0);
-  background-color: #8cb200;
+  height: auto;
+  width: 100%;
 }
+/* 
+.paletteContainer table.palette td.buttons button {
+    width: 40px;
+    height: 22px;
+    padding: 0 14px 5px;
+	border: 1px solid @btn-border-color;
+    color: @btn-text-color;
+    border-radius: @btn-radius @btn-radius @btn-radius @btn-radius;
+
+    background: -webkit-linear-gradient(@btn-top-color, @btn-bottom-color);
+    background: -webkit-gradient(linear, left top, left bottom, @btn-top-color, @btn-bottom-color);
+    background: -moz-linear-gradient(center top, @btn-top-color, @btn-bottom-color);
+    background: -ms-linear-gradient(@btn-top-color, @btn-bottom-color);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@btn-top-color', endColorstr='@btn-bottom-color', GradientType=0);
+    background-color: @btn-background;
+}
+*/
 /* Palette End */
 /* Wizard Start */
 .wizardScheduler {
@@ -885,15 +891,22 @@ span.tree-content .selected span.tree-label {
 /* Feedback End */
 /* Dashboard */
 .dashboard-widget-container {
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-  border-bottom: 1px dashed #000;
-  float: left;
-  width: 100%;
+  margin: 0 0 15px;
+  display: block;
+  padding: 0 0 15px;
+  border-bottom: 1px dashed #77cff9;
+}
+.dashboard-widget-container:last-child {
+  margin: 0;
+  padding: 0;
+  border: 0 none;
+}
+.dashboard-widget-container .block-header {
+  padding: 0;
 }
 .dashboard-widget-container-no-border {
-  float: left;
-  width: 100%;
+  margin-bottom: 10px;
+  display: block;
 }
 .dashboard-widget-header {
   /*background: url( ../images/bread-middle.gif ) repeat-x;*/
@@ -903,20 +916,6 @@ span.tree-content .selected span.tree-label {
   height: 28px;
   line-height: 28px width : 100 %;
   clear: both;
-}
-.dashboard-widget-header-left {
-  float: left;
-  background: url(../../images/widget-left.gif) no-repeat;
-  height: 24px;
-  width: 13px;
-  display: none;
-}
-.dashboard-widget-header-right {
-  float: right;
-  background: url(../../images/widget-right.gif) no-repeat;
-  height: 24px;
-  width: 13px;
-  display: none;
 }
 /* Ajax Busy Indicator */
 .wicket-ajax-indicator table {
@@ -1716,6 +1715,7 @@ input[type=radio].nrs:checked + .lbl::before {
 }
 .section-container {
   height: calc(100% - 36px);
+  margin: 0 -15px;
 }
 .section-content {
   height: calc(100% - 71px);
@@ -2032,7 +2032,7 @@ table tr td.date {
 table.grid {
   width: 100%;
   background: #FFFFFF;
-  border-bottom: 1px solid #e5e5e5;
+  border-collapse: separate;
 }
 table.grid tr.tr-even {
   background: #f4f4f4;
@@ -2082,7 +2082,8 @@ table.grid th.th-hover a {
   text-decoration: none;
   color: #ffffff;
 }
-table.grid tbody td {
+table.grid tbody td,
+table.grid tfoot td {
   padding: 2px 5px;
   line-height: 18px;
   border-bottom: 1px solid #e5e5e5;
@@ -2963,7 +2964,7 @@ body {
 }
 .block-header {
   margin: 0 0 15px 0;
-  padding: 0 15px;
+  padding: 0;
   position: relative;
 }
 .block-header > h2 {
@@ -3127,9 +3128,9 @@ body {
 }
 .tabpanesettings .tab-row-settings {
   float: left;
-  padding-left: 15px;
+  padding-left: 0;
   position: relative;
-  width: 200px;
+  width: 180px;
   z-index: 1500;
   margin-right: -1px;
   margin-top: 10px;
@@ -3187,7 +3188,7 @@ body {
   float: left;
   height: 100%;
   position: relative;
-  width: calc(100% - 215px);
+  width: calc(100% - 180px);
   z-index: 1400;
   overflow: auto;
   border: 1px solid #9fe0f7;

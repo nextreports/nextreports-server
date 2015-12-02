@@ -9,7 +9,7 @@ table tr td.date {
 table.grid {
     width: 100%;     
     background: #FFFFFF;
-    border-bottom: 1px solid @hr-borders-color;
+    border-collapse: separate;
 }
 
 table.grid tr.tr-even {
@@ -68,7 +68,7 @@ table.grid th.th-hover a {
     color: @table-header-text-hover;
 }
 
-table.grid tbody td {
+table.grid tbody td, table.grid tfoot td {
     padding: 2px 5px;
     line-height: 18px;
     border-bottom: 1px solid @table-border-color;
