@@ -8,7 +8,7 @@
 			<div style="float: right; margin-right: 5px;">
 				<label wicket:id="rowsLabel" style="margin-right: 2px;"/>
 				<input type="text" size=4 wicket:id="rows" style="margin-right: 2px;"/>
-				<input wicket:id="rowsLink" wicket:message="value:set" type="submit" class="button2" style="height: 19px; margin-top: 0px; margin-bottom: 0px; line-height: 15px;"/>
+				<input wicket:id="rowsLink" wicket:message="value:set" type="submit" class="btn btn-primary btn-xs" style="height: 19px; margin-top: 0px; margin-bottom: 0px; line-height: 15px;"/>
 			</div>	
 		</div>    	    	
         <span wicket:id="group">
@@ -16,9 +16,9 @@
         		<table wicket:id="runHistoryTable" class="grid"></table>
         	</div>
         </span>        
-        <input wicket:id="deleteLink" wicket:message="value:deleteSelected" class="secondary" type="submit"/>
+        <input wicket:id="deleteLink" wicket:message="value:deleteSelected" class="btn btn-primary btn-xs" type="submit"/>
         <div wicket:id="buttonsPanel" style="float: left; width: 100%; margin-top: 5px;">
-            <a wicket:id="cancel" class="secondary"><wicket:message key="back">Back</wicket:message></a>
+            <a wicket:id="cancel" class="btn btn-primary btn-xs"><wicket:message key="back">Back</wicket:message></a>
         </div>
     </form>
 </wicket:panel>
