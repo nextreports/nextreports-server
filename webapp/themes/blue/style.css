@@ -959,7 +959,7 @@ body#body-license {
 }
 /*  end Licence Page */
 .yui-skin-sam img {
-  padding-bottom: 7px;
+  padding-bottom: 3px;
 }
 .validationMessage {
   color: red;
@@ -1042,7 +1042,7 @@ div.wicket-modal div.w_content_container {
   padding-right: 2px;
 }
 .yui-calcontainer {
-  width: 140px;
+  width: 170px;
 }
 /* end - date picker over dialog   */
 h3.w_captionText {
