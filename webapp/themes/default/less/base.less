@@ -658,24 +658,17 @@ element.style {
     border-collapse: collapse;
 }
 
-/*
-.button:hover, .secondary:hover, .primary:hover, .manualListButton:hover, .button2:hover,
-.paletteContainer table.palette td.buttons button:hover,
+
+.manualListButton:hover, 
 .wizardScheduler .wicketExtensionsWizardButtonBar input:hover,
 .wizardScheduler td a.wizardButton:hover {
     text-decoration: none !important;
-	border: 1px solid @btn-border-color-hover;
-    color: @btn-text-color-hover;
+	border: 1px solid @btn-primary-hover-border-color;
+    color: @btn-primary-hover-text-color;
     border-radius: @btn-radius @btn-radius @btn-radius @btn-radius;
-
-    background: -webkit-linear-gradient(@btn-background-hover, @btn-top-color);
-    background: -webkit-gradient(linear, left top, left bottom, @btn-background-hover, @btn-top-color);
-    background: -moz-linear-gradient(center top, @btn-background-hover, @btn-top-color);
-    background: -ms-linear-gradient(@btn-background-hover, @btn-top-color);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@btn-background-hover', endColorstr='@btn-top-color', GradientType=0);
-    background-color: @btn-background;
+    background-color: @btn-primary-hover-bg-color;
 }
-*/
+
 .wizardScheduler .wicketExtensionsWizardViewRow {
 	height: 110px;
 }
@@ -940,16 +933,11 @@ span.tree-content .selected span.tree-label {
     border-spacing: 0;
     cursor: pointer;
 
-	border: 1px solid @btn-border-color;
-    color: @btn-text-color;
+	border: 1px solid @btn-primary-border-color;
+    color: @btn-primary-text-color;
     border-radius: @btn-radius @btn-radius @btn-radius @btn-radius;
 
-    background: -webkit-linear-gradient(@btn-top-color, @btn-bottom-color);
-    background: -webkit-gradient(linear, left top, left bottom, @btn-top-color, @btn-bottom-color);
-    background: -moz-linear-gradient(center top, @btn-top-color, @btn-bottom-color);
-    background: -ms-linear-gradient(@btn-top-color, @btn-bottom-color);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@btn-top-color', endColorstr='@btn-bottom-color', GradientType=0);
-    background-color: @btn-background;
+    background-color: @btn-primary-bg-color;
 }
 
 .wizardScheduler .wicketExtensionsWizardButtonBar input[disabled='disabled'] {
