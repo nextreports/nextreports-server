@@ -1052,17 +1052,19 @@ div.w_content {
   background: none repeat scroll 0 0 #F4F4F4 !important;
 }
 .sql {
-  margin-top: 5px;
+  background: #fafafa none repeat scroll 0 0;
+  border: 1px solid #e5e5e5;
+  margin: 0;
+  padding: 10px;
 }
 .sql p {
-  font-size: 11px !important;
-  text-align: left !important;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: inherit;
+  margin: 0;
+  padding: 0;
+  text-align: left;
 }
-/* .row { */
-/* 	float: left; */
-/* 	clear: both; */
-/* 	margin-left: 5px; */
-/* } */
 .row-label {
   display: inline-block;
   width: 120px;
@@ -2120,9 +2122,6 @@ table.actions-grid tr td.actions-col {
   padding: 0px !important;
   text-align: center;
   height: 20px;
-}
-table.actions-grid tbody tr.tr-last td {
-  border-bottom: none;
 }
 table.actions-grid tr td.actions-col ul .li-relative {
   position: relative;
