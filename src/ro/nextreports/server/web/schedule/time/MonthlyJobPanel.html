@@ -1,35 +1,38 @@
-<wicket:panel>        
+<wicket:panel> 
+	<hr class="hr-10">       
     <table class="form">
         <tr>
-            <td class="label"><label wicket:id="mTypeLabel">[]</label></td>
-            <td><select wicket:id="mTypeChoice" name="mTypeChoice"/></td>
+            <td><label wicket:id="mTypeLabel">[]</label></td>
+            <td class="form-inline">
+            	<select wicket:id="mTypeChoice" class="form-control input-xs" name="mTypeChoice"/>
+            	<select wicket:id="noChoice" class="form-control input-xs" name="noChoice"/>
+			    <select wicket:id="dayChoice" class="form-control input-xs" name="dayChoice"/>
+			    <label wicket:id="everyLabel">[]</label>
+            </td>
         </tr>
         <tr>
-            <td class="label"><label class="td-label" style="padding-top: 4px; display: block;" wicket:id="hoursLabel">[]</label></td>
+            <td><label class="td-label" style="padding-top: 4px; display: block;" wicket:id="hoursLabel">[]</label></td>
             <td><div wicket:id="hoursPanel" class="left"/></td>
         </tr>
         <tr>
-            <td class="label"><label wicket:id="minuteLabel">[]</label></td>
-            <td><select wicket:id="minuteChoice" name="minuteChoice"/></td>
+            <td><label wicket:id="minuteLabel">[]</label></td>
+            <td class="form-inline"><select wicket:id="minuteChoice" class="form-control input-xs" name="minuteChoice"/></td>
         </tr>
         <tr>
-            <td class="label"><label wicket:id="everyMinuteLabel">[]</label></td>
-            <td><input wicket:id="minuteText" name="minuteText" type="text" size="5"/></td>
+            <td><label wicket:id="everyMinuteLabel">[]</label></td>
+            <td class="form-inline"><input wicket:id="minuteText" class="form-control input-xs" name="minuteText" type="text" size="3"/></td>
         </tr>
         <tr>
-            <td class="label"><label class="td-label" style="padding-top: 4px; display: block;" wicket:id="daysLabel">[]</label></td>
+            <td><label class="td-label" style="padding-top: 4px; display: block;" wicket:id="daysLabel">[]</label></td>
             <td><div wicket:id="daysPanel" class="left"/></td>
         </tr>
         <tr>
-            <td class="label"><label class="td-label" style="padding-top: 4px; display: block;" wicket:id="weekDaysLabel">[]</label></td>
+            <td><label class="td-label" style="padding-top: 4px; display: block;" wicket:id="weekDaysLabel">[]</label></td>
             <td><div wicket:id="weekdaysPanel" class="left"/></td>
         </tr>
         <tr>
-            <td class="label"><label class="td-label" style="padding-top: 4px; display: block;" wicket:id="monthsLabel">[]</label></td>
+            <td><label class="td-label" style="padding-top: 4px; display: block;" wicket:id="monthsLabel">[]</label></td>
             <td><div wicket:id="monthsPanel" class="left"/></td>
         </tr>
     </table>
-    <select wicket:id="noChoice" name="noChoice"/>
-    <select wicket:id="dayChoice" name="dayChoice"/>
-    <label wicket:id="everyLabel">[]</label>
 </wicket:panel>

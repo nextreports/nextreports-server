@@ -1,21 +1,37 @@
-<wicket:panel>	
+<wicket:panel>
+<div class="form-inline">
+	<div class="form-group">
+		<label wicket:id="templateLabel" for="template">[]</label>
+		<select wicket:id="template" name="template" class="form-control input-xs" />
+	</div>
+
+	<a wicket:id="removeTemplate" class="btn btn-primary btn-xs">
+		<wicket:message key="remove">Remove</wicket:message>
+	</a>
+
+	<div class="form-group">
+		<label>
+			<input type="checkbox" wicket:id="saveTemplate" class="nrs" /> 
+			<span class="lbl"></span>
+		</label>
+	</div>
+
+	<div class="form-group">
+		<label wicket:id="saveTemplateLabel" for="name">[]</label> 
+		<input type="text" wicket:id="name" class="form-control input-xs" />
+	</div>
+</div>
 	<table>
-	<tr>
-		<td><label wicket:id="templateLabel" style="white-space: nowrap;">[]</label></td>
-		<td style="margin-left: 10px;"><select wicket:id="template" name="template"/></td>	
-		<td style="display: inline-block; margin-left: 5px;">
-			<a wicket:id="removeTemplate" class="btn btn-primary btn-xs"><wicket:message key="remove">Remove</wicket:message></a></td>
-		<td style="padding-left: 30px;"><input type="checkbox" wicket:id="saveTemplate"/></td>
-		<td><label wicket:id="saveTemplateLabel" style="white-space: nowrap;">[]</label></td>
-		<td><input type="text" wicket:id="name"/></td>
-		<td wicket:id="shortcutContainer" style="display: inline-block; padding-top: 5px; white-space: nowrap;">
-			<label wicket:id="withShortcut" style="white-space: nowrap;">[]</label>
-			<select wicket:id="shortcutType" name="shortcutType"/>
-			<span wicket:id="shortcutLastContainer">
-				<input type="text" wicket:id="timeUnits" size="3"/>
-				<select wicket:id="timeType" name="timeType"/>
-			</span>
-		</td>
-	</tr>
+		<tr>
+			<td wicket:id="shortcutContainer">
+				<label wicket:id="withShortcut">[]</label> 
+				<select wicket:id="shortcutType" name="shortcutType" /> 
+				<span wicket:id="shortcutLastContainer">
+					<input type="text" wicket:id="timeUnits" size="3" />
+					<select wicket:id="timeType" name="timeType" />
+				</span>
+			</td>
+		</tr>
 	</table>
+<hr class="hr-dashed hr-10">	
 </wicket:panel>

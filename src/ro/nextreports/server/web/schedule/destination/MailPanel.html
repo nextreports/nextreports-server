@@ -1,47 +1,63 @@
 <wicket:panel>
+	<hr class="hr-10">
 	<tr>
-	    <td><label wicket:id="name">[]</label></td>
-	    <td><input wicket:id="nameField" name="nameField" type="text" size="40"/></td>
+		<td><label wicket:id="name">[]</label></td>
+		<td><input wicket:id="nameField" class="form-control input-xs"
+			name="nameField" type="text" size="40" /></td>
 	</tr>
 	<tr>
-	    <td><label wicket:id="send">[]</label></td>
-	    <td><select wicket:id="sendChoice" name="sendChoice"/></td>
+		<td><label wicket:id="send">[]</label></td>
+		<td><select wicket:id="sendChoice" class="form-control input-xs"
+			name="sendChoice" /></td>
 	</tr>
 	<tr>
-	    <td class="top"><label wicket:id="to">[]</label></td>
-	    <td>
-	        <div>
-	            <div class="toolbar-buttons">
-	                <img alt="Email" src="images/email.png"/>
-	                <a href="#" wicket:id="email" class="toolbar-button">
-	                	<wicket:message key="ActionContributor.Run.destination.email">Add Email</wicket:message>
-	                </a>
-	                <span> | </span>
-	                <img alt="User" src="images/user.png"/>
-	                <a href="#" wicket:id="user" class="toolbar-button">
-	                	<wicket:message key="ActionContributor.Run.destination.user">Add User</wicket:message>
-	                </a>
-	                <span> | </span>
-	                <img alt="Group" src="images/group.png"/>
-	                <a href="#" wicket:id="group" class="toolbar-button">
-	                	<wicket:message key="ActionContributor.Run.destination.group">Add Group</wicket:message>
-	                </a>
-	            </div>
-	        </div>
-	        <div wicket:id="recipientsPanel"></div>
-	    </td>
+		<td class="top"><label wicket:id="to">[]</label></td>
+		<td>
+			<div>
+				<ul class="topnav">
+					<li>
+					<a href="#" title="Email" alt="Email" wicket:id="email"> 
+						<img src="images/email.png" class="left-image"> 
+						<span>
+							<wicket:message key="ActionContributor.Run.destination.email">Add Email</wicket:message>
+						</span>
+					</a>
+					</li>
+					<li>
+					<a href="#" wicket:id="user" title="User" alt="User"> 
+						<img src="images/user.png" class="left-image"> 
+						<span>
+							<wicket:message key="ActionContributor.Run.destination.user">Add User</wicket:message>
+						</span>
+					</a>
+					</li>
+					<li>
+					<a href="#" wicket:id="group" title="Group" alt="Group"> 
+						<img src="images/group.png" class="left-image"> 
+						<span>
+							<wicket:message key="ActionContributor.Run.destination.group">Add Group</wicket:message>
+						</span>
+					</a>
+					</li>
+				</ul>
+			</div>
+			<div wicket:id="recipientsPanel"></div>
+		</td>
 	</tr>
 	<tr>
-	    <td><label wicket:id="subject">[]</label></td>
-	    <td><input wicket:id="subjectField" name="subjectField" type="text" size="40"/>
-	    </td>
+		<td><label wicket:id="subject">[]</label></td>
+		<td><input wicket:id="subjectField" class="form-control input-xs"
+			name="subjectField" type="text" size="40" /></td>
 	</tr>
 	<tr>
-	    <td class="top"><label wicket:id="body">[]</label></td>
-	    <td><textarea wicket:id="bodyArea" name="bodyArea" rows="8" cols="30"></textarea></td>
+		<td class="top"><label wicket:id="body">[]</label></td>
+		<td><textarea wicket:id="bodyArea" class="form-control input-xs"
+				name="bodyArea" rows="8" cols="30"></textarea></td>
 	</tr>
 	<tr>
-	    <td><label wicket:id="changedFileName">[]</label></td>
-	    <td><input wicket:id="changedFileNameField" name="changedFileNameField" type="text" size="40"/></td>
+		<td><label wicket:id="changedFileName">[]</label></td>
+		<td><input wicket:id="changedFileNameField"
+			class="form-control input-xs" name="changedFileNameField" type="text"
+			size="40" /></td>
 	</tr>
 </wicket:panel>

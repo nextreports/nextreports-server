@@ -1,22 +1,23 @@
 <wicket:panel>
+	<hr class="hr-10">
     <form wicket:id="form" class="form-container">
         <table>
             <tr>
-                <td class="td-label"><label wicket:id="type">[]</label></td>
+                <td><label wicket:id="type">[]</label></td>
                 <td><select wicket:id="choice" name="choice"/></td>
             </tr>
             <tr>
-                <td class="td-label"><label wicket:id="startLabel">[]</label></td>
+                <td><label wicket:id="startLabel">[]</label></td>
                 <td><select wicket:id="startChoice" name="startChoice"/></td>
             </tr>
             <tr>
-                <td class="td-label"><label wicket:id="endLabel">[]</label></td>
+                <td><label wicket:id="endLabel">[]</label></td>
                 <td><select wicket:id="endChoice" name="endChoice"/></td>
             </tr>
         </table>
         <table>
             <tr>
-                <td colspan="2" class="td-label">
+                <td colspan="2">
                     <div class="paletteContainer">
                         <div wicket:id="palette"></div>
                     </div>

@@ -24,15 +24,15 @@
     /*padding: 0px 0px 10px;*/
 }
 
-.form-container form table td {
-    padding-bottom: 6px;
+.form-container table.form td {
+    padding-bottom: 5px;
 }
 
 .form-container td.td-label {
     /*width: 110px;*/
     display: block;
     text-align: left;
-    padding: 5px 10px 0px 5px;
+    padding: 5px 10px 0px 0px;
 	margin-bottom: 5px !important;
     vertical-align: top;
     white-space: nowrap;
@@ -85,8 +85,8 @@
 }
 
 .form-container table select.manualList {
-    padding: 2px 3px 1px;
-    width: 160px;
+    padding: 1px 2px;
+    width: 100%;
     height: 80px;
 }
 
@@ -108,7 +108,7 @@
 }
 
 .form-btns{
-    margin:10px 0;
+    margin:5px 0;
     .clearfix();
 }
 .form-btns li {
@@ -180,7 +180,7 @@ input[type=checkbox].nrs , input[type=radio].nrs {
         z-index:11;
 		display:inline-block;
 		margin:0;
-		line-height:18px;
+		line-height:20px;
 		min-height:18px;
 		min-width:18px;
 		font-weight:normal;
@@ -213,9 +213,9 @@ input[type=checkbox].nrs , input[type=radio].nrs {
 			text-align:center;
 			vertical-align:middle;
 			height:16px; 
-            line-height:13px;
+            line-height:14px;
 			min-width:16px;	
-			margin-right:5px;
+			margin-right:1px;
 		}
 	}//.lbl
 	
@@ -263,9 +263,9 @@ input[type=radio].nrs + .lbl::before {
 	font-family: FontAwesome;//let's use a fonts that's available everywhere
 	text-shadow: 0 0 1px @input-checkbox-color;
 
-	line-height: 13px;	
-	height: 16px;
-	min-width: 16px;
+	line-height: 15px;	
+	height: 17px;
+	min-width: 17px;
 }
 input[type=radio].nrs:checked + .lbl::before {
 	content:"\f111";
@@ -275,5 +275,47 @@ input[type=radio].nrs:checked + .lbl::before {
     margin-bottom: 0;
     &.radio-inline, &.checkbox-inline{
         padding-left: 0;
+    }
+}
+
+@font-size-base:              12px;
+@line-height-base:            1.5; 
+@input-height-xs:             (floor((@font-size-base) * @line-height-base) + 2 + 2);
+@padding-small-vertical:      1px;
+@padding-small-horizontal:    5px;
+@border-radius-small:         3px;
+// -----------------------------------------
+// Form control sizing
+// -----------------------------------------
+.input-xs {
+	.input-size (
+        @input-height-xs;
+	    @padding-small-vertical;
+	    @padding-small-horizontal;
+	    @font-size-base;
+	    @line-height-base;
+	    @border-radius-small);
+}
+
+label {
+	display: inline-block;
+	margin-bottom: 2px;
+}
+
+textarea {
+	resize: vertical;
+}
+
+.form-group {
+	margin-bottom: 8px;
+}
+
+.form-control{
+    border-color: @hr-borders-color;
+    box-shadow: none;
+    
+    &:focus{
+        box-shadow: none;
+        border-color: @main-color;
     }
 }

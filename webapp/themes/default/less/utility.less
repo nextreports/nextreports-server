@@ -1,0 +1,40 @@
+// main: style.less
+
+
+// HR
+hr, .hr {
+    display: block;
+    height: 0px;
+    overflow: hidden;
+    font-size: 0;
+    border-top: 1px solid @hr-borders-color;
+    margin: 12px 0;
+}
+
+.hr-double {
+    height: 3px;
+    border-top: 1px solid @hr-borders-color;
+    border-bottom: 1px solid @hr-borders-color;
+}
+
+.hr.dotted , .hr-dotted {
+    border-top-style: dotted;
+}
+.hr.dashed , .hr-dashed {
+    border-top-style: dashed;
+    border-top-color: @main-color;
+}
+
+.hr-double.dotted {
+   border-bottom-style: dashed;
+}
+
+.hrX (@index) when (@index > 0) {
+   .hr-@{index}, .hr@{index}
+       {
+           margin: unit(@index, px) 0;
+        }
+   .hrX (@index - 2);
+}
+
+.hrX (32);

@@ -445,7 +445,7 @@ public class ScheduleWizard extends Wizard {
             String action = runNow ? "" : getString("Section.Scheduler.name");
             String result = getString("select") + " " + action + " " + getString("ActionContributor.Run.parameters");
             if (runNow) {
-                result = result + "<br><br>" + INFO;
+                result = result + "<br>" + INFO;
             }
             return result;
         }
@@ -591,7 +591,7 @@ public class ScheduleWizard extends Wizard {
             String action = runNow ? "" : getString("Section.Scheduler.name");
             String result = getString("select") + " " + action + " " + getString("ActionContributor.Run.destinations");
             if (runNow) {
-                result = result + "<br><br>" + INFO;
+                result = result + "<br>" + INFO;
             }
             return result;
         }

@@ -659,19 +659,7 @@ element.style {
 }
 
 
-.manualListButton:hover, 
-.wizardScheduler .wicketExtensionsWizardButtonBar input:hover,
-.wizardScheduler td a.wizardButton:hover {
-    text-decoration: none !important;
-	border: 1px solid @btn-primary-hover-border-color;
-    color: @btn-primary-hover-text-color;
-    border-radius: @btn-radius @btn-radius @btn-radius @btn-radius;
-    background-color: @btn-primary-hover-bg-color;
-}
 
-.wizardScheduler .wicketExtensionsWizardViewRow {
-	height: 110px;
-}
 
 
 
@@ -790,9 +778,12 @@ span.tree-content .selected span.tree-label {
     width: 170px !important;
 }
 
-.paletteContainer table.palette td.pane select.choicesSelect {
+.paletteContainer table.palette td.pane select.choicesSelect,
+.paletteContainer table.palette td.pane select.selectionSelect{
     min-width: 170px;
     width: 100%;
+    height: auto;
+    
 }
 
 .paletteContainer table.palette td.buttons {
@@ -826,136 +817,7 @@ span.tree-content .selected span.tree-label {
 /* Palette End */
 
 
-/* Wizard Start */
-.wizardScheduler {
-    overflow: auto;
-    min-height: 320px;
-    border: 1px solid black;
-    margin-top: 8px;
-}
 
-.wizardScheduler .wicketExtensionsWizardOuterTable {
-    width: 100%;
-}
-
-.wizardScheduler .wicketExtensionsWizardInnerTable {
-    top: 0px;
-    right: 0px;
-    left: 0px;
-    bottom: 0px;
-    width: 100%;
-    border: none;
-}
-
-.wizardScheduler .wicketExtensionsWizardHeader {
-    border: none;
-    border-bottom: thin solid black;
-}
-
-.wizardScheduler .wicketExtensionsWizardView {
-    border: none;
-    border-bottom: thin solid black;
-}
-
-.wizardScheduler .wicketExtensionsWizardButtonBar {
-	padding: 10px;
-}
-
-.wizardScheduler .wicketExtensionsWizardHeaderTitle {
-    font-weight: bold;
-    font-size: 14px;
-    margin: 10px 5px 10px 15px;
-    color: #000000;
-}
-
-.wizardScheduler .wicketExtensionsWizardHeaderSummary {
-    font-style: normal;
-    font-size: 11px;
-    margin: 10px 15px 5px;
-    color: #000000;
-}
-
-.wizardScheduler table td {
-    padding-left: 1px;
-    padding-right: 1px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    /*vertical-align: top;*/
-    font-size: 10px;
-    color: #999;
-}
-
-.wizardScheduler .top {
-    padding: 2px;
-    vertical-align: top;
-}
-
-.wizardScheduler table td label, .wizardScheduler table td.label {
-    font-weight: bold;
-    /*display: block;*/
-    padding: 2px;
-    vertical-align: top;
-    color: #000000;
-}
-
-.wizardScheduler fieldset {
-    border: 1px solid #bcc1c1;
-    /*width: 100%;*/
-    margin-bottom: 4px;
-    padding: 10px;
-    /*background-color: #e9f4ff;*/
-}
-
-.wizardScheduler legend {
-    font-weight: bold;
-    font-size: 12px;
-    color: #fff;
-    background: @header-color;
-    border: 1px solid #781351;
-    padding: 4px 6px
-}
-
-.wizardScheduler h3 {
-    color: @header-color;
-}
-
-.wizardScheduler .wicketExtensionsWizardButtonBar input, .wizardScheduler td a.wizardButton {
-    float: left;
-    margin-right: 5px;
-    padding: 0px 10px;
-    height: 22px;
-    line-height: 20px;
-    display: block;
-    font-size: 11px;
-    outline: none;
-    border-collapse: collapse;
-    font-weight: bold;
-    border-spacing: 0;
-    cursor: pointer;
-
-	border: 1px solid @btn-primary-border-color;
-    color: @btn-primary-text-color;
-    border-radius: @btn-radius @btn-radius @btn-radius @btn-radius;
-
-    background-color: @btn-primary-bg-color;
-}
-
-.wizardScheduler .wicketExtensionsWizardButtonBar input[disabled='disabled'] {
-    background: #e9e8e8;
-    color: #bdbdbd;
-    cursor: default;
-    border: 1px solid #cacaca;
-}
-
-.wizardScheduler .wicketExtensionsWizardButtonBar {
-    float: right;
-}
-
-.wizardScheduler .wicketExtensionsWizardViewInner .small {
-    white-space: nowrap;
-}
-
-/* Wizard End */
 
 /* Feedback Start */
 .feedbackPanelERROR {
@@ -1072,6 +934,8 @@ body#body-license {
 
 .validationMessage {
     color: red;
+    display: inline-block;
+    margin-left: 10px;
 }
 
 .error {
@@ -1215,15 +1079,7 @@ div.w_content {
 	margin-bottom: 60px;
 }
 
-.hr {
-    display: block;
-    height: 0px;
-    overflow: hidden;
-    font-size: 0;
-    border-top: 1px dashed #779800;
-    margin: 10px 0;
-    border-width: 1px 0 0 0;
-}
+
 #splitter{
 	margin: 0 15px;
 }

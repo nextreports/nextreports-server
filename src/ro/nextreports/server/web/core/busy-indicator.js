@@ -2,7 +2,7 @@ window.onload = setup;
 var isBusy = false;
 
 function setup() {
-    document.getElementsByTagName('body')[0].onclick = clickHandler;
+    //document.getElementsByTagName('body')[0].onclick = clickHandler;
     hideBusy();
 
 //    Wicket.Ajax.registerPreCallHandler(showBusy);
