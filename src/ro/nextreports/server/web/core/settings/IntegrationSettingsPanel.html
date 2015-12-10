@@ -1,51 +1,49 @@
 <wicket:panel>
-    <div class="form-container form-container-dialog">
-        <form wicket:id="form">
-            <table class="form">    
-                <tr>
-                    <td class="td-label">
-                        <label><strong><wicket:message key="Settings.integration.drillUrl">Drill url</wicket:message></strong></label>
-                    </td>
-                    <td>
-                        <input wicket:id="integration.drillUrl" type="text" size="24" name="integration.drillUrl" style="margin-top: 5px !important;"/>
-                    </td>                    
-                </tr>   
-                <tr>
-                    <td class="td-label">
-                        <label><strong><wicket:message key="Settings.integration.notifyUrl">Notify url</wicket:message></strong></label>
-                    </td>
-                    <td>
-                        <input wicket:id="integration.notifyUrl" type="text" size="24" name="integration.notifyUrl" style="margin-top: 5px !important;"/>
-                    </td>                    
-                </tr>                            
-                <tr>
-                    <td class="td-label">
-                        <label><strong><wicket:message key="Settings.integration.secretKey">Secret key</wicket:message></strong></label>
-                    </td>
-                    <td>
-                        <input wicket:id="integration.secretKey" type="text" size="24" name="integration.secretKey" style="margin-top: 5px !important;"/>
-                    </td>                    
-                </tr>                            
-                <tr>
-                    <td class="td-label">
-                        <label><strong><wicket:message key="Settings.integration.whiteIp">White Ip</wicket:message></strong></label>
-                    </td>
-                    <td>
-                        <input wicket:id="integration.whiteIp" type="text" size="24" name="integration.whiteIp" style="margin-top: 5px !important;"/>
-                    </td>                    
-                </tr>                            
-                <tr>                    
-                    <td>
-                        <ul class="form-btns">                            
-                            <li><input wicket:id="change" type="submit" name="change" wicket:message="value:change" class="btn btn-primary btn-xs"/>
-                            </li>
-                        </ul>
-                    </td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </table>            
-        </form>
-        <span wicket:id="feedback" class="feedbackPanelERROR"/>
-    </div>    
+	<div class="form-container form-container-dialog">
+		<form wicket:id="form">
+			<table class="form">
+				<tr>
+					<td class="td-label"><label><wicket:message
+									key="Settings.integration.drillUrl">Drill url</wicket:message></label>
+					</td>
+					<td><input wicket:id="integration.drillUrl"
+						class="form-control input-xs" type="text" size="24"
+						name="integration.drillUrl" style="margin-top: 5px !important;" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-label"><label><wicket:message
+									key="Settings.integration.notifyUrl">Notify url</wicket:message></label>
+					</td>
+					<td><input wicket:id="integration.notifyUrl"
+						class="form-control input-xs" type="text" size="24"
+						name="integration.notifyUrl" style="margin-top: 5px !important;" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-label"><label><wicket:message
+									key="Settings.integration.secretKey">Secret key</wicket:message></label>
+					</td>
+					<td><input wicket:id="integration.secretKey"
+						class="form-control input-xs" type="text" size="24"
+						name="integration.secretKey" style="margin-top: 5px !important;" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-label"><label><wicket:message
+									key="Settings.integration.whiteIp">White Ip</wicket:message></label></td>
+					<td><input wicket:id="integration.whiteIp"
+						class="form-control input-xs" type="text" size="24"
+						name="integration.whiteIp" style="margin-top: 5px !important;" />
+					</td>
+				</tr>
+			</table>
+			<hr class="hr-10">
+			<ul class="form-btns">
+				<li><input wicket:id="change" type="submit" name="change"
+					wicket:message="value:change" class="btn btn-primary btn-xs" /></li>
+			</ul>
+		</form>
+		<span wicket:id="feedback" class="feedbackPanelERROR" />
+	</div>
 </wicket:panel>

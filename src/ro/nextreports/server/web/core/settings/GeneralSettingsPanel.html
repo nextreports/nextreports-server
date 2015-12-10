@@ -1,100 +1,87 @@
 <wicket:panel>
-    <div class="form-container form-container-dialog">
-        <form wicket:id="form">
-            <table class="form">                
-                <tr>
-                    <td class="td-label">
-                        <label><strong><wicket:message key="Settings.general.baseUrl">Base Url</wicket:message> *</strong></label>
-                    </td>
-                    <td>
-                        <input wicket:id="baseUrl" name="baseUrl" type="text" style="width: 200px; !important"/>
-                        <img wicket:id="urlImage"/>
-                    </td>                    
-                </tr>
-                <tr>
-                    <td class="td-label">
-                        <label><strong><wicket:message key="Settings.general.reportsHome">Reports Home</wicket:message> *</strong></label>
-                    </td>
-                    <td>
-                        <input wicket:id="reportsHome" name="reportsHome" type="text" style="width: 200px; !important"/>
-                        <img wicket:id="homeImage"/>
-                    </td>                    
-                </tr>
-                <tr>
-                    <td class="td-label">
-                        <label><strong><wicket:message key="Settings.general.reportsUrl">Reports Url</wicket:message> *</strong></label>
-                    </td>
-                    <td>
-                        <input wicket:id="reportsUrl" name="reportsUrl" type="text" style="width: 200px; !important"/>
-                        <img wicket:id="repImage"/>
-                    </td>                    
-                </tr>                
-                <tr>
-                    <td class="td-label">
-                        <label><strong><wicket:message key="Settings.general.connectTimeout">Connect Timeout (s)</wicket:message>*</strong></label>
-                    </td>
-                    <td>
-                        <input wicket:id="connectionTimeout" name="connectionTimeout" type="text" style="width: 50px; !important; margin-top: 5px;"/>
-                        <img wicket:id="conImage"/>
-                    </td>                    
-                </tr>
-                <tr>
-                    <td class="td-label">
-                        <label><strong><wicket:message key="Settings.general.queryTimeout">Query Timeout (s)</wicket:message>*</strong></label>
-                    </td>
-                    <td>
-                        <input wicket:id="queryTimeout" name="queryTimeout" type="text" style="width: 50px; !important; margin-top: 5px;"/>
-                        <img wicket:id="timeoutImage"/>
-                    </td>                    
-                </tr>
-                <tr>
-                    <td class="td-label">
-                        <label><strong><wicket:message key="Settings.general.updateInterval">Update Interval (s)</wicket:message>*</strong></label>
-                    </td>
-                    <td>
-                        <input wicket:id="updateInterval" name="updateInterval" type="text" style="width: 50px; !important; margin-top: 5px;"/>
-                        <img wicket:id="updateImage"/>
-                    </td>                    
-                </tr>
-                <tr>
-                    <td class="td-label">
-                        <label><strong><wicket:message key="Settings.general.pollingInterval">Polling Interval (s)</wicket:message>*</strong></label>
-                    </td>
-                    <td>
-                        <input wicket:id="pollingInterval" name="pollingInterval" type="text" style="width: 50px; !important; margin-top: 5px;"/>
-                        <img wicket:id="pollingImage"/>
-                    </td>                    
-                </tr>
-                <tr>
-                    <td class="td-label">
-                        <label><strong><wicket:message key="Settings.general.uploadSize">Upload Size (MB)</wicket:message>*</strong></label>
-                    </td>
-                    <td>
-                        <input wicket:id="uploadSize" name="uploadSize" type="text" style="width: 50px; !important; margin-top: 5px;"/>
-                        <img wicket:id="uploadSizeImage"/>
-                    </td>                    
-                </tr>
-                <tr>
-                    <td class="td-label">
-                        <label><strong><wicket:message key="Settings.general.autoOpen">Auto Open</wicket:message></strong></label>
-                    </td>
-                    <td>
-                        <input wicket:id="autoOpen" type="checkbox" name="autoOpen"/>
-                    </td>                    
-                </tr>
-
-                <tr>                    
-                    <td>
-                        <ul class="form-btns">                            
-                            <li><input wicket:id="change" type="submit" name="change" wicket:message="value:change" class="btn btn-primary btn-xs"/>
-                            </li>
-                        </ul>
-                    </td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </table>            
-        </form>
-        <span wicket:id="feedback" class="feedbackPanelERROR"/>
-    </div>    
+	<div class="form-container form-container-dialog">
+		<form wicket:id="form">
+			<table class="form form-inline">
+				<tr>
+					<td class="td-label">
+						<label><wicket:message key="Settings.general.baseUrl">Base Url</wicket:message> *</label>
+					</td>
+					<td>
+						<input wicket:id="baseUrl" name="baseUrl" class="form-control input-xs" type="text" style="width: 200px!important;" />
+						<img wicket:id="urlImage" /></td>
+				</tr>
+				<tr>
+					<td class="td-label">
+						<label><wicket:message key="Settings.general.reportsHome">Reports Home</wicket:message> *</label>
+					</td>
+					<td>
+						<input wicket:id="reportsHome" name="reportsHome" class="form-control input-xs" type="text" style="width: 200px!important;" />
+						<img wicket:id="homeImage" /></td>
+				</tr>
+				<tr>
+					<td class="td-label">
+						<label><wicket:message key="Settings.general.reportsUrl">Reports Url</wicket:message> *</label></td>
+					<td>
+						<input wicket:id="reportsUrl" name="reportsUrl" class="form-control input-xs" type="text" style="width: 200px!important;" /> 
+						<img wicket:id="repImage" /></td>
+				</tr>
+				<tr>
+					<td class="td-label">
+						<label><wicket:message key="Settings.general.connectTimeout">Connect Timeout (s)</wicket:message> *</label>
+					</td>
+					<td>
+						<input wicket:id="connectionTimeout" name="connectionTimeout" class="form-control input-xs" type="text" style="width: 50px!important;"/> 
+						<img wicket:id="conImage" /></td>
+				</tr>
+				<tr>
+					<td class="td-label">
+						<label><wicket:message key="Settings.general.queryTimeout">Query Timeout (s)</wicket:message> *</label>
+					</td>
+					<td>
+						<input wicket:id="queryTimeout" name="queryTimeout" class="form-control input-xs" type="text" style="width: 50pximportant;"/>
+						<img wicket:id="timeoutImage" /></td>
+				</tr>
+				<tr>
+					<td class="td-label">
+						<label><wicket:message key="Settings.general.updateInterval">Update Interval (s)</wicket:message> *</label>
+					</td>
+					<td>
+						<input wicket:id="updateInterval" name="updateInterval" class="form-control input-xs" type="text" style="width: 50px!important;" />
+						<img wicket:id="updateImage" /></td>
+				</tr>
+				<tr>
+					<td class="td-label">
+						<label><wicket:message key="Settings.general.pollingInterval">Polling Interval (s)</wicket:message> *</label>
+					</td>
+					<td>
+						<input wicket:id="pollingInterval" name="pollingInterval" class="form-control input-xs" type="text" style="width: 50px!important;" />
+						<img wicket:id="pollingImage" /></td>
+				</tr>
+				<tr>
+					<td class="td-label">
+						<label><wicket:message key="Settings.general.uploadSize">Upload Size (MB)</wicket:message> *</label>
+					</td>
+					<td>
+						<input wicket:id="uploadSize" name="uploadSize" class="form-control input-xs" type="text" style="width: 50px!important;" />
+						<img wicket:id="uploadSizeImage" /></td>
+				</tr>
+				<tr>
+					<td class="td-label">
+						<label><wicket:message key="Settings.general.autoOpen">Auto Open</wicket:message></label>
+					</td>
+					<td>
+						<label>
+							<input wicket:id="autoOpen" type="checkbox" class="nrs" name="autoOpen" />
+							<span class="lbl"></span>
+						</label>
+					</td>
+				</tr>
+			</table>
+			<hr class="hr-10">
+			<ul class="form-btns">
+				<li><input wicket:id="change" type="submit" name="change" wicket:message="value:change" class="btn btn-primary btn-xs" /></li>
+			</ul>
+		</form>
+		<span wicket:id="feedback" class="feedbackPanelERROR" />
+	</div>
 </wicket:panel>

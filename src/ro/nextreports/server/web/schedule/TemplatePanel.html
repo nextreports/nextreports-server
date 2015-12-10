@@ -20,18 +20,14 @@
 		<label wicket:id="saveTemplateLabel" for="name">[]</label> 
 		<input type="text" wicket:id="name" class="form-control input-xs" />
 	</div>
+	<div class="form-group" wicket:id="shortcutContainer">
+		<label wicket:id="withShortcut">[]</label> 
+		<select wicket:id="shortcutType" class="form-control input-xs" name="shortcutType" /> 
+		<span wicket:id="shortcutLastContainer">
+			<input type="text" class="form-control input-xs" wicket:id="timeUnits" size="2" />
+			<select wicket:id="timeType" class="form-control input-xs" name="timeType" />
+		</span>
+	</div>
+	<hr class="hr-10 hr-dashed">
 </div>
-	<table>
-		<tr>
-			<td wicket:id="shortcutContainer">
-				<label wicket:id="withShortcut">[]</label> 
-				<select wicket:id="shortcutType" name="shortcutType" /> 
-				<span wicket:id="shortcutLastContainer">
-					<input type="text" wicket:id="timeUnits" size="3" />
-					<select wicket:id="timeType" name="timeType" />
-				</span>
-			</td>
-		</tr>
-	</table>
-<hr class="hr-dashed hr-10">	
 </wicket:panel>
