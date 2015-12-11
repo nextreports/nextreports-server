@@ -18,8 +18,10 @@ package ro.nextreports.server.web.security;
 
 import java.util.List;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -40,6 +42,7 @@ import ro.nextreports.server.web.common.panel.NextFeedbackPanel;
 import ro.nextreports.server.web.core.HomePage;
 import ro.nextreports.server.web.core.settings.LogoResource;
 import ro.nextreports.server.web.security.recover.ForgotPasswordPage;
+import ro.nextreports.server.web.themes.ThemesManager;
 
 /**
  * @author Decebal Suiu
@@ -47,8 +50,14 @@ import ro.nextreports.server.web.security.recover.ForgotPasswordPage;
 public class LoginPage extends WebPage {  		
 
 	private static final long serialVersionUID = 1L;
+	protected WebMarkupContainer cssContainer;
 
 	public LoginPage() {
+		
+		cssContainer = new WebMarkupContainer("cssPath");       
+        cssContainer.add(new AttributeModifier("href", ThemesManager.getInstance().getThemeRelativePathCss()));
+        add(cssContainer);
+        
         setStatelessHint(false);
                
         add(new Image("logoImage", new LogoResource()));

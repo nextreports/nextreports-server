@@ -1,26 +1,19 @@
 <wicket:panel>
     <form wicket:id="form" class="form-container form-container-dialog">
-		<table>
-			<tr>
-				<td class="td-label"><label><strong><wicket:message key="AclEntryPanel.user">User</wicket:message></strong></label></td>
-				<td class="padding"><select wicket:id="name"/></td>
-			</tr>
-			<div wicket:id="permissionPanel"></div>
-            <tr>
-                <td class="td-label"><label><wicket:message key="AclEntryPanel.recursively">Apply recursively</wicket:message></label></td>
-                <td class="padding"><input wicket:id="recursively" type="checkbox"/></td>
-            </tr>                                   
-		</table>
-        <table>
-            <tr>
-                <td>
-                    <ul class="form-btns">
-                        <li><a wicket:id="cancel" class="btn btn-secondary btn-xs"><wicket:message key="cancel">Cancel</wicket:message></a></li>
-                        <li><input wicket:id="add" type="submit" wicket:message="value:save" class="btn btn-primary btn-xs"/></li>
-                    </ul>
-                </td>
-            </tr>
-        </table>         
+		<div class="form-group">
+			<label><strong><wicket:message key="AclEntryPanel.user">User</wicket:message></strong></label>
+			<select wicket:id="name" class="form-control input-xs"/>
+		</div>
+		<div wicket:id="permissionPanel"></div>
+		<div class="form-group">
+	        <label><wicket:message key="AclEntryPanel.recursively">Apply recursively</wicket:message></label>
+	        <label class="checkbox-inline"><input wicket:id="recursively" class="nrs" type="checkbox"/><span class="lbl"></span></label>
+		</div>
+		<hr class="hr-10">                                  
+		<ul class="form-btns">
+           <li><a wicket:id="cancel" class="btn btn-secondary btn-xs"><wicket:message key="cancel">Cancel</wicket:message></a></li>
+           <li><input wicket:id="add" type="submit" wicket:message="value:save" class="btn btn-primary btn-xs"/></li>
+        </ul>        
 	</form>
     <span wicket:id="feedback" class="feedbackPanelERROR"/>
 </wicket:panel>

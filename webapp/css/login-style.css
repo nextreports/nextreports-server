@@ -23,27 +23,27 @@ body { background: url(../images/general_bg.png); }
                    #wrapper { width:960px; margin: 0px; padding:0px; }
  #header, #content, #footer { width: 820px; margin: 0 auto; }
           #header, #content { border-bottom: 1px solid #97b129; }
-                      .logo { margin: 12px 0 30px 0; }
+                      .logo { margin: 15px 0 30px 0; }
               .left, .right { margin: 0px; padding: 0px; float:left; text-align:left; }
 	                  .left { width: 350px; margin-right: 10px; }
                      .right { width: 450px; margin-left: 10px; }
-                 .text_logo { font-family:Arial, Helvetica, sans-serif; font-size:11px; padding: 0 0 18px; width: 300px; color: #505050; }
+                 .text_logo { font-size:11px; padding: 0 0 18px; width: 300px; color: #505050; }
                .text-shadow { text-shadow: 0px 1px 0px #ffffff; }
               .text-justify { text-align: justify; }
          .text-shadow-light { text-shadow: 0px -1px 0px #758b1e; }
                  .copyright { background-color: #8cb200; height: 28px; line-height: 28px; -moz-border-radius: 0 0 4px 4px; -webkit-border-radius: 0 0 4px 4px; border-radius: 0 0 4px 4px;
-			  	              width: 100%; text-align:center; font-family:"LatoBold", Arial, Helvetica, sans-serif; font-size: 12px; color: #ffffff;	text-shadow: 0px -1px 0px #758b1e; }
-.server, .engine, .designer { float:left; display:block; margin-bottom: 16px; }
+			  	              width: 100%; text-align:center; font-size: 12px; color: #ffffff;	text-shadow: 0px -1px 0px #758b1e; }
+.server, .engine, .designer { float:left; display:block; margin-bottom: 10px; }
                     .server { width: 100%; }
                     .engine { width: 160px;	margin-right: 10px; }
                   .designer { width: 270px; margin-left: 10px; }
                   .charts	{float: right;}
                      .green { color: #8cb200;}
 
-             #next-products { width: 100%; margin-top: 16px; }
-           #next-products p { font-family:Arial, Helvetica, sans-serif; font-size:11px; color: #666666; line-height: 18px; }
+             #next-products { width: 100%; margin-top: 10px; }
+           #next-products p { font-size:11px; color: #666666; line-height: 18px; margin: 0;}
 
-                         h2 { font-family: 'LatoBlack', Arial, Helvetica, sans-serif; font-size: 16px; padding-bottom: 6px; }
+          #next-products h2 { font-size: 16px; padding-bottom: 6px; margin:0; }
                        h2 a { text-decoration:none; color: #000000; }
           
 		  
@@ -53,7 +53,7 @@ body { background: url(../images/general_bg.png); }
 		    
      ul#footer-meniu                                    { height: 28px; line-height: 28px; width: 100%; }
      ul#footer-meniu li, ul#footer-meniu li a           { float:left; display:block; }
-     ul#footer-meniu li a                               { padding: 0 6px; margin: 0 1px; text-decoration: none; font-family:"LatoBold", Arial, Helvetica, sans-serif; 
+     ul#footer-meniu li a                               { padding: 0 6px; margin: 0 1px; text-decoration: none; 
 	                                                      font-size: 12px; text-transform:uppercase; text-shadow: 0px 1px 0px #ffffff; }
      ul#footer-meniu .default                           { color: #484848; }
      ul#footer-meniu li a:hover, ul#footer-meniu .activ { background-color: #8cb200; color: #ffffff;	text-shadow: 0px -1px 0px #758b1e;
@@ -63,11 +63,10 @@ body { background: url(../images/general_bg.png); }
 
 
 #login-form{
-	margin: 16px 0;
+	margin: 30px 0;
 }
 
 #login-form a{
-    font-family:Arial, Helvetica, sans-serif;
     font-size: 12px;
     color: #789800;
     text-decoration:none;
@@ -82,7 +81,6 @@ body { background: url(../images/general_bg.png); }
 
 .info {
     color: #789800;
-    font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
     text-align:justify;
     display:block;
@@ -100,13 +98,12 @@ body { background: url(../images/general_bg.png); }
 #login-form label {
 	color: #313030;
 	display: block;
-	font-family: Arial, Helvetica, sans-serif;
 	font-size: 16px;
 	font-weight: bold;
 	height: 18px;
 	line-height: 18px;
 	text-transform: capitalize;
-	margin-bottom: 5px;
+	margin-bottom: 10px;
 }
 
 #login-form input[type="text"], #login-form input[type="password"], #login-form select{
@@ -115,45 +112,15 @@ body { background: url(../images/general_bg.png); }
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	
-	margin-bottom: 12px;
-	padding: 0 6px;		
+	margin-bottom: 15px;
+	padding: 5px 10px;		
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
-	
-	height: 28px;
-	width: 292px;
+	width: 300px;
 }
 
-
-#login-form select{
-	background-color: #f9f9f9;
-	border: 1px solid #b0b0b0;	
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	
-	margin-bottom: 12px;
-	padding: 1px 1px 1px 6px;		
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	border-radius: 4px;
-	
-	height: 28px;
-	line-height: 28px;
-	width: 292px;
-}
-
-#login-form select:focus {
-	background-color: #ffffff;
-	color: #484848;
-	
-	-webkit-box-shadow:  1px 2px 2px 0px #d2d4d8 inset;
-	-moz-box-shadow:  1px 2px 2px 0px #d2d4d8 inset;
-	-o--box-shadow: 1px 2px 2px 0px #d2d4d8 inset;
-	box-shadow:  1px 2px 2px 0px #d2d4d8 inset;	
-}
-
-#login-form input[type="text"]:focus, #login-form input[type="password"]:focus {
+#login-form input[type="text"]:focus, #login-form input[type="password"]:focus, #login-form select:focus  {
 	background-color: #ffffff;
 	color: #484848;
 	
@@ -170,7 +137,7 @@ body { background: url(../images/general_bg.png); }
     display: block;
 	border: 1px solid #313030;
 	padding: 6px 12px;
-	margin: 18px 0;
+	margin: 10px 0 15px 0;
 	
 	text-shadow: -1px -1px 0px #000000;
 
@@ -192,7 +159,6 @@ body { background: url(../images/general_bg.png); }
 	-moz-border-radius: 6px;
 	border-radius: 6px;    
 	
-	font-family: 'LatoBlack',Arial,Helvetica,sans-serif;
     font-size: 18px;
 	color: #ffffff;
     text-transform: uppercase;
