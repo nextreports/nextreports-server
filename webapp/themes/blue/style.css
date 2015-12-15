@@ -2239,6 +2239,25 @@ ul.column {
   padding-top: 5px;
   padding-bottom: 5px;
 }
+.statistics {
+  background: #F4F4F4 !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+.statistics-row {
+  line-height: 2.5em;
+}
+.statistics-title {
+  padding-left: 5px;
+  padding-top: 2px;
+  font-size: 1.2em;
+}
+.statistics-number {
+  float: right;
+  padding-top: 3px;
+  padding-left: 20px;
+  color: #00aeef;
+}
 /* Wizard Start */
 .wizardScheduler {
   height: 100%;
