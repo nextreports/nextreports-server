@@ -40,9 +40,7 @@ public class ErrorPage extends BasePage {
 		String errorCode = parameters.get("errorCode").toString();
 		add(new Label("errorCode", errorCode));
 		add(new BookmarkablePageLink<HomePage>("home", getApplication().getHomePage()));
-		
-		ContextImage errorImage = new ContextImage("errorImage", "images/error.png");
-		add(errorImage);
+	
 	}
 
 }

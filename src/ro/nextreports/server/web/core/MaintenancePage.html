@@ -1,15 +1,17 @@
 <wicket:extend>	
-	<table>
-		<tr>
-			<td rowspan="2"><img wicket:id="maintenanceImage"/></td>
-			<td class="errorMaintenance">
+	<div class="error-container">
+		<div class="error-message">
+			<div class="error-image">
+				<i class="fa fa-wrench fa-5x"></i>
+			</div>
+			<p class="error-title">
 				<span wicket:id="maintenance"/>
-			</td>
-		</tr>	
-		<tr>
-			<td class="errorMaintenanceLink">
-				<a wicket:id="home"><b><wicket:message key="home"></wicket:message></b></a>
-			</td>
-		</tr>	
-	</table>
+			<p class="error-text">
+				We are sorry for the inconvenience.	
+			</p>
+			<div class="error-buttons">
+				<a wicket:id="home" class="btn btn-primary btn-lg"><wicket:message key="home"></wicket:message></a>
+			</div>
+		</div>
+	</div>
 </wicket:extend>

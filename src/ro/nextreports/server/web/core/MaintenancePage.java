@@ -35,8 +35,6 @@ public class MaintenancePage extends BasePage {
 		add(new Label("maintenance", getString("Maintenance.message")));
 		add(new BookmarkablePageLink<HomePage>("home", getApplication().getHomePage()));
 
-		ContextImage homeImage = new ContextImage("maintenanceImage", "images/maintenance.png");
-		add(homeImage);
 	}
 
 }

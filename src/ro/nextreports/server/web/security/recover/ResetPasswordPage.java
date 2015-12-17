@@ -16,9 +16,11 @@
  */
 package ro.nextreports.server.web.security.recover;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.HiddenField;
@@ -44,6 +46,7 @@ import ro.nextreports.server.web.common.form.AdvancedForm;
 import ro.nextreports.server.web.common.panel.NextFeedbackPanel;
 import ro.nextreports.server.web.core.HomePage;
 import ro.nextreports.server.web.core.settings.LogoResource;
+import ro.nextreports.server.web.themes.ThemesManager;
 
 /**
  * @author Decebal Suiu
@@ -67,9 +70,15 @@ public class ResetPasswordPage extends WebPage {
     @SpringBean
     private PasswordEncoder passwordEncoder;
     
+    protected WebMarkupContainer cssContainer;
+    
 	public ResetPasswordPage(PageParameters parameters) {
         super(parameters);
 
+        cssContainer = new WebMarkupContainer("cssPath");       
+        cssContainer.add(new AttributeModifier("href", ThemesManager.getInstance().getThemeRelativePathCss()));
+        add(cssContainer);
+        
         token = parameters.get("token").toString();
         if (token == null) {
             throw new RestartResponseException(HomePage.class);

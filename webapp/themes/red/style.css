@@ -1564,6 +1564,13 @@ p {
   background: linear-gradient(to bottom, #ff5722 0%, #a03715 100%);
   border: 1px solid #df4c1e;
 }
+#login-form .info {
+  color: #1f1f1f;
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
 /*************************/
 /*     Meniu footer      */
 /*************************/
@@ -3601,3 +3608,96 @@ body {
   border-top: 3px solid #ff5722;
   margin-top: -3px;
 }
+.error-container {
+  display: table-cell;
+  height: 100vh;
+  margin: 0;
+  padding: 50px 0 30px;
+  text-align: center;
+  vertical-align: middle;
+  word-wrap: break-word;
+}
+.error-container .error-message {
+  background: #faf8f7 none repeat scroll 0 0;
+  border-radius: 10px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  display: block;
+  margin: 0 auto;
+  padding: 30px;
+}
+.error-container .error-image {
+  color: #4d433f;
+  font-size: 200%;
+  margin: 0 auto 30px;
+}
+.error-container .error-title {
+  font-size: 36px;
+  line-height: 1.2;
+  margin: 15px auto;
+  padding: 0;
+}
+.error-container .error-text {
+  color: #1f1f1f;
+  font-size: 23px;
+  font-weight: 300;
+  line-height: 1.5;
+  margin: 15px auto;
+  padding: 0;
+}
+@media (max-width: 767px) {
+  .error-container .error-message {
+    width: 90%;
+    padding: 20px;
+  }
+  .error-container .error-title {
+    font-size: 28px;
+  }
+  .error-container .error-text {
+    font-size: 18px;
+  }
+  .error-container .error-image {
+    font-size: 150%;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .error-container .error-message {
+    width: 90%;
+    padding: 30px;
+  }
+  .error-container .error-title {
+    font-size: 32px;
+  }
+  .error-container .error-text {
+    font-size: 21px;
+  }
+  .error-container .error-image {
+    font-size: 170%;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .error-container .error-message {
+    width: 80%;
+    padding: 40px;
+  }
+  .error-container .error-title {
+    font-size: 32px;
+  }
+  .error-container .error-text {
+    font-size: 21px;
+  }
+  .error-container .error-image {
+    font-size: 170%;
+  }
+}
+@media (min-width: 1200px) {
+  .error-container .error-message {
+    width: 70%;
+    padding: 50px;
+  }
+}
+/*
+@media (max-width: @screen-xs-max) { ... }
+@media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) { ... }
+@media (min-width: @screen-md-min) and (max-width: @screen-md-max) { ... }
+@media (min-width: @screen-lg-min) { ... }
+*/

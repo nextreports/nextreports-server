@@ -1,17 +1,19 @@
-<wicket:extend>	
-	<table>
-		<tr>
-			<td rowspan="2"><img wicket:id="errorImage"/></td>
-			<td class="errorMaintenance">				
-				<wicket:message key="error.code"></wicket:message> 
-				<span wicket:id="errorCode"/>, 
-				<wicket:message key="error.try"></wicket:message> 			
-			</td>
-		</tr>
-		<tr>
-			<td class="errorMaintenanceLink">
-				<a wicket:id="home"><b><wicket:message key="home"></wicket:message></b></a>
-			</td>	
-		</tr>
-	</table>
+<wicket:extend>
+	<div class="error-container">
+		<div class="error-message">
+			<div class="error-image">
+				<i class="fa fa-warning fa-5x"></i>
+			</div>
+			<p class="error-title">
+				<wicket:message key="error.code"></wicket:message>
+				<span wicket:id="errorCode" />,
+				<wicket:message key="error.try"></wicket:message>!</p>
+			<p class="error-text">
+				We apologize for the interruption to your work. NextServer application had a problem processing your request. We are sorry for the inconvenience.	
+			</p>
+			<div class="error-buttons">
+				<a wicket:id="home" class="btn btn-primary btn-lg"><wicket:message key="home"></wicket:message></a>
+			</div>
+		</div>
+	</div>
 </wicket:extend>
