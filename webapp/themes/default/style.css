@@ -1384,10 +1384,6 @@ p {
   float: left;
   text-align: left;
 }
-.left {
-  width: 350px;
-  margin-right: 10px;
-}
 .right {
   width: 450px;
   margin-left: 10px;
@@ -1683,12 +1679,12 @@ p {
   margin: 0;
   padding: 0;
   height: 100%;
-  width: 200px;
+  width: 220px;
   float: left;
 }
 .analysisLeft + .form-container {
   float: left;
-  width: calc(100% - 200px);
+  width: calc(100% - 220px);
   height: 100%;
 }
 .analysisNavigation {
@@ -1696,6 +1692,7 @@ p {
   overflow-y: auto;
   background: #fafbf8;
   height: calc(100% - 32px);
+  *height: calc(100% - 34px);
 }
 .analysisNavigation table.actions-grid {
   width: 100%;
@@ -2167,12 +2164,17 @@ ul.column {
   height: 100%;
   width: 100%;
 }
+.dashboard .toolbar_nav {
+  min-width: 960px;
+}
 .dashboardCapture {
-  display: inline-block;
+  display: block;
   overflow-y: auto;
   overflow-x: hidden;
   height: calc(100% - 32px);
+  *height: calc(100% - 34px);
   width: 100%;
+  min-width: 960px;
 }
 .dashboardLeft {
   background: #edecec;
@@ -2181,12 +2183,12 @@ ul.column {
   margin: 0;
   padding: 0;
   height: 100%;
-  width: 200px;
+  width: 220px;
   float: left;
 }
 .dashboardLeft + .form-container {
   float: left;
-  width: calc(100% - 200px);
+  width: calc(100% - 220px);
   height: 100%;
 }
 .dashboardNavigation {
@@ -3094,6 +3096,28 @@ body {
   margin: 0 !important;
   float: right;
 }
+.nrs .nrs-nav .dropdown-menu {
+  border-color: #e5e5e5;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05);
+  left: auto;
+  margin-top: 0;
+  right: 0;
+}
+.nrs .nrs-nav .dropdown-menu > li > a {
+  font-size: 12px;
+  color: #575757;
+  font-weight: 500;
+}
+.nrs .nrs-nav .dropdown-menu > li > a:hover,
+.nrs .nrs-nav .dropdown-menu > li > a:focus,
+.nrs .nrs-nav .dropdown-menu > li > a:active {
+  background: #f4f8ec none repeat scroll 0 0;
+  text-decoration: none;
+  outline: none;
+  color: #81a335;
+}
 .nrs .nrs-nav > li {
   float: left !important;
   height: 50px;
@@ -3113,6 +3137,7 @@ body {
   position: relative;
   text-align: center;
   width: auto;
+  background: transparent;
 }
 .nrs .nrs-nav > li > a:hover,
 .nrs .nrs-nav > li > a:focus,
