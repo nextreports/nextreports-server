@@ -1,7 +1,4 @@
-<wicket:panel>    
-	<div class="dashboard-section">
-		<div  class="form-container">
-			<div class="dashboard">
+<wicket:panel>    			
 			    <div wicket:id="toolbar" class="toolbar_nav">        
 			        <img wicket:id="toggle" class="dashboard-toggle"/>                      
 			        <a wicket:id="addWidget" class="btn btn-primary btn-xs" style="margin-right: 2px;"><wicket:message key="DashboardPanel.add">Add widget</wicket:message></a>
@@ -14,10 +11,7 @@
 			    	<div wicket:id="columns">
 			        	<div wicket:id="column"></div>
 			    	</div>
-			    </div>
-		    </div>
-	    </div>
-    </div>
+			    </div>		    
     <script>
     $(document).ready(function(){
     	$(".dragbox-toggle").on("click",function(){
