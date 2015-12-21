@@ -224,10 +224,18 @@ ul.column {
 	display: block;
 	overflow-y: auto;
     overflow-x: hidden;
-	height: ~'calc(100% - 32px)';
-    *height: ~'calc(100% - 34px)';
+    height: 100%;
 	width: 100%;
     min-width: 960px;
+}
+
+.toolbar_nav + .dashboardCapture{
+    height: ~'calc(100% - 32px)';
+    *height: ~'calc(100% - 34px)'; // For IE
+}
+
+.form-container{
+    height: 100%;
 }
  .dashboardLeft {
     background: @body-color;
@@ -243,14 +251,18 @@ ul.column {
 .dashboardLeft + .form-container{
     float: left;
     width: ~'calc(100% - 220px)';
-    height: 100%;
 }
  
 .dashboardNavigation  {	
 	overflow-x: hidden;	
 	overflow-y: auto;
     background: @main-lightest-bg-color;
-	height: ~'calc(100% - 32px)';	
+	height: 100%;	
+}
+
+.toolbar_nav + .dashboardNavigation  {	
+    height: ~'calc(100% - 32px)';
+    *height: ~'calc(100% - 34px)'; // For IE
 }
 
 .dashboardNavigation table.actions-grid {

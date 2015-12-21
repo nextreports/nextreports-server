@@ -2171,10 +2171,16 @@ ul.column {
   display: block;
   overflow-y: auto;
   overflow-x: hidden;
-  height: calc(100% - 32px);
-  *height: calc(100% - 34px);
+  height: 100%;
   width: 100%;
   min-width: 960px;
+}
+.toolbar_nav + .dashboardCapture {
+  height: calc(100% - 32px);
+  *height: calc(100% - 34px);
+}
+.form-container {
+  height: 100%;
 }
 .dashboardLeft {
   background: #edecec;
@@ -2189,13 +2195,16 @@ ul.column {
 .dashboardLeft + .form-container {
   float: left;
   width: calc(100% - 220px);
-  height: 100%;
 }
 .dashboardNavigation {
   overflow-x: hidden;
   overflow-y: auto;
   background: #f7fafa;
+  height: 100%;
+}
+.toolbar_nav + .dashboardNavigation {
   height: calc(100% - 32px);
+  *height: calc(100% - 34px);
 }
 .dashboardNavigation table.actions-grid {
   width: 100%;
@@ -3358,6 +3367,15 @@ body {
 }
 .nrs-integration .actions-col .topnav > li:hover::before {
   display: none;
+}
+.nrs-integration.nrs-embeded {
+  background: #f4f4f4;
+}
+.nrs-integration.nrs-embeded .dashboard-section {
+  border: 0 none;
+}
+.nrs-integration.nrs-embeded .dashboard {
+  background: transparent;
 }
 .block-header {
   margin: 0 0 15px 0;
