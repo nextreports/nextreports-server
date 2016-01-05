@@ -6,13 +6,13 @@
          </tr>  	
 		 <tr>                	
               <td class="td-label"><label wicket:id="name"/></td>
-              <td><input wicket:id="nameText" type="text" size="30"/></td>
+              <td><input wicket:id="nameText" class="form-control input-xs" type="text" size="30"/></td>
          </tr>         
          <tr>                	
               <td class="td-label"><label wicket:id="expression"/></td>
-              <td>              		              		 
-              		<select wicket:id="aggChoice"/>
-              		<select wicket:id="columnChoice"/> 
+              <td class="form-inline">              		              		 
+              		<select wicket:id="aggChoice" class="form-control input-xs"/>
+              		<select wicket:id="columnChoice" class="form-control input-xs"/> 
               		<a wicket:id="addColumn" class="btn btn-primary btn-xs" style=" display: inline-block; padding-top: 0;">
               			<wicket:message key="insert"/>
               		</a>            		
@@ -20,11 +20,11 @@
          </tr>           
          <tr>                	
               <td class="td-label"> </td>
-              <td><textarea wicket:id="expressionText" rows="4" cols="30"/></td>
+              <td><textarea wicket:id="expressionText" rows="4" cols="40"/></td>
          </tr>     
          <tr>                	
               <td class="td-label"><label wicket:id="type"/></td>
-              <td><select wicket:id="typeChoice"/></td>
+              <td><select wicket:id="typeChoice" class="form-control input-xs"/></td>
          </tr>           
          <tr>
          	<td><a wicket:id="addLink" class="btn btn-primary btn-xs"><span wicket:id="addMessage"/></a></td>
