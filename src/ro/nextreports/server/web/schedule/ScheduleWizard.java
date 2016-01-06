@@ -121,6 +121,7 @@ public class ScheduleWizard extends Wizard {
     private boolean runNow = false;
     private ICondition notRunNowCondition = new NotRunNowCondition();
     private ICondition editNotRunNowCondition = new EditNotRunNowCondition();
+    private ICondition batchCondition = new BatchCondition();
     private ICondition mailServerDefinedCondition = new MailServerDefinedCondition();
     private AjaxWizardButtonBar buttonBar;
     private int[] finishSteps = new int[0];
@@ -158,7 +159,7 @@ public class ScheduleWizard extends Wizard {
         model.add(new ScheduleRuntimeStep());
         model.add(new ScheduleJobStep(), notRunNowCondition);
         if (moduleLicence.isValid(NextServerModuleLicence.BATCH_MODULE)) {
-        	model.add(new ScheduleBatchStep());
+        	model.add(new ScheduleBatchStep(), batchCondition);
         }
         model.add(new ScheduleDestinationsStep());
                         
@@ -619,6 +620,14 @@ public class ScheduleWizard extends Wizard {
             return !runNow && !edit;
         }
 
+    }
+    
+    private final class BatchCondition implements ICondition {
+    	
+    	public boolean evaluate() {
+    		String type = schedulerJob.getReport().getType();
+    		return ReportConstants.NEXT.equals(type);
+    	}	
     }
 
     private final class MailServerDefinedCondition implements ICondition {
