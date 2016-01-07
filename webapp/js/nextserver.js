@@ -112,8 +112,8 @@ function showPopup() {
     x = $(this).find("ul.subnav");
 //    var t = $(this).parents().filter("td.actions-col");
 //    x.css({ "left":  + t.position().left + "px" });
-
-    var table = $(this).parents().filter("div.table-right-container,div.table-container,div.dashboardNavigation,div.analysisNavigation,div.table-actions");
+// trebuie adaugat tot timpul parintele in care se afla submeniul
+    var table = $(this).parents().filter("div.table-right-container,div.table-container,div.dashboardNavigation,div.analysisNavigation,div.table-actions, div.dashboardCapture");
 	var tt = table.position().top;
 	var th = table.height();
 	var tb = tt + th;
