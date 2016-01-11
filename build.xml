@@ -92,8 +92,9 @@ Copyright:
                 <compilerarg value="-Xlint:unchecked"/>
                 -->
         </javac>
-        <!-- move logo to classpath so an installed next-server can found it for pushing to JCR storage -->
-        <copy file="${app.home}/webapp/images/logo.png" todir="${app.classes}"/>
+
+        <!-- Move logo to classpath so an installed next-server can found it for pushing to JCR storage -->
+        <copy file="${app.home}/webapp/themes/default/images/Nextreports-logo.png" todir="${app.classes}"/>
     </target>
 
     <!-- ================================================================== -->
