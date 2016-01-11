@@ -88,7 +88,7 @@ public class AlarmWidgetView extends WidgetView {
 				
 				if (alarmModel.getObject() == null) {
 					if (alarmModel.getError() instanceof NoDataFoundException) {
-						setDefaultModelObject("No Data Found");
+						setDefaultModelObject(getString("ActionContributor.Run.nodata"));
 					} else {
 						setDefaultModelObject(ExceptionUtils.getRootCauseMessage(alarmModel.getError()));
 					}

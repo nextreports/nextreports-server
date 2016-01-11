@@ -24,19 +24,14 @@ import java.net.URLClassLoader;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.UrlValidator;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import ro.nextreports.server.domain.Settings;
 import ro.nextreports.server.service.StorageService;
-import ro.nextreports.server.web.NextServerApplication;
 import ro.nextreports.server.web.common.behavior.SimpleTooltipBehavior;
-import ro.nextreports.server.web.core.validation.MailServerValidator;
 
 /**
  * User: mihai.panaitescu
@@ -49,9 +44,7 @@ public class GeneralSettingsPanel extends AbstractSettingsPanel {
 	private StorageService storageService;
 	
 	private String oldReportsHome;
-	private String oldMailIp;
-	private Integer oldMailPort;
-		
+	
     public GeneralSettingsPanel(String id) {
         super(id);                
     }
@@ -84,22 +77,6 @@ public class GeneralSettingsPanel extends AbstractSettingsPanel {
         ContextImage repImage = new ContextImage("repImage","images/exclamation.png");        
         repImage.add(new SimpleTooltipBehavior(getString("Settings.general.reportsUrlTooltip")));
         form.add(repImage);
-
-        final TextField<String> mailServerIpField = new TextField<String>("mailServer.ip");
-        form.add(mailServerIpField);
-        final TextField<Integer> mailServerPortField = new TextField<Integer>("mailServer.port");
-        form.add(mailServerPortField);
-        final TextField<String> mailServerSenderField = new TextField<String>("mailServer.from");
-        form.add(mailServerSenderField);
-        final TextField<String> mailServerUsernameField = new TextField<String>("mailServer.username");
-        form.add(mailServerUsernameField);
-        final PasswordTextField mailServerPasswordField = new PasswordTextField("mailServer.password");
-        mailServerPasswordField.setResetPassword(false);
-        mailServerPasswordField.setRequired(false);
-        form.add(mailServerPasswordField);
-        final CheckBox tlsCheckField = new CheckBox("mailServer.enableTls");
-        form.add(tlsCheckField);        
-        form.add(new MailServerValidator(new FormComponent[] {mailServerIpField, mailServerPortField, mailServerSenderField}));
         
         final TextField<Integer> conTimeoutField = new TextField<Integer>("connectionTimeout");
         conTimeoutField.setRequired(true);
@@ -121,14 +98,26 @@ public class GeneralSettingsPanel extends AbstractSettingsPanel {
         ContextImage updateImage = new ContextImage("updateImage","images/information.png");        
         updateImage.add(new SimpleTooltipBehavior(getString("Settings.general.updateIntervalTooltip")));
         form.add(updateImage);
+        
+        final TextField<Integer> pollingIntervalField = new TextField<Integer>("pollingInterval");
+        pollingIntervalField.setRequired(true);
+        form.add(pollingIntervalField);      
+        ContextImage poolingImage = new ContextImage("pollingImage","images/information.png");        
+        poolingImage.add(new SimpleTooltipBehavior(getString("Settings.general.pollingIntervalTooltip")));
+        form.add(poolingImage);
+        
+        final TextField<Integer> uploadSizeField = new TextField<Integer>("uploadSize");
+        uploadSizeField.setRequired(true);
+        form.add(uploadSizeField);      
+        ContextImage uploadSizeImage = new ContextImage("uploadSizeImage","images/information.png");        
+        uploadSizeImage.add(new SimpleTooltipBehavior(getString("Settings.general.uploadSizeTooltip")));
+        form.add(uploadSizeImage);
 
         final CheckBox autoOpenField = new CheckBox("autoOpen");
         form.add(autoOpenField);
 
         Settings settings = storageService.getSettings();
-        oldReportsHome = String.valueOf(settings.getReportsHome());
-        oldMailPort = settings.getMailServer().getPort();
-        oldMailIp = settings.getMailServer().getIp();
+        oldReportsHome = String.valueOf(settings.getReportsHome());        
     }   
     
     protected void beforeChange(Form form, AjaxRequestTarget target) {	
@@ -147,18 +136,7 @@ public class GeneralSettingsPanel extends AbstractSettingsPanel {
 			} catch (Exception e) {				
 				e.printStackTrace();
 			}
-    	}
-    	JavaMailSenderImpl mailSender = (JavaMailSenderImpl) NextServerApplication.get().getSpringBean("mailSender");
-    	if (!oldMailIp.equals(settings.getMailServer().getIp()) || 
-    		!oldMailPort.equals(settings.getMailServer().getPort())) {    		
-            mailSender.setHost(settings.getMailServer().getIp());
-            mailSender.setPort(settings.getMailServer().getPort());
-    	}
-    	
-   		mailSender.setPassword(settings.getMailServer().getPassword());
-   		mailSender.setUsername(settings.getMailServer().getUsername());
-		mailSender.getJavaMailProperties().put("mail.smtp.starttls.enable", settings.getMailServer().getEnableTls());
-
+    	}    	
 	}
 
 	public void setStorageService(StorageService storageService) {

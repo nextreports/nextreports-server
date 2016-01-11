@@ -67,15 +67,31 @@
                         <input wicket:id="maxPoolSize" name="maxPoolSize" type="text" size="5"/>
                     </td>
                 </tr>
+                <tr class="trHide">
+                    <td class="td-label">
+                        <label wicket:id="incPoolLabel"/>
+                    </td>
+                    <td>
+                        <input wicket:id="incrementPoolCon" name="incrementPoolCon" type="text" size="5"/>
+                    </td>
+                </tr>
+                <tr class="trHide">
+                    <td class="td-label">
+                        <label wicket:id="idleTimePoolLabel"/>
+                    </td>
+                    <td>
+                        <input wicket:id="idleTimePoolCon" name="idleTimePoolCon" type="text" size="5"/>
+                    </td>
+                </tr>
                 <tr>
                     <td class="td-label">
                     </td>
                     <td>
                         <ul class="form-btns">
-                            <li><a wicket:id="cancel" class="secondary"><wicket:message key="back">Back</wicket:message></a></li>
-                            <li><a wicket:id="properties" class="secondary"><wicket:message key="properties">Properties</wicket:message></a></li>
-                            <li><a wicket:id="test" class="secondary"><wicket:message key="test">Test</wicket:message></a></li>
-                            <li><a wicket:id="create" class="secondary"><wicket:message key="save">Save</wicket:message></a></li>
+                            <li><a wicket:id="cancel" class="btn btn-secondary btn-xs"><wicket:message key="back">Back</wicket:message></a></li>
+                            <li><a wicket:id="properties" class="btn btn-primary btn-xs"><wicket:message key="properties">Properties</wicket:message></a></li>
+                            <li><a wicket:id="test" class="btn btn-primary btn-xs"><wicket:message key="test">Test</wicket:message></a></li>
+                            <li><a wicket:id="create" class="btn btn-primary btn-xs"><wicket:message key="save">Save</wicket:message></a></li>
                             <!--<li><input wicket:id="test" type="submit" value="Test" class="primary"/></li>-->
                             <!--<li><input wicket:id="create" type="submit" value="Create" class="primary"/></li>-->
                         </ul>

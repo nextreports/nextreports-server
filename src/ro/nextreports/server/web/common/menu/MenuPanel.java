@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,9 +16,8 @@
  */
 package ro.nextreports.server.web.common.menu;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -30,6 +29,10 @@ import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
+import ro.nextreports.server.web.common.behavior.SimpleTooltipBehavior;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Decebal Suiu
@@ -37,10 +40,10 @@ import org.apache.wicket.model.PropertyModel;
 public class MenuPanel extends GenericPanel<List<MenuItem>> {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	public static final String LINK_ID = "linkId";
 	public static final String LINK_IMAGE_ID = "linkImage";
-	public static final String LINK_TEXT_ID = "linkText";	
+	public static final String LINK_TEXT_ID = "linkText";
 
 	/**
 	 * This appender is used to add a down or right arrow icon if there are
@@ -50,17 +53,17 @@ public class MenuPanel extends GenericPanel<List<MenuItem>> {
 	private static final AttributeAppender MENU_HAS_SUBMENU_APPENDER = new AttributeAppender(
 			"class", new Model("menu-has-submenu"), " ");
 	 */
-	
-	private List<MenuItem> topMenuItems = new ArrayList<MenuItem>();
-	
+
+	private List<MenuItem> topMenuItems = new ArrayList<>();
+
 	public MenuPanel(String id) {
 		super(id);
-		
+
 		setModel(new PropertyModel<List<MenuItem>>(this, "topMenuItems"));
-		
+
 		add(new SubMenuListView("topMenuItems", getModel()));
 	}
-	
+
 	public MenuPanel(String id, IModel<List<MenuItem>> model) {
 		super(id, model);
 
@@ -75,9 +78,9 @@ public class MenuPanel extends GenericPanel<List<MenuItem>> {
 		clear();
 		topMenuItems.addAll(menuItems);
 	}
-	
+
 	public void clear() {
-		topMenuItems.clear();		
+		topMenuItems.clear();
 	}
 
 	private class SubMenuListView extends ListView<MenuItem> {
@@ -97,7 +100,7 @@ public class MenuPanel extends GenericPanel<List<MenuItem>> {
 			MenuItem menuItem = item.getModelObject();
 			item.add(new MenuItemFragment(menuItem));
 		}
-		
+
 	}
 
 	private class MenuItemFragment extends Fragment {
@@ -106,8 +109,9 @@ public class MenuPanel extends GenericPanel<List<MenuItem>> {
 
 		public MenuItemFragment(MenuItem menuItem) {
 			super("menuItemFragment", "MENU_ITEM_FRAGMENT", MenuPanel.this);
+
 			setRenderBodyOnly(true);
-			
+
 			// add the menu's label (hyperlinked if a link is provided)
 			if (menuItem.getLink() != null) {
 				if (menuItem.getImage() != null) {
@@ -130,17 +134,17 @@ public class MenuPanel extends GenericPanel<List<MenuItem>> {
 			}
 			WebMarkupContainer menuItemList = new WebMarkupContainer("menuItemList");
 			add(menuItemList);
-			
+
 			// hide the <ul> tag if there are no submenus
 			menuItemList.setVisible(menuItem.getChildren().size() > 0);
-			
+
 			/*
 			// add a down or right arrow icon if there are children
 			if (menuItem.getChildren().size() > 0) {
 				menuItem.getLabel().add(MENU_HAS_SUBMENU_APPENDER);
 			}
 			*/
-			
+
 			// add the submenus
 			menuItemList.add(new SubMenuListView("menuItemLinks", menuItem.getChildren()));
 		}
@@ -152,11 +156,12 @@ public class MenuPanel extends GenericPanel<List<MenuItem>> {
 
 		public LinkFragment(AbstractLink link, String label) {
 			super("linkFragment", "LINK_FRAGMENT", MenuPanel.this);
+
 			setRenderBodyOnly(true);
 			link.add(new Label(LINK_TEXT_ID, label));
 			add(link);
 		}
-		
+
 	}
 
 	private class LinkImageTextFragment extends Fragment {
@@ -164,13 +169,19 @@ public class MenuPanel extends GenericPanel<List<MenuItem>> {
 		private static final long serialVersionUID = 1L;
 
 		public LinkImageTextFragment(AbstractLink link, String image, String label) {
-			super("linkFragment", "LINK_IMAGE_TEXT_FRAGMENT", MenuPanel.this);
+            super("linkFragment", decorateMarkupId("LINK_IMAGE_TEXT_FRAGMENT", image), MenuPanel.this);
+
 			setRenderBodyOnly(true);
-			link.add(new ContextImage(LINK_IMAGE_ID, image));
+            if (isFontawesome(image)) {
+                link.add(new TransparentWebMarkupContainer(LINK_IMAGE_ID).add(AttributeModifier.append("class", "fa-" + image)));
+            } else {
+                link.add(new ContextImage(LINK_IMAGE_ID, image));
+            }
+            link.add(new SimpleTooltipBehavior(label));
 			link.add(new Label(LINK_TEXT_ID, label));
 			add(link);
 		}
-		
+
 	}
 
 	private class LinkImageFragment extends Fragment {
@@ -178,12 +189,17 @@ public class MenuPanel extends GenericPanel<List<MenuItem>> {
 		private static final long serialVersionUID = 1L;
 
 		public LinkImageFragment(AbstractLink link, String image) {
-			super("linkFragment", "LINK_IMAGE_FRAGMENT", MenuPanel.this);
+			super("linkFragment", decorateMarkupId("LINK_IMAGE_FRAGMENT", image), MenuPanel.this);
+
 			setRenderBodyOnly(true);
-			link.add(new ContextImage(LINK_IMAGE_ID, image));
+            if (isFontawesome(image)) {
+                link.add(new TransparentWebMarkupContainer(LINK_IMAGE_ID).add(AttributeModifier.append("class", "fa-" + image)));
+            } else {
+                link.add(new ContextImage(LINK_IMAGE_ID, image));
+            }
 			add(link);
 		}
-		
+
 	}
 
 	private class ImageFragment extends Fragment {
@@ -191,23 +207,37 @@ public class MenuPanel extends GenericPanel<List<MenuItem>> {
 		private static final long serialVersionUID = 1L;
 
 		public ImageFragment(String image) {
-			super("linkFragment", "IMAGE_FRAGMENT", MenuPanel.this);
+			super("linkFragment", decorateMarkupId("IMAGE_FRAGMENT", image), MenuPanel.this);
+
 			setRenderBodyOnly(true);
-			add(new ContextImage(LINK_IMAGE_ID, image));
+            if (isFontawesome(image)) {
+                add(new TransparentWebMarkupContainer(LINK_IMAGE_ID).add(AttributeModifier.append("class", "fa-" + image)));
+            } else {
+                add(new ContextImage(LINK_IMAGE_ID, image));
+            }
 		}
-		
+
 	}
-	
+
 	private class TextFragment extends Fragment {
 
 		private static final long serialVersionUID = 1L;
 
 		public TextFragment(String label) {
 			super("linkFragment", "TEXT_FRAGMENT", MenuPanel.this);
+
 			setRenderBodyOnly(true);
 			add(new Label(LINK_TEXT_ID, label));
 		}
-		
+
 	}
-	
+
+    private static String decorateMarkupId(String markupId, String image) {
+        return isFontawesome(image) ? markupId + "_2" : markupId;
+    }
+
+    private static boolean isFontawesome(String image) {
+        return !image.startsWith("images/");
+    }
+
 }

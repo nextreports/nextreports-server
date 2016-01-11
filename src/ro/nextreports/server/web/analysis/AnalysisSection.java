@@ -22,7 +22,8 @@ public class AnalysisSection extends AbstractSection {
 	}
 
 	public String getIcon() {
-		return "images/analysis.png";
+		//return "images/analysis.png";
+		return "table";
 	}	
 
 	public Panel createView(String viewId) {

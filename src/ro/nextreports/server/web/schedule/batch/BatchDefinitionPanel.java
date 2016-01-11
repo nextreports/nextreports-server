@@ -15,6 +15,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import ro.nextreports.engine.queryexec.QueryParameter;
 import ro.nextreports.engine.util.ParameterUtil;
 import ro.nextreports.server.domain.SchedulerJob;
+import ro.nextreports.server.report.ReportConstants;
 import ro.nextreports.server.report.next.NextUtil;
 import ro.nextreports.server.service.StorageService;
 
@@ -35,6 +36,12 @@ public class BatchDefinitionPanel extends Panel {
     }
 
     private void init() {
+    	
+    	// Scheduler Batch is shown only for NEXT REPORTS
+    	if (!ReportConstants.NEXT.equals(schedulerJob.getReport().getType())) {
+    		return;
+    	}
+    	
     	Label parameter = new Label("parameter", getString("ActionContributor.Run.batch.parameter"));
         add(parameter);
                 

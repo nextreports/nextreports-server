@@ -78,6 +78,7 @@ public class MailPanel extends AbstractDestinationPanel {
 		add(sendChoice);
 
 		initBasicComponents();
+		initSpecificComponents();
 	}
 
 	protected void initBasicComponents() {
@@ -100,7 +101,10 @@ public class MailPanel extends AbstractDestinationPanel {
 		provider = new RecipientDataProvider((SmtpDestination) destination);
 		recipientsPanel = new RecipientsPanel("recipientsPanel", provider);
 		add(recipientsPanel);
-		
+				
+	}
+	
+	protected void initSpecificComponents() {
 		add(new Label("changedFileName", getString("ActionContributor.Run.destination.changedFileName")));
 		TextField<String> fileNameField = new TextField<String>("changedFileNameField", new PropertyModel<String>(destination,
 				"changedFileName"));

@@ -1,0 +1,320 @@
+// main: style.less
+
+/* Form Start */
+.form-container {
+    /*margin-top: 8px;*/
+    background: none repeat scroll 0 0 transparent;
+    /*border: 1px solid #cacaca;*/
+    /*padding: 10px;*/
+    text-align: left;
+    /*float:left;*/
+    /*width: 100%;*/
+}
+
+.form-container-dialog {
+	margin-top: 0px !important;
+	padding: 10px;
+	/* width: 96% !important;  horizontal scroll bar will always be seen if this is not set */
+}
+
+.form-container table {
+    /*display: block;*/
+    clear: both;
+    /*padding: 0px 0px 10px;*/
+}
+
+.form-container table.form td {
+    padding-bottom: 5px;
+}
+
+.form-container td.td-label {
+    /*width: 110px;*/
+    display: block;
+    text-align: left;
+    padding: 5px 10px 0px 0px;
+	margin-bottom: 5px !important;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+.form-container td.td-label-login {
+    display: block;
+    text-align: left;
+    padding: 4px 10px 0px 50px;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+.form-container td.td-name {
+    padding: 4px 10px 5px 0px;
+    vertical-align: top;
+    font-weight: bold;
+}
+
+.form-container td.checkbox {
+    padding-top: 4px;
+}
+
+.form-container table input.textInput, .form-container table textarea, .form-container table select {
+    /*float: left;*/
+    /*width: 97%;*/
+    /*display: block;*/
+    padding: 2px 3px 0px;
+    /*border: 1px solid #cacaca !important;*/
+    /*height: 20px*/
+}
+
+.form-container table input.checkbox {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.form-container table textarea {
+    height: auto;
+}
+
+.form-container table select {
+    padding: 1px 3px 1px;
+}
+
+.form-container table select.entityList {
+    padding: 2px 3px 1px;
+    width: 380px;
+    height: 160px;
+}
+
+.form-container table select.manualList {
+    padding: 1px 2px;
+    width: 100%;
+    height: 80px;
+}
+
+.form-container table input.textFile {
+    float: left;
+    width: 100%;
+    display: inline-block;
+    padding: 2px 3px 0px;
+    position: relative;
+    height: 25px;
+}
+
+.form-container table input.textInput {
+    height: 18px;
+}
+
+.form-container td.padding {
+    padding-top: 4px;
+}
+
+.form-btns{
+    margin:5px 0;
+    .clearfix();
+}
+.form-btns li {
+    width: auto;
+    float: left;
+    margin-right: 5px;
+    display: block;
+}
+
+.form-container h1 {
+    font-size: 13px;
+    line-height: 20px;
+    background: url(../../images/thead.gif) repeat-x;
+    padding: 0px 10px;
+    height: 20px;
+    line-height: 20px;
+    display: block;
+    border: 1px solid #cacaca;
+    margin-bottom: 10px;
+    color: #333333;
+}
+
+.form-container fieldset {
+    /*border-top: 1px solid #bcc1c1;*/
+    /*width: 100%;
+    margin-bottom: 4px;*/
+    padding: 0 10px;
+    /*background-color: #e9f4ff;*/
+}
+
+.form-container legend {
+	display: block;
+    font-weight: bold;
+    font-size: 12px;
+    color: #202020;
+    border-bottom: 1px solid @main-color;
+    margin: 5px 0 10px;
+    padding: 5px 0;
+	width: 100%;
+}
+
+.form-container h2, h3, h4 {
+    color: #000000;
+}
+
+.fieldset-panel-right {
+    /*margin-top: 10px;*/
+}
+
+/* Form End */
+
+
+/* Checkbox & Radio */
+input[type=checkbox].nrs , input[type=radio].nrs {
+	opacity:0;
+	position:absolute;
+	z-index:12;
+	width:18px; 
+    height:18px;
+	cursor:pointer;
+    margin: 0;
+	
+	&:checked, &:focus {
+		outline:none !important;
+	}
+	
+	+ .lbl {
+		position: relative; 
+        z-index:11;
+		display:inline-block;
+		margin:0;
+		line-height:20px;
+		min-height:18px;
+		min-width:18px;
+		font-weight:normal;
+		
+		
+		.checkbox-paddings() {// a little paddings for .lbl
+			 .checkbox-paddingX (@index) when (@index >= 0) {
+				&.padding-@{index}::before {
+					margin-right:unit(@index,px);
+				}
+			   .checkbox-paddingX(@index - 4);
+			  }
+			  .checkbox-paddingX(16);
+		}
+		.checkbox-paddings();
+
+
+		&::before {
+			content:"\a0";
+            font-family:FontAwesome; 
+            font-weight:normal;
+			font-size: 12px; 
+            color:@input-checkbox-color;
+			display:inline-block;
+			background-color: #FAFAFA;
+			border: 1px solid @input-checkbox-border;
+			box-shadow: 0 1px 2px rgba(0,0,0,0.05);/*, inset 0px -15px 10px -12px rgba(0,0,0,0.05);*/
+			border-radius: 4px;
+			display: inline-block;
+			text-align:center;
+			vertical-align:middle;
+			height:16px; 
+            line-height:14px;
+			min-width:16px;	
+			margin-right:1px;
+		}
+	}//.lbl
+	
+	&:checked + .lbl::before {
+		display:inline-block;
+		content: '\f00c';
+		background-color: #F5F8FC;
+		border-color:@input-checkbox-checked-border;
+		box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05), inset 15px 10px -12px rgba(255,255,255,0.1);
+	}
+	&:hover + .lbl::before , + .lbl:hover::before {
+		border-color:@input-checkbox-hover-border;
+	}
+
+	
+	&:active , &:checked:active {
+		+ .lbl::before {
+			box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+		}
+	}
+	
+	
+	&.nrs-checkbox-2 + .lbl::before {
+		box-shadow: none;
+	}
+	&.nrs-checkbox-2:checked + .lbl::before {
+		background-color: @input-checkbox2-bg;
+		border-color: @input-checkbox2-bg;
+		color: #FFF;
+	}
+
+	&:disabled + .lbl::before ,
+	&[disabled] + .lbl::before ,
+	&.disabled + .lbl::before {
+		background-color:@btn-disabled-bg-color !important;
+		border-color:@btn-disabled-border-color !important;
+		box-shadow:none !important;
+		color:@btn-disabled-text-color;
+	}
+}
+
+input[type=radio].nrs + .lbl::before {
+	border-radius: 100%;
+	font-size: 11px;
+	font-family: FontAwesome;//let's use a fonts that's available everywhere
+	text-shadow: 0 0 1px @input-checkbox-color;
+
+	line-height: 15px;	
+	height: 17px;
+	min-width: 17px;
+}
+input[type=radio].nrs:checked + .lbl::before {
+	content:"\f111";
+}
+
+.nrs-checkbox{
+    margin-bottom: 0;
+    &.radio-inline, &.checkbox-inline{
+        padding-left: 0;
+    }
+}
+
+@font-size-base:              12px;
+@line-height-base:            1.5; 
+@input-height-xs:             (floor((@font-size-base) * @line-height-base) + 2 + 2);
+@padding-small-vertical:      1px;
+@padding-small-horizontal:    5px;
+@border-radius-small:         3px;
+// -----------------------------------------
+// Form control sizing
+// -----------------------------------------
+.input-xs {
+	.input-size (
+        @input-height-xs;
+	    @padding-small-vertical;
+	    @padding-small-horizontal;
+	    @font-size-base;
+	    @line-height-base;
+	    @border-radius-small);
+}
+
+label {
+	display: inline-block;
+	margin-bottom: 2px;
+}
+
+textarea {
+	resize: vertical;
+}
+
+.form-group {
+	margin-bottom: 8px;
+}
+
+.form-control{
+    border-color: @hr-borders-color;
+    box-shadow: none;
+    
+    &:focus{
+        box-shadow: none;
+        border-color: @main-color;
+    }
+}

@@ -1,28 +1,28 @@
 <wicket:panel>
     <table class="form">
         <tr>
-            <td class="label"><label wicket:id="startJobDate">[]</label></td>
+            <td><label wicket:id="startJobDate">[]</label></td>
             <td>
                 <div wicket:id="time.startActivationDate" class="left"/>
             </td>
         </tr>
         <tr>
-            <td class="label"><label wicket:id="endJobDate">[]</label></td>
+            <td><label wicket:id="endJobDate">[]</label></td>
             <td>
                 <div wicket:id="time.endActivationDate" class="left"/>
             </td>
         </tr>
         <tr>
-            <td class="label"><label wicket:id="type">[]</label></td>
-            <td><select wicket:id="choice" name="choice"/>
-                <span wicket:id="containerAdv">
-                    <input wicket:id="advanced" name="advanced" type="checkbox" size="45"/>
-                    <label wicket:id="advancedLabel">[]</label>
-                </span>
+            <td><label wicket:id="type">[]</label></td>
+            <td class="form-inline">
+            	<select wicket:id="choice" class="form-control input-xs" style="margin-top: 2px;" name="choice"/>
+                <label wicket:id="containerAdv">
+                    <input wicket:id="advanced" class="nrs" name="advanced" type="checkbox" size="45"/>
+                    <span class="lbl"></span>&nbsp;<span wicket:id="advancedLabel">[]</span>
+                </label>
             </td>
         </tr>
     </table>
-    <div class="dashboard-widget-container"></div>
     <div wicket:id="container">
         <div wicket:id="content"></div>
     </div>

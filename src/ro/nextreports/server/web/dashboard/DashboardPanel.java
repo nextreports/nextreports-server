@@ -31,7 +31,6 @@ import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -139,18 +138,14 @@ public class DashboardPanel extends GenericPanel<Dashboard> {
         toolbarContainer.setVisible(viewToolbar);
         addColumnsPanel();
         
-        add(AttributeModifier.replace("class", "dashboard"));        
+       // add(AttributeModifier.replace("class", "dashboard"));        
     }
 	
     @Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		
-        response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(DashboardPanel.class, "dashboard.js")));
-        response.render(CssHeaderItem.forReference(new PackageResourceReference(DashboardPanel.class, "dashboard.css")));
-        if (isInternetExplorer()) {
-        	response.render(CssHeaderItem.forReference(new PackageResourceReference(DashboardPanel.class, "dashboard-ie.css")));
-        }
+        response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(DashboardPanel.class, "dashboard.js")));       
         response.render(JavaScriptHeaderItem.forReference(HTML2CANVAS_JS));
         response.render(JavaScriptHeaderItem.forReference(JSPDF_JS));
         response.render(JavaScriptHeaderItem.forReference(NEXTCHARTS_JS));

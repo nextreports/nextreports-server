@@ -16,12 +16,14 @@
  */
 package ro.nextreports.server.web.core;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import ro.nextreports.server.web.core.HomePage;
+import ro.nextreports.server.web.themes.ThemesManager;
 
 
 /**
@@ -32,12 +34,13 @@ public class ErrorPage extends BasePage {
 	private static final long serialVersionUID = 1L;
 
 	public ErrorPage(PageParameters parameters) {
+		
+		cssContainer.add(AttributeModifier.replace("href", ThemesManager.getInstance().get3rdThemeRelativePathCss()));
+		
 		String errorCode = parameters.get("errorCode").toString();
 		add(new Label("errorCode", errorCode));
 		add(new BookmarkablePageLink<HomePage>("home", getApplication().getHomePage()));
-		
-		ContextImage errorImage = new ContextImage("errorImage", "images/error.png");
-		add(errorImage);
+	
 	}
 
 }

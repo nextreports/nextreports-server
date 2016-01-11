@@ -18,7 +18,9 @@ package ro.nextreports.server.web.dashboard;
 
 import java.util.Map;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -34,6 +36,7 @@ import ro.nextreports.server.util.PermissionUtil;
 import ro.nextreports.server.web.core.NextServerJavaScriptContributor;
 import ro.nextreports.server.web.dashboard.model.WidgetModel;
 import ro.nextreports.server.web.security.SecurityUtil;
+import ro.nextreports.server.web.themes.ThemesManager;
 
 /**
  * @author Decebal Suiu
@@ -52,6 +55,10 @@ public class WidgetWebPage extends WebPage {
     private SecurityService securityService;
 
 	public WidgetWebPage(PageParameters pageParameters) {
+		
+		WebMarkupContainer cssContainer = new WebMarkupContainer("cssPath");        
+        cssContainer.add(new AttributeModifier("href", ThemesManager.getInstance().getThemeRelativePathCss()));
+        add(cssContainer);
 		
 		IFrameSettings iframeSettings = storageService.getSettings().getIframe();
 		if ((iframeSettings == null) || (iframeSettings.isUseAuthentication() && (SecurityUtil.getLoggedUser() == null)) ) {

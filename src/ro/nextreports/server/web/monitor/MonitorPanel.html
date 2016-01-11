@@ -1,38 +1,33 @@
 <wicket:panel>
+<div class="auditSection">
 	<div class="dashboard-widget-container">
-	    <div class="dashboard-widget-header">
-	        <span class="dashboard-widget-header-left"></span>
-	        <span style="float: left; font-weight: bold; padding-top: 3px;">
-	        	<wicket:message key="MonitorPanel.runningTitle">Running reports</wicket:message>
-	        </span>
-	        <span class="dashboard-widget-header-right"></span>
-	    </div>
-	    <div class="table-container">
-	        <table wicket:id="jobsTable" class="grid"></table>
-	    </div>
+		<div class="block-header">
+			<h2>
+				<wicket:message key="MonitorPanel.runningTitle">Running reports</wicket:message>
+			</h2>
+		</div>
+		<div class="table-container">
+			<table wicket:id="jobsTable" class="grid"></table>
+		</div>
 	</div>
+	<div class="dashboard-widget-container">
 
-    <div class="dashboard-widget-container">
-        <div class="dashboard-widget-header">
-            <span class="dashboard-widget-header-left"></span>
-            <span style="float: left; font-weight: bold; padding-top: 3px;">
-            	<wicket:message key="MonitorPanel.activeTitle">Active scheduled reports</wicket:message>
-            </span>
-            <span class="dashboard-widget-header-right"></span>
-        </div>
-        <div class="table-container">
-            <table wicket:id="schedulerJobsTable" class="grid"></table>
-        </div>
-    </div>
-
-    <div class="dashboard-widget-container">
-	    <div class="dashboard-widget-header">
-	        <span class="dashboard-widget-header-left"></span>
-	        <span style="float: left; font-weight: bold; padding-top: 3px;">
-	        	<wicket:message key="MonitorPanel.historyTitle">Reports run history</wicket:message></span>
-	        <span class="dashboard-widget-header-right"></span>
-	    </div>
-	    <div wicket:id="runHistoryPanel"></div>
+		<div class="block-header">
+			<h2>
+				<wicket:message key="MonitorPanel.activeTitle">Active scheduled reports</wicket:message>
+			</h2>
+		</div>
+		<div class="table-container">
+			<table wicket:id="schedulerJobsTable" class="grid"></table>
+		</div>
+	</div>
+	<div class="dashboard-widget-container">
+		<div class="block-header">
+			<h2>
+				<wicket:message key="MonitorPanel.historyTitle">Reports run history</wicket:message>
+			</h2>
+		</div>
+		<div wicket:id="runHistoryPanel"></div>
+	</div>
 	</div>
 </wicket:panel>
-  

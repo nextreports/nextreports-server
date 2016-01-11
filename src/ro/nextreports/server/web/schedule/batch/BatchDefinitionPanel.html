@@ -2,14 +2,16 @@
         <table class="table-padding">
             <tr>
                 <td class="td-label"><label wicket:id="parameter">[]</label></td>
-                <td><select wicket:id="parameterChoice" name="parameterChoice"/></td>
+                <td><select wicket:id="parameterChoice" class="form-control input-xs" name="parameterChoice"/></td>
             </tr>
             <tr>
 	    		<td class="td-label top"><label wicket:id="dataQuery">[]</label></td>
-	    		<td><textarea wicket:id="dataQueryArea" name="dataQuery" rows="8" cols="50"></textarea></td>
+	    		<td><textarea wicket:id="dataQueryArea" class="form-control input-xs" name="dataQuery" rows="8" cols="50"></textarea></td>
 			</tr>			
         </table>    
-        <div class="dashboard-widget-container"></div>    
-        <div><label wicket:id="infoDynamic" style="font-weight: normal; color: gray;">[]</label></div>          
-        <div><label wicket:id="infoDependent" style="font-weight: normal; color: gray;">[]</label></div>
+        <hr class="hr-10">  
+        <p>
+        <span wicket:id="infoDynamic">[]</span><br>
+		<span wicket:id="infoDependent">[]</span>
+		</p>
 </wicket:panel>

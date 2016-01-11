@@ -48,6 +48,7 @@ public class DashboardBrowserPanel extends GenericPanel<Entity> {
 		
         dashboardPanel = new DashboardPanel("work");
         workContainer.add(dashboardPanel);
+        
         add(workContainer);
     }
     

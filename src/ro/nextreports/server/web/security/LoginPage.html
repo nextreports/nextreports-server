@@ -1,19 +1,25 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:wicket="http://wicket.apache.org/" 
-      xml:lang="en" 
-      lang="en"
-      style="height: 98%;">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/" xml:lang="en" lang="en">
 <head>
 	<title><wicket:message key="LoginPage.title">NextReports - Login</wicket:message></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<link href="fonts/Lato/lato.css" rel="stylesheet"/>
-	<link href="fonts/Ubuntu/ubuntu.css" rel="stylesheet"/>
-	<link href="css/login-reset.css" rel='stylesheet'/>
-	<link href="css/login-style.css" rel='stylesheet'/>
+	
+	<!-- Old Style 
+		<link href="fonts/Lato/lato.css" rel="stylesheet"/>
+		<link href="fonts/Ubuntu/ubuntu.css" rel="stylesheet"/>
+		<link href="css/login-style.css" rel='stylesheet'/> 
+	End old style -->
+	
+	<!-- Bootstrap Base Style -->
+	<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="" wicket:id="cssPath"/>	
+	
 	<link rel="SHORTCUT ICON" href="images/favicon.ico" /> 
+	
+	<script type="text/javascript" src="js/jquery.json-2.2.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 </head>
-<body style="height: 98%;">
+<body class="nrs">
 	<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
   		<tr>
     		<td align="center" valign="middle">
@@ -21,85 +27,78 @@
     		    <!-- header -->
         		<div id="header" class="clearfix">
           			<div class="left"> <img wicket:id="logoImage" class="logo" src="images/logo.png"/>
-            			<p class="text_logo text-shadow text-justify"><wicket:message key="LoginPage.description.general">[]</wicket:message></p>
+            			<p class="text_logo text-shadow"><wicket:message key="LoginPage.description.general">[]</wicket:message></p>
           			</div>
 	          		<div class="right"><img class="charts" src="images/charts.png"/></div>
-    	      		<div class="clrboth"></div>
         		</div>
         		
         
         		<!-- content -->
-        		<div id="content">
+        		<div id="content" class="clearfix">
         			<!-- left -->
           			<div class="left">
             			<form wicket:id="loginForm" id="login-form" method="post">
               				<fieldset>
+              					<span wicket:id="feedback" class="error">[]</span> 
                 				<label><wicket:message key="LoginPage.userName">User Name</wicket:message></label>              
                 				<input wicket:id="username" name="name" type="text">                
                 				<label><wicket:message key="LoginPage.password">Password</wicket:message></label>
                 				<input wicket:id="password" name="password" type="password">
                 				<label wicket:id="realmLabel">[]</label>
                 				<select wicket:id="realm" name="realm"/>      
-                				<span wicket:id="feedback" class="error">[]</span>          
-                				<input wicket:id="login" type="submit" class="button clearfix" wicket:message="value:LoginPage.login"/>
+                				<input wicket:id="login" type="submit" class="button" wicket:message="value:LoginPage.login"/>
                 				<a wicket:id="forgot" href="#"><wicket:message key="LoginPage.forgot">Forgot password</wicket:message></a>
               				</fieldset>
             			</form>
           			</div>
           			<!-- right -->
           			<div class="right">
-            			<div id="next-products">
+            			<div class="next-products">
               				<div class="server">
-                				<h2 class="text-shadow"><a href="http://www.next-reports.com/index.php/products/nextreports-server.html" target="_blank">NextReports <span class="green">Server</span></a></h2>
-                				<p class="text-shadow text-justify"><wicket:message key="LoginPage.description.server">[]</wicket:message></p>
+                				<h2 class="text-shadow"><a href="http://www.next-reports.com/index.php/products/nextreports-server.html" target="_blank">NextReports <span class="theme">Server</span></a></h2>
+                				<p class="text-shadow"><wicket:message key="LoginPage.description.server">[]</wicket:message></p>
 				            </div>
               				<div class="engine">
-                				<h2 class="text-shadow"><a href="http://www.next-reports.com/index.php/products/nextreports-engine.html" target="_blank">NextReports <span class="green">Engine</span></a></h2>
-                				<p class="text-shadow text-justify"><wicket:message key="LoginPage.description.engine">[]</wicket:message></p>
+                				<h2 class="text-shadow"><a href="http://www.next-reports.com/index.php/products/nextreports-engine.html" target="_blank">NextReports <span class="theme">Engine</span></a></h2>
+                				<p class="text-shadow"><wicket:message key="LoginPage.description.engine">[]</wicket:message></p>
               				</div>
               				<div class="designer">
-                				<h2 class="text-shadow"><a href="http://www.next-reports.com/index.php/products/nextreports-designer.html" target="_blank">NextReports <span class="green">Designer</span></a></h2>
-                				<p class="text-shadow text-justify"><wicket:message key="LoginPage.description.designer">[]</wicket:message></p>
+                				<h2 class="text-shadow"><a href="http://www.next-reports.com/index.php/products/nextreports-designer.html" target="_blank">NextReports <span class="theme">Designer</span></a></h2>
+                				<p class="text-shadow"><wicket:message key="LoginPage.description.designer">[]</wicket:message></p>
               				</div>
-              				<div class="clrboth"></div>
             			</div>
           			</div>          
-          			<div class="clrboth"></div>
         		</div>
                 <!-- footer -->
-        		<div id="footer">
+        		<div id="footer" class="clearfix">
         			<div class="left">
             			<ul id="footer-meniu">
             				<li><a href="http://www.next-reports.com/products/nextreports-server/109-nextreports-server-documentation.html"
-               						target="_blank" class="default">
+               						target="_blank">
                						<wicket:message key="LoginPage.manual">Manual</wicket:message></a>
                				</li>
               				<li><a href="http://www.next-reports.com/products/nextreports-server/131-next-reports-server-video-tutorials.html"
-               						target="_blank" class="default">
+               						target="_blank">
                						<wicket:message key="LoginPage.tutorials">Tutorials</wicket:message></a>
                				</li>
             				<li><a href="http://www.next-reports.com/index.php/forum.html"
-               						target="_blank" class="default">
+               						target="_blank">
                						<wicket:message key="LoginPage.forum">Forum</wicket:message></a>
                				</li>
                				<li><a href="http://blog.next-reports.com/"
-               						target="_blank" class="default">
+               						target="_blank">
                						<wicket:message key="LoginPage.blog">Blog</wicket:message></a>
                				</li>
                				<li><a href="https://github.com/nextreports/"
-               						target="_blank" class="default">
+               						target="_blank">
                						<wicket:message key="LoginPage.github">GitHub</wicket:message></a>
                				</li>
             			</ul>
           			</div>
-          
           			<div class="right">
-            			<p class="copyright"><wicket:message key="copyright">Copyright</wicket:message> ©2015 Advantage Software Factory</p>
+            			<p class="copyright"><wicket:message key="copyright">Copyright</wicket:message> ©2016 Advantage Software Factory</p>
           			</div>
-          
-			        <div class="clrboth"></div>
         		</div>
-                 
       		  </div>      
       		</td>
   		</tr>

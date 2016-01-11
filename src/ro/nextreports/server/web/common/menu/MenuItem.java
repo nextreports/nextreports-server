@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,24 +25,24 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 /**
  * @author Decebal Suiu
  */
-public class MenuItem implements Serializable {				
+public class MenuItem implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private AbstractLink link;
 	private String label;
 	private String image;
-	private List<MenuItem> subMenuItems = new ArrayList<MenuItem>();
+	private List<MenuItem> subMenuItems = new ArrayList<>();
 
 	public MenuItem(AbstractLink link, String label) {
 		this(link, label, null);
 	}
-	
+
 	public MenuItem(AbstractLink link, String label, String image) {
 		if ((link != null) && !link.getId().equals(MenuPanel.LINK_ID)) {
 			throw new IllegalArgumentException("The id must be MenuPanel.LINK_ID");
 		}
-		
+
 		this.link = link;
 		this.label = label;
 		this.image = image;
@@ -56,7 +56,7 @@ public class MenuItem implements Serializable {
 		this.image = image;
 		this.label = label;
 	}
-	
+
 	public void addMenuItem(MenuItem menuItem) {
 		subMenuItems.add(menuItem);
 	}
@@ -79,7 +79,7 @@ public class MenuItem implements Serializable {
 	public String getImage() {
 		return image;
 	}
-	
+
 	public List<MenuItem> getChildren() {
 		return subMenuItems;
 	}

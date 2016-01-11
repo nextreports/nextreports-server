@@ -1,0 +1,182 @@
+//main: style.less
+
+//  COLORS
+// --------------------------------------------------------------
+
+// Theme Colors
+@main-color:                  #00AEEF;
+@main-light-color:            #C0E9FC;
+@main-lightest-color:         #E6F7FD;
+@main-lightest-bg-color:      #f7fafa;
+@main-dark-color:             #0098D1;
+@main-darkest-color:          #006D96;
+@secondary-color:             #455257;
+@secondary-light-color:       #C1D0D6;
+@secondary-dark-color:        #303A3D; 
+@body-color:                  #edecec;
+
+// Other colors
+@link-color:                  @dark-headings-color;
+@link-hover-color:            @main-darkest-color;
+@bg-inverse:                  @secondary-dark-color;
+
+//   HEADINGS
+//----------------------------------------------------------------
+@header-color:               	#202020;
+    
+//   BUTTONS
+// --------------------------------------------------------------
+@btn-primary-bg-color:             @main-color;
+@btn-primary-border-color:         @main-dark-color;
+@btn-primary-text-color:           @main-lightest-color;
+@btn-primary-hover-bg-color:       @main-dark-color;
+@btn-primary-hover-border-color:   @main-dark-color;
+@btn-primary-hover-text-color:     @white;
+
+@btn-secondary-bg-color:           @secondary-color;
+@btn-secondary-border-color:       @secondary-dark-color;
+@btn-secondary-text-color:         @secondary-light-color;
+@btn-secondary-hover-bg-color:     @secondary-dark-color;
+@btn-secondary-hover-border-color: @secondary-dark-color;
+@btn-secondary-hover-text-color:   @white;
+
+@btn-default-bg-color:             @white;
+@btn-default-border-color:         @secondary-light-color;
+@btn-default-text-color:           @secondary-color;
+@btn-default-hover-bg-color:       @main-light-color;
+@btn-default-hover-border-color:   @main-dark-color;
+@btn-default-hover-text-color:     @main-darkest-color;
+
+@btn-disabled-bg-color:            @dark-grey-bg-color;
+@btn-disabled-border-color:        @hr-borders-color;
+@btn-disabled-text-color:          @disabled-color;
+
+@btn-border-color:            #779800;
+@btn-text-color:              #ffffff;
+@btn-top-color:               #8cb200;
+@btn-bottom-color:            #789800;
+@btn-background:              #8cb200;
+@btn-background-hover:        #afc951;
+@btn-border-color-hover:      #779800;
+@btn-text-color-hover:        #ffffff;
+@btn-radius:                  4px;
+
+
+// FORM Elements
+// --------------------------------------------------------------
+@input-bg: @dark-grey-bg-color;
+@input-border: @hr-borders-color;
+@input-color: @general-text-color;
+@input-focus-bg: @white;
+@input-focus-border: @main-color;
+@input-focus-color: @main-color;
+@input-checkbox-color: @input-color;
+
+@input-checkbox-border: @input-border;
+@input-checkbox-bg: @input-bg;
+@input-checkbox-checked-color: @input-focus-color;
+@input-checkbox-checked-border: @input-focus-border;
+@input-checkbox-checked-bg: @input-focus-bg;
+@input-checkbox-hover-color: @input-focus-color;
+@input-checkbox-hover-border: @input-focus-border;
+@input-checkbox-hover-bg: @input-focus-bg;
+@input-checkbox2-bg: @input-focus-bg;
+
+// TABLE
+//----------------------------------------------------------------
+@table-normal-text:           @general-text-color;
+@table-border-color:          @hr-borders-color;
+@table-row-hover:             @main-light-color;
+@table-row-hover-text:        @main-darkest-color;
+@table-row-selected:          @secondary-light-color;
+@table-row-checked:           @secondary-light-color;
+@table-header-bg:             @main-color;
+@table-header-bg-hover:       @main-dark-color;
+@table-header-text:           @main-lightest-color;
+@table-header-text-hover:     #ffffff;
+@table-striped-color:         @dark-grey-bg-color;
+	
+//  LOCATION (BREADCRUMB)
+//----------------------------------------------------------------
+@bcrb-text-color:             #6a6a6a;
+@bcrb-text-hover:             #8cb200;
+@bcrb-text-activ:             #8cb200;
+@bcrb-top-color:              #ffffff;
+@bcrb-bottom-color:           #ffffff;
+@bcrb-border-color:           #dfdfdf;
+@bcrb-border-radius:          8px;
+    
+//  MENIU ACTION PANEL
+//----------------------------------------------------------------
+@menu-act-pnl-bg:             #ffffff;
+@menu-act-pnl-text:           @general-text-color;
+@menu-act-pnl-border:         @hr-borders-color;
+@menu-act-pnl-shadow:         #dfdfdf;
+@menu-act-pnl-bg-hover:       @main-color;
+@menu-act-pnl-text-hover:     @main-lightest-color;
+
+//   ACTION BAR
+//----------------------------------------------------------------
+@act-bar-top-color:           #efefef;
+@act-bar-bottom-color:        #cfcfcf;
+@act-bar-border-radius:       8px;
+@act-bar-border-color:        #cccccc;
+    
+//  WIDGET HEADER
+//----------------------------------------------------------------
+@wdg-text-color:              #202020;
+@wdg-border-color:            #8cb200;
+
+//   DASHBOARD
+//----------------------------------------------------------------	
+@dash-selected-color:         @main-light-color;
+@dash-selected-text:          #000000;
+
+
+//   LAYOUT
+//----------------------------------------------------------------	
+@sidebar-width: 220px;
+@header-height: 50px;
+@footer-height: 30px;
+@breadcrumb-height: 27px;
+@section-space: 15px;
+
+@content-substract: @header-height + @footer-height;
+@content-height: ~'calc(100vh - @{content-substract})';
+
+@section-substract: @header-height + @footer-height + @breadcrumb-height + 2*@section-space;
+@section-height: ~'calc(100vh - @{section-substract})';
+@section-integration-substract: @breadcrumb-height + 2*@section-space;
+@section-integration-height: ~'calc(100vh - @{section-integration-substract})';
+@section-content-height: ~'calc(100% - 73px)';
+
+
+
+
+// MEDIA QUERIES BREAKPOINTS
+//----------------------------------------------------------------
+
+// Extra small screen / phone
+@screen-xs:                  480px;
+@screen-xs-min:              @screen-xs;
+@screen-phone:               @screen-xs-min;
+
+// Small screen / tablet
+@screen-sm:                  768px;
+@screen-sm-min:              @screen-sm;
+@screen-tablet:              @screen-sm-min;
+
+// Medium screen / desktop
+@screen-md:                  992px;
+@screen-md-min:              @screen-md;
+@screen-desktop:             @screen-md-min;
+
+// Large screen / wide desktop
+@screen-lg:                  1200px;
+@screen-lg-min:              @screen-lg;
+@screen-lg-desktop:          @screen-lg-min;
+
+// So media queries don't overlap when required, provide a maximum
+@screen-xs-max:              (@screen-sm-min - 1);
+@screen-sm-max:              (@screen-md-min - 1);
+@screen-md-max:              (@screen-lg-min - 1);

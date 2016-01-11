@@ -112,12 +112,16 @@ public class DataSourcePanel extends Panel {
         private Label passwordLabel;
         private Label minPoolSizeLabel;
         private Label maxPoolSizeLabel;
+        private Label incPoolLabel;
+        private Label idleTimePoolLabel;
         private TextField<String> driver;
         private TextField<String> url;
         private TextField<String> username;
         private PasswordTextField password;
         private TextField<Integer> minPool;
         private TextField<Integer> maxPool;
+        private TextField<Integer> incPool;
+        private TextField<Integer> idlePool;
 
         public DataSourceForm(String id) {
             super(id, new CompoundPropertyModel<DataSource>(dataSource));
@@ -145,6 +149,10 @@ public class DataSourcePanel extends Panel {
             add(minPoolSizeLabel);
             maxPoolSizeLabel = new Label("maxPoolSizeLabel", getString("ActionContributor.DataSource.maxPoolSize"));
             add(maxPoolSizeLabel);
+            idleTimePoolLabel = new Label("idleTimePoolLabel", getString("ActionContributor.DataSource.idleTimePool"));
+            add(idleTimePoolLabel);
+            incPoolLabel = new Label("incPoolLabel", getString("ActionContributor.DataSource.incPool"));
+            add(incPoolLabel);
 
             final TextField<String> name = new TextField<String>("name")  {
             	
@@ -182,12 +190,20 @@ public class DataSourcePanel extends Panel {
             add(password);
             
             minPool = new TextField<Integer>("minPoolSize");
-            minPool.add(RangeValidator.minimum(1));
+            minPool.add(RangeValidator.minimum(0));
             add(minPool);
             maxPool = new TextField<Integer>("maxPoolSize");
             maxPool.add(RangeValidator.minimum(1));
             add(maxPool);
             add(new MinMaxPoolSizeValidator(minPool, maxPool));
+            
+            incPool = new TextField<Integer>("incrementPoolCon");
+            incPool.add(RangeValidator.minimum(1));
+            add(incPool);
+            
+            idlePool = new TextField<Integer>("idleTimePoolCon");
+            idlePool.add(RangeValidator.minimum(1));
+            add(idlePool); 
 
             List<DriverTemplate> driverTemplates;
             try {
@@ -335,6 +351,10 @@ public class DataSourcePanel extends Panel {
 			minPool.setVisible(!isJNDI);
 			maxPoolSizeLabel.setVisible(!isJNDI);
 			maxPool.setVisible(!isJNDI);
+			incPoolLabel.setVisible(!isJNDI);
+			incPool.setVisible(!isJNDI);
+			idleTimePoolLabel.setVisible(!isJNDI);
+			idlePool.setVisible(!isJNDI);
 			
 			if (isJNDI) {
 				urlLabel.setDefaultModelObject(DataSource.JNDI_VENDOR + " " + getString("ActionContributor.DataSource.name") + " *");

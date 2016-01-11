@@ -1,0 +1,153 @@
+// main: style.less
+
+
+.pivotHeight {
+	height: 440px; 
+}
+
+.pivotHeightFull {
+	height: 100% !important; 
+}
+
+// Zonele de campuri ce se pot aranja cu drag and drop
+.areas {
+    margin: 0px 0px 10px 0px;
+    
+    .area{
+        background: @light-grey-bg-color none repeat scroll 0 0;
+        //border-bottom: 1px solid @main-light-color;
+        box-shadow: 0 0 1px rgba(0,0,0,0.18);
+        margin: 0 0 5px 0;
+        padding: 5px;
+        .clearfix();
+        
+        .area-name{
+            color: @light-headings-color;
+            display: block;
+            float: left;
+            font-weight: bold;
+            margin: 0 10px 0 0;
+            padding: 5px;
+            text-align: left;
+            width: 70px;
+        }
+        
+        .fields-container {
+            display: block;
+            .clearfix();
+            
+            .value-container{
+                background-color: @main-lightest-color;
+                border: 1px solid @main-light-color;
+                border-radius: 3px;
+                color: @main-dark-color;
+                display: block;
+                float: left;
+                font-size: 11px;
+                font-weight: 400;
+                line-height: 15px;
+                margin: 0 10px 0 0;
+                padding: 0px;
+                position: relative;
+                text-transform: uppercase;
+                
+                .initiate{
+                    background: rgba(0, 0, 0, 0) url("../../images/initiate.gif") no-repeat scroll center center;
+                    cursor: move;
+                    display: inline-block;
+                    height: 14px;
+                    left: 5px;
+                    margin-right: 5px;
+                    position: absolute;
+                    top: 5px;
+                    width: 6px;
+                }
+                .value {
+                    padding: 5px 8px 5px 16px;
+                    display: block;
+                    cursor: default;
+                    
+                    &.aggregator{
+                        color: @dark-headings-color;
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+        
+        .pivot-placeholder {
+            background: @dark-grey-bg-color;
+            border: 1px dashed @hr-borders-color;
+            height: 27px;
+            display: block;
+            float: left;
+            border-radius: 3px;
+            margin-right: 10px;
+        }
+    }
+}
+
+.pivot {
+	margin-top: 5px;
+    margin-bottom: 10px;
+	border: 1px solid @hr-borders-color;
+    
+    &.grid {
+        th{
+            background: @body-color;
+            font-weight: 600;
+            color: @secondary-color;
+
+            &.grand-total{
+                background: @main-lightest-color;
+                color: @main-dark-color;
+                text-align: right;
+                font-weight: 600;
+                border-bottom-color: @main-light-color;
+                white-space: nowrap;
+            }
+            &.col{
+                white-space: nowrap;
+                text-align: right;
+            }
+        }
+        
+        td{
+            &.data{
+                text-align: right;
+                &.grand-total{
+                    background: @main-lightest-color;
+                    text-align:right;
+                    font-weight: 600;
+                    color: @main-dark-color;
+                    border-bottom-color: @main-light-color;
+                }
+            }
+        }
+        
+        tr.grand-total{
+            td{
+                text-align:right;
+                font-weight: 600;
+                color: @main-dark-color;
+                background: @main-lightest-color;
+                border-left-color: @main-light-color;
+    
+                &:first-child{
+                    text-align: left;
+                }
+                &:last-child{
+                    background: @main-color;
+                    color: @main-lightest-color;
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+}
+
+.area .drop-here {
+	color: @general-text-color; 
+	width: 100%;
+	text-align: center;
+}

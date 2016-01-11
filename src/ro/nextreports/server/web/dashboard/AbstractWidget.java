@@ -39,6 +39,7 @@ public abstract class AbstractWidget implements Widget {
     public static final String REFRESH_TIME = "refreshTime";
     public static final String TIMEOUT = "timeout";
     public static final String ROWS_PER_PAGE = "rowsPerPage";
+    public static final String ENABLE_FILTER = "enableFilter";
 
     protected String id;
 	protected String title;
@@ -117,6 +118,19 @@ public abstract class AbstractWidget implements Widget {
 
     public void setRowsPerPage(int rowsPerPage) {
         settings.put(ROWS_PER_PAGE, Integer.toString(rowsPerPage));
+    }
+    
+    public boolean isEnableFilter() {
+        String s = settings.get(ENABLE_FILTER);
+        if (s == null) {
+            return false;
+        } else {
+            return Boolean.parseBoolean(s);
+        }
+    }
+
+    public void setEnableFilter(boolean enableFilter) {
+        settings.put(ENABLE_FILTER, String.valueOf(enableFilter));
     }
 
     public void init() {

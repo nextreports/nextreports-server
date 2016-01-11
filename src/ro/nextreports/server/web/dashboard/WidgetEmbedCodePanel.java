@@ -119,6 +119,10 @@ public class WidgetEmbedCodePanel extends Panel {
 		    toString();
 		sb.append(url);
 		
+		if (parameters == null) {
+			parameters = "";
+		}
+		
 		if (!"".equals(parameters.trim())) {
 			String password = storageService.getSettings().getIframe().getEncryptionKey();
 			if ((password != null) && !password.trim().equals("")) {

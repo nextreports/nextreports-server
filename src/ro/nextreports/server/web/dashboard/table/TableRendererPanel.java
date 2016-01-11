@@ -31,6 +31,8 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterForm;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.TextFilteredPropertyColumn;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.Item;
@@ -144,6 +146,7 @@ public class TableRendererPanel extends GenericPanel<Report> {
 		boolean single = dashboardService.isSingleWidget(widgetId);		
 		// table is the single widget in a dashboard with one column
 		// make the height 100%
+		// see WidgetPanel.html where we make the parent with overflow visible!
 		if (single) {		
 			container.add(AttributeModifier.replace("class", "tableWidgetViewFull"));
 		}
@@ -151,7 +154,26 @@ public class TableRendererPanel extends GenericPanel<Report> {
         
         
 	}	
+		
+	/*
+		When we have a dashboard with a single column and with only one table
+		we want to expand the table height as big as it is
+		See TableRendererPanel.java where this class is added
 	
+		Also the submit button from filter form must be set with top 0
+		(because position relative on tableWidgetView makes scrollbar to show)
+	*/
+	@Override
+	public void renderHead(IHeaderResponse response) {		
+		super.renderHead(response);
+		response.render(OnDomReadyHeaderItem.forScript(
+			"$(document).ready(function() { " +
+					"$(\".tableWidgetViewFull\").parents(\".dragbox-content\").css(\"overflow\",\"visible\"); " +			
+					"$(\".tableWidgetView form table + div\").css(\"top\",\"0\"); "+			
+			"});"
+		));
+	}
+
 	private void setCurrentTable(FilterForm filterForm, TableDataProvider dataProvider, String widgetId ) throws NoDataFoundException {    	        
         List<String> tableHeader;
         List<String> tablePattern;
@@ -169,10 +191,11 @@ public class TableRendererPanel extends GenericPanel<Report> {
 				throw new RuntimeException(ExceptionUtils.getRootCauseMessage(e));
 			}
 		}
-		int rowsPerPage = Integer.MAX_VALUE;				
+		int rowsPerPage = Integer.MAX_VALUE;			
 		try {
 			Widget widget = dashboardService.getWidgetById(widgetId);
-			rowsPerPage = WidgetUtil.getRowsPerPage(dashboardService, widget);						
+			rowsPerPage = WidgetUtil.getRowsPerPage(dashboardService, widget);
+			enableFilter = WidgetUtil.isEnableFilter(dashboardService, widget);
 		} catch (NotFoundException e) {
 			LOG.error(e.getMessage(), e);
 		}

@@ -1,17 +1,18 @@
 <wicket:panel>
-    <form wicket:id="form" class="form-container">
+	<hr class="hr-10">
+    <form wicket:id="form" class="form-container" style="margin-left: 10px;">
         <table>
             <tr>
                 <td class="td-label"><label wicket:id="type">[]</label></td>
-                <td><select wicket:id="choice" name="choice"/></td>
+                <td><select wicket:id="choice" name="choice" class="form-control input-xs"/></td>
             </tr>
             <tr>
                 <td class="td-label"><label wicket:id="startLabel">[]</label></td>
-                <td><select wicket:id="startChoice" name="startChoice"/></td>
+                <td><select wicket:id="startChoice" name="startChoice" class="form-control input-xs"/></td>
             </tr>
             <tr>
                 <td class="td-label"><label wicket:id="endLabel">[]</label></td>
-                <td><select wicket:id="endChoice" name="endChoice"/></td>
+                <td><select wicket:id="endChoice" name="endChoice" class="form-control input-xs"/></td>
             </tr>
         </table>
         <table>
@@ -27,8 +28,8 @@
             <tr>
                 <td>
                     <ul class="form-btns">
-                        <li><a wicket:id="cancel" class="secondary"><wicket:message key="back">Back</wicket:message></a></li>
-                        <li><input wicket:id="set" type="submit" wicket:message="value:set" class="secondary"/></li>
+                        <li><a wicket:id="cancel" class="btn btn-secondary btn-xs"><wicket:message key="back">Back</wicket:message></a></li>
+                        <li><input wicket:id="set" type="submit" wicket:message="value:set" class="btn btn-primary btn-xs"/></li>
                     </ul>
                 </td>
             </tr>

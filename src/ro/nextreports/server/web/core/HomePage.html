@@ -1,6 +1,63 @@
-<wicket:extend>
-    <span wicket:id="growl">[Growl messages here]</span>    
-    <div wicket:id="tabs" class="tabpane"></div>
-    <div class="clear"></div>
-    <div class="push"></div>
-</wicket:extend>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/" xml:lang="en" lang="en">
+
+<head>
+<title>NextReports Server</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+	<!-- Font awesome -->
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+	
+
+	<!-- Bootstrap Base Style -->
+	<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css" />
+	
+	<!-- Style Theme -->
+	<link rel="stylesheet" type="text/css" media="screen" href="themes/default/style.css" wicket:id="cssPath" />
+
+	<link rel="SHORTCUT ICON" href="images/favicon.ico" />		
+	
+	<script type="text/javascript" src="js/jquery.json-2.2.min.js"></script>	
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+</head>
+
+<body class="nrs">
+	<div id="sb-site" class="wrapper">
+		<div wicket:id="headerPanel"></div>
+		<div class="content">
+			<div class="container-fluid">
+				<span wicket:id="growl">[Growl messages here]</span>
+				<div wicket:id="sectionPanel"></div>
+			</div>
+		</div>
+
+		<div wicket:id="footerPanel"></div>
+		<div wicket:id="dialog"></div>
+	</div>
+
+	<!-- SB Slider -->
+	<div class="sb-slidebar sb-left sb-style-push sb-width-thin">
+		<div class="profile">
+			<div class="info">				
+				<div class="user-icon">				
+					<!-- <i class="fa fa-pie-chart fa-3x"></i> -->
+				</div>
+				
+				<div class="user-details">
+					<span class="userName"><wicket:message key="menu">[]</wicket:message></span><br>
+					<!-- <span class="realName"></span> -->
+				</div>
+			</div>
+		</div>
+
+		<ul class="sb-menu">
+			<li class="sb-close" wicket:id="section"><a href="#"
+				wicket:id="link"> <i wicket:id="icon" class="fa fa-fw fa-lg"></i>
+					<span wicket:id="label"></span>
+			</a></li>
+		</ul>
+	</div>
+	
+</body>
+</html>

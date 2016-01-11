@@ -1,42 +1,36 @@
 <wicket:panel>
-    <table>
-        <tr wicket:id="params" class="parameters">
-            <td class="td-label">
-                <label class="small" wicket:id="name">[]</label>
-            </td>
-            <td>
-                <ul class="form-btns">
-                    <li>
-                        <input type="text" wicket:id="txtValue"/>
-                        <div wicket:id="txtTime" class="left"/>
-                        <div wicket:id="txtDate" class="left"/>
-                        <input type="checkbox" wicket:id="chkBox"/>
-                        <select wicket:id="cmbValue"></select>
-                        <div class="paletteContainer">
-                            <div wicket:id="paletteContainer">
-                                <div wicket:id="palette"></div>
-                            </div>
-                        </div>                        
-                    </li>
-                </ul>
-            </td>
-            <td class="top" style="padding-top: 5px !important;">
-               <input type="checkbox" wicket:id="dynamicChkBox"/>
-            </td>
-            <td class="top">
-                <label wicket:id="dynamicLabel">[]</label>
-            </td>            
-        </tr>
-        <tr>
-            <td class="td-label">
-                <label class="small"><wicket:message key="ActionContributor.Run.export">Export Type</wicket:message></label>
-            </td>
-            <td colspan="3">
-                <ul class="form-btns">
-                    <li><select wicket:id="exportType"></select></li>
-                    <!-- <li><span wicket:id="analysisPanel"/></li> -->                    
-                </ul>
-            </td>            
-        </tr>
-    </table>
+	<table>
+		<tr wicket:id="params" class="parameters">
+			<td class="td-label"><label wicket:id="name">[]</label></td>
+			<td class="form-inline" style="padding-top: 5px !important;">
+				<input type="text" class="form-control input-xs" wicket:id="txtValue" />
+				<div wicket:id="txtTime"/>
+				<div wicket:id="txtDate"/> 
+				<label wicket:id="chkBox">
+					<input type="checkbox" class="nrs" />
+					<span class="lbl"></span>
+				</label> 
+				<select class="form-control input-xs" wicket:id="cmbValue"></select>
+				<div class="paletteContainer">
+					<div wicket:id="paletteContainer">
+						<div wicket:id="palette"></div>
+					</div>
+				</div>
+			</td>
+			<td class="top" style="padding-top: 5px !important;">
+				<label>
+					<input type="checkbox" class="nrs" wicket:id="dynamicChkBox" />
+					<span class="lbl"></span>
+				</label>
+			</td>
+			<td class="top"><label wicket:id="dynamicLabel">[]</label></td>
+		</tr>
+		<tr>
+			<td class="td-label"><label><wicket:message key="ActionContributor.Run.export">Export Type</wicket:message></label></td>
+			<td colspan="3" class="form-inline">
+				<select class="form-control input-xs" wicket:id="exportType"></select>
+			</td>
+		</tr>
+	</table>
+
 </wicket:panel>

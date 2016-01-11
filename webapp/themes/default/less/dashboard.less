@@ -1,0 +1,371 @@
+// main: style.less
+
+/** height is dynamically updated in nextserver.js in function onResize()  */
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+		
+.column {
+	/*width: 49.5%;*/
+	margin-right: .5%;
+	min-height: 320px;
+	float: left;
+}
+
+.dragbox {
+	background: #ffffff none repeat scroll 0 0;
+	margin: 10px;
+	position: relative;
+    box-shadow: 0 0px 1px rgba(0, 0, 0, 0.1);
+}
+
+.dragbox-header {
+	margin: 0;
+	padding: 5px;
+	background: #f8f8f8;
+	color: @general-text-color;
+	border-bottom: 1px solid @main-light-color;
+    cursor: move;
+    .clearfix();
+}
+
+.dragbox-header img {
+    margin: 0 0 0 3px;
+    padding: 0 3px 0 0px;
+}
+
+.dragbox-toggle {
+	float: right;	
+	margin-right: 3px;
+	cursor: pointer;
+}
+
+.dragbox-title {
+  color: @general-text-color;
+  float: left;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  line-height: 20px;
+  text-transform: uppercase;
+}
+
+.dragbox-actions {
+	float: right;
+	margin: 0px;
+	padding: 0px;
+	display: none;
+}
+
+.dragbox-actions ul {
+    padding: 0px;
+    margin: 0px;
+}
+
+.dragbox-actions ul li {
+    display: inline; 
+    margin: 0 1px 0 1px;
+ }
+
+.dragbox-actions ul li a img {
+	border: 0px;
+	margin: 0px;
+ }
+
+.dragbox-content {
+	background: #fff;
+	min-height: 60px;
+    margin: 0;
+    padding: 5px;
+	line-height: 1.5em;
+	overflow: auto;
+    //margin: 5px 5px 3px 5px;
+	/* padding-bottom is needed for IE otherwise the vertical 
+	   scrollbar is allways present for overflow=auto
+	   because we have a margin we put only 3 (5-2) to bottom margin 
+	padding-bottom: 2px;
+	padding-left: 1px;
+	padding-right: 1px;*/
+}
+
+.drill-dragbox-content {
+	background: #fff;
+	min-height: 60px;		
+	line-height: 1.5em;
+	overflow: auto;
+    /* padding-bottom is needed for IE otherwise the vertical 
+	   scrollbar is allways present for overflow=auto 
+	padding-bottom: 2px;
+	padding-left: 1px;
+	padding-right: 1px;
+    */
+}
+
+.dragbox-content-alarm {
+	min-height: 134px !important;
+	/*overflow-y: hidden !important;*/
+}
+
+.dragbox-content-indicator {
+	min-height: 134px !important;
+	/*overflow-y: hidden !important;*/
+}
+
+.dragbox-content-display {
+	min-height: 134px !important;
+	/*overflow-y: hidden !important;*/
+}
+
+.dragbox-content-chart {
+	min-height: 300px !important;
+	/*overflow-y: hidden !important;*/
+}
+
+.noChartData{
+    height: 300px;
+}
+
+.noAlarmData, .noIndicatorData, .noDisplayData{
+    height: 134px;
+}
+
+.placeholder {
+	background: @main-lightest-bg-color;
+	border: 1px dashed @secondary-light-color;
+}
+
+ul.column {
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+.toolbar {
+	width: 100%;
+	float: left;
+    font-weight: bold;		
+    border-bottom: 1px solid #CACACA;
+}
+
+.toolbar_nav {
+    background: darken(@main-lightest-color,5%);
+    border-bottom: 1px solid darken(@main-lightest-color,15%);
+    height: 32px;
+    padding: 0 5px;
+}
+
+.toolbar-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: @secondary-dark-color;
+    line-height: 22px;
+    display: inline-block;
+    padding: 5px;
+    text-transform: uppercase;
+}
+
+.widgetDescriptor {
+	border-bottom: 1px solid LightGray;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	margin: 5px 0px 5px 0px;
+	clear: both;
+}
+
+.widgetDescriptor .name {
+	color: blue;
+    font-weight: bold;
+    font-size: 13;      
+}
+
+.widgetDescriptor .provider {
+    color: green;
+ }
+
+.widgetDescriptor .description {
+    margin-top: 5px;
+    margin-bottom: 5px;
+ }
+
+.widgetDescriptor .message {
+	font-style: italic;
+	background: Khaki;
+	padding: 3px;
+ }
+
+// Dashboard section
+.dashboard-section{
+    border: 1px solid darken(@main-lightest-color,15%);
+    margin: 15px 0;
+    height: ~'calc(100vh - 110px)';
+    .clearfix();
+}
+
+.dashboard {
+	background: @body-color;
+	min-height: 353px;
+	overflow: auto;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    
+    .toolbar_nav{
+        min-width: 960px;
+    }
+}
+
+.dashboardCapture {
+	display: block;
+	overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+	width: 100%;
+    min-width: 960px;
+}
+
+.toolbar_nav + .dashboardCapture{
+    height: ~'calc(100% - 32px)';
+    *height: ~'calc(100% - 34px)'; // For IE
+}
+
+.form-container{
+    height: 100%;
+}
+ .dashboardLeft {
+    background: @body-color;
+    border-right: 1px solid darken(@main-lightest-color,10%);
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 220px;
+    float:left;
+ }
+
+.dashboardLeft + .form-container{
+    float: left;
+    width: ~'calc(100% - 220px)';
+}
+ 
+.dashboardNavigation  {	
+	overflow-x: hidden;	
+	overflow-y: auto;
+    background: @main-lightest-bg-color;
+	height: 100%;	
+}
+
+.toolbar_nav + .dashboardNavigation  {	
+    height: ~'calc(100% - 32px)';
+    *height: ~'calc(100% - 34px)'; // For IE
+}
+
+.dashboardNavigation table.actions-grid {
+	width: 100%;
+}	
+
+.dashboardNavigation table.actions-grid ul.subnav {
+    left: 38px !important;
+    top: 20px;    
+}
+
+.dashboardNavigation table tr {		
+	border-bottom: 1px solid #e4e5e7;
+}
+
+.dashboardNavigation table tr > td{
+    padding: 5px 0;
+}
+
+.dashboardNavigation tr.selected {
+    background-color: @dash-selected-color;
+}
+
+.dashboardNavigation tr.selected a{
+	color: @dash-selected-text;
+    font-weight: bold;
+	text-transform: uppercase;
+}
+.dashboardNavigation table.actions-grid tr td.actions-col {
+	width: 38px;
+	min-width: 38px;
+}	
+
+.dashboardNavigation table.actions-grid tr td.actions-col ul.subnav {
+	width: 140px;		
+}	
+
+.dashboardNavigation tr ul.subnav li a {
+    font-weight: normal;
+}
+
+.dashboardNavigation table.actions-grid tr a {
+	display: block;
+    width: 100%;
+}	
+
+.dashboardNavigation table tr.tr-hover {
+	background-color: @table-row-hover;	  
+}
+
+.dashboardNavigation table.actions-grid tr td.actions-col-hover {
+	border-left: none;
+	border-bottom: none;
+}	
+
+.dashboard-toggle {
+    float: left;
+    margin: 8px 5px 8px 0;
+    cursor: pointer;
+}
+
+.drillHeader {
+	padding-top: 5px;
+	padding-bottom: 5px;		
+}	
+
+.statistics {
+
+    .list-group{
+        margin-bottom: 0;
+        
+        .list-group-item {
+            background-color: @main-lightest-bg-color;
+            border: 0 none;
+            border-top: 1px solid @hr-borders-color;
+            font-size: 12px;
+            font-weight: 600;
+            color: @general-text-color;
+            
+            &:first-child {
+                border-top: 0 none;
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+            }
+            
+            &:last-child {
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+                margin-bottom: 0;
+            }
+            
+            .badge{
+                background: @main-color;
+                font-size: 11px;
+                font-weight: 600;
+                margin-top: -2px;
+                padding: 5px 7px;
+            }
+            
+            .left-image {
+                display: inline-block;
+                margin-right: 10px;
+            }
+        }
+    }
+}

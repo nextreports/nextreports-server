@@ -1,0 +1,243 @@
+// main: style.less
+
+table tr td.date {
+	/*
+    width: 135px;
+    */
+}
+
+table.grid {
+    width: 100%;     
+    background: #FFFFFF;
+    border-collapse: separate;
+}
+
+table.grid tr.tr-even {
+    background: @table-striped-color;
+}
+
+table.grid tr.tr-selected {
+    background: @table-row-selected;
+}
+
+table.grid tr.tr-hover {
+    background: @table-row-hover;
+    color: @table-row-hover-text;
+}
+
+table.grid tr.tr-checked {
+    background: @table-row-checked;
+}
+
+table.grid th {
+    background: @table-header-bg;
+    border-bottom: 1px solid @table-border-color;
+    border-left: 1px solid @table-border-color;
+    padding: 5px;
+}
+
+table.grid th:last-child, table.grid td:last-child{
+    border-right: 1px solid @table-border-color;
+}
+
+table.grid td {
+    border-left: 1px solid @table-border-color;
+}
+
+table.grid th a, table th span {
+    padding: 0px;
+    display: block;
+    background-position: right center;
+	color: @table-header-text;
+	font-weight: bold;
+}
+
+table.grid th[class^="wicket"] a, table th[class^="wicket"] span {
+    padding: 0px 20px 0px 0;
+}
+
+table.grid th[class^="wicket"].th-hover {
+    background: @table-header-bg-hover;
+    text-decoration: none;
+    color: @table-header-text-hover;
+}
+
+table.grid th.th-hover a {
+    background-color: @table-header-bg-hover;
+    text-decoration: none;
+    color: @table-header-text-hover;
+}
+
+table.grid tbody td, table.grid tfoot td {
+    padding: 2px 5px;
+    line-height: 18px;
+    border-bottom: 1px solid @table-border-color;
+}
+table.grid td a, table.grid th a {
+    &, &:hover, &:focus, &:active{
+         text-decoration: none;   
+    }
+}
+
+table.grid{
+    input[type="radio"], input[type="checkbox"] {
+      margin: 0;
+    }
+}
+
+table.actions-grid {
+    /*
+    margin-bottom: 160px;
+    */
+}
+
+.actions-grid tr > td{
+    padding: 5px;
+}
+table.actions-grid tr .name-col {
+    min-width: 150px;
+    color: #000;
+    border-left: none !important;
+}
+
+table.actions-grid tr td.actions-col {
+    width: 60px;
+    padding: 0px !important;
+    text-align: center;
+    height: 20px;
+}
+
+table.actions-grid tr td.actions-col ul .li-relative {
+    position: relative;
+}
+
+/* table grid actions and bulk menu actions */ 
+table.actions-grid tr td.actions-col ul.subnav , .actions-grid ul.subnav {
+    position: absolute;
+    left: 100%;
+    top: -3px;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+    display: none;
+    float: left;
+    min-width: 140px;
+    border: 1px solid rgba(0,0,0,0.15);
+    z-index: 99999;
+	box-shadow: 0px 4px 8px rgba(0,0,0,0.176);
+}
+
+.actions-grid ul.subnav {
+    left: -1px;
+    top: 20px;
+}
+
+table.actions-grid tr td.actions-col ul.subnav li , .actions-grid ul.subnav li {
+    margin: 0;
+    padding: 0;
+    clear: both;
+    text-align: left;
+}
+
+table.actions-grid tr td.actions-col ul.subnav li a , .actions-grid ul.subnav li a {
+    display: block;
+    line-height: 24px;
+    padding: 0 10px 0 0;
+    white-space: nowrap;
+    width: 100%;
+    text-transform: none;
+}
+
+table.actions-grid tr td.actions-col ul.subnav li a:hover , .actions-grid ul.subnav li a:hover {
+    background-color: @menu-act-pnl-bg-hover;
+	color: @menu-act-pnl-text-hover;
+}
+
+table.actions-grid tr td.actions-col a , .actions-grid a {
+    //padding-top: 2px;
+}
+
+table.actions-grid tr td.actions-col-hover {
+    background: @table-row-hover url( ../../images/@actions-image ) top right no-repeat;
+}
+
+.checkboxColumn {
+    width: 30px;
+}
+
+.checkboxColumn input[type=checkbox]{
+	display: block;
+}
+.tableWidgetView {
+	max-height: 300px;
+    position: relative;
+}
+
+.tableWidgetViewFull {
+	max-height: 100% !important;
+    position: relative;
+}
+
+.filter-td {
+	padding: 1px !important;
+}
+
+.filter-td input {
+	width: 99%;
+}	
+
+tr.navigation td {
+	padding-bottom: 0px !important;
+}
+
+.actions-grid > tbody .name-col{
+    .clearfix();
+    
+    .left-image{
+        display: block;
+        float: left;
+        margin-right: 4px;
+    }
+    
+    a{
+        color:@secondary-color;
+        text-decoration: none;
+        &:hover{
+            color: @main-darkest-color;
+        }
+        > span{
+            font-weight: 400;
+            text-transform: capitalize;
+            letter-spacing: 0.05em;
+        }
+    }
+}
+
+.actions-grid > tbody .name-col > span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.actions-grid > tbody .date > * {
+  display: block;
+  min-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+//no border table
+table.grid {
+    &.no-borders {
+        th, td{
+            &:first-child{
+                border-left: 0 none;
+            }
+            &:last-child{
+                border-right: 0 none;
+            }
+        }
+    }
+}

@@ -2,15 +2,15 @@
     <table>
         <tr>
             <td class="td-label">
-                <label class="small"><wicket:message key="Runtime.chartType">Chart Type</wicket:message></label>
+                <label><wicket:message key="Runtime.chartType">Chart Type</wicket:message></label>
             </td>
             <td>
-                <select wicket:id="chartType"></select>                
+                <select wicket:id="chartType" style="height: 1.7em;"></select>                
             </td>
         </tr>
         <tr>
 		    <td class="td-label">
-                 <label class="small"><wicket:message key="Runtime.refreshTime">Refresh Time (sec)</wicket:message></label>
+                 <label><wicket:message key="Runtime.refreshTime">Refresh Time (sec)</wicket:message></label>
             </td>
 			<td>
                 <input type="text" wicket:id="refreshTime" style="width:80px;"/>
@@ -18,7 +18,7 @@
 		</tr>
 		<tr>
 		    <td class="td-label">
-                 <label class="small"><wicket:message key="Runtime.timeout">Timeout (sec)</wicket:message></label>
+                 <label><wicket:message key="Runtime.timeout">Timeout (sec)</wicket:message></label>
             </td>
 			<td>
                 <input type="text" wicket:id="timeout" style="width:80px;"/>
@@ -26,15 +26,15 @@
 		</tr>
         <tr wicket:id="params">
             <td class="td-label">
-                <label class="small" wicket:id="name">[]</label>
+                <label wicket:id="name">[]</label>
             </td>
             <td>
-                <ul class="form-btns">
+                <ul>
                     <li><input type="text" wicket:id="txtValue"/></li>
-                    <li><div wicket:id="txtTime" class="left"/></li>
-                    <li><div wicket:id="txtDate" class="left"/></li>
+                    <li><div wicket:id="txtTime"/></li>
+                    <li><div wicket:id="txtDate"/></li>
                     <li><input type="checkbox" wicket:id="chkBox"/></li>
-                    <li><select wicket:id="cmbValue"></select></li>
+                    <li><select wicket:id="cmbValue" style="height: 1.7em; margin-top: 3px;"></select></li>
 
                     <li>
                         <div class="paletteContainer">
@@ -46,10 +46,10 @@
                 </ul>
             </td>
             <td class="top">
-               <input type="checkbox" wicket:id="dynamicChkBox" style="margin-right: 5px; margin-top: 2px;"/>
+               <input type="checkbox" wicket:id="dynamicChkBox" style="margin-right: 5px; margin-left: 5px; margin-top: 4px;"/>
             </td>
             <td class="top">
-                <label wicket:id="dynamicLabel" style="margin-right: 5px;">[]</label>
+                <label wicket:id="dynamicLabel" style="margin-right: 5px; margin-top: 3px;">[]</label>
             </td>        
         </tr>        
     </table>

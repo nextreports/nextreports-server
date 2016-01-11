@@ -1,54 +1,57 @@
 <wicket:panel>
-	<table class=form-container style="background: #F4F4F4 !important; margin-left: auto; margin-right: auto;">
-        <tr>
-           <td><img src="images/dashboard.png"/></td>	
-           <td class="td-label"><label><strong><wicket:message key="DashboardStatistics.personal">Personal Dashboards:</wicket:message></strong></label></td>
-           <td><label wicket:id="dashboardNo" style="float: right;"/></td>
-        </tr>
-        <tr>
-           <td><img src="images/dashboard_link.png"/></td>
-           <td class="td-label"><label><strong><wicket:message key="DashboardStatistics.link">Dashboard Links:</wicket:message></strong></label></td>
-           <td><label wicket:id="linkNo" style="float: right;"/></td>
-        </tr>
-        <tr>
-           <td><img src="images/sum.png"/></td>
-           <td class="td-label"><label><strong><wicket:message key="DashboardStatistics.total">Total Widgets:</wicket:message></strong></label></td>
-           <td><label wicket:id="widgetNo" style="float: right;"/></td>
-        </tr>        
-        <tr>
-           <td><img src="images/chart.png"/></td>
-           <td class="td-label"><label><strong><wicket:message key="DashboardStatistics.chart">Chart Widgets:</wicket:message></strong></label></td>
-           <td><label wicket:id="chartNo" style="float: right;"/></td>
-        </tr>
-        <tr>
-           <td><img src="images/table.png"/></td>	
-           <td class="td-label"><label><strong><wicket:message key="DashboardStatistics.table">Table Widgets:</wicket:message></strong></label></td>
-           <td><label wicket:id="tableNo" style="float: right;"/></td>
-        </tr>
-        <tr>
-           <td><img src="images/alarm.png"/></td>
-           <td class="td-label"><label><strong><wicket:message key="DashboardStatistics.alarm">Alarm Widgets:</wicket:message></strong></label></td>
-           <td><label wicket:id="alarmNo" style="float: right;"/></td>
-        </tr>
-        <tr>
-           <td><img src="images/indicator.png"/></td>
-           <td class="td-label"><label><strong><wicket:message key="DashboardStatistics.indicator">Indicator Widgets:</wicket:message></strong></label></td>
-           <td><label wicket:id="indicatorNo" style="float: right;"/></td>
-        </tr>      
-        <tr>
-           <td><img src="images/display.png"/></td>
-           <td class="td-label"><label><strong><wicket:message key="DashboardStatistics.display">Display Widgets:</wicket:message></strong></label></td>
-           <td><label wicket:id="displayNo" style="float: right;"/></td>
-        </tr>        
-        <tr>
-           <td><img src="images/view_columns.png"/></td>	
-           <td class="td-label"><label><strong><wicket:message key="DashboardStatistics.pivot">Pivot Widgets:</wicket:message></strong></label></td>
-           <td><label wicket:id="pivotNo" style="float: right;"/></td>
-        </tr>
-        <tr>
-           <td><img src="images/link.png"/></td>
-           <td class="td-label"><label><strong><wicket:message key="DashboardStatistics.drill">DrillDown Widgets:</wicket:message></strong></label></td>
-           <td><label wicket:id="drillDownNo" style="float: right; "/></td>
-        </tr>
-    </table>    
+<div class="statistics">
+	<ul class="list-group">
+		<li class="list-group-item">
+			<span wicket:id="dashboardNo" class="badge" />
+			<img class="left-image" src="images/dashboard.png" />
+			<wicket:message key="DashboardStatistics.personal">Personal Dashboards:</wicket:message>
+		</li>
+		<li class="list-group-item">
+			<span wicket:id="linkNo" class="badge" />
+			<img class="left-image" src="images/dashboard_link.png" />
+			<wicket:message key="DashboardStatistics.link">Dashboard Links:</wicket:message>
+		</li>
+		<li class="list-group-item">
+			<span wicket:id="widgetNo" class="badge" />
+			<img class="left-image" src="images/sum.png" />
+			<wicket:message key="DashboardStatistics.total">Total Widgets:</wicket:message>
+		</li>
+		<li class="list-group-item">
+			<span wicket:id="chartNo" class="badge" />
+			<img class="left-image" src="images/chart.png" />
+			<wicket:message key="DashboardStatistics.chart">Chart Widgets:</wicket:message>
+		</li>
+		<li class="list-group-item">
+			<span wicket:id="tableNo" class="badge" />
+			<img class="left-image" src="images/table.png" />
+			<wicket:message key="DashboardStatistics.table">Table Widgets:</wicket:message>
+		</li>
+		<li class="list-group-item">
+			<span wicket:id="alarmNo" class="badge" />
+			<img class="left-image" src="images/alarm.png" />
+			<wicket:message key="DashboardStatistics.alarm">Alarm Widgets:</wicket:message>
+		</li>
+		<li class="list-group-item">
+			<span wicket:id="indicatorNo" class="badge" />
+			<img class="left-image" src="images/indicator.png" />
+			<wicket:message key="DashboardStatistics.indicator">Indicator Widgets:</wicket:message>
+		</li>
+		<li class="list-group-item">
+			<span wicket:id="displayNo" class="badge" />
+			<img class="left-image" src="images/display.png" />
+			<wicket:message key="DashboardStatistics.display">Display Widgets:</wicket:message>
+		</li>
+		<li class="list-group-item">
+			<span wicket:id="pivotNo" class="badge" />
+			<img class="left-image" src="images/view_columns.png" />
+			<wicket:message key="DashboardStatistics.pivot">Pivot Widgets:</wicket:message>
+		</li>
+		<li class="list-group-item">
+			<span wicket:id="drillDownNo" class="badge" />
+			<img class="left-image" src="images/link.png" />
+			<wicket:message key="DashboardStatistics.drill">DrillDown Widgets:</wicket:message>
+		</li>
+
+	</ul>
+</div>
 </wicket:panel>

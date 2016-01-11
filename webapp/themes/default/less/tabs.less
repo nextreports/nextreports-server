@@ -1,0 +1,139 @@
+// main: style.less
+
+/* Tabpane */
+
+.settings-section {
+    height: ~'calc(100vh - 110px)';
+    margin: 15px 0;
+}
+
+.tabpanesettings {
+    display: block;
+    height: ~'calc(100% - 36px)';
+    padding: 0;
+    width: 100%;
+    
+    .tab-row-settings {
+        float: left;
+        padding-left: 0;
+        position: relative;
+        width: 180px;
+        z-index: 150;
+        margin-right: -1px;
+        margin-top: 10px;
+        height: ~'calc(100% - 10px)';
+        overflow: auto;
+        
+        li {
+            border: 0 none;
+            display: block;
+            margin-bottom: 5px;
+            padding: 0;
+            margin-right: 1px;
+            
+            a {
+                background: @body-color;
+                border-left: 5px solid @secondary-light-color;
+                color: @light-headings-color;
+                cursor: pointer;
+                display: block;
+                font-size: 12px;
+                font-weight: 400;
+                line-height: 21px;
+                margin-top: 0;
+                padding: 5px;
+                text-decoration: none;
+                
+                &:hover {
+                    background: darken(@main-lightest-color,5%);
+                    color: @link-hover-color;
+                    text-decoration: none;
+                    border-left: 5px solid @main-color;
+                }
+                
+                .left-image {
+                    display: inline-block;
+                    padding: 3px 6px 3px 3px;
+                }
+            }
+            &.selected {
+                border-color: darken(@main-lightest-color,15%) transparent darken(@main-lightest-color,15%) darken(@main-lightest-color,15%);
+                border-image: none;
+                border-style: solid none solid solid;
+                border-width: 1px 0 1px 1px;
+                margin-right: 0;
+                
+                a{
+                    background: #ffffff none repeat scroll 0 0;
+                    border-left: 5px solid @main-color;
+                    color: @main-dark-color;
+                    font-weight: 600;
+                    letter-spacing: 0.05em;
+                    box-shadow: 0 2px 1px rgba(0,0,0,0.08);
+                }
+            }
+        }
+    }
+
+    .tab-panel-settings {
+        background: @white none repeat scroll 0 0;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+        float: left;
+        height: 100%;
+        position: relative;
+        width: ~'calc(100% - 180px)';
+        z-index: 140;
+        overflow: auto;
+        border: 1px solid darken(@main-lightest-color,15%);
+    }
+}
+
+.tab-row ul {
+    position: absolute;
+    top: -25px;
+    left: -1px;
+}
+
+.tab-row li {
+    float: left;
+    display: inline;
+    margin-right: 10px;
+    background: #f4f4f4;
+    margin-bottom: -1px;
+}
+
+.tab-row li a {
+    cursor: pointer;
+    display: block;
+    padding: 3px 10px 0px 0px;
+    margin-top: 0;
+    text-decoration: none;
+    font-size: 11px;
+    line-height: 20px;
+    background: #eaeaea;
+    border: 1px solid #cccccc;
+    font-weight: bold;
+    color: @link-color;
+}
+
+.tab-row li a:hover{
+    background: darken(@main-lightest-color,5%);
+    color: @link-hover-color;
+    text-decoration: none;
+}
+
+.tab-row li.selected a {
+    border-bottom: none;
+    color: @link-hover-color;
+    font-weight: bold;
+    line-height: 21px;
+    font-size: 11px;
+	text-transform: uppercase;
+	background: #fafafa;
+}
+
+.tab-row li.selected {
+	border-top: 3px solid @main-color;
+	margin-top: -3px;
+}
+

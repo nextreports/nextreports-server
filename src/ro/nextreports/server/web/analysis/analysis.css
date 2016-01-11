@@ -1,3 +1,4 @@
+ /*
  .analysis {
     overflow: auto;
     min-height: 353px;
@@ -62,7 +63,7 @@
 }
 
 .analysisNavigation table.actions-grid tr a {
-	width: 175px; /* chrome requires the most space */
+	width: 175px; 
 }	
 
 .analysisNavigation table tr.tr-hover {
@@ -100,7 +101,7 @@
 	height: 1.8em;
 }
 
-/* for empty row cells*/
+// for empty row cells
 .analysis table.grid tbody td {
 	height: 21px !important;
 	white-space: nowrap;
@@ -186,3 +187,4 @@
 .analysisForm .feedbackPanelERROR {
 	float: left;
 }
+*/

@@ -50,12 +50,9 @@ public class EntityTreeMenuModel extends LoadableDetachableModel<List<MenuItem>>
         	
         	private static final long serialVersionUID = 1L;
         	
-            public void onClick(AjaxRequestTarget target) {
-            	// TODO wicket-6
-            	/*
-                tree.getTreeState().expandAll();
-                tree.updateTree(target);
-                */
+            public void onClick(AjaxRequestTarget target) {            	
+            	EntityTreeExpansionState.get().expandAll();
+            	target.add(tree);
             }
             
         };
@@ -64,12 +61,9 @@ public class EntityTreeMenuModel extends LoadableDetachableModel<List<MenuItem>>
         	
         	private static final long serialVersionUID = 1L;
         	
-            public void onClick(AjaxRequestTarget target) {
-            	// TODO wicket-6
-            	/*
-                tree.getTreeState().collapseAll();
-                tree.updateTree(target);
-                */
+            public void onClick(AjaxRequestTarget target) {            	
+            	EntityTreeExpansionState.get().collapseAll();
+            	target.add(tree);
             }
             
         };

@@ -43,7 +43,7 @@ import javax.mail.internet.MimeMessage;
  */
 public class SmtpDistributor implements Distributor {
 			
-    private List<String> users;
+    private List<String> users =  new ArrayList<String>();
 
     private static final Logger LOG = LoggerFactory.getLogger(SmtpDistributor.class);
 
@@ -54,7 +54,11 @@ public class SmtpDistributor implements Distributor {
         	exportedFile = DistributorUtil.getFileCopy(exportedFile, fileName);
 		}
 
-        users = new ArrayList<String>(smtpDestination.getUserRecipients());
+        if (smtpDestination.getUserRecipients() != null) {
+        	users = new ArrayList<String>(smtpDestination.getUserRecipients());
+        } else {
+        	users = new ArrayList<String>();
+        }
         String body = smtpDestination.getMailBody();
         if (body == null) {
             body = "";
@@ -88,11 +92,15 @@ public class SmtpDistributor implements Distributor {
                         
             if ((context.getBatchValue() != null) && (context.getBatchMailMap() != null)) {
             	String batchEmail = context.getBatchMailMap().get(context.getBatchValue()); 
-            	String[] emails = batchEmail.split(";");
-            	for (String email : emails) {
-            		if (MailUtil.isEmailValid(email) && !mails.contains(email)) {
-            			mails.add(email);
-            		}
+            	if (batchEmail != null) {
+	            	String[] emails = batchEmail.split(";");
+	            	for (String email : emails) {
+	            		if (MailUtil.isEmailValid(email) && !mails.contains(email)) {
+	            			mails.add(email);
+	            		}
+	            	}
+            	} else {
+            		LOG.error("Please check your batch email SQL! Batch Email SQL obtained null email string for value (id) = '" + context.getBatchValue() + "'");
             	}
             }
 

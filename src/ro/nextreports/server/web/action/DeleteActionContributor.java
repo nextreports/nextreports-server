@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,7 +37,7 @@ import java.util.List;
  * @author Decebal Suiu
  */
 public class DeleteActionContributor extends AbstractActionContributor {
-	
+
 	public static final String ID = DeleteActionContributor.class.getName();
 
     @Resource
@@ -52,7 +52,7 @@ public class DeleteActionContributor extends AbstractActionContributor {
             if (StorageUtil.isCommonPath(entities)) {
                 return false;
             }
-            
+
             for (Entity entity : entities) {
 				if (StorageUtil.isSystemPath(entity.getPath())) {
 					return false;
@@ -69,7 +69,7 @@ public class DeleteActionContributor extends AbstractActionContributor {
 				String loggedRealm = NextServerSession.get().getUserRealm();
 				// for admins logged on realms we must see if entities are from the same realm, otherwise if admins have rights to delete
 				// this is done in hasPermissionsById
-				if (!"".equals(loggedRealm)) {				
+				if (!"".equals(loggedRealm)) {
 					for (Entity entity : entities) {
 						if (!securityService.hasPermissionsById(ServerUtil.getUsername(), PermissionUtil.getDelete(), entity.getId())) {
 							return false;
@@ -81,18 +81,20 @@ public class DeleteActionContributor extends AbstractActionContributor {
             e.printStackTrace();
             return false;
         }
-                
+
         return true;
     }
 
     public String getActionImage() {
+        // TODO bootstrap
         return "images/delete.gif";
+//        return "remove";
     }
 
     public String getActionName() {
         return new StringResourceModel("ActionContributor.Delete.name", null).getString();
     }
-    
+
     public String getId() {
     	return ID;
     }

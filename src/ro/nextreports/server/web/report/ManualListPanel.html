@@ -1,24 +1,22 @@
 <wicket:panel>
     <div class="form-container">
-        <form wicket:id="form">
+        <form wicket:id="form" class="form-inline">
             <table class="form">
                 <tr>
                     <td>
                         <ul class="form-btns">
-                            <li><input type="text" wicket:id="txtValue"/></li>
-                            <li><div wicket:id="txtTime" class="left"/></li>
+                            <li><input class="form-control input-xs" type="text" wicket:id="txtValue"/></li>
+                            <li><div wicket:id="txtTime"/></li>
                         </ul>
                     </td>
                     <td>
-                        <ul class="form-btns">
-                            <li><input wicket:id="addElement" type="submit" value="+" class="manualListButton"/></li>
-                            <li><input wicket:id="removeElement" type="submit" value="-" class="manualListButton"/></li>
-                        </ul>
+                        <input wicket:id="addElement" type="submit" value="+" class="btn btn-secondary btn-xs"/>
+                        <input wicket:id="removeElement" type="submit" value="-" class="btn btn-secondary btn-xs"/>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">                        
-                        <select wicket:id="listChoice" class="manualList"/>
+                        <select wicket:id="listChoice" class="manualList form-control input-xs"/>
                     </td>
                 </tr>
             </table>

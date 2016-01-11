@@ -1,0 +1,79 @@
+<wicket:panel>
+	<div class="form-container form-container-dialog">
+		<form wicket:id="form">
+			<table class="form">
+				<tr>
+					<td class="td-label"><label><wicket:message
+									key="Settings.general.mailIp">Mail Server Ip</wicket:message></label></td>
+					<td><input wicket:id="mailServer.ip"
+						class="form-control input-xs" name="mailServer.ip" type="text"
+						style="width: 200px; !important" /></td>
+				</tr>
+				<tr>
+					<td class="td-label"><label><wicket:message
+									key="Settings.general.mailPort">Mail Server Port</wicket:message></label>
+					</td>
+					<td><input wicket:id="mailServer.port"
+						class="form-control input-xs" name="mailServer.port" type="text"
+						style="width: 50px; !important" /></td>
+				</tr>
+				<tr>
+					<td class="td-label"><label><wicket:message
+									key="Settings.general.mailFrom">Mail Server From</wicket:message></label>
+					</td>
+					<td><input wicket:id="mailServer.from"
+						class="form-control input-xs" name="mailServer.from" type="text"
+						style="width: 200px; !important" /></td>
+				</tr>
+				<tr>
+					<td class="td-label"><label><wicket:message
+									key="Settings.general.mailUsername">Mail Server Username</wicket:message></label>
+					</td>
+					<td><input wicket:id="mailServer.username"
+						class="form-control input-xs" name="mailServer.username"
+						type="text" style="width: 200px; !important" /></td>
+				</tr>
+				<tr>
+					<td class="td-label"><label><wicket:message
+									key="Settings.general.mailPassword">Mail Server Password</wicket:message></label>
+					</td>
+					<td><input wicket:id="mailServer.password"
+						class="form-control input-xs" name="mailServer.password"
+						type="password" style="width: 200px; !important" /></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td class="td-label"><label><wicket:message
+									key="Settings.general.enableTls">Mail Enable Tls</wicket:message></label>
+					</td>
+					<td><label> <input wicket:id="mailServer.enableTls"
+							class="nrs" name="mailServer.enableTls" type="checkbox" /> <span
+							class="lbl"></span>
+					</label></td>
+				</tr>
+				<tr>
+					<td class="td-label"><label><wicket:message
+									key="Settings.general.distributorDatePattern">Distributor Date Pattern</wicket:message></label>
+					</td>
+					<td><input wicket:id="distributor.datePattern"
+						class="form-control input-xs" name="distributor.datePattern"
+						type="text" style="width: 200px; !important" /></td>
+				</tr>
+				<tr>
+					<td class="td-label"><label><wicket:message
+									key="Settings.general.distributorTimePattern">Distributor Time Pattern</wicket:message></label>
+					</td>
+					<td><input wicket:id="distributor.timePattern"
+						class="form-control input-xs" name="distributor.timePattern"
+						type="text" style="width: 200px; !important" /></td>
+				</tr>
+			</table>
+			<hr class="hr-10">
+			<ul class="form-btns">
+				<li><input wicket:id="change" type="submit" name="change"
+					wicket:message="value:change" class="btn btn-primary btn-xs" /></li>
+			</ul>
+		</form>
+		<span wicket:id="feedback" class="feedbackPanelERROR" />
+	</div>
+</wicket:panel>

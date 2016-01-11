@@ -85,7 +85,7 @@ public class IndicatorWidgetView  extends WidgetView  {
 				
 				if (indicatorModel.getObject() == null) {
 					if (indicatorModel.getError() instanceof NoDataFoundException) {
-						setDefaultModelObject("No Data Found");
+						setDefaultModelObject(getString("ActionContributor.Run.nodata"));
 					} else {
 						setDefaultModelObject(ExceptionUtils.getRootCauseMessage(indicatorModel.getError()));
 					}

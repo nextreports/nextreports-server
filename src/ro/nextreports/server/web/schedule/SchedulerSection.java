@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,7 @@ import ro.nextreports.server.web.core.section.AbstractEntitySection;
 public class SchedulerSection extends AbstractEntitySection {
 
 	public static final String ID = SchedulerSection.class.getName();
-	
+
     public SchedulerSection() {
         super(StorageConstants.SCHEDULER_ROOT);
     }
@@ -40,12 +40,13 @@ public class SchedulerSection extends AbstractEntitySection {
 	}
 
 	public String getIcon() {
-		return "images/schedule.png";
-	}	
+//		return "images/schedule.png";
+        return "calendar";
+	}
 
 	@Override
     public EntityBrowserPanel createBrowserPanel(String id, String sectionId) {
 		return new SchedulerBrowserPanel(id, sectionId);
-    }    
-    
+    }
+
 }

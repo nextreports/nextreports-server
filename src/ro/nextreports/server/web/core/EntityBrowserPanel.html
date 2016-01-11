@@ -1,38 +1,67 @@
 <wicket:panel>
-	<div class="breadcrumbs" wicket:id="locationPanel"></div>
-	
-    <div id="splitter">
-        <div class="left-column">
-            <!--<ul class="expand-colapse">-->
-                <!--<li class="expand-all">-->
-                    <!--<a href="#" wicket:id="expandAll">Expand all</a>-->
-                <!--</li>-->
-                <!--<li class="colapse-all">-->
-                    <!--<a href="#" wicket:id="collapseAll">Colapse all</a>-->
-                <!--</li>-->
-            <!--</ul>-->
-            <div class="actions-bar">
-                <span class="actions-bar-left"></span>
-                <div wicket:id="treeMenuPanel"></div>
-                <span class="actions-bar-right"></span>
-            </div>
-            <div class="accordion-group" wicket:id="tree"></div>
-        </div>
-        
-        <div class="right-column">
-            <div class="actions-bar">
-                <span class="actions-bar-left"></span>
-                <div wicket:id="bulkMenuPanel" class="actions-grid"></div>
-                <div wicket:id="menuPanel"></div>
-                <span class="actions-bar-right"></span>
-            </div>
-            <div wicket:id="workContainer" class="form-container">
-                <div wicket:id="work" class="table-right-container">                    
-                </div>                       
-            </div>    
-        </div>
-        <div  class="statusBar" wicket:id="statusBarPanel"></div>
-    </div>
 
+	<div class="row">
+		<div class="breadcrumbs" wicket:id="locationPanel"></div>
+	</div>
+	<div class="row">
+		<div class="main-section">
+			<div class="col-xs-4 col-sm-4 col-md-3 col-lg-3 left-section">
+				<div class="panel panel-default">
+					<div class="panel-heading clearfix">
+						<nav class="" wicket:id="treeMenuPanel"></nav>
+					</div>
+					<div class="panel-body tree-container">
+						<div class="accordion-group" wicket:id="tree"></div>
+					</div>
+					<div class="panel-footer" wicket:id="statusBarPanel"></div>
+				</div>
+			</div>
+
+			<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9 right-section">
+				<div class="panel panel-default">
+					<div class="panel-heading clearfix">
+						<nav class="">
+							<div wicket:id="bulkMenuPanel" class="actions-grid"></div>
+							<div wicket:id="menuPanel"></div>
+						</nav>
+					</div>
+
+					<div wicket:id="workContainer" class="panel-body form-container">
+						<div wicket:id="work" class="table-right-container"></div>
+					</div>
+					<div class="panel-footer">&nbsp;</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 
+	
+	// Daca vrem sa avem aceeasi structura ca la dashboards 
+	
+	<div class="dashboard-section">
+		<div class="dashboardLeft">
+			<div class="toolbar_nav"> 
+				<div wicket:id="treeMenuPanel"></div>
+			</div>
+			<div class="dashboardNavigation">
+				<div class="accordion-group" wicket:id="tree"></div>
+			</div>
+		</div>
+		<div class="form-container">
+			<div class="dashboard">
+				<div class="toolbar_nav">
+					<nav class="">
+						<div wicket:id="bulkMenuPanel" class="actions-grid"></div>
+						<div wicket:id="menuPanel"></div>
+					</nav>			 
+				</div>
+					<div wicket:id="workContainer" class="dashboardCapture">
+						<div wicket:id="work"></div>
+					</div>
+			</div>
+		</div>
+	</div>
+	
+	 -->
 </wicket:panel>
-  

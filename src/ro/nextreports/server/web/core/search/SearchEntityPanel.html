@@ -1,86 +1,90 @@
 <wicket:panel>
-    <fieldset class="fieldset-panel-right">
-        <legend wicket:id="title">[]</legend>
-        <form wicket:id="form">   
-              <div class="row row-bottom">               
-                <label class="row-label"><wicket:message key="ActionContributor.Search.path">Path</wicket:message></label>
-                <label wicket:id="info">[]</label>
-              </div>  
-              
-              <div class="row row-bottom">   
-                <label wicket:id="name" class="row-label">[]</label>
-                <input wicket:id="nameText" name="nametext" type="text" size="45"/>
-              </div>
-                
-              <div class="row">   
-                <label wicket:id="description" class="row-label">[]</label>
-                <input wicket:id="descriptionText" name="descriptionText" type="text" size="45"/>
-              </div>
-              
-              <div class="row">   
-                <label wicket:id="sql" class="row-label">[]</label>
-                <input wicket:id="sqlText" name="sqlText" type="text" size="45"/>
-              </div>
-                
-              <div class="row row-bottom">   
-                <label wicket:id="ignore" class="row-label">[]</label>
-                <input wicket:id="chkBox" name="chkBox" type="checkbox"/>
-              </div>
-                
-              <div class="row">   
-                <label wicket:id="invalidSql" class="row-label">[]</label>
-                <select wicket:id="invalidSqls" name="invalidSqls"/>
-              </div>
-                
-              <div class="row">   
-                <label wicket:id="alarm" class="row-label">[]</label>
-                <select wicket:id="alarms" name="alarms"/>
-              </div>
-              
-              <div class="row">   
-                <label wicket:id="indicator" class="row-label">[]</label>
-                <select wicket:id="indicators" name="indicators"/>
-              </div>
-              
-              <div class="row">   
-                <label wicket:id="display" class="row-label">[]</label>
-                <select wicket:id="displays" name="displays"/>
-              </div>
-                
-              <div class="row">   
-                <label wicket:id="table" class="row-label">[]</label>
-                <select wicket:id="tables" name="tables"/>
-              </div>
-                
-              <div class="row">   
-                <label wicket:id="drill" class="row-label">[]</label>
-                <select wicket:id="drills" name="drills"/>
-              </div>
-                
-              <div class="row">   
-                <ul class="form-btns">
-                            <li><a wicket:id="cancel" class="secondary"><wicket:message key="back">Back</wicket:message></a></li>
-                            <li><a wicket:id="search" class="secondary"><wicket:message key="search">Search</wicket:message></a></li>
-                </ul>
-              </div>  
-              
-            <h2 class="row">
-                <span wicket:id="resultsLabel">[]</span>
-            </h2>
+	<fieldset class="fieldset-panel-right">
+		<legend wicket:id="title">[]</legend>
+		<form wicket:id="form">
+			<div class="row-bottom">
+				<label class="row-label"><wicket:message
+						key="ActionContributor.Search.path">Path</wicket:message></label> <label
+					wicket:id="info">[]</label>
+			</div>
 
-            <div wicket:id="table-container" class="row table-container">
-                <div wicket:id="table" class="grid actions-grid"></div>
-            </div>
-            
-            <table class="row">
-                <tr>
-                    <td><input wicket:id="deleteLink" wicket:message="value:deleteSelected" class="secondary" type="submit"/></td>
-                </tr>
-                <tr>
-                    <td><span wicket:id="feedback" class="feedbackPanelERROR"/></td>
-                </tr>
-            </table>
-        </form>
+			<div class="row-bottom">
+				<label wicket:id="name" class="row-label">[]</label> <input
+					wicket:id="nameText" name="nametext" type="text" size="45" />
+			</div>
 
-    </fieldset>
+			<div>
+				<label wicket:id="description" class="row-label">[]</label> <input
+					wicket:id="descriptionText" name="descriptionText" type="text"
+					size="45" />
+			</div>
+
+			<div>
+				<label wicket:id="sql" class="row-label">[]</label> <input
+					wicket:id="sqlText" name="sqlText" type="text" size="45" />
+			</div>
+
+			<div class="row-bottom">
+				<label wicket:id="ignore" class="row-label">[]</label> <input
+					wicket:id="chkBox" name="chkBox" type="checkbox" />
+			</div>
+
+			<div>
+				<label wicket:id="invalidSql" class="row-label">[]</label> <select
+					wicket:id="invalidSqls" name="invalidSqls" />
+			</div>
+
+			<div>
+				<label wicket:id="alarm" class="row-label">[]</label> <select
+					wicket:id="alarms" name="alarms" />
+			</div>
+
+			<div>
+				<label wicket:id="indicator" class="row-label">[]</label> <select
+					wicket:id="indicators" name="indicators" />
+			</div>
+
+			<div>
+				<label wicket:id="display" class="row-label">[]</label> <select
+					wicket:id="displays" name="displays" />
+			</div>
+
+			<div>
+				<label wicket:id="table" class="row-label">[]</label> <select
+					wicket:id="tables" name="tables" />
+			</div>
+
+			<div>
+				<label wicket:id="drill" class="row-label">[]</label> <select
+					wicket:id="drills" name="drills" />
+			</div>
+
+			<ul class="form-btns">
+				<li><a wicket:id="cancel" class="btn btn-secondary btn-xs"><wicket:message
+							key="back">Back</wicket:message></a></li>
+				<li><a wicket:id="search" class="btn btn-primary btn-xs"><wicket:message
+							key="search">Search</wicket:message></a></li>
+			</ul>
+			
+			<div>
+				<span wicket:id="resultsLabel">[]</span>
+			</div>
+			<hr>
+			<div wicket:id="table-container" class="table-container">
+				<div wicket:id="table"></div>
+			</div>
+
+			<ul class="form-btns">
+				<li><input wicket:id="deleteLink"
+					wicket:message="value:deleteSelected"
+					class="btn btn-primary btn-xs" type="submit" /></li>
+			</ul>
+			<table>
+				<tr>
+					<td><span wicket:id="feedback" class="feedbackPanelERROR" /></td>
+				</tr>
+			</table>
+		</form>
+
+	</fieldset>
 </wicket:panel>

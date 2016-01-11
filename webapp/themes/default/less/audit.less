@@ -1,0 +1,136 @@
+// main: style.less
+
+.auditSection {
+  height: ~'calc(100vh - 110px)';
+  margin: 15px 0;
+  padding: 0;
+}
+
+
+.audit {
+    margin-top: 20px;
+}
+
+.audit ul li {
+    font-size: 14px;
+    padding: 0px 10px 0px 10px;
+}
+
+.audit ul li:hover {
+	color: @link-hover-color;
+	cursor: pointer;
+}
+
+.auditRow {
+	display: inline-block;
+	float: left;
+	margin-right: 20px;
+	margin-bottom: 10px;
+}
+
+.auditDesc {
+	color: #999;
+	margin-left: 10px;
+}
+
+
+
+.sections-list{
+    margin: 10px 0;
+    .clearfix();
+    
+    
+    .audit-section{
+        float: left;
+        padding: 0 15px;
+        position: relative;
+        width: 33.3333%;
+            
+            
+        .section-item{
+            display: block; 
+            border: 1px solid #fff;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+            background: #fff none repeat scroll 0% 0%; 
+            padding: 10px;
+            position: relative;
+            
+            .section-title{
+                font-weight: 500;
+                color: @dark-headings-color;
+                margin: 0;
+                padding: 0;
+            }
+            .section-desc{
+                color: @light-headings-color;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                font-size: 11px;
+                font-weight: 400;
+                margin: 0;
+                padding: 0;
+            }
+            
+            &.with-icon{
+                padding-left: 64px;
+                
+                &[class^='section-']::after{
+                    color: @main-light-color;
+                    content: " ";
+                    display: block;
+                    font-family: FontAwesome;
+                    font-size: 36px;
+                    left: 0;
+                    line-height: 60px;
+                    padding: 0;
+                    position: absolute;
+                    text-align: center;
+                    top: 0;
+                    width: 64px;
+                }
+                &.section-rights::after{ content: "\f0c0"; }
+                &.section-run::after{ content: "\f04b"; }
+                &.section-list::after{ content: "\f0ae"; }
+            }
+            &:hover{
+                box-shadow: none;
+                border: 1px solid @main-light-color;
+                background: @main-lightest-bg-color none repeat scroll 0% 0%; 
+            }
+        }
+    }
+}
+
+.section-container{
+    height: ~'calc(100% - 36px)';
+    margin: 0 -15px;
+}
+
+.section-content {
+    height: ~'calc(100% - 71px)';
+    padding: 0 15px;
+}
+
+.auditToolbar {
+    color: @dark-headings-color;
+    font-size: 12px;
+    font-weight: 500;
+    margin: 10px 0;
+    padding: 0 10px;
+    .clearfix();
+    
+    > span {
+        display: inline-block;
+        margin-top: 5px;
+    }
+}
+
+.auditTable {
+    border: 1px solid #e5e5e5;
+    height: ~'calc(100% - 32px)';
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    width: 100%;
+}

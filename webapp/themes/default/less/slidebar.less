@@ -1,0 +1,199 @@
+// main: style.less
+
+html,body{
+    height: 100%;
+    overflow: hidden;
+}
+#sb-site, .sb-site-container{
+	background: 0 none;
+	padding:50px 0 30px 0;
+    min-height: 100vh;
+    width: 100%;
+    z-index: 1;
+}
+
+.header{
+    .sb-toggle-left {
+        border-right: 1px solid @hr-borders-color;
+        color: @main-color;
+        cursor: pointer;
+        float: left;
+        font-size: 20px;
+        margin: 0 10px 0 0;
+        padding: 15px;
+    }
+    .sb-toggle-left:hover{
+        background-color: @main-dark-color;
+        color: #fff;
+    }
+    .sb-toggle-right {
+        border-left: 1px solid @hr-borders-color;
+        color: @main-color;
+        cursor: pointer;
+        float: right;
+        font-size: 20px;
+        margin: 0 0 0 10px;
+        padding: 15px;
+    }
+}
+
+.navicon-line {
+    width: 24px;
+    height: 4px;
+    border-radius: 1px;
+    margin-bottom: 3px;
+    background-color: #779800;
+}
+
+.sb-slidebar {
+    /*background-color: #222222;*/
+    background-color: @bg-inverse!important;
+    color: #e8e8e8;
+    
+    .profile{
+        
+        .info {
+            background: @main-color none repeat scroll 0 0;
+            padding: 15px 0 9px;
+            text-align: left;
+            width: 100%;
+            height: 50px;
+        
+            .user-icon {
+                color: #ffffff;
+                display: inline-block;
+                padding: 0 5px 0 15px;
+            }
+
+            .user-details {
+                display: inline-block;
+            }
+
+            .userName {
+                color: #fff;
+                font-weight: bold;
+                font-size: 20px;
+            }
+        }
+    } // end profile
+
+    .sb-menu {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        text-align: left;
+        
+        li {
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1); /* Will lighten any background colour you set. */
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Will darken any background colour you set. */
+            
+            a {
+                display: block;
+                padding: 1em;
+                color: #f2f2f2;
+                
+                &:hover {
+                    color: #fff;
+                    text-decoration: none;
+                    background-color: rgba(255, 255, 255, 0.15); /* Will lighten any background colour you set. */
+                }
+            }
+            &.active {
+                background-color: @dark-grey-bg-color;
+                border-color: @secondary-dark-color;
+                
+                > a {
+                    color: @main-color;
+                    border-left: 5px solid @main-color !important;
+                    font-weight: bold;
+                    text-transform: uppercase;
+                    
+                    i{
+                        color: @main-color;
+                    }
+                }
+            }
+        }
+        
+        > li {
+            &:first-child { border-top: none; } /* Removes top border from first list item.. */ 
+            &:last-child { border-bottom: none; } /* Removed bottom border from last list item. */
+        }
+        
+        [class^='fa'] + span {
+            margin-left: 10px;
+        }
+        
+    } // end sb-menu
+}
+
+
+/* Borders */
+.sb-slidebar {
+    &.sb-left {
+        .sb-menu li {
+            a {
+                border-left: 5px solid transparent;
+                &:hover { border-left: 5px solid @main-color; }/* Removes transparent colour, so border colour will be the same as link hover colour. */       
+            }
+        }
+    }
+
+    &.sb-right {
+        .sb-menu li {
+            a {
+                border-rigt: 5px solid transparent;
+                &:hover { border-right: 5px solid @main-color; }/* Removes transparent colour, so border colour will be the same as link hover colour. */       
+            }
+        }
+    }
+}
+/* Slidebar widths for browsers/devices that don't support media queries. */
+	.sb-slidebar   { width: 30%; }
+	.sb-width-thin { width: 15%; }
+	.sb-width-wide { width: 45%; }
+
+@media (max-width: 480px) { /* Slidebar widths on extra small screens. */
+	.sb-slidebar   { width: 70%; }
+	.sb-width-thin { width: 55%; }
+	.sb-width-wide { width: 85%; }
+}
+
+@media (min-width: 481px) { /* Slidebar widths on small screens. */
+	.sb-slidebar   { width: 55%; }
+	.sb-width-thin { width: 40%; }
+	.sb-width-wide { width: 70%; }
+}
+
+@media (min-width: 768px) { /* Slidebar widths on medium screens. */
+	.sb-slidebar   { width: 40%; }
+	.sb-width-thin { width: 25%; }
+	.sb-width-wide { width: 55%; }
+}
+
+@media (min-width: 992px) { /* Slidebar widths on large screens. */
+	.sb-slidebar   { width: 30%; }
+	.sb-width-thin { width: 15%; }
+	.sb-width-wide { width: 45%; }
+}
+
+@media (min-width: 1200px) { /* Slidebar widths on extra large screens. */
+	.sb-slidebar { width: 20%; }
+	.sb-width-thin { width: 15%; }
+	.sb-width-wide { width: 35%; }
+}
+
+// Exista un bug la Boostrap pentru modala atunci cand se afla intr-un container avand setat "position: relative"
+// Am vazut ca se comporta la fel de ciudat cand am transform
+.nrs{
+    #sb-site {
+        position: initial!important;
+        -webkit-transform: none;
+           -moz-transform: none;
+             -o-transform: none;
+                transform: none;
+      }
+}

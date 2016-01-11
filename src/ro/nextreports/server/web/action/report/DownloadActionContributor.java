@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,9 +32,9 @@ import java.util.ArrayList;
 
 //
 public class DownloadActionContributor extends AbstractActionContributor {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	public static final String ID = DownloadActionContributor.class.getName();
 
     public boolean support(List<Entity> entities) {
@@ -42,19 +42,21 @@ public class DownloadActionContributor extends AbstractActionContributor {
             if (!(entity instanceof Report)) {
                 return false;
             }
-        }              
-        
+        }
+
         return true;
     }
 
     public String getActionImage() {
+        // TODO bootstrap
         return "images/download.png";
+//        return "download";
     }
 
     public String getActionName() {
         return new StringResourceModel("download", null).getString();
     }
-    
+
     public String getId() {
     	return ID;
     }
@@ -65,7 +67,7 @@ public class DownloadActionContributor extends AbstractActionContributor {
             reports.add((Report)entity);
         }
         ReportResource download = new ReportResource(reports);
-        
+
         return new ResourceLink<ReportResource>(context.getLinkId(), download);
     }
 

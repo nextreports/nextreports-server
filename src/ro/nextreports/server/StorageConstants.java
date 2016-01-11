@@ -95,5 +95,6 @@ public interface StorageConstants {
 	public static final String INTEGRATION = "integration";
 	public static final String INTEGRATION_DRILL_URL = "drillUrl";
 	public static final String INTEGRATION_NOTIFY_URL = "notifyUrl";
+	public static final String THEME = "colorTheme";
 		
 }

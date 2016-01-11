@@ -92,4 +92,8 @@ public interface Widget extends Serializable {
     
     public void setRowsPerPage(int rowsPerPage);
     
+    public boolean isEnableFilter();
+    
+    public void setEnableFilter(boolean enableFilter);
+    
 }

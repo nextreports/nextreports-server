@@ -1,0 +1,112 @@
+// main: style.less
+
+.error-container {
+    display: table-cell;
+    height: 100vh;
+    margin: 0;
+    padding: 50px 0 30px;
+    text-align: center;
+    vertical-align: middle;
+    word-wrap: break-word;
+    
+    .error-message {
+        background: @main-lightest-bg-color none repeat scroll 0 0;
+        border-radius: 10px;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+        display: block;
+        margin: 0 auto;
+        padding: 30px;
+    }
+    
+    .error-image {
+        color: @secondary-color;
+        font-size: 200%;
+        margin: 0 auto 30px;
+    }
+    
+    .error-title {
+        font-size: 36px;
+        line-height: 1.2;
+        margin: 15px auto;
+        padding: 0;
+    }
+    
+    .error-text {
+        color: @dark-headings-color;
+        font-size: 23px;
+        font-weight: 300;
+        line-height: 1.5;
+        margin: 15px auto;
+        padding: 0;
+    }
+    
+    @media (max-width: @screen-xs-max) {
+        .error-message{
+            width: 90%;
+            padding: 20px;
+        }
+        
+        .error-title {
+            font-size: 28px;
+        }
+        
+        .error-text {
+            font-size: 18px;
+        }
+        .error-image {
+            font-size: 150%;
+        }
+    }
+
+    @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max){
+        .error-message{
+            width: 90%;
+            padding: 30px;
+        }
+        
+        .error-title {
+            font-size: 32px;
+        }
+        
+        .error-text {
+            font-size: 21px;
+        } 
+        
+        .error-image {
+            font-size: 170%;
+        }
+    }
+
+    @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+        .error-message{
+            width: 80%;
+            padding: 40px;
+        }
+        
+        .error-title {
+            font-size: 32px;
+        }
+        
+        .error-text {
+            font-size: 21px;
+        }
+        
+        .error-image {
+            font-size: 170%;
+        }
+    }
+    
+    @media (min-width: @screen-lg-min) {
+        .error-message{
+            width: 70%;
+            padding: 50px;
+        }
+    }
+}  
+
+/*
+@media (max-width: @screen-xs-max) { ... }
+@media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) { ... }
+@media (min-width: @screen-md-min) and (max-width: @screen-md-max) { ... }
+@media (min-width: @screen-lg-min) { ... }
+*/

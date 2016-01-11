@@ -10,13 +10,21 @@
 			 Specify that the viewport width should exactly match the device screen width 
 		-->
 		<meta name="viewport" content="width=device-width" />
+		<!-- Bootstrap Base Style -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css"/>
 		
-		<link rel="stylesheet" type="text/css" media="screen" href="css/style.css"/>
-        <link rel="stylesheet" type="text/css" media="screen" href="css/table.css"/>                     
+		<link rel="stylesheet" type="text/css" media="screen" href="" wicket:id="cssPath"/>                         
 		<script type="text/javascript" src="js/jquery.json-2.2.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	</head>
 
-	<body>
-	   <div wicket:id="panel"></div>
+	<body class="nrs nrs-integration nrs-embeded">
+		<div  class="container-fluid">
+	   		<div class="dashboard-section">
+				<div  class="form-container">	
+	   				<div wicket:id="panel" class="dashboard"></div>
+	  			</div>
+	   		</div>
+	   </div>
 	</body>
 </html>

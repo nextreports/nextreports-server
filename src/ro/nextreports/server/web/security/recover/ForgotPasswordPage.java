@@ -17,8 +17,10 @@
 package ro.nextreports.server.web.security.recover;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -43,6 +45,7 @@ import ro.nextreports.server.web.common.behavior.DefaultFocusBehavior;
 import ro.nextreports.server.web.core.HomePage;
 import ro.nextreports.server.web.core.UrlUtil;
 import ro.nextreports.server.web.core.settings.LogoResource;
+import ro.nextreports.server.web.themes.ThemesManager;
 
 /**
  * @author Decebal Suiu
@@ -64,8 +67,14 @@ public class ForgotPasswordPage extends WebPage {
 	@SpringBean
 	private JavaMailSender mailSender;
 	
+	protected WebMarkupContainer cssContainer;
+	
 	public ForgotPasswordPage(PageParameters parameters) {
 		super(parameters);
+		
+		cssContainer = new WebMarkupContainer("cssPath");       
+        cssContainer.add(new AttributeModifier("href", ThemesManager.getInstance().getThemeRelativePathCss()));
+        add(cssContainer);
 		
 		add(new Image("logoImage", new LogoResource()));
 		

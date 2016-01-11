@@ -86,7 +86,7 @@ public class PivotAreaPanel extends Panel {
 				}
 				Label valueLabel = new Label("value", title);
 				if (pivotField.isNumber()) {
-					valueLabel.add(AttributeModifier.append("class", "label-info"));
+					valueLabel.add(AttributeModifier.append("class", "aggregator"));
 //				} else {
 //					valueLabel.add(AttributeModifier.append("class", "label-important"));
 				}

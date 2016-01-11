@@ -1,0 +1,53 @@
+// main: style.less
+
+.breadcrumbs {
+    border-radius: 0;
+    height: @breadcrumb-height;
+    margin: 0;
+    padding: 0 15px;
+    background: darken(@main-lightest-color,5%);
+    border-bottom: 1px solid darken(@main-lightest-color,15%);
+
+    ul {
+        display: block;
+        margin: 0;
+        padding: 0;
+        
+        li {
+            display: inline-block;
+            padding: 0;
+            font-size: 11px;
+            font-weight: 500;
+            margin: 0;
+            
+             > a{
+                 font-size: 11px;
+                 font-weight: 500;
+                 color: @link-color;
+                 display: block;
+                 padding: 3px;
+                 line-height: 20px;  
+                 
+                 &::before {
+                    color: @main-dark-color;
+                    content: "\f105";
+                    font-family: FontAwesome;
+                    padding-right: 6px;
+                }
+                 &:hover{
+                     text-decoration: none;
+                     color: @link-hover-color;
+                 }
+            }
+            &.bread-current > a{
+                color: @main-dark-color;
+                text-transform: uppercase;
+                font-size: 11px;
+                font-weight: 600;
+            }
+            &:first-child > a::before{
+                display: none;
+            }
+        }
+    }
+}

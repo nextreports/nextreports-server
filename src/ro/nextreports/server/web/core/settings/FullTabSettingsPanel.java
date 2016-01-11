@@ -23,9 +23,10 @@ public class FullTabSettingsPanel extends Panel {
 		super(id);
 				
     	final List<ITab> tabs = new ArrayList<ITab>();
-        tabs.add(new SettingsTab(SettingsTab.GENERAL_SETTINGS, "Settings.general.title", "images/settings_general.png"));    
-        tabs.add(new SettingsTab(SettingsTab.JASPER_SETTINGS, "Settings.jasper.title", "images/settings_jasper.png"));
+        tabs.add(new SettingsTab(SettingsTab.GENERAL_SETTINGS, "Settings.general.title", "images/settings_general.png")); 
         tabs.add(new SettingsTab(SettingsTab.LOOK_SETTINGS, "Settings.personalize.title", "images/settings_look.png"));
+        tabs.add(new SettingsTab(SettingsTab.DISTRIBUTION_SETTINGS, "Settings.distribution.title", "images/settings_distribution.png"));   
+        tabs.add(new SettingsTab(SettingsTab.JASPER_SETTINGS, "Settings.jasper.title", "images/settings_jasper.png"));        
         tabs.add(new SettingsTab(SettingsTab.SYNCHRONIZER_SETTINGS, "Settings.synchronizer.title", "images/settings_synchronizer.png"));
         tabs.add(new SettingsTab(SettingsTab.THREAD_POOL_SETTINGS, "Settings.thread.title", "images/settings_thread_pool.png"));
         tabs.add(new SettingsTab(SettingsTab.IFRAME_SETTINGS, "Settings.iframe.title", "images/settings_iframe.png"));
