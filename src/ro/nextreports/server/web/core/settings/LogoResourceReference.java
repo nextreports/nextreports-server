@@ -22,7 +22,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 public class LogoResourceReference extends ResourceReference {
 	
 	public LogoResourceReference() {	   
-	    super(LogoResourceReference.class, "logo.png");
+	    super(LogoResourceReference.class, "Nextreports-logo.png");
 	}
 	 
 	@Override

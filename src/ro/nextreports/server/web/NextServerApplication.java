@@ -184,8 +184,7 @@ public class NextServerApplication extends WebApplication  {
 		mountPage("/dashboards", DashboardsPage.class);
 		mountPage("/reports", ReportsPage.class);
 		
-		// need to have a static url to view logo in maintenance page
-		mountResource("/../images/logo.png", new LogoResourceReference());
+		
 
 		// load all jobs from repository to scheduler
 		addJobsInScheduler();						
@@ -205,6 +204,9 @@ public class NextServerApplication extends WebApplication  {
 			
 			// set the current color theme at startup
 			ThemesManager.getInstance().setTheme(storageService.getSettings().getColorTheme());
+			
+			// need to have a static url to view logo in maintenance page
+			mountResource("/../themes/" + storageService.getSettings().getColorTheme() +  "/images/Nextreports-logo.png", new LogoResourceReference());
 		}
 		
 		getRequestCycleListeners().add(new ExceptionRequestCycleListener());
