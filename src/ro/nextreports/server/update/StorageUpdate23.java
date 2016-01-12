@@ -8,7 +8,7 @@ import javax.jcr.RepositoryException;
 import ro.nextreports.server.StorageConstants;
 import ro.nextreports.server.web.themes.ThemesManager;
 
-// NextReports Server 8.3 changed all UI css
+// NextReports Server 9.0 changed all UI css
 // Themes are now red, blue, default (instead of green)
 // If found theme is green we change it to default
 // If user created and selected another theme we change it to default (old custom themes must be rewritten)
