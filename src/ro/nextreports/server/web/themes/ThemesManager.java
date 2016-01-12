@@ -51,10 +51,11 @@ public class ThemesManager {
 	private ThemesManager() {
 		// for new themes you must add in all other i18n files the property:
 		// Settings.personalize.theme.<theme_folder> to see it in seetings
+		// test first for path inside installer and then if not found for path inside Java IDE
 		long start = System.currentTimeMillis();
-		File themesPath = new File("./webapp/themes");
+		File themesPath = new File("./webapps/nextreports-server/themes");
 		if (!themesPath.exists()) {
-			themesPath = new File(".");
+			themesPath = new File("./webapp/themes");
 		}
 		LOG.info("Check directory '" + themesPath.getAbsolutePath() + " for themes ...");
 		String[] directories = themesPath.list(new FilenameFilter() {
