@@ -139,9 +139,8 @@ public class NextPivotDataSource extends ResultSetPivotDataSource {
         } catch (Exception e) {        						
             throw new ReportRunnerException(e);
         } finally {
-        	if (executor != null) {
-        		//@todo uncomment
-        		//executor.closeCursors();
+        	if (executor != null) {        		
+        		executor.closeCursors();
         	}
         }
 	}
