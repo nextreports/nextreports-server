@@ -53,6 +53,10 @@ public class LanguageManager {
 	public static final String COUNTRY_RUSSIAN = "RU";
 	public static final String PROPERTY_NAME_RUSSIAN = LANGUAGE_RUSSIAN + "_" + COUNTRY_RUSSIAN;
 	
+	public static final String LANGUAGE_PORTUGUESE = "pt";
+	public static final String COUNTRY_BRAZIL = "BR";
+	public static final String PROPERTY_NAME_PORTUGUESE = LANGUAGE_PORTUGUESE + "_" + COUNTRY_BRAZIL;
+	
 	public static final List<Language> languages = new ArrayList<Language>();			
 	public static final List<String> LANGUAGES = new ArrayList<String>();		
 	
@@ -66,12 +70,14 @@ public class LanguageManager {
 		languages.add(new Language(LANGUAGE_ROMANIAN, COUNTRY_ROMANIAN, PROPERTY_NAME_ROMANIAN));
 		languages.add(new Language(LANGUAGE_POLISH, COUNTRY_POLISH, PROPERTY_NAME_POLISH));
 		languages.add(new Language(LANGUAGE_RUSSIAN, COUNTRY_RUSSIAN, PROPERTY_NAME_RUSSIAN));
+		languages.add(new Language(LANGUAGE_PORTUGUESE, COUNTRY_BRAZIL, PROPERTY_NAME_PORTUGUESE));
 		
 		LANGUAGES.add(PROPERTY_NAME_ENGLISH);
 		LANGUAGES.add(PROPERTY_NAME_FRENCH);
 		LANGUAGES.add(PROPERTY_NAME_ROMANIAN);
 		LANGUAGES.add(PROPERTY_NAME_POLISH);
 		LANGUAGES.add(PROPERTY_NAME_RUSSIAN);
+		LANGUAGES.add(PROPERTY_NAME_PORTUGUESE);
 		
 		// try to see if other internatinalization filee where added by hand
 		// must have name like NextServerApplication_<lang>_<country>.properties
