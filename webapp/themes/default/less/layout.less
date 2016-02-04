@@ -56,6 +56,13 @@
             }
         }
     }
+    
+    .basicSection {
+        height: ~'calc(100vh - 110px)';
+        margin: 15px 0;
+        padding: 0;     
+        overflow: auto;
+    }
 
     .slider-menu {
         position: absolute;
@@ -201,7 +208,7 @@
             margin-top: 0;
             right: 0;
             
-            > li > a{
+            > li > a  {
                 font-size: 12px;
                 color: @general-text-color;
                 font-weight: 500;
@@ -212,6 +219,17 @@
                     outline: none;
                     color: @main-dark-color;
                 }
+            }
+            
+            // disable link inside menu (change password on demo site)
+            > li > span > em {
+                line-height: 1.42857;
+                padding: 3px 20px;
+                font-size: 12px;
+                color: @disabled-color;
+                font-weight: 500;
+                white-space: nowrap;
+                display: block;
             }
         }
         
