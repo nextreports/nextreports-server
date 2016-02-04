@@ -23,6 +23,9 @@ import org.apache.http.protocol.HTTP;
 import org.apache.wicket.util.encoding.UrlEncoder;
 import org.jasypt.digest.StringDigester;
 import org.jasypt.encryption.StringEncryptor;
+import org.jfree.util.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +35,7 @@ import ro.nextreports.server.audit.Auditor;
 import ro.nextreports.server.dao.SecurityDao;
 import ro.nextreports.server.dao.StorageDao;
 import ro.nextreports.server.domain.AclEntry;
+import ro.nextreports.server.domain.Entity;
 import ro.nextreports.server.domain.Group;
 import ro.nextreports.server.domain.User;
 import ro.nextreports.server.exception.NotFoundException;
@@ -44,6 +48,8 @@ import ro.nextreports.server.util.ServerUtil;
  * @author Decebal Suiu
  */
 public class DefaultSecurityService implements SecurityService {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(DefaultSecurityService.class);
 
 	private static final String SEPARATOR = "-sep-";
 	   
@@ -204,12 +210,18 @@ public class DefaultSecurityService implements SecurityService {
                 }
 			}
             if (aclEntry.getType() == AclEntry.GROUP_TYPE) {
-                Group group = getGroupByName(aclEntry.getName());
-                if (StorageConstants.ALL_GROUP_NAME.equals(group.getName()) || group.isMember(userName)) {
-                    if ((aclEntry.getPermissions() & permissions) == permissions) {
-                        return true;
-                    }
-                }
+            	try {
+	                Group group = getGroupByName(aclEntry.getName());
+	                if (StorageConstants.ALL_GROUP_NAME.equals(group.getName()) || group.isMember(userName)) {
+	                    if ((aclEntry.getPermissions() & permissions) == permissions) {
+	                        return true;
+	                    }
+	                }
+            	} catch (NotFoundException ex) {
+            		// group was removed from security, but it was not removed from entity permissions
+            		Entity e = storageDao.getEntityById(entityId);
+            		LOG.warn("   --> entity with path : '" + e.getPath() + "' has phantom permission for group '" + aclEntry.getName() + "'. You should remove this group permission.");
+            	}
             }
         }
 
