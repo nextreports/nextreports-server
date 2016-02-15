@@ -21,8 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.wicket.WicketRuntimeException;
-import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.injection.Injector;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -33,7 +33,7 @@ import ro.nextreports.server.service.SchedulerService;
 /**
  * @author Decebal Suiu
  */
-public class ReportJobInfoDataProvider extends SortableDataProvider<ReportJobInfo, String> {
+public class ReportJobInfoDataProvider implements IDataProvider<ReportJobInfo> {
 
 	private static final long serialVersionUID = 1L;
 

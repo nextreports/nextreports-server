@@ -23,10 +23,12 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -60,6 +62,7 @@ import ro.nextreports.server.web.common.panel.AbstractImageAjaxLinkPanel;
 import ro.nextreports.server.web.common.table.BaseTable;
 import ro.nextreports.server.web.common.table.BooleanImagePropertyColumn;
 import ro.nextreports.server.web.common.table.DateColumn;
+import ro.nextreports.server.web.common.table.SortableDataAdapter;
 import ro.nextreports.server.web.core.table.NextRunDateColumn;
 import ro.nextreports.server.web.report.RunHistoryPanel;
 import ro.nextreports.server.web.schedule.ActiveSchedulerJobDataProvider;
@@ -114,11 +117,15 @@ public class MonitorPanel extends Panel {
     }
 
     protected DataTable<ReportJobInfo, String> createJobsTable(ReportJobInfoDataProvider dataProvider) {
-        return new BaseTable<ReportJobInfo>("jobsTable", createJobsTableColumns(), dataProvider, Integer.MAX_VALUE);
+    	SortableDataProvider<ReportJobInfo, String> sortableDataProvider = new SortableDataAdapter<ReportJobInfo>(dataProvider);
+    	sortableDataProvider.setSort("startDate", SortOrder.ASCENDING);
+        return new BaseTable<ReportJobInfo>("jobsTable", createJobsTableColumns(), sortableDataProvider, Integer.MAX_VALUE);
     }
 
     protected DataTable<SchedulerJob, String> createSchedulerJobsTable(ActiveSchedulerJobDataProvider dataProvider) {
-        return new BaseTable<SchedulerJob>("schedulerJobsTable", createActiveSchedulerJobsTableColumns(), dataProvider, Integer.MAX_VALUE);
+    	SortableDataProvider<SchedulerJob, String> sortableDataProvider = new SortableDataAdapter<SchedulerJob>(dataProvider);
+    	sortableDataProvider.setSort("nextRun", SortOrder.ASCENDING);
+        return new BaseTable<SchedulerJob>("schedulerJobsTable", createActiveSchedulerJobsTableColumns(), sortableDataProvider, Integer.MAX_VALUE);
     }
 
     protected List<IColumn<ReportJobInfo, String>> createJobsTableColumns() {

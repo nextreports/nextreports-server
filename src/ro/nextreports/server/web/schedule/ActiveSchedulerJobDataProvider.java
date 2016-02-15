@@ -20,8 +20,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.injection.Injector;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -34,7 +34,7 @@ import ro.nextreports.server.service.SchedulerService;
  * Date: 11-Jun-2010
  * Time: 11:54:39
  */
-public class ActiveSchedulerJobDataProvider extends SortableDataProvider<SchedulerJob, String> {
+public class ActiveSchedulerJobDataProvider implements IDataProvider<SchedulerJob> {
 
 	private static final long serialVersionUID = 1L;
 
