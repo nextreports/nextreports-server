@@ -28,26 +28,33 @@ import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 /**
  * Provides a mount strategy that drops the version number from
  * stateful page urls.
+ * 
+ * From wicket version 6.13+ ajax did not work from bokmarkablke pages when using this mapper and some changes were added
+ * see http://stackoverflow.com/questions/8602489/delete-version-number-in-url
  */
 public class NoVersionMountMapper extends MountedMapper {
 
-    public NoVersionMountMapper(String path, Class<? extends IRequestablePage> pageClass) {
-        super(path, pageClass, new PageParametersEncoder());
+	public NoVersionMountMapper(final Class<? extends IRequestablePage> pageClass) {
+        this("/", pageClass);
+    }
+
+    public NoVersionMountMapper(String mountPath, final Class<? extends IRequestablePage> pageClass) {
+        super(mountPath, pageClass, new PageParametersEncoder());
     }
 
     @Override
     protected void encodePageComponentInfo(Url url, PageComponentInfo info) {
-        // do nothing so that component info does not get rendered in url
+        //Does nothing
     }
 
     @Override
     public Url mapHandler(IRequestHandler requestHandler) {
-        if (requestHandler instanceof ListenerInterfaceRequestHandler ||
-                requestHandler instanceof BookmarkableListenerInterfaceRequestHandler) {
+        if (requestHandler instanceof ListenerInterfaceRequestHandler || 
+        	requestHandler instanceof BookmarkableListenerInterfaceRequestHandler) {
             return null;
+        } else {
+            return super.mapHandler(requestHandler);
         }
-
-        return super.mapHandler(requestHandler);
     }
 
 }
