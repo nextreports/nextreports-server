@@ -57,6 +57,10 @@ public class ThemesManager {
 		if (!themesPath.exists()) {
 			themesPath = new File("./webapp/themes");
 		}
+		// test for themes path when we use the war inside another webserver
+		if (!themesPath.exists()) {
+			themesPath = new File(NextServerApplication.get().getServletContext().getRealPath("/") + "/themes");			
+		}
 		LOG.info("Check directory '" + themesPath.getAbsolutePath() + " for themes ...");
 		String[] directories = themesPath.list(new FilenameFilter() {
 			  @Override
