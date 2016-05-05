@@ -113,7 +113,7 @@ public class ThemesManager {
 
 		String file = "tick_" + theme + ".png";
 		ServletContext context = application.getServletContext();
-    	File imgFile = new File(context.getRealPath("images/" + file));
+    	File imgFile = new File(context.getRealPath("/images/" + file));
     	if (imgFile.exists()) {
     		return file;
     	} else {
