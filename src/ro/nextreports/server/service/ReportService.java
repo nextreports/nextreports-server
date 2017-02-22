@@ -75,6 +75,8 @@ public interface ReportService {
     
     public List<RunReportHistory> getRunHistoryForRange(String reportPath, DateRange range) throws NotFoundException;
     
+    public long deleteRunHistoryForRange(String reportPath, DateRange range) throws NotFoundException;
+    
     public List<ReportRuntimeTemplate> getReportTemplates(String reportPath) throws NotFoundException;
     
     public List<ReportRuntimeTemplate> getReportTemplatesById(String reportId) throws NotFoundException;

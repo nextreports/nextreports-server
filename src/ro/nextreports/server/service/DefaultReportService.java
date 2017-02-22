@@ -475,6 +475,11 @@ public class DefaultReportService implements ReportService {
         return storageDao.getRunHistoryForRange(reportPath, range);
     }
     
+    @Transactional
+    public long deleteRunHistoryForRange(String reportPath, DateRange range) throws NotFoundException {
+        return storageDao.deleteRunHistoryForRange(reportPath, range);
+    }
+    
     @Transactional(readOnly = true)
     @Secured("AFTER_ACL_COLLECTION_READ")
     public List<ReportRuntimeTemplate> getReportTemplates(String reportPath) throws NotFoundException {

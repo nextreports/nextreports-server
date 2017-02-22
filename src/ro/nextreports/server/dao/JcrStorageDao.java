@@ -887,6 +887,26 @@ public class JcrStorageDao extends AbstractJcrDao implements StorageDao, Initial
 
         return list;
     }
+    
+    public long deleteRunHistoryForRange(String reportPath, DateRange range) throws NotFoundException {
+        if (reportPath == null) {
+            reportPath = StorageConstants.REPORTS_ROOT;
+        }
+        
+        checkPath(reportPath);
+        
+        Entity[] entities = getEntitiesByClassNameForRange(reportPath, RunReportHistory.class.getName(), range);
+        long deleted= 0;
+        for (Entity entity : entities) {
+        	try {
+        		removeEntityById(entity.getId());
+        		deleted ++;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+        }
+        return deleted;
+    }
 
     public List<RunReportHistory> getRunHistory() {
         Entity[] entities;

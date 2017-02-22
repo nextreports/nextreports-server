@@ -30,7 +30,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.datetime.StyleDateConverter;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
@@ -93,73 +92,72 @@ import ro.nextreports.server.web.common.table.ImageLinkPropertyColumn;
 import ro.nextreports.server.web.common.table.SortableDataAdapter;
 import ro.nextreports.server.web.core.BasePage;
 import ro.nextreports.server.web.core.EntityBrowserPanel;
-import ro.nextreports.server.web.report.RunHistoryPanel.CheckBoxHeaderPanel;
-import ro.nextreports.server.web.report.RunHistoryPanel.CheckBoxPanel;
 
 //
 public class RunHistoryPanel extends Panel {
-	
-	private static String localDatePattern = getShortLocaleDatePattern(); 
+
+	private static String localDatePattern = getShortLocaleDatePattern();
 
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-    private ReportService reportService;
+	private ReportService reportService;
 
-    @SpringBean
-    private StorageService storageService;
+	@SpringBean
+	private StorageService storageService;
 
-    @SpringBean
-    private SecurityService securityService;
+	@SpringBean
+	private SecurityService securityService;
 
-    private RunReportHistoryDataProvider runHistoryDataProvider;
-    private DataTable<RunReportHistory, String> runHistoryTable;
+	private RunReportHistoryDataProvider runHistoryDataProvider;
+	private DataTable<RunReportHistory, String> runHistoryTable;
 
-    private CheckGroup<RunReportHistory> group;
-    private Date time;   
-    private Date tillTime;
-    private DateField tillTimeField;
-    private FeedbackPanel feedbackPanel;
-    
-    private static String DAY_TYPE = "Day";
-    private static String FROM_DAY_TYPE = "DayRange";
-    
-    private String type = DAY_TYPE;    
-    
-    private int rowsPerPage = 10;
+	private CheckGroup<RunReportHistory> group;
+	private Date time;
+	private Date tillTime;
+	private DateField tillTimeField;
+	private FeedbackPanel feedbackPanel;
 
-    private transient List<RunReportHistory> marked = new ArrayList<RunReportHistory>();
+	private static String DAY_TYPE = "Day";
+	private static String FROM_DAY_TYPE = "DayRange";
 
-    @SuppressWarnings("unchecked")
+	private String type = DAY_TYPE;
+
+	private int rowsPerPage = 10;
+	private String reportPath = null;
+
+	private transient List<RunReportHistory> marked = new ArrayList<RunReportHistory>();
+
+	@SuppressWarnings("unchecked")
 	public RunHistoryPanel(String id, final Report report) {
-        super(id);                
-                       
-        group = new CheckGroup<RunReportHistory>("group", marked);
+		super(id);
 
-        String reportPath = null;
-        if (report != null) {
-            reportPath = report.getPath();
-        }
-        runHistoryDataProvider = new RunReportHistoryDataProvider(reportPath);
-        runHistoryTable = createRunHistoryTable(runHistoryDataProvider);
-        runHistoryTable.setOutputMarkupId(true);
+		group = new CheckGroup<RunReportHistory>("group", marked);
 
-        /*
-        int updateInterval = NextServerApplication.get().getConfiguration().getInt("ui.updateInterval", 0);
-        if (updateInterval > 0) {
-        	runHistoryTable.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(updateInterval)));
-        }
-        */
+		if (report != null) {
+			reportPath = report.getPath();
+		}
+		runHistoryDataProvider = new RunReportHistoryDataProvider(reportPath);
+		runHistoryTable = createRunHistoryTable(runHistoryDataProvider);
+		runHistoryTable.setOutputMarkupId(true);
 
-        Form<RunReportHistory> form = new Form<RunReportHistory>("form");     
-        
-        feedbackPanel = new FeedbackPanel("feedback");
-        feedbackPanel.setOutputMarkupId(true);
-        form.add(feedbackPanel);
-        
-        List<String> types = new ArrayList<String>();
+		/*
+		 * int updateInterval =
+		 * NextServerApplication.get().getConfiguration().getInt(
+		 * "ui.updateInterval", 0); if (updateInterval > 0) {
+		 * runHistoryTable.add(new
+		 * AjaxSelfUpdatingTimerBehavior(Duration.seconds(updateInterval))); }
+		 */
+
+		Form<RunReportHistory> form = new Form<RunReportHistory>("form");
+
+		feedbackPanel = new FeedbackPanel("feedback");
+		feedbackPanel.setOutputMarkupId(true);
+		form.add(feedbackPanel);
+
+		List<String> types = new ArrayList<String>();
 		types.add(DAY_TYPE);
-		types.add(FROM_DAY_TYPE);		
+		types.add(FROM_DAY_TYPE);
 		IChoiceRenderer<String> renderer = new ChoiceRenderer<String>() {
 
 			@Override
@@ -171,198 +169,241 @@ public class RunHistoryPanel extends Panel {
 			public String getIdValue(String object, int index) {
 				return object;
 			}
-			
+
 		};
-		DropDownChoice<String> typeDropDownChoice = new DropDownChoice<String>("type", new PropertyModel<String>(this, "type"), types, renderer);
+		DropDownChoice<String> typeDropDownChoice = new DropDownChoice<String>("type",
+				new PropertyModel<String>(this, "type"), types, renderer);
 		typeDropDownChoice.setOutputMarkupPlaceholderTag(true);
 		typeDropDownChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onUpdate(AjaxRequestTarget target) {				
-				setDateRange(target);            	
+			protected void onUpdate(AjaxRequestTarget target) {
+				setDateRange(target);
 			}
-			
+
 		});
 		form.add(typeDropDownChoice);
-        
-        time = new Date();
-        DateField timeField = new DateField("time", new PropertyModel(this, "time")) {
-        	
-            protected DateTextField newDateTextField(String s, PropertyModel propertyModel) {
-            	
-                final DateTextField dateField = DateTextField.withConverter(s, propertyModel,new StyleDateConverter("S-", false));
-                dateField.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-                    protected void onUpdate(AjaxRequestTarget target) {
-                      // @todo wicket 1.5 does not update model for DateField and DateTimeField
-                      // https://issues.apache.org/jira/browse/WICKET-4496	
-                      // use this as an workaround	
-                      time = (Date)dateField.getDefaultModelObject();
-                      
-                      setDateRange(target);                  	  
-                   }
-                });   
-                dateField.setLabel(new Model<String>(getString("ActionContributor.RunHistory.day")));                
-                return dateField;
-            }  
-            
-            protected DatePicker newDatePicker() {
-        		return new DatePicker() {
-        			private static final long serialVersionUID = 1L;
 
-        			@Override
-        			protected void configure(final Map<String, Object> widgetProperties,
-        				final IHeaderResponse response, final Map<String, Object> initVariables) {
-        				super.configure(widgetProperties, response, initVariables);        				
-        			}
+		time = new Date();
+		DateField timeField = new DateField("time", new PropertyModel(this, "time")) {
+
+			protected DateTextField newDateTextField(String s, PropertyModel propertyModel) {
+
+				final DateTextField dateField = DateTextField.withConverter(s, propertyModel,
+						new StyleDateConverter("S-", false));
+				dateField.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+					protected void onUpdate(AjaxRequestTarget target) {
+						// @todo wicket 1.5 does not update model for DateField
+						// and DateTimeField
+						// https://issues.apache.org/jira/browse/WICKET-4496
+						// use this as an workaround
+						time = (Date) dateField.getDefaultModelObject();
+
+						setDateRange(target);
+					}
+				});
+				dateField.setLabel(new Model<String>(getString("ActionContributor.RunHistory.day")));
+				return dateField;
+			}
+
+			protected DatePicker newDatePicker() {
+				return new DatePicker() {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void configure(final Map<String, Object> widgetProperties, final IHeaderResponse response,
+							final Map<String, Object> initVariables) {
+						super.configure(widgetProperties, response, initVariables);
+					}
 
 					@Override
 					protected boolean enableMonthYearSelection() {
 						return true;
-					}        			        			
-        		};
-        	}
-        };
-        timeField.setRequired(true);
-        timeField.add(new AttributeModifier("class", "timeField"));
-        form.add(timeField);    
-        
-        tillTime = new Date();
-        tillTimeField = new DateField("tillTime", new PropertyModel(this, "tillTime")) {        	
-            protected DateTextField newDateTextField(String s, PropertyModel propertyModel) {
-                final DateTextField dateField = DateTextField.withConverter(s, propertyModel, new StyleDateConverter("S-", false));
-                dateField.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-                    protected void onUpdate(AjaxRequestTarget target) {
-                      // @todo wicket 1.5 does not update model for DateField and DateTimeField
-                      // https://issues.apache.org/jira/browse/WICKET-4496		
-                      // use this as an workaround                    	
-                      tillTime = (Date)dateField.getDefaultModelObject();
-                      
-                      setDateRange(target);                  	  
-                   }
-                });   
-                dateField.setLabel(new Model<String>(getString("ActionContributor.RunHistory.TillDay")));                
-                return dateField;
-            }     
-            
-            protected DatePicker newDatePicker() {
-        		return new DatePicker() {
-        			private static final long serialVersionUID = 1L;
+					}
+				};
+			}
+		};
+		timeField.setRequired(true);
+		timeField.add(new AttributeModifier("class", "timeField"));
+		form.add(timeField);
 
-        			@Override
-        			protected void configure(final Map<String, Object> widgetProperties,
-        				final IHeaderResponse response, final Map<String, Object> initVariables) {
-        				super.configure(widgetProperties, response, initVariables);        				
-        			}
+		tillTime = new Date();
+		tillTimeField = new DateField("tillTime", new PropertyModel(this, "tillTime")) {
+			protected DateTextField newDateTextField(String s, PropertyModel propertyModel) {
+				final DateTextField dateField = DateTextField.withConverter(s, propertyModel,
+						new StyleDateConverter("S-", false));
+				dateField.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+					protected void onUpdate(AjaxRequestTarget target) {
+						// @todo wicket 1.5 does not update model for DateField
+						// and DateTimeField
+						// https://issues.apache.org/jira/browse/WICKET-4496
+						// use this as an workaround
+						tillTime = (Date) dateField.getDefaultModelObject();
+
+						setDateRange(target);
+					}
+				});
+				dateField.setLabel(new Model<String>(getString("ActionContributor.RunHistory.TillDay")));
+				return dateField;
+			}
+
+			protected DatePicker newDatePicker() {
+				return new DatePicker() {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void configure(final Map<String, Object> widgetProperties, final IHeaderResponse response,
+							final Map<String, Object> initVariables) {
+						super.configure(widgetProperties, response, initVariables);
+					}
 
 					@Override
 					protected boolean enableMonthYearSelection() {
 						return true;
-					}        			        			
-        		};
-        	}
-        };
-        tillTimeField.setVisible(false);   
-        tillTimeField.setOutputMarkupId(true);
-        tillTimeField.setOutputMarkupPlaceholderTag(true);
-        tillTimeField.add(new AttributeModifier("class", "timeField"));
-        form.add(tillTimeField);    
+					}
+				};
+			}
+		};
+		tillTimeField.setVisible(false);
+		tillTimeField.setOutputMarkupId(true);
+		tillTimeField.setOutputMarkupPlaceholderTag(true);
+		tillTimeField.add(new AttributeModifier("class", "timeField"));
+		form.add(tillTimeField);
 
-        group.add(runHistoryTable);
-        form.add(group);
-        
-        Label rowsLabel = new Label("rowsLabel", getString("ActionContributor.RunHistory.rows"));
-        form.add(rowsLabel);
-        TextField<Integer> rowsTextField = new TextField<Integer>("rows", new PropertyModel(this, "rowsPerPage"));
-        rowsTextField.setRequired(true);
-        rowsTextField.add(RangeValidator.minimum(5));
-        rowsTextField.add(RangeValidator.maximum(1000));
-        rowsTextField.setLabel(Model.of(getString("ActionContributor.RunHistory.rows")));
-        form.add(rowsTextField);
-        
-        AjaxButton rowsLink = new AjaxButton("rowsLink"){         
-            
-            @Override
+		group.add(runHistoryTable);
+		form.add(group);
+
+		Label rowsLabel = new Label("rowsLabel", getString("ActionContributor.RunHistory.rows"));
+		form.add(rowsLabel);
+		TextField<Integer> rowsTextField = new TextField<Integer>("rows", new PropertyModel(this, "rowsPerPage"));
+		rowsTextField.setRequired(true);
+		rowsTextField.add(RangeValidator.minimum(5));
+		rowsTextField.add(RangeValidator.maximum(1000));
+		rowsTextField.setLabel(Model.of(getString("ActionContributor.RunHistory.rows")));
+		form.add(rowsTextField);
+
+		AjaxButton rowsLink = new AjaxButton("rowsLink") {
+
+			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				target.add(form);
 			}
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {						
-				runHistoryTable.setItemsPerPage(rowsPerPage);						
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				runHistoryTable.setItemsPerPage(rowsPerPage);
 				target.add(feedbackPanel);
-                target.add(runHistoryTable);    				
+				target.add(runHistoryTable);
 			}
-        };        
-        form.add(rowsLink);        
-        
+		};
+		form.add(rowsLink);
 
-        AjaxSubmitConfirmLink submitLink = new AjaxSubmitConfirmLink("deleteLink", getString("deleteEntities")) {
+		AjaxSubmitConfirmLink deleteLink = new AjaxSubmitConfirmLink("deleteLink", getString("deleteEntities")) {
 
 			private static final long serialVersionUID = 1L;
 
 			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				if (marked == null) {				
+				if (marked == null) {
 					return;
 				}
-                for (RunReportHistory h : marked) {
-                    try {
-                        storageService.removeEntityById(h.getId());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        add(new AlertBehavior(e.getMessage()));
-                        target.add(this);
-                    }
-                }
-                if (marked.size() > 0) {
-                    target.add(runHistoryTable);
-                }
-            }
+				for (RunReportHistory h : marked) {
+					try {
+						storageService.removeEntityById(h.getId());
+					} catch (Exception e) {
+						e.printStackTrace();
+						add(new AlertBehavior(e.getMessage()));
+						target.add(this);
+					}
+				}
+				if (marked.size() > 0) {
+					target.add(runHistoryTable);
+				}
+			}
 
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				target.add(form);
 			}
 
-        };
-        form.add(submitLink);
+		};
+		form.add(deleteLink);
 
-        WebMarkupContainer buttonsPanel = new WebMarkupContainer("buttonsPanel") {
+		AjaxSubmitConfirmLink deleteByRangeLink = new AjaxSubmitConfirmLink("deleteRangeLink",
+				getString("deleteEntities")) {
+			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
+
+				try {
+					DateRange range = null;
+					if (DAY_TYPE.equals(type)) {
+						tillTime = new Date();
+						range = new DateRange(DateUtil.floor(time), DateUtil.ceil(time));
+					} else {
+						if (DateUtil.after(time, tillTime)) {
+							error(getString("ActionContributor.RunHistory.rangeInvalid"));
+							target.add(feedbackPanel);
+							target.add(tillTimeField);
+							return;
+						}
+						range = new DateRange(DateUtil.floor(time), DateUtil.ceil(tillTime));
+					}
+					long deleted = reportService.deleteRunHistoryForRange(reportPath, range);
+
+					info(getString("ActionContributor.RunHistory.deleteByRangeDone") + " {" + deleted + "}");
+
+					target.add(this);
+					target.add(runHistoryTable);
+				} catch (Exception e) {
+					e.printStackTrace();
+					add(new AlertBehavior(e.getMessage()));
+					target.add(this);
+				}
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				target.add(form);
+			}
+
+		};
+		form.add(deleteByRangeLink);
+
+		WebMarkupContainer buttonsPanel = new WebMarkupContainer("buttonsPanel") {
 
 			@Override
 			public boolean isVisible() {
 				return (report != null);
 			}
-        	
-        };
-        if (NextServerSession.get().isDemo()) {
-            submitLink.setVisible(false);            
-        }
-        
-        buttonsPanel.add(new AjaxLink("cancel") {
-        	
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-//                if (ActionUtil.isFromSearch()) {
-//                    setResponsePage(new SearchEntityPage(null));
-//                } else {
-//                    setResponsePage(HomePage.class);
-//                }
-                EntityBrowserPanel panel = findParent(EntityBrowserPanel.class);
-                panel.backwardWorkspace(target);
-            }
-            
-        });
-        form.add(buttonsPanel);
 
-        add(form);
-    }
-    
-    private void setDateRange(AjaxRequestTarget target) {
-    	if (DAY_TYPE.equals(type))  {
-    		tillTime = new Date();
-    		tillTimeField.setVisible(false);
+		};
+		if (NextServerSession.get().isDemo()) {
+			deleteLink.setVisible(false);
+		}
+
+		buttonsPanel.add(new AjaxLink("cancel") {
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				// if (ActionUtil.isFromSearch()) {
+				// setResponsePage(new SearchEntityPage(null));
+				// } else {
+				// setResponsePage(HomePage.class);
+				// }
+				EntityBrowserPanel panel = findParent(EntityBrowserPanel.class);
+				panel.backwardWorkspace(target);
+			}
+
+		});
+		form.add(buttonsPanel);
+
+		add(form);
+	}
+
+	private void setDateRange(AjaxRequestTarget target) {
+		if (DAY_TYPE.equals(type)) {
+			tillTime = new Date();
+			tillTimeField.setVisible(false);
 			runHistoryDataProvider.setDateRange(new DateRange(DateUtil.floor(time), DateUtil.ceil(time)));
 		} else {
 			tillTimeField.setVisible(true);
@@ -371,212 +412,231 @@ public class RunHistoryPanel extends Panel {
 				target.add(feedbackPanel);
 				target.add(tillTimeField);
 				return;
-			} 
-			runHistoryDataProvider.setDateRange(new DateRange(DateUtil.floor(time),  DateUtil.ceil(tillTime)));			
+			}
+			runHistoryDataProvider.setDateRange(new DateRange(DateUtil.floor(time), DateUtil.ceil(tillTime)));
 		}
-    	target.add(tillTimeField);
-    	target.add(runHistoryTable);
-    	target.add(feedbackPanel);
-    }
+		target.add(tillTimeField);
+		target.add(runHistoryTable);
+		target.add(feedbackPanel);
+	}
 
 	public DataTable<RunReportHistory, String> getRunHistoryTable() {
 		return runHistoryTable;
 	}
 
 	protected DataTable<RunReportHistory, String> createRunHistoryTable(RunReportHistoryDataProvider dataProvider) {
-    	SortableDataProvider<RunReportHistory, String> sortableDataProvider = new SortableDataAdapter<RunReportHistory>(dataProvider);
-    	sortableDataProvider.setSort("endDate", SortOrder.DESCENDING);
-        return new BaseTable<RunReportHistory>("runHistoryTable", createHistoryTableColumns(), sortableDataProvider, rowsPerPage);
-    }
+		SortableDataProvider<RunReportHistory, String> sortableDataProvider = new SortableDataAdapter<RunReportHistory>(
+				dataProvider);
+		sortableDataProvider.setSort("endDate", SortOrder.DESCENDING);
+		return new BaseTable<RunReportHistory>("runHistoryTable", createHistoryTableColumns(), sortableDataProvider,
+				rowsPerPage);
+	}
 
-    protected List<IColumn<RunReportHistory, String>> createHistoryTableColumns() {
-        List<IColumn<RunReportHistory, String>> columns = new ArrayList<IColumn<RunReportHistory, String>>();
+	protected List<IColumn<RunReportHistory, String>> createHistoryTableColumns() {
+		List<IColumn<RunReportHistory, String>> columns = new ArrayList<IColumn<RunReportHistory, String>>();
 
-        columns.add(new AbstractColumn<RunReportHistory, String>(new Model<String>(getString("ActionContributor.EditParameters.parameterSelect"))) {
+		columns.add(new AbstractColumn<RunReportHistory, String>(
+				new Model<String>(getString("ActionContributor.EditParameters.parameterSelect"))) {
 
-            public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId, IModel<RunReportHistory> rowModel) {
-                try {
-                    if (securityService.hasPermissionsById(ServerUtil.getUsername(),
-                            PermissionUtil.getDelete(), rowModel.getObject().getId())) {
-                        item.add(new CheckBoxPanel(componentId, rowModel, item));
-                    } else {
-                        item.add(new Label(componentId));
-                    }
-                    item.add(new AttributeModifier("width", "30px"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public Component getHeader(String s) {
-                return new CheckBoxHeaderPanel(s);
-            }
-
-        });
-
-        columns.add(new PropertyColumn<RunReportHistory, String>(new Model<String>(getString("Report")), "path", "path") {
-
-            @Override
-			public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId, IModel<RunReportHistory> rowModel) {
-                String path = rowModel.getObject().getPath();                                
-                String relativePath = path.substring(StorageConstants.REPORTS_ROOT.length(), path.indexOf("/runHistory"));
-                String name = StorageUtil.getName(relativePath);
-                Label label = new Label(componentId, name);
-                label.add(new SimpleTooltipBehavior(relativePath));
-				item.add(label);
+			public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId,
+					IModel<RunReportHistory> rowModel) {
+				try {
+					if (securityService.hasPermissionsById(ServerUtil.getUsername(), PermissionUtil.getDelete(),
+							rowModel.getObject().getId())) {
+						item.add(new CheckBoxPanel(componentId, rowModel, item));
+					} else {
+						item.add(new Label(componentId));
+					}
+					item.add(new AttributeModifier("width", "30px"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 
-        });
+			@Override
+			public Component getHeader(String s) {
+				return new CheckBoxHeaderPanel(s);
+			}
 
-        columns.add(new AbstractColumn<RunReportHistory, String>(new Model<String>(getString("ActionContributor.DataSource.url"))) {
+		});
 
-            public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId,
-                                     final IModel<RunReportHistory> rowModel) {
-                String url = rowModel.getObject().getUrl();
-                if ((url == null) || url.equals("")) {
-                    item.add(new Label(componentId));
-                    return;
-                } else if (url.equals(ReportConstants.ETL_FORMAT)) {
-                	item.add(new Label(componentId, Model.of(url)));
-                    return;
-                }
+		columns.add(
+				new PropertyColumn<RunReportHistory, String>(new Model<String>(getString("Report")), "path", "path") {
 
-                // dynamic url
-                String fileName = url.substring(url.lastIndexOf("/") + 1);
-                String dynamicUrl = reportService.getReportURL(fileName);
-                item.add(new SimpleLink(componentId, dynamicUrl, getString("view"), true));
-            }
+					@Override
+					public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId,
+							IModel<RunReportHistory> rowModel) {
+						String path = rowModel.getObject().getPath();
+						String relativePath = path.substring(StorageConstants.REPORTS_ROOT.length(),
+								path.indexOf("/runHistory"));
+						String name = StorageUtil.getName(relativePath);
+						Label label = new Label(componentId, name);
+						label.add(new SimpleTooltipBehavior(relativePath));
+						item.add(label);
+					}
 
-        });
+				});
 
-        columns.add(new PropertyColumn<RunReportHistory, String>(new Model<String>(getString("DashboardNavigationPanel.owner")), "runnerId", "runnerId") {
+		columns.add(new AbstractColumn<RunReportHistory, String>(
+				new Model<String>(getString("ActionContributor.DataSource.url"))) {
 
-            @Override
-            protected IModel<?> createLabelModel(IModel<RunReportHistory> rowModel) {
-                try {
-                    // TODO optimization (getNameByUUID - no entity creation)
-                    Entity entity = storageService.getEntityById(rowModel.getObject().getRunnerId());
-                    String owner;
-                    if (entity instanceof User) {
-                        owner = entity.getName();
-                    } else {
-                        //SchedulerJob
-                        owner = entity.getCreatedBy();
-                    }
-                    return new Model<String>(owner);
-                } catch (NotFoundException ex) {
-                    // if user or scheduler was deleted
-                    return new Model<String>();
-                }
-            }
+			public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId,
+					final IModel<RunReportHistory> rowModel) {
+				String url = rowModel.getObject().getUrl();
+				if ((url == null) || url.equals("")) {
+					item.add(new Label(componentId));
+					return;
+				} else if (url.equals(ReportConstants.ETL_FORMAT)) {
+					item.add(new Label(componentId, Model.of(url)));
+					return;
+				}
 
-        });
-        columns.add(new PropertyColumn<RunReportHistory, String>(new Model<String>(getString("ActionContributor.RunHistory.type")), "runnerType", "runnerType") {
-        	@Override
-            public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId, IModel<RunReportHistory> rowModel) {                
-                item.add(new Label(componentId, getString("MonitorPanel.runnerType." + rowModel.getObject().getRunnerType())));
-            }
-        });
-        columns.add(new DateColumn<RunReportHistory>(new Model<String>(getString("startDate")), "startDate", "startDate"));
-        columns.add(new PropertyColumn<RunReportHistory, String>(new Model<String>(getString("duration")), "duration", "duration") {
+				// dynamic url
+				String fileName = url.substring(url.lastIndexOf("/") + 1);
+				String dynamicUrl = reportService.getReportURL(fileName);
+				item.add(new SimpleLink(componentId, dynamicUrl, getString("view"), true));
+			}
 
-            @Override
-            public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId, IModel<RunReportHistory> rowModel) {
-                super.populateItem(item, componentId, rowModel);
-                item.add(new AttributeModifier("width", "70px"));
-            }
+		});
 
-            @Override
-            protected IModel<?> createLabelModel(IModel<RunReportHistory> rowModel) {
-                int runTime = rowModel.getObject().getDuration();
-                String text = "";
-                if (runTime >= 0) {
-                    DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm:ss").withZone(DateTimeZone.UTC);
-                    text = formatter.print(runTime * 1000);
-                }
+		columns.add(new PropertyColumn<RunReportHistory, String>(
+				new Model<String>(getString("DashboardNavigationPanel.owner")), "runnerId", "runnerId") {
 
-                return new Model<String>(text);
-            }
+			@Override
+			protected IModel<?> createLabelModel(IModel<RunReportHistory> rowModel) {
+				try {
+					// TODO optimization (getNameByUUID - no entity creation)
+					Entity entity = storageService.getEntityById(rowModel.getObject().getRunnerId());
+					String owner;
+					if (entity instanceof User) {
+						owner = entity.getName();
+					} else {
+						// SchedulerJob
+						owner = entity.getCreatedBy();
+					}
+					return new Model<String>(owner);
+				} catch (NotFoundException ex) {
+					// if user or scheduler was deleted
+					return new Model<String>();
+				}
+			}
 
-        });
-        columns.add(new DateColumn<RunReportHistory>(new Model<String>(getString("endDate")), "endDate", "endDate"));
-        
-        columns.add(new ImageLinkPropertyColumn<RunReportHistory>(new Model<String>(getString("Query"))) {
+		});
+		columns.add(new PropertyColumn<RunReportHistory, String>(
+				new Model<String>(getString("ActionContributor.RunHistory.type")), "runnerType", "runnerType") {
+			@Override
+			public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId,
+					IModel<RunReportHistory> rowModel) {
+				item.add(new Label(componentId,
+						getString("MonitorPanel.runnerType." + rowModel.getObject().getRunnerType())));
+			}
+		});
+		columns.add(
+				new DateColumn<RunReportHistory>(new Model<String>(getString("startDate")), "startDate", "startDate"));
+		columns.add(new PropertyColumn<RunReportHistory, String>(new Model<String>(getString("duration")), "duration",
+				"duration") {
 
-            @Override
-            public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId, IModel<RunReportHistory> rowModel) {
-                super.populateItem(item, componentId, rowModel);
-                item.add(new AttributeModifier("width", "50px"));
-                item.add(new SimpleTooltipBehavior(getString("Query")));
-            }
+			@Override
+			public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId,
+					IModel<RunReportHistory> rowModel) {
+				super.populateItem(item, componentId, rowModel);
+				item.add(new AttributeModifier("width", "70px"));
+			}
 
-            @Override
-            public void onImageClick(RunReportHistory runHistory, AjaxRequestTarget target) {
-                ModalWindow dialog = findParent(BasePage.class).getDialog();
-                dialog.setTitle(getString("Query"));
-                dialog.setInitialWidth(600);
-                dialog.setInitialHeight(400);                
-                dialog.setContent(new RunHistoryQueryPanel(dialog.getContentId(), runHistory));
-                dialog.show(target);
-            }
-            
-            @Override
-            public String getLinkImageName() {
-            	return "sql.png";
-            }
+			@Override
+			protected IModel<?> createLabelModel(IModel<RunReportHistory> rowModel) {
+				int runTime = rowModel.getObject().getDuration();
+				String text = "";
+				if (runTime >= 0) {
+					DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm:ss").withZone(DateTimeZone.UTC);
+					text = formatter.print(runTime * 1000);
+				}
 
-        });
-        
-        columns.add(new BooleanImageLinkPropertyColumn<RunReportHistory>(new Model<String>(getString("success")), "success", "success") {
+				return new Model<String>(text);
+			}
 
-            @Override
-            public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId, IModel<RunReportHistory> rowModel) {
-                super.populateItem(item, componentId, rowModel);
-                item.add(new AttributeModifier("width", "50px"));
-                item.add(new SimpleTooltipBehavior(getString("details")));
-            }
+		});
+		columns.add(new DateColumn<RunReportHistory>(new Model<String>(getString("endDate")), "endDate", "endDate"));
 
-            @Override
-            public void onImageClick(RunReportHistory runHistory, AjaxRequestTarget target) {
-                ModalWindow dialog = findParent(BasePage.class).getDialog();
-                dialog.setTitle(getString("details"));
-                dialog.setInitialWidth(350);
-                dialog.setInitialHeight(200);                
-                dialog.setContent(new RunHistoryDetailPanel(dialog.getContentId(), runHistory));
-                dialog.show(target);
-            }
+		columns.add(new ImageLinkPropertyColumn<RunReportHistory>(new Model<String>(getString("Query"))) {
 
-        });
+			@Override
+			public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId,
+					IModel<RunReportHistory> rowModel) {
+				super.populateItem(item, componentId, rowModel);
+				item.add(new AttributeModifier("width", "50px"));
+				item.add(new SimpleTooltipBehavior(getString("Query")));
+			}
 
-        return columns;
-    }
+			@Override
+			public void onImageClick(RunReportHistory runHistory, AjaxRequestTarget target) {
+				ModalWindow dialog = findParent(BasePage.class).getDialog();
+				dialog.setTitle(getString("Query"));
+				dialog.setInitialWidth(600);
+				dialog.setInitialHeight(400);
+				dialog.setContent(new RunHistoryQueryPanel(dialog.getContentId(), runHistory));
+				dialog.show(target);
+			}
 
-    class CheckBoxPanel extends Panel {
-    	
-        public CheckBoxPanel(String id, IModel<RunReportHistory> model, final Item<ICellPopulator<RunReportHistory>> item) {
-            super(id, model);
-            add(new Check<RunReportHistory>("select", model));
-        }
-        
-    }
+			@Override
+			public String getLinkImageName() {
+				return "sql.png";
+			}
 
-    class CheckBoxHeaderPanel extends Panel {
-    	
-        public CheckBoxHeaderPanel(String id) {
-            super(id);
-            CheckGroupSelector selector = new CheckGroupSelector("groupselector");
-            group.add(selector);
-            add(selector);
-        }
-        
-    }
-    
-    private static String getShortLocaleDatePattern() {
-    	 DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
-    	 SimpleDateFormat sf = (SimpleDateFormat) df;
-    	 System.out.println("*********** " + sf.toLocalizedPattern());
-    	 return sf.toLocalizedPattern();
-    }
+		});
+
+		columns.add(new BooleanImageLinkPropertyColumn<RunReportHistory>(new Model<String>(getString("success")),
+				"success", "success") {
+
+			@Override
+			public void populateItem(Item<ICellPopulator<RunReportHistory>> item, String componentId,
+					IModel<RunReportHistory> rowModel) {
+				super.populateItem(item, componentId, rowModel);
+				item.add(new AttributeModifier("width", "50px"));
+				item.add(new SimpleTooltipBehavior(getString("details")));
+			}
+
+			@Override
+			public void onImageClick(RunReportHistory runHistory, AjaxRequestTarget target) {
+				ModalWindow dialog = findParent(BasePage.class).getDialog();
+				dialog.setTitle(getString("details"));
+				dialog.setInitialWidth(350);
+				dialog.setInitialHeight(200);
+				dialog.setContent(new RunHistoryDetailPanel(dialog.getContentId(), runHistory));
+				dialog.show(target);
+			}
+
+		});
+
+		return columns;
+	}
+
+	class CheckBoxPanel extends Panel {
+
+		public CheckBoxPanel(String id, IModel<RunReportHistory> model,
+				final Item<ICellPopulator<RunReportHistory>> item) {
+			super(id, model);
+			add(new Check<RunReportHistory>("select", model));
+		}
+
+	}
+
+	class CheckBoxHeaderPanel extends Panel {
+
+		public CheckBoxHeaderPanel(String id) {
+			super(id);
+			CheckGroupSelector selector = new CheckGroupSelector("groupselector");
+			group.add(selector);
+			add(selector);
+		}
+
+	}
+
+	private static String getShortLocaleDatePattern() {
+		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+		SimpleDateFormat sf = (SimpleDateFormat) df;
+		System.out.println("*********** " + sf.toLocalizedPattern());
+		return sf.toLocalizedPattern();
+	}
 
 }
