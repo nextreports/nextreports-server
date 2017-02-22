@@ -1,94 +1,112 @@
 <drivers>
-    <driver>
-        <type>Oracle</type>
-        <className>oracle.jdbc.driver.OracleDriver</className>
-        <urlTemplate>jdbc:oracle:thin:@&lt;ip&gt;:&lt;port&gt;:&lt;sid&gt;</urlTemplate>
-        <defaultPort>1521</defaultPort>
-      </driver>
-      <driver>
-        <type>Oracle - Service</type>
-        <className>oracle.jdbc.driver.OracleDriver</className>
-        <urlTemplate>jdbc:oracle:thin:@//&lt;ip&gt;:&lt;port&gt;/&lt;service&gt;</urlTemplate>
-        <defaultPort>1521</defaultPort>
-      </driver>
-      <driver>
-        <type>Oracle - Tns Name</type>
-        <className>oracle.jdbc.driver.OracleDriver</className>
-        <urlTemplate>jdbc:oracle:thin:@&lt;database&gt;</urlTemplate>
-      </driver>
-      <driver>
-        <type>MySQL</type>
-        <className>com.mysql.jdbc.Driver</className>
-        <urlTemplate>jdbc:mysql://&lt;ip&gt;:&lt;port&gt;/&lt;database&gt;</urlTemplate>
-        <defaultPort>3306</defaultPort>
-      </driver>
-      <driver>
-        <type>PostgreSQL</type>
-        <className>org.postgresql.Driver</className>
-        <urlTemplate>jdbc:postgresql://&lt;ip&gt;:&lt;port&gt;/&lt;database&gt;</urlTemplate>
-        <defaultPort>5432</defaultPort>
-      </driver>
-      <driver>
-    	<type>Sybase9 (JConnect)</type>
-    	<className>com.sybase.jdbc4.jdbc.SybDriver</className>
-    	<urlTemplate>jdbc:sybase:Tds:&lt;host&gt;:&lt;port&gt;/&lt;database&gt;</urlTemplate>
-    	<defaultPort>5000</defaultPort>
-  	  </driver>
-      <driver>
-        <type>MSSQL Server (jTDS)</type>
-        <className>net.sourceforge.jtds.jdbc.Driver</className>
-        <urlTemplate>jdbc:jtds:sqlserver://&lt;host&gt;:&lt;port&gt;/&lt;database&gt;</urlTemplate>
-        <defaultPort>1433</defaultPort>
-      </driver>
-      <driver>
-        <type>Derby Embedded</type>
-        <className>org.apache.derby.jdbc.EmbeddedDriver</className>
-        <urlTemplate>jdbc:derby:&lt;path&gt;;create=false</urlTemplate>
-      </driver>
-      <driver>
-        <type>Firebird</type>
-        <className>org.firebirdsql.jdbc.FBDriver</className>
-        <urlTemplate>jdbc:firebirdsql:&lt;ip&gt;/&lt;port&gt;:&lt;database-file&gt;</urlTemplate>
-        <defaultPort>3050</defaultPort>
-      </driver>  
-      <driver>    
-    	<type>SQLite</type>
-    	<className>org.sqlite.JDBC</className>
-    	<urlTemplate>jdbc:sqlite:&lt;dbfile-path&gt;</urlTemplate>    
-    	<defaultPort>0</defaultPort>	
-  	</driver>  
-  	<driver>    
-    	<type>CsvJdbc</type>
-    	<className>org.relique.jdbc.csv.CsvDriver</className>
-    	<urlTemplate>jdbc:relique:csv:&lt;directory&gt;</urlTemplate>    
-    	<defaultPort>0</defaultPort>	
-  	</driver>  
-  	<driver>
+	<driver>
+		<type>Oracle</type>
+		<className>oracle.jdbc.driver.OracleDriver</className>
+		<urlTemplate>jdbc:oracle:thin:@&lt;ip&gt;:&lt;port&gt;:&lt;sid&gt;
+		</urlTemplate>
+		<defaultPort>1521</defaultPort>
+	</driver>
+	<driver>
+		<type>Oracle - Service</type>
+		<className>oracle.jdbc.driver.OracleDriver</className>
+		<urlTemplate>jdbc:oracle:thin:@//&lt;ip&gt;:&lt;port&gt;/&lt;service&gt;
+		</urlTemplate>
+		<defaultPort>1521</defaultPort>
+	</driver>
+	<driver>
+		<type>Oracle - Tns Name</type>
+		<className>oracle.jdbc.driver.OracleDriver</className>
+		<urlTemplate>jdbc:oracle:thin:@&lt;database&gt;</urlTemplate>
+	</driver>
+	<driver>
+		<type>MySQL</type>
+		<className>com.mysql.jdbc.Driver</className>
+		<urlTemplate>jdbc:mysql://&lt;ip&gt;:&lt;port&gt;/&lt;database&gt;
+		</urlTemplate>
+		<defaultPort>3306</defaultPort>
+	</driver>
+	<driver>
+		<type>PostgreSQL</type>
+		<className>org.postgresql.Driver</className>
+		<urlTemplate>jdbc:postgresql://&lt;ip&gt;:&lt;port&gt;/&lt;database&gt;
+		</urlTemplate>
+		<defaultPort>5432</defaultPort>
+	</driver>
+	<driver>
+		<type>Sybase9 (JConnect)</type>
+		<className>com.sybase.jdbc4.jdbc.SybDriver</className>
+		<urlTemplate>jdbc:sybase:Tds:&lt;host&gt;:&lt;port&gt;/&lt;database&gt;
+		</urlTemplate>
+		<defaultPort>5000</defaultPort>
+	</driver>
+	<driver>
+		<type>MSSQL Server (jTDS)</type>
+		<className>net.sourceforge.jtds.jdbc.Driver</className>
+		<urlTemplate>jdbc:jtds:sqlserver://&lt;host&gt;:&lt;port&gt;/&lt;database&gt;
+		</urlTemplate>
+		<defaultPort>1433</defaultPort>
+	</driver>
+	<driver>
+		<type>Derby Embedded</type>
+		<className>org.apache.derby.jdbc.EmbeddedDriver</className>
+		<urlTemplate>jdbc:derby:&lt;path&gt;;create=false</urlTemplate>
+	</driver>
+	<driver>
+		<type>Firebird</type>
+		<className>org.firebirdsql.jdbc.FBDriver</className>
+		<urlTemplate>jdbc:firebirdsql:&lt;ip&gt;/&lt;port&gt;:&lt;database-file&gt;
+		</urlTemplate>
+		<defaultPort>3050</defaultPort>
+	</driver>
+	<driver>
+		<type>SQLite</type>
+		<className>org.sqlite.JDBC</className>
+		<urlTemplate>jdbc:sqlite:&lt;dbfile-path&gt;</urlTemplate>
+		<defaultPort>0</defaultPort>
+	</driver>
+	<driver>
+		<type>CsvJdbc</type>
+		<className>org.relique.jdbc.csv.CsvDriver</className>
+		<urlTemplate>jdbc:relique:csv:&lt;directory&gt;</urlTemplate>
+		<defaultPort>0</defaultPort>
+	</driver>
+	<driver>
 		<type>Vertica</type>
 		<className>com.vertica.jdbc.Driver</className>
-		<urlTemplate>jdbc:vertica://&lt;server&gt;:&lt;port&gt;/&lt;database&gt;</urlTemplate>
-		<defaultPort>0</defaultPort>	
-    </driver> 
-    <driver>
+		<urlTemplate>jdbc:vertica://&lt;server&gt;:&lt;port&gt;/&lt;database&gt;
+		</urlTemplate>
+		<defaultPort>0</defaultPort>
+	</driver>
+	<driver>
 		<type>Pervasive</type>
 		<className>com.pervasive.jdbc.v2.Driver</className>
-		<urlTemplate>jdbc:pervasive://&lt;host&gt;:&lt;port&gt;/&lt;database&gt;</urlTemplate>
-		<defaultPort>1583</defaultPort>	
-  	</driver> 
-  	<driver>
-    	<type>Teradata</type>
-    	<className>com.teradata.jdbc.TeraDriver</className>
-    	<urlTemplate>jdbc:teradata://&lt;server&gt;/&lt;database=databasename&gt;</urlTemplate>
-    	<defaultPort>0</defaultPort>
-  	</driver>  
-  	<driver>
-    	<type>MS Access</type>
-    	<className>net.ucanaccess.jdbc.UcanaccessDriver</className>
-    	<urlTemplate>jdbc:ucanaccess://&lt;dbfile-path&gt;;showschema=true</urlTemplate>
-    	<defaultPort>0</defaultPort>
-    </driver>
-    <driver>
-        <type>JNDI</type>        
-        <urlTemplate>&lt;JNDI name&gt;</urlTemplate>        
-    </driver> 
+		<urlTemplate>jdbc:pervasive://&lt;host&gt;:&lt;port&gt;/&lt;database&gt;
+		</urlTemplate>
+		<defaultPort>1583</defaultPort>
+	</driver>
+	<driver>
+		<type>Teradata</type>
+		<className>com.teradata.jdbc.TeraDriver</className>
+		<urlTemplate>jdbc:teradata://&lt;server&gt;/&lt;database=databasename&gt;
+		</urlTemplate>
+		<defaultPort>0</defaultPort>
+	</driver>
+	<driver>
+		<type>MS Access</type>
+		<className>net.ucanaccess.jdbc.UcanaccessDriver</className>
+		<urlTemplate>jdbc:ucanaccess://&lt;dbfile-path&gt;;showschema=true
+		</urlTemplate>
+		<defaultPort>0</defaultPort>
+	</driver>
+	<driver>
+		<type>JNDI</type>
+		<urlTemplate>&lt;JNDI name&gt;</urlTemplate>
+	</driver>
+	<driver>
+		<type>HSQLDB</type>
+		<className>org.hsqldb.jdbc.JDBCDriver</className>
+		<urlTemplate>jdbc:hsqldb:hsql://&lt;host&gt;:&lt;port&gt;/&lt;alias&gt;
+		</urlTemplate>
+		<defaultPort>9001</defaultPort>
+	</driver>
 </drivers>
