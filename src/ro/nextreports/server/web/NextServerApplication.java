@@ -143,7 +143,8 @@ public class NextServerApplication extends WebApplication  {
 		
 		// request cycle settings
 //		getRequestCycleSettings().addResponseFilter(new ServerAndClientTimeFilter());
-		getRequestCycleSettings().addResponseFilter(new AjaxServerAndClientTimeFilter());
+		// remove this so meta content is first in head title
+//		getRequestCycleSettings().addResponseFilter(new AjaxServerAndClientTimeFilter());
 		
 		// debug
 //		getDebugSettings().setAjaxDebugModeEnabled(false);
