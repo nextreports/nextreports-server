@@ -11,7 +11,7 @@
     <dependencies>
 
         <!-- NextReports Engine -->
-        <dependency org="ro.nextreports" name="nextreports-engine" rev="${app.version}" changing="true"/>
+        <dependency org="ro.nextreports" name="nextreports-engine" rev="9.2" changing="true"/>
 
         <!-- Logging -->
         <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.1"/>
