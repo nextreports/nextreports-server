@@ -96,5 +96,9 @@ public interface StorageConstants {
 	public static final String INTEGRATION_DRILL_URL = "drillUrl";
 	public static final String INTEGRATION_NOTIFY_URL = "notifyUrl";
 	public static final String THEME = "colorTheme";
-		
+	public static final String CLEAN_HISTORY = "cleanHistory";
+	public static final String DAYS_TO_KEEP = "daysToKeep";
+	public static final String CRON_EXPRESSION = "cronExpression";
+	public static final String DAYS_TO_DELETE = "daysToDelete";
+	public static final String SHRINK_DATA_FOLDER = "shrinkDataFolder";
 }

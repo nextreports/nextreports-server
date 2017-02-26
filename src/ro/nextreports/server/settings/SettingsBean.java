@@ -23,8 +23,9 @@ import ro.nextreports.server.service.StorageService;
 
 public class SettingsBean {
 
-    public static final Integer DEFAULT_CLEAN_HISTORY_DAYS_TO_KEEP = -1; // disable clean history
+    public static final Integer DEFAULT_CLEAN_HISTORY_DAYS_TO_KEEP = 5; // disable clean history
     public static final String DEFAULT_CLEAN_HISTORY_CRON_EXPRESSION = "0 0 2 * * ?";
+    public static final Integer DEFAULT_CLEAN_HISTORY_DAYS_TO_DELETE = 15;
 
     private StorageService storageService;
 	

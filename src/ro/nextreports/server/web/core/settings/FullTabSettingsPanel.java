@@ -30,7 +30,7 @@ public class FullTabSettingsPanel extends Panel {
         tabs.add(new SettingsTab(SettingsTab.SYNCHRONIZER_SETTINGS, "Settings.synchronizer.title", "images/settings_synchronizer.png"));
         tabs.add(new SettingsTab(SettingsTab.THREAD_POOL_SETTINGS, "Settings.thread.title", "images/settings_thread_pool.png"));
         tabs.add(new SettingsTab(SettingsTab.IFRAME_SETTINGS, "Settings.iframe.title", "images/settings_iframe.png"));
-        //tabs.add(new SettingsTab(SettingsTab.HISTORY_SETTINGS, "Settings.cleanHistory.title", "images/settings_history.png"));
+        tabs.add(new SettingsTab(SettingsTab.HISTORY_SETTINGS, "Settings.cleanHistory.title", "images/settings_history.png"));
         tabs.add(new SettingsTab(SettingsTab.INTEGRATION_SETTINGS, "Settings.integration.title", "images/settings_integration.png"));                
     	
         ImageTabbedPanel panel = new ImageTabbedPanel("tabs", tabs) {

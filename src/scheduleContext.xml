@@ -23,6 +23,7 @@
         <property name="triggers">
             <list>
                 <ref local="userSynchronizerTrigger"/>
+                <ref local="cleanHistoryTrigger"/>
             </list>
         </property>
         <!--
@@ -118,6 +119,7 @@
         <property name="jobDataAsMap">
             <map>
                 <entry key="storageService" value-ref="storageService"/>
+                <entry key="reportService" value-ref="reportService"/>
             </map>
         </property>
     </bean>

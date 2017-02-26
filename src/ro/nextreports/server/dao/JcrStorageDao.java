@@ -17,6 +17,12 @@
 package ro.nextreports.server.dao;
 
 import java.lang.reflect.Field;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,9 +38,11 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 
-import net.sf.ehcache.Ehcache;
-
 import org.apache.jackrabbit.core.NodeImpl;
+import org.apache.jackrabbit.core.SessionImpl;
+import org.apache.jackrabbit.core.WorkspaceImpl;
+import org.apache.jackrabbit.core.config.WorkspaceConfig;
+import org.apache.jackrabbit.core.data.GarbageCollector;
 import org.apache.jackrabbit.util.ISO9075;
 import org.apache.jackrabbit.value.ValueFactoryImpl;
 import org.jcrom.JcrDataProviderImpl;
@@ -46,9 +54,12 @@ import org.jcrom.annotations.JcrNode;
 import org.jcrom.annotations.JcrPath;
 import org.jcrom.util.NodeFilter;
 import org.jcrom.util.ReflectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Required;
 
+import net.sf.ehcache.Ehcache;
 import ro.nextreports.server.StorageConstants;
 import ro.nextreports.server.cache.Cache;
 import ro.nextreports.server.cache.ehcache.EhCache;
@@ -66,6 +77,7 @@ import ro.nextreports.server.domain.VersionInfo;
 import ro.nextreports.server.exception.DuplicationException;
 import ro.nextreports.server.exception.NotFoundException;
 import ro.nextreports.server.exception.ReferenceException;
+import ro.nextreports.server.util.Pair;
 import ro.nextreports.server.util.ServerUtil;
 import ro.nextreports.server.util.StorageUtil;
 
@@ -74,232 +86,238 @@ import ro.nextreports.server.util.StorageUtil;
  */
 public class JcrStorageDao extends AbstractJcrDao implements StorageDao, InitializingBean {
 
+	private static final Logger LOG = LoggerFactory.getLogger(JcrStorageDao.class);
+	private static final Logger LOG_RUN_HISTORY_FILE = LoggerFactory.getLogger("RUN_HISTORY_FILE");
+
 	private Cache entitiesCache;
-	
+
 	@Required
-    public void setCache(Ehcache entitiesCache) {
+	public void setCache(Ehcache entitiesCache) {
 		this.entitiesCache = new EhCache(entitiesCache);
 	}
 
 	public Entity getEntity(String path) throws NotFoundException {
-    	checkPath(path);
-    	
-        return getEntity(getNode(path));
-    }
+		checkPath(path);
 
-    public Entity getEntityById(String id) throws NotFoundException {
-    	if (entitiesCache.hasElement(id)) {
-    		return (Entity) entitiesCache.get(id);
-    	}
-    	
-    	Node node = checkId(id);
-        Entity entity = getEntity(node);
-        entitiesCache.put(id, entity);
-        
-        return entity;
-    }
-    
-    public boolean isSystemEntity(String entityId) throws NotFoundException {
-    	Entity entity = getEntityById(entityId);
-    	return StorageUtil.isSystemPath(entity.getPath());
-    }
-    
-    public boolean isEntityFromLoggedRealm(String entityId) throws NotFoundException {
-    	Entity entity = getEntityById(entityId);
-    	String name;
-    	if (entity instanceof User) {
-    		name = entity.getName();
-    	} else {
-    		name = entity.getCreatedBy();
-    	}
-    	return ServerUtil.getRealm().equals(ServerUtil.getRealm(name));
-    }
+		return getEntity(getNode(path));
+	}
 
-    public Entity[] getEntityChildren(String path) throws NotFoundException {
-    	checkPath(path);
-    	
-        Node node = getNode(path);
-        try {
-            if (!node.hasNodes()) {
-                return new Entity[0];
-            }
+	public Entity getEntityById(String id) throws NotFoundException {
+		if (entitiesCache.hasElement(id)) {
+			return (Entity) entitiesCache.get(id);
+		}
 
-            List<Entity> entities = new ArrayList<Entity>();
-            NodeIterator nodes = node.getNodes();
-            while (nodes.hasNext()) {
-                Entity entity = getEntity(nodes.nextNode());
-                if (entity != null) {
-                    entities.add(entity);
-                }
-            }
+		Node node = checkId(id);
+		Entity entity = getEntity(node);
+		entitiesCache.put(id, entity);
 
-            return entities.toArray(new Entity[entities.size()]);
-        } catch (RepositoryException e) {
-            throw convertJcrAccessException(e);
-        }
-    }
+		return entity;
+	}
 
-    // get all children entities without the history nodes (see RunReportHistory) which are kept
-    // under the same node
-    public Entity[] getBaseEntityChildren(String path) throws NotFoundException {
-    	checkPath(path);
-    	
-        Node node = getNode(path);
-        try {
-            if (!node.hasNodes()) {
-                return new Entity[0];
-            }
+	public boolean isSystemEntity(String entityId) throws NotFoundException {
+		Entity entity = getEntityById(entityId);
+		return StorageUtil.isSystemPath(entity.getPath());
+	}
 
-            List<Entity> entities = new ArrayList<Entity>();
-            NodeIterator nodes = node.getNodes();
-            while (nodes.hasNext()) {
-                Node child = nodes.nextNode();
-                if (child.getName().endsWith("_history")) {
-                    continue;
-                }
-                Entity entity = getEntity(child);
-                if (entity != null) {
-                    entities.add(entity);
-                }
+	public boolean isEntityFromLoggedRealm(String entityId) throws NotFoundException {
+		Entity entity = getEntityById(entityId);
+		String name;
+		if (entity instanceof User) {
+			name = entity.getName();
+		} else {
+			name = entity.getCreatedBy();
+		}
+		return ServerUtil.getRealm().equals(ServerUtil.getRealm(name));
+	}
 
-            }
+	public Entity[] getEntityChildren(String path) throws NotFoundException {
+		checkPath(path);
 
-            return entities.toArray(new Entity[entities.size()]);
-        } catch (RepositoryException e) {
-            throw convertJcrAccessException(e);
-        }
-    }
+		Node node = getNode(path);
+		try {
+			if (!node.hasNodes()) {
+				return new Entity[0];
+			}
 
-    public Entity[] getEntityChildrenById(String id) throws NotFoundException {
-    	return getEntityChildrenById(id, 0, Integer.MAX_VALUE);
-    }
+			List<Entity> entities = new ArrayList<Entity>();
+			NodeIterator nodes = node.getNodes();
+			while (nodes.hasNext()) {
+				Entity entity = getEntity(nodes.nextNode());
+				if (entity != null) {
+					entities.add(entity);
+				}
+			}
 
-    public Entity[] getEntityChildrenById(String id, long firstResult, long maxResults) throws NotFoundException { 
-    	//long s1 = System.currentTimeMillis();
-    	//boolean sortable = true;
-        Node node = checkId(id);
-        try {
-            if (!node.hasNodes()) {
-                return new Entity[0];
-            }
+			return entities.toArray(new Entity[entities.size()]);
+		} catch (RepositoryException e) {
+			throw convertJcrAccessException(e);
+		}
+	}
 
-            List<Entity> entities = new ArrayList<Entity>();
-//            System.out.println("---------->");
-//            StopWatch watch = new StopWatch();
-//            watch.start();
-            
-            NodeIterator nodes = node.getNodes();
-//        	String path = node.getPath();     	
-//            String statement = "/jcr:root" + ISO9075.encodePath(path) + "//*/)";
-//            if (sortByName) {
-//            	statement.concat(" ").concat("order by jcr:name ascending");
-//            }
-//            System.out.println(">>> " + statement);
-//            QueryResult queryResult = getTemplate().query(statement);
-//            NodeIterator nodes = queryResult.getNodes();
-            
-//            TreeSet<Node> set = new TreeSet<Node>(new Comparator<Node>() {
-//				@Override
-//				public int compare(Node n1, Node n2) {
-//					try {
-//						String name1 = n1.getName();
-//						String name2 = n2.getName();
-//						return name1.compareTo(name2);
-//					} catch (RepositoryException ex) {
-//						ex.printStackTrace();
-//						return 0;
-//					}										
-//				}
-//            	
-//            });
-//            while (nodes.hasNext()) {            	
-//            	Node nextNode = nodes.nextNode();
-//            	set.add(nextNode);
-//            }	
-//             
-//            Iterator<Node> it;
-//            if (sortable) {
-//            	it = set.iterator();
-//            } else {
-//            	it = nodes;
-//            }
-            
-            NodeIterator it = nodes;
-            
-            int position = 0;
-            if (firstResult > 0) {
-            	while (position < firstResult) {
-            		it.next();
-            		position++;
-            	}
-            	//nodes.skip(firstResult);
-            }
-            int counter = 0;
-            while (it.hasNext()) {
-            	if (counter == maxResults) {
-            		break;
-            	}
-            	Node nextNode = it.nextNode();
-//            	watch.suspend();
-            	Entity entity = getEntity(nextNode);
-                if (entity != null) {
-                    entities.add(entity);
-                    counter++;
-                }
-//                watch.resume();
-            }
-//            watch.stop();
-//            System.out.println("t = " + watch.getTime() + " ms");
-//            System.out.println("< ---------");
-//            return entities.toArray(new Entity[entities.size()]);
-           
-            //System.out.println("--> ended in " + (System.currentTimeMillis()-s1) + " ms");
-            return entities.toArray(new Entity[entities.size()]);        
-        } catch (RepositoryException e) {
-            throw convertJcrAccessException(e);
-        }
-    }
-    
-    public String addEntity(Entity entity) throws DuplicationException {
-    	return addEntity(entity, false);
-    }
-    
-    public String addEntity(Entity entity, boolean keepId) throws DuplicationException {
-        Node parentNode = getNode(StorageUtil.getParentPath(entity.getPath()));
+	// get all children entities without the history nodes (see
+	// RunReportHistory) which are kept
+	// under the same node
+	public Entity[] getBaseEntityChildren(String path) throws NotFoundException {
+		checkPath(path);
 
-        testDuplication(parentNode, entity.getName());
-        entity.setCreatedDate(new Date());
-        // maybe a background job (see UserSynchronizerJob) add this entity
-        String userName = ServerUtil.getUsername();
-        if (!userName.equals(ServerUtil.UNKNOWN_USER)) {
-            entity.setCreatedBy(userName);
-        }
+		Node node = getNode(path);
+		try {
+			if (!node.hasNodes()) {
+				return new Entity[0];
+			}
 
-        // this method sets also the id on entity (used to add in cache map later)
-        Node node;
-        if (keepId && (entity.getId() != null)) {
-        	node = addNodeWithUUID(parentNode, entity, entity.getId());
-        } else {
-        	node = getJcrom().addNode(parentNode, entity);
-        }
-        
-        getTemplate().save();
+			List<Entity> entities = new ArrayList<Entity>();
+			NodeIterator nodes = node.getNodes();
+			while (nodes.hasNext()) {
+				Node child = nodes.nextNode();
+				if (child.getName().endsWith("_history")) {
+					continue;
+				}
+				Entity entity = getEntity(child);
+				if (entity != null) {
+					entities.add(entity);
+				}
 
-        if (isVersionable(node)) {
-            // create a new version
-            try {                
-            	getSession().getWorkspace().getVersionManager().checkin(entity.getPath());
-            	getSession().getWorkspace().getVersionManager().checkout(entity.getPath());
-            } catch (RepositoryException e) {
-                throw convertJcrAccessException(e);
-            }
-        }
-        
-		entitiesCache.put(entity.getId(), entity);			
+			}
+
+			return entities.toArray(new Entity[entities.size()]);
+		} catch (RepositoryException e) {
+			throw convertJcrAccessException(e);
+		}
+	}
+
+	public Entity[] getEntityChildrenById(String id) throws NotFoundException {
+		return getEntityChildrenById(id, 0, Integer.MAX_VALUE);
+	}
+
+	public Entity[] getEntityChildrenById(String id, long firstResult, long maxResults) throws NotFoundException {
+		// long s1 = System.currentTimeMillis();
+		// boolean sortable = true;
+		Node node = checkId(id);
+		try {
+			if (!node.hasNodes()) {
+				return new Entity[0];
+			}
+
+			List<Entity> entities = new ArrayList<Entity>();
+			// System.out.println("---------->");
+			// StopWatch watch = new StopWatch();
+			// watch.start();
+
+			NodeIterator nodes = node.getNodes();
+			// String path = node.getPath();
+			// String statement = "/jcr:root" + ISO9075.encodePath(path) +
+			// "//*/)";
+			// if (sortByName) {
+			// statement.concat(" ").concat("order by jcr:name ascending");
+			// }
+			// System.out.println(">>> " + statement);
+			// QueryResult queryResult = getTemplate().query(statement);
+			// NodeIterator nodes = queryResult.getNodes();
+
+			// TreeSet<Node> set = new TreeSet<Node>(new Comparator<Node>() {
+			// @Override
+			// public int compare(Node n1, Node n2) {
+			// try {
+			// String name1 = n1.getName();
+			// String name2 = n2.getName();
+			// return name1.compareTo(name2);
+			// } catch (RepositoryException ex) {
+			// ex.printStackTrace();
+			// return 0;
+			// }
+			// }
+			//
+			// });
+			// while (nodes.hasNext()) {
+			// Node nextNode = nodes.nextNode();
+			// set.add(nextNode);
+			// }
+			//
+			// Iterator<Node> it;
+			// if (sortable) {
+			// it = set.iterator();
+			// } else {
+			// it = nodes;
+			// }
+
+			NodeIterator it = nodes;
+
+			int position = 0;
+			if (firstResult > 0) {
+				while (position < firstResult) {
+					it.next();
+					position++;
+				}
+				// nodes.skip(firstResult);
+			}
+			int counter = 0;
+			while (it.hasNext()) {
+				if (counter == maxResults) {
+					break;
+				}
+				Node nextNode = it.nextNode();
+				// watch.suspend();
+				Entity entity = getEntity(nextNode);
+				if (entity != null) {
+					entities.add(entity);
+					counter++;
+				}
+				// watch.resume();
+			}
+			// watch.stop();
+			// System.out.println("t = " + watch.getTime() + " ms");
+			// System.out.println("< ---------");
+			// return entities.toArray(new Entity[entities.size()]);
+
+			// System.out.println("--> ended in " +
+			// (System.currentTimeMillis()-s1) + " ms");
+			return entities.toArray(new Entity[entities.size()]);
+		} catch (RepositoryException e) {
+			throw convertJcrAccessException(e);
+		}
+	}
+
+	public String addEntity(Entity entity) throws DuplicationException {
+		return addEntity(entity, false);
+	}
+
+	public String addEntity(Entity entity, boolean keepId) throws DuplicationException {
+		Node parentNode = getNode(StorageUtil.getParentPath(entity.getPath()));
+
+		testDuplication(parentNode, entity.getName());
+		entity.setCreatedDate(new Date());
+		// maybe a background job (see UserSynchronizerJob) add this entity
+		String userName = ServerUtil.getUsername();
+		if (!userName.equals(ServerUtil.UNKNOWN_USER)) {
+			entity.setCreatedBy(userName);
+		}
+
+		// this method sets also the id on entity (used to add in cache map
+		// later)
+		Node node;
+		if (keepId && (entity.getId() != null)) {
+			node = addNodeWithUUID(parentNode, entity, entity.getId());
+		} else {
+			node = getJcrom().addNode(parentNode, entity);
+		}
+
+		getTemplate().save();
+
+		if (isVersionable(node)) {
+			// create a new version
+			try {
+				getSession().getWorkspace().getVersionManager().checkin(entity.getPath());
+				getSession().getWorkspace().getVersionManager().checkout(entity.getPath());
+			} catch (RepositoryException e) {
+				throw convertJcrAccessException(e);
+			}
+		}
+
+		entitiesCache.put(entity.getId(), entity);
 		return entity.getId();
-    }
-    
-    
+	}
+
 	private Node addNodeWithUUID(Node parentNode, Entity entity, String UUID) {
 
 		try {
@@ -350,346 +368,361 @@ public class JcrStorageDao extends AbstractJcrDao implements StorageDao, Initial
 			throw new JcrMappingException("Could not create node from object", e);
 		}
 	}
-    
-    private static Field findAnnotatedField( Object obj, Class annotationClass ) {
-		for ( Field field : ReflectionUtils.getDeclaredAndInheritedFields(obj.getClass(), false) ) {
-			if ( field.isAnnotationPresent(annotationClass) ) {
+
+	private static Field findAnnotatedField(Object obj, Class annotationClass) {
+		for (Field field : ReflectionUtils.getDeclaredAndInheritedFields(obj.getClass(), false)) {
+			if (field.isAnnotationPresent(annotationClass)) {
 				field.setAccessible(true);
 				return field;
 			}
 		}
 		return null;
 	}
-    
-    static void setNodeName( Object object, String name ) throws IllegalAccessException {
+
+	static void setNodeName(Object object, String name) throws IllegalAccessException {
 		findNameField(object).set(object, name);
 	}
-	
-	static void setNodePath( Object object, String path ) throws IllegalAccessException {
+
+	static void setNodePath(Object object, String path) throws IllegalAccessException {
 		findPathField(object).set(object, path);
 	}
-	
-	static void setUUID( Object object, String uuid ) throws IllegalAccessException {
+
+	static void setUUID(Object object, String uuid) throws IllegalAccessException {
 		Field uuidField = findUUIDField(object);
-		if ( uuidField != null ) {
+		if (uuidField != null) {
 			uuidField.set(object, uuid);
 		}
 	}
-	
-	static Field findPathField( Object obj ) {
+
+	static Field findPathField(Object obj) {
 		return findAnnotatedField(obj, JcrPath.class);
 	}
-	
-	static Field findNameField( Object obj ) {
+
+	static Field findNameField(Object obj) {
 		return findAnnotatedField(obj, JcrName.class);
 	}
-	
-	static Field findUUIDField( Object obj ) {
+
+	static Field findUUIDField(Object obj) {
 		return findAnnotatedField(obj, JcrIdentifier.class);
 	}
-    
-    public void modifyEntity(Entity entity) {
-    	modifyEntity(entity, null);
-    }
 
-    public void modifyEntity(Entity entity, String excludeChildrenName) {
-        Node node = getNodeById(entity.getId());
-        entity.setLastUpdatedDate(new Date());
-        // maybe a background job (see UserSynchronizerJob) modify this entity
-        String userName = ServerUtil.getUsername();
-        if (!userName.equals(ServerUtil.UNKNOWN_USER)) {
-        	entity.setLastUpdatedBy(userName);
-        }
+	public void modifyEntity(Entity entity) {
+		modifyEntity(entity, null);
+	}
 
-        if (excludeChildrenName == null) {
-        	getJcrom().updateNode(node, entity);
-        } else {
-        	NodeFilter nodeFilter = new NodeFilter("-"+excludeChildrenName, NodeFilter.DEPTH_INFINITE);
-        	getJcrom().updateNode(node, entity, nodeFilter);
-        }
-        getTemplate().save();
+	public void modifyEntity(Entity entity, String excludeChildrenName) {
+		Node node = getNodeById(entity.getId());
+		entity.setLastUpdatedDate(new Date());
+		// maybe a background job (see UserSynchronizerJob) modify this entity
+		String userName = ServerUtil.getUsername();
+		if (!userName.equals(ServerUtil.UNKNOWN_USER)) {
+			entity.setLastUpdatedBy(userName);
+		}
 
-        entitiesCache.put(entity.getId(), entity);
-        // clear all parents from cache
-        clearParentsCache(entity);
-        
-        if (isVersionable(node)) {
-            // create a new version
-            try {
-            	getSession().getWorkspace().getVersionManager().checkin(entity.getPath());
-            	getSession().getWorkspace().getVersionManager().checkout(entity.getPath());
-            } catch (RepositoryException e) {
-                throw convertJcrAccessException(e);
-            }
-        }
-    }
+		if (excludeChildrenName == null) {
+			getJcrom().updateNode(node, entity);
+		} else {
+			NodeFilter nodeFilter = new NodeFilter("-" + excludeChildrenName, NodeFilter.DEPTH_INFINITE);
+			getJcrom().updateNode(node, entity, nodeFilter);
+		}
+		getTemplate().save();
 
-    public void removeEntity(String path) throws ReferenceException {
-    	try {
+		entitiesCache.put(entity.getId(), entity);
+		// clear all parents from cache
+		clearParentsCache(entity);
+
+		if (isVersionable(node)) {
+			// create a new version
+			try {
+				getSession().getWorkspace().getVersionManager().checkin(entity.getPath());
+				getSession().getWorkspace().getVersionManager().checkout(entity.getPath());
+			} catch (RepositoryException e) {
+				throw convertJcrAccessException(e);
+			}
+		}
+	}
+
+	public void removeEntity(String path) throws ReferenceException {
+		try {
 			checkPath(path);
 		} catch (NotFoundException e) {
 			return;
 		}
-    	
-        Node node = getNode(path);
-        try {
-            if (node.getReferences().hasNext()) {
-                throw new ReferenceException("References to this entity exists.");
-            }
 
-            // must remove the versions
-            // base version can be removed only after the node
-            VersionHistory versionHistory = null;
-            String baseVersionName = null;
-            if (isVersionable(node)) {
-                versionHistory = getSession().getWorkspace().getVersionManager().getVersionHistory(path);            	
-                VersionIterator versions = versionHistory.getAllVersions();
-                baseVersionName = getSession().getWorkspace().getVersionManager().getBaseVersion(path).getName();
-                versions.skip(1);
-                while (versions.hasNext()) {
-                    Version version = versions.nextVersion();
-                    if (!baseVersionName.equals(version.getName())) {
-                        //System.out.println("%%%%% removeVersion : " + version.getName());
-                        versionHistory.removeVersion(version.getName());
-                    }
-                }
-            }
+		Node node = getNode(path);
+		try {
+			if (node.getReferences().hasNext()) {
+				throw new ReferenceException("References to this entity exists.");
+			}
 
-            node.remove();
+			// must remove the versions
+			// base version can be removed only after the node
+			VersionHistory versionHistory = null;
+			String baseVersionName = null;
+			if (isVersionable(node)) {
+				versionHistory = getSession().getWorkspace().getVersionManager().getVersionHistory(path);
+				VersionIterator versions = versionHistory.getAllVersions();
+				baseVersionName = getSession().getWorkspace().getVersionManager().getBaseVersion(path).getName();
+				versions.skip(1);
+				while (versions.hasNext()) {
+					Version version = versions.nextVersion();
+					if (!baseVersionName.equals(version.getName())) {
+						// System.out.println("%%%%% removeVersion : " +
+						// version.getName());
+						versionHistory.removeVersion(version.getName());
+					}
+				}
+			}
 
-            //@todo if we do not use restore version even this base version can be deleted
-            //@todo but after a restore, it seems there is a cyclic reference between base version and root version (???)
-            //@todo and spring transaction cannot commit
-//	        if (baseVersionName != null) {
-//	            //System.out.println("%%%%% removeBaseVersion : " + baseVersionName);
-//	            versionHistory.removeVersion(baseVersionName);
-//	        }
-        } catch (RepositoryException e) {
-            throw convertJcrAccessException(e);
-        }
+			node.remove();
 
-        getTemplate().save();
-        
-        String id;
+			// @todo if we do not use restore version even this base version can
+			// be deleted
+			// @todo but after a restore, it seems there is a cyclic reference
+			// between base version and root version (???)
+			// @todo and spring transaction cannot commit
+			// if (baseVersionName != null) {
+			// //System.out.println("%%%%% removeBaseVersion : " +
+			// baseVersionName);
+			// versionHistory.removeVersion(baseVersionName);
+			// }
+		} catch (RepositoryException e) {
+			throw convertJcrAccessException(e);
+		}
+
+		getTemplate().save();
+
+		String id;
 		try {
 			id = node.getIdentifier();
 		} catch (RepositoryException e) {
 			throw convertJcrAccessException(e);
 		}
-        entitiesCache.remove(id);
-    }
+		entitiesCache.remove(id);
+	}
 
-    public void removeEntityById(String id) throws NotFoundException {
-        try {
-        	Node node = checkId(id);
-            node.remove();
-        } catch (RepositoryException e) {
-            throw convertJcrAccessException(e);
-        }
-        
-        getTemplate().save();
-        
-        entitiesCache.remove(id);
-    }
-    
+	public void removeEntityById(String id) throws NotFoundException {
+		try {
+			Node node = checkId(id);
+			node.remove();
+		} catch (RepositoryException e) {
+			throw convertJcrAccessException(e);
+		}
+
+		getTemplate().save();
+
+		entitiesCache.remove(id);
+	}
+
 	public List<String> getReferences(String id) {
 		List<String> result = new ArrayList<String>();
 		try {
 			Node node = checkId(id);
 			PropertyIterator pi = node.getReferences();
-			while (pi.hasNext()) {				
+			while (pi.hasNext()) {
 				result.add(pi.nextProperty().getParent().getPath());
 			}
-		} catch (Exception e) {					
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
 
-    public void renameEntity(String path, String newName) throws NotFoundException, DuplicationException {
-    	checkPath(path);
-    	
-        Node node = getNode(path);
-        Node parent;
-        try {
-            parent = node.getParent();
-        } catch (RepositoryException e) {
-            throw convertJcrAccessException(e);
-        }
-        testDuplication(parent, newName);
-        Entity entity = getEntity(node);
-        entity.setLastUpdatedDate(new Date());
-        entity.setLastUpdatedBy(ServerUtil.getUsername());
-        getJcrom().updateNode(node, entity);
-        
-        getTemplate().rename(node, newName);
-        getTemplate().save();
-        
-        entitiesCache.remove(entity.getId());
-        
-        // clear all children from cache (path is modified!)
-        clearChildrenCache(entity.getId());
-    }
+	public void renameEntity(String path, String newName) throws NotFoundException, DuplicationException {
+		checkPath(path);
 
-    public void copyEntity(String sourcePath, String destPath) throws NotFoundException, DuplicationException {
-    	checkPath(sourcePath);
-    	checkPath(destPath);
-    	
-        Node node = getNode(destPath);
-        testDuplication(node, StorageUtil.getName(sourcePath));
-        destPath = destPath + StorageConstants.PATH_SEPARATOR + StorageUtil.getName(sourcePath);
-        try {
-            getSession().getWorkspace().copy(sourcePath, destPath);
-            // make sure that any versionable node (report) has its first version created
-            createVersions(destPath);
-            
-            // cache new entity
-            getEntity(destPath);            
-        } catch (RepositoryException e) {
-            throw convertJcrAccessException(e);
-        }                
-    }
+		Node node = getNode(path);
+		Node parent;
+		try {
+			parent = node.getParent();
+		} catch (RepositoryException e) {
+			throw convertJcrAccessException(e);
+		}
+		testDuplication(parent, newName);
+		Entity entity = getEntity(node);
+		entity.setLastUpdatedDate(new Date());
+		entity.setLastUpdatedBy(ServerUtil.getUsername());
+		getJcrom().updateNode(node, entity);
 
-    private void createVersions(String path) throws NotFoundException {
-    	checkPath(path);
-    	
-        Node node = getNode(path);
-        if (isEntityNode(node)) {
-            if (isVersionable(node)) {
-                // create a new version
-                try {
-                	getSession().getWorkspace().getVersionManager().checkin(path);
-                	getSession().getWorkspace().getVersionManager().checkout(path);
-                } catch (RepositoryException e) {
-                    throw convertJcrAccessException(e);
-                }
-            }
-            for (Entity entity : getEntityChildren(path)) {
-                createVersions(entity.getPath());
-            }
-        }                
-    }
+		getTemplate().rename(node, newName);
+		getTemplate().save();
 
-    public void moveEntity(String sourcePath, String destPath) throws NotFoundException, DuplicationException {
-    	checkPath(sourcePath);
-    	checkPath(destPath);
-    	
-        Node node = getNode(destPath);
-        testDuplication(node, StorageUtil.getName(sourcePath));
-        destPath = destPath + StorageConstants.PATH_SEPARATOR + StorageUtil.getName(sourcePath);
-        try {
-            getSession().getWorkspace().move(sourcePath, destPath);           
-            // path changes : remove from cache
-            Entity entity = getEntity(destPath);  
-            entitiesCache.remove(entity.getId());
-            // clear all children from cache (path is modified!)
-            clearChildrenCache(entity.getId());            
-        } catch (RepositoryException e) {
-            throw convertJcrAccessException(e);
-        }                
-    }
+		entitiesCache.remove(entity.getId());
 
-    public Entity[] getEntitiesByClassName(String path, String className) throws NotFoundException {
-    	checkPath(path);    	
-        String statement = "/jcr:root" + ISO9075.encodePath(path) + "//*[@className='" + className + "']";        
-        return getEntities(statement);        
-    }
-    
-    public Entity[] getEntitiesByClassNameForRange(String path, String className, DateRange range) throws NotFoundException {
-    	// xpath xs:dateTime function has a specific format (see getFormattedDate)
-    	// characters that must remain unchanged must be between '' in SimpleDateFormat
-    	// SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-    	// this format does not put semicolon in time zone ( 2012-01-04T23:59:59.999+0200 instead of  2012-01-04T23:59:59.999+02:00)  
-    	// so we will use getFormattedDate method instead of formatting with a SimpleDateFormat
-    	
-    	checkPath(path); 
-    	StringBuilder sb= new StringBuilder();    	
-    	sb.append("/jcr:root").append(ISO9075.encodePath(path)).
-    	   append("//*[@className='").append(className).append("'").
-    	   append(" and @createdDate <= xs:dateTime('").append(getFormattedDate(range.getEndDate())).append("')").
-    	   append(" and @createdDate >= xs:dateTime('").append(getFormattedDate(range.getStartDate())).append("')]");                      
-        return getEntities(sb.toString());
-    }
-    
-    public Entity[] getEntities(String xpath) {
-    	return getEntities(getTemplate().query(xpath));
-    }
+		// clear all children from cache (path is modified!)
+		clearChildrenCache(entity.getId());
+	}
 
-    // A date if formatted in JCR like the following : 2012-01-04T23:59:59.999+02:00    
-    private String getFormattedDate(Date date) {
-    	String formattedDate = "";
-    	Calendar cal = Calendar.getInstance();
-    	cal.setTime(date);
-    	try {
+	public void copyEntity(String sourcePath, String destPath) throws NotFoundException, DuplicationException {
+		checkPath(sourcePath);
+		checkPath(destPath);
+
+		Node node = getNode(destPath);
+		testDuplication(node, StorageUtil.getName(sourcePath));
+		destPath = destPath + StorageConstants.PATH_SEPARATOR + StorageUtil.getName(sourcePath);
+		try {
+			getSession().getWorkspace().copy(sourcePath, destPath);
+			// make sure that any versionable node (report) has its first
+			// version created
+			createVersions(destPath);
+
+			// cache new entity
+			getEntity(destPath);
+		} catch (RepositoryException e) {
+			throw convertJcrAccessException(e);
+		}
+	}
+
+	private void createVersions(String path) throws NotFoundException {
+		checkPath(path);
+
+		Node node = getNode(path);
+		if (isEntityNode(node)) {
+			if (isVersionable(node)) {
+				// create a new version
+				try {
+					getSession().getWorkspace().getVersionManager().checkin(path);
+					getSession().getWorkspace().getVersionManager().checkout(path);
+				} catch (RepositoryException e) {
+					throw convertJcrAccessException(e);
+				}
+			}
+			for (Entity entity : getEntityChildren(path)) {
+				createVersions(entity.getPath());
+			}
+		}
+	}
+
+	public void moveEntity(String sourcePath, String destPath) throws NotFoundException, DuplicationException {
+		checkPath(sourcePath);
+		checkPath(destPath);
+
+		Node node = getNode(destPath);
+		testDuplication(node, StorageUtil.getName(sourcePath));
+		destPath = destPath + StorageConstants.PATH_SEPARATOR + StorageUtil.getName(sourcePath);
+		try {
+			getSession().getWorkspace().move(sourcePath, destPath);
+			// path changes : remove from cache
+			Entity entity = getEntity(destPath);
+			entitiesCache.remove(entity.getId());
+			// clear all children from cache (path is modified!)
+			clearChildrenCache(entity.getId());
+		} catch (RepositoryException e) {
+			throw convertJcrAccessException(e);
+		}
+	}
+
+	public Entity[] getEntitiesByClassName(String path, String className) throws NotFoundException {
+		checkPath(path);
+		String statement = "/jcr:root" + ISO9075.encodePath(path) + "//*[@className='" + className + "']";
+		return getEntities(statement);
+	}
+
+	public Entity[] getEntitiesByClassNameForRange(String path, String className, DateRange range)
+			throws NotFoundException {
+		// xpath xs:dateTime function has a specific format (see
+		// getFormattedDate)
+		// characters that must remain unchanged must be between '' in
+		// SimpleDateFormat
+		// SimpleDateFormat format = new
+		// SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+		// this format does not put semicolon in time zone (
+		// 2012-01-04T23:59:59.999+0200 instead of
+		// 2012-01-04T23:59:59.999+02:00)
+		// so we will use getFormattedDate method instead of formatting with a
+		// SimpleDateFormat
+
+		checkPath(path);
+		StringBuilder sb = new StringBuilder();
+		sb.append("/jcr:root").append(ISO9075.encodePath(path)).append("//*[@className='").append(className).append("'")
+				.append(" and @createdDate <= xs:dateTime('").append(getFormattedDate(range.getEndDate())).append("')")
+				.append(" and @createdDate >= xs:dateTime('").append(getFormattedDate(range.getStartDate()))
+				.append("')]");
+		return getEntities(sb.toString());
+	}
+
+	public Entity[] getEntities(String xpath) {
+		return getEntities(getTemplate().query(xpath));
+	}
+
+	// A date if formatted in JCR like the following :
+	// 2012-01-04T23:59:59.999+02:00
+	private String getFormattedDate(Date date) {
+		String formattedDate = "";
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		try {
 			formattedDate = ValueFactoryImpl.getInstance().createValue(cal).getString();
-		} catch (Exception e) {	
+		} catch (Exception e) {
 			// should never happen
 			e.printStackTrace();
-		} 
+		}
 		return formattedDate;
-    }
-        
-    private Entity[] getEntities(QueryResult queryResult) {
-    	try {
-            NodeIterator nodes = queryResult.getNodes();
-            List<Entity> entities = new ArrayList<Entity>();
-            while (nodes.hasNext()) {
-                Entity entity = getEntity(nodes.nextNode());
-                if (entity != null) {
-                    entities.add(entity);
-                }
-            }
+	}
 
-            return entities.toArray(new Entity[entities.size()]);
-        } catch (RepositoryException e) {
-            throw convertJcrAccessException(e);
-        }
-    }
-    
-    // clear all parents from cache
-    private void clearParentsCache(Entity entity) {
+	private Entity[] getEntities(QueryResult queryResult) {
+		try {
+			NodeIterator nodes = queryResult.getNodes();
+			List<Entity> entities = new ArrayList<Entity>();
+			while (nodes.hasNext()) {
+				Entity entity = getEntity(nodes.nextNode());
+				if (entity != null) {
+					entities.add(entity);
+				}
+			}
+
+			return entities.toArray(new Entity[entities.size()]);
+		} catch (RepositoryException e) {
+			throw convertJcrAccessException(e);
+		}
+	}
+
+	// clear all parents from cache
+	private void clearParentsCache(Entity entity) {
 		try {
 			String xpath = null;
 			if (entity instanceof DataSource) {
 				// find all reports and charts with this DataSource
-				xpath = "//nextServer//*[@dataSource='" + entity.getId()	+ "']";				
+				xpath = "//nextServer//*[@dataSource='" + entity.getId() + "']";
 			} else if (entity instanceof Report) {
 				// find all schedulers with this report
 				xpath = "//nextServer/scheduler/*[@report='" + entity.getId() + "']";
 			}
 			if (xpath != null) {
 				NodeIterator nodes = getTemplate().query(xpath).getNodes();
-				while (nodes.hasNext()) {										
+				while (nodes.hasNext()) {
 					entitiesCache.remove(nodes.nextNode().getIdentifier());
 				}
 			}
-			// if entity is inside a drill down we have to clear the master report (with drillDown list) 
-			// first parent is 'drillDownEntities' node; second parent is the actual report/chart
+			// if entity is inside a drill down we have to clear the master
+			// report (with drillDown list)
+			// first parent is 'drillDownEntities' node; second parent is the
+			// actual report/chart
 			if ((entity instanceof Report) || (entity instanceof Chart)) {
-				xpath = " //nextServer//drillDownEntities/*[@entity='" +  entity.getId() + "']";
+				xpath = " //nextServer//drillDownEntities/*[@entity='" + entity.getId() + "']";
 				if (xpath != null) {
 					NodeIterator nodes = getTemplate().query(xpath).getNodes();
-					while (nodes.hasNext()) {										
+					while (nodes.hasNext()) {
 						entitiesCache.remove(nodes.nextNode().getParent().getParent().getIdentifier());
 					}
 				}
-			}	
+			}
 		} catch (RepositoryException e) {
 			throw convertJcrAccessException(e);
 		}
-    }
-    
+	}
+
 	public void clearUserWidgetData(String widgetId) {
 		try {
 			String className = "ro.nextreports.server.domain.UserWidgetParameters";
-			String xpath = "/jcr:root" + ISO9075.encodePath(StorageConstants.USERS_DATA_ROOT) + "//*[@className='" + className
-					+ "']";
+			String xpath = "/jcr:root" + ISO9075.encodePath(StorageConstants.USERS_DATA_ROOT) + "//*[@className='"
+					+ className + "']";
 			NodeIterator nodes = getTemplate().query(xpath).getNodes();
 			while (nodes.hasNext()) {
-				Node node = nodes.nextNode();				
+				Node node = nodes.nextNode();
 				if (node.getName().equals(widgetId)) {
-					node.remove();					
-				}				
+					node.remove();
+				}
 			}
 			getTemplate().save();
 		} catch (RepositoryException e) {
@@ -697,68 +730,71 @@ public class JcrStorageDao extends AbstractJcrDao implements StorageDao, Initial
 		}
 	}
 
-    // TODO remove
-    public DataSource[] getDataSources() {
-        Entity[] entities;
+	// TODO remove
+	public DataSource[] getDataSources() {
+		Entity[] entities;
 		try {
 			entities = getEntitiesByClassName(StorageConstants.DATASOURCES_ROOT, DataSource.class.getName());
 		} catch (NotFoundException e) {
 			// never happening
 			throw new RuntimeException(e);
 		}
-        DataSource[] dataSources = new DataSource[entities.length];
-        System.arraycopy(entities, 0, dataSources, 0, entities.length);
+		DataSource[] dataSources = new DataSource[entities.length];
+		System.arraycopy(entities, 0, dataSources, 0, entities.length);
 
-        return dataSources;
-    }
+		return dataSources;
+	}
 
-    public boolean isEntityReferenced(String path) throws NotFoundException {
-    	checkPath(path);
-    	
-        try {
-            return getNode(path).getReferences().hasNext();
-        } catch (RepositoryException e) {
-            throw convertJcrAccessException(e);
-        }
-    }
+	public boolean isEntityReferenced(String path) throws NotFoundException {
+		checkPath(path);
 
-    public boolean entityExists(String path) {
-        if (!getTemplate().itemExists(path)) {
-            return false;
-        }
+		try {
+			return getNode(path).getReferences().hasNext();
+		} catch (RepositoryException e) {
+			throw convertJcrAccessException(e);
+		}
+	}
 
-        return isEntityNode(getNode(path));
-    }      
-    
-    public boolean nodeExists(String path) {
-    	return getTemplate().itemExists(path);            
-    }
+	public boolean entityExists(String path) {
+		if (!getTemplate().itemExists(path)) {
+			return false;
+		}
 
-    public VersionInfo[] getVersionInfos(String id) throws NotFoundException {
-    	//checkPath(path);
-    	
-        Node node = getNodeById(id);
-        if (!isVersionable(node)) {
-            // TODO throws an custom exception
-            return new VersionInfo[0];
-        }        
+		return isEntityNode(getNode(path));
+	}
 
-        List<VersionInfo> versionInfos = new ArrayList<VersionInfo>();
-        try {        	        	
-            VersionHistory versionHistory = getSession().getWorkspace().getVersionManager().getVersionHistory(node.getPath());
-            Version baseVersion = getSession().getWorkspace().getVersionManager().getBaseVersion(node.getPath());
-            VersionIterator versions = versionHistory.getAllVersions();
-            versions.skip(1);
-            while (versions.hasNext()) {
-                Version version = versions.nextVersion();
-                NodeIterator nodes = version.getNodes();
+	public boolean nodeExists(String path) {
+		return getTemplate().itemExists(path);
+	}
+
+	public VersionInfo[] getVersionInfos(String id) throws NotFoundException {
+		// checkPath(path);
+
+		Node node = getNodeById(id);
+		if (!isVersionable(node)) {
+			// TODO throws an custom exception
+			return new VersionInfo[0];
+		}
+
+		List<VersionInfo> versionInfos = new ArrayList<VersionInfo>();
+		try {
+			VersionHistory versionHistory = getSession().getWorkspace().getVersionManager()
+					.getVersionHistory(node.getPath());
+			Version baseVersion = getSession().getWorkspace().getVersionManager().getBaseVersion(node.getPath());
+			VersionIterator versions = versionHistory.getAllVersions();
+			versions.skip(1);
+			while (versions.hasNext()) {
+				Version version = versions.nextVersion();
+				NodeIterator nodes = version.getNodes();
 				while (nodes.hasNext()) {
 					VersionInfo versionInfo = new VersionInfo();
 					versionInfo.setName(version.getName());
 					try {
 						Entity entity = getEntity(nodes.nextNode());
-						// after StorageUpdate20 when com.asf.nextserver package was renamed with ro.nextreports.server
-						// all version nodes remained with older className (they cannot be changed because they are protected)
+						// after StorageUpdate20 when com.asf.nextserver package
+						// was renamed with ro.nextreports.server
+						// all version nodes remained with older className (they
+						// cannot be changed because they are protected)
 						// so they cannot be accessed anymore!
 						if (entity == null) {
 							continue;
@@ -773,169 +809,206 @@ public class JcrStorageDao extends AbstractJcrDao implements StorageDao, Initial
 						versionInfos.add(versionInfo);
 					} catch (JcrMappingException ex) {
 						// getEntity version is not found???
-						// @todo why?						
+						// @todo why?
 					}
 				}
-            }
-        } catch (RepositoryException e) {
-            throw convertJcrAccessException(e);
-        }
-
-        return versionInfos.toArray(new VersionInfo[versionInfos.size()]);
-    }
-
-    public Entity getVersion(String id, String versionName) throws NotFoundException {
-    	//checkPath(path);
-    	
-        Node node = getNodeById(id);
-        if (!isVersionable(node)) {
-            // TODO throws an custom exception
-            return null;
-        }
-
-        try {        	
-            VersionHistory versionHistory = getSession().getWorkspace().getVersionManager().getVersionHistory(node.getPath());
-            Version baseVersion = getSession().getWorkspace().getVersionManager().getBaseVersion(node.getPath());
-            Version version = versionHistory.getVersion(versionName);
-
-            Entity entity = getEntity(version.getNodes().nextNode());
-
-            // @todo another way ?
-            // hack : otherwise name is "jcr:frozenNode"
-            entity.setName(StorageUtil.getName(getEntity(node).getPath()));
-
-            getJcrom().setBaseVersionInfo(entity, baseVersion.getName(), baseVersion.getCreated());
-
-            return entity;
-        } catch (RepositoryException e) {
-            throw convertJcrAccessException(e);
-        }
-    }
-
-    public void restoreVersion(String path, String versionName) throws NotFoundException {
-    	checkPath(path);
-    	
-        Node node = getNode(path);
-        if (!isVersionable(node)) {
-            // TODO throws an custom exception
-            return;
-        }
-
-        try {
-        	getSession().getWorkspace().getVersionManager().restore(node.getPath(), versionName, true);
-            getSession().getWorkspace().getVersionManager().checkout(node.getPath());
-            
-            // cache
-            getEntity(path);            
-        } catch (RepositoryException e) {
-            throw convertJcrAccessException(e);
-        }                
-    }
-
-    public List<RunReportHistory> getRunHistory(String reportPath) throws NotFoundException {
-        if (reportPath == null) {
-            reportPath = StorageConstants.REPORTS_ROOT;
-        }
-        
-        checkPath(reportPath);
-        
-        Entity[] entities = getEntitiesByClassName(reportPath, RunReportHistory.class.getName());
-        List<RunReportHistory> list = new ArrayList<RunReportHistory>(entities.length);
-        for (Entity entity : entities) {
-            list.add((RunReportHistory) entity);
-        }
-
-        return list;
-    }
-    
-    public List<ReportRuntimeTemplate> getReportTemplates(String reportPath) throws NotFoundException {
-        if (reportPath == null) {
-            return new ArrayList<ReportRuntimeTemplate>();
-        }
-        
-        checkPath(reportPath);
-        
-        Entity[] entities = getEntitiesByClassName(reportPath, ReportRuntimeTemplate.class.getName());        
-        List<ReportRuntimeTemplate> list = new ArrayList<ReportRuntimeTemplate>(entities.length);
-        for (Entity entity : entities) {
-            list.add((ReportRuntimeTemplate) entity);
-        }
-
-        return list;
-    }
-    
-    public List<ReportRuntimeTemplate> getReportTemplatesById(String reportId) throws NotFoundException {
-        if (reportId == null) {
-            return new ArrayList<ReportRuntimeTemplate>();
-        }        
-        String reportPath = getEntityById(reportId).getPath();                
-        return getReportTemplates(reportPath);
-    }
-    
-    public List<RunReportHistory> getRunHistoryForRange(String reportPath, DateRange range) throws NotFoundException {
-        if (reportPath == null) {
-            reportPath = StorageConstants.REPORTS_ROOT;
-        }
-        
-        checkPath(reportPath);
-        
-        Entity[] entities = getEntitiesByClassNameForRange(reportPath, RunReportHistory.class.getName(), range);
-        List<RunReportHistory> list = new ArrayList<RunReportHistory>(entities.length);
-        for (Entity entity : entities) {
-            list.add((RunReportHistory) entity);
-        }
-
-        return list;
-    }
-    
-    public long deleteRunHistoryForRange(String reportPath, DateRange range) throws NotFoundException {
-        if (reportPath == null) {
-            reportPath = StorageConstants.REPORTS_ROOT;
-        }
-        
-        checkPath(reportPath);
-        
-        Entity[] entities = getEntitiesByClassNameForRange(reportPath, RunReportHistory.class.getName(), range);
-        long deleted= 0;
-        for (Entity entity : entities) {
-        	try {
-        		removeEntityById(entity.getId());
-        		deleted ++;
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
-        }
-        return deleted;
-    }
+		} catch (RepositoryException e) {
+			throw convertJcrAccessException(e);
+		}
 
-    public List<RunReportHistory> getRunHistory() {
-        Entity[] entities;
+		return versionInfos.toArray(new VersionInfo[versionInfos.size()]);
+	}
+
+	public Entity getVersion(String id, String versionName) throws NotFoundException {
+		// checkPath(path);
+
+		Node node = getNodeById(id);
+		if (!isVersionable(node)) {
+			// TODO throws an custom exception
+			return null;
+		}
+
+		try {
+			VersionHistory versionHistory = getSession().getWorkspace().getVersionManager()
+					.getVersionHistory(node.getPath());
+			Version baseVersion = getSession().getWorkspace().getVersionManager().getBaseVersion(node.getPath());
+			Version version = versionHistory.getVersion(versionName);
+
+			Entity entity = getEntity(version.getNodes().nextNode());
+
+			// @todo another way ?
+			// hack : otherwise name is "jcr:frozenNode"
+			entity.setName(StorageUtil.getName(getEntity(node).getPath()));
+
+			getJcrom().setBaseVersionInfo(entity, baseVersion.getName(), baseVersion.getCreated());
+
+			return entity;
+		} catch (RepositoryException e) {
+			throw convertJcrAccessException(e);
+		}
+	}
+
+	public void restoreVersion(String path, String versionName) throws NotFoundException {
+		checkPath(path);
+
+		Node node = getNode(path);
+		if (!isVersionable(node)) {
+			// TODO throws an custom exception
+			return;
+		}
+
+		try {
+			getSession().getWorkspace().getVersionManager().restore(node.getPath(), versionName, true);
+			getSession().getWorkspace().getVersionManager().checkout(node.getPath());
+
+			// cache
+			getEntity(path);
+		} catch (RepositoryException e) {
+			throw convertJcrAccessException(e);
+		}
+	}
+
+	public List<RunReportHistory> getRunHistory(String reportPath) throws NotFoundException {
+		if (reportPath == null) {
+			reportPath = StorageConstants.REPORTS_ROOT;
+		}
+
+		checkPath(reportPath);
+
+		Entity[] entities = getEntitiesByClassName(reportPath, RunReportHistory.class.getName());
+		List<RunReportHistory> list = new ArrayList<RunReportHistory>(entities.length);
+		for (Entity entity : entities) {
+			list.add((RunReportHistory) entity);
+		}
+
+		return list;
+	}
+
+	public List<ReportRuntimeTemplate> getReportTemplates(String reportPath) throws NotFoundException {
+		if (reportPath == null) {
+			return new ArrayList<ReportRuntimeTemplate>();
+		}
+
+		checkPath(reportPath);
+
+		Entity[] entities = getEntitiesByClassName(reportPath, ReportRuntimeTemplate.class.getName());
+		List<ReportRuntimeTemplate> list = new ArrayList<ReportRuntimeTemplate>(entities.length);
+		for (Entity entity : entities) {
+			list.add((ReportRuntimeTemplate) entity);
+		}
+
+		return list;
+	}
+
+	public List<ReportRuntimeTemplate> getReportTemplatesById(String reportId) throws NotFoundException {
+		if (reportId == null) {
+			return new ArrayList<ReportRuntimeTemplate>();
+		}
+		String reportPath = getEntityById(reportId).getPath();
+		return getReportTemplates(reportPath);
+	}
+
+	public List<RunReportHistory> getRunHistoryForRange(String reportPath, DateRange range) throws NotFoundException {
+		if (reportPath == null) {
+			reportPath = StorageConstants.REPORTS_ROOT;
+		}
+
+		checkPath(reportPath);
+
+		Entity[] entities = getEntitiesByClassNameForRange(reportPath, RunReportHistory.class.getName(), range);
+		List<RunReportHistory> list = new ArrayList<RunReportHistory>(entities.length);
+		for (Entity entity : entities) {
+			list.add((RunReportHistory) entity);
+		}
+
+		return list;
+	}
+
+	public long deleteRunHistoryForRange(String reportPath, DateRange range, boolean exportToLog)
+			throws NotFoundException {
+		if (reportPath == null) {
+			reportPath = StorageConstants.REPORTS_ROOT;
+		}
+
+		checkPath(reportPath);
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("/jcr:root")//
+				.append(ISO9075.encodePath(reportPath))//
+				.append("//*[@className='")//
+				.append(RunReportHistory.class.getName()).append("'")//
+				.append(" and @createdDate <= xs:dateTime('").append(getFormattedDate(range.getEndDate())).append("')")//
+				.append(" and @createdDate >= xs:dateTime('").append(getFormattedDate(range.getStartDate()))//
+				.append("')")/* .append(" and position < 100") */.append("]");
+
+		int count = 0;
+		String spath = "deleteRunHistoryForRange {" + getFormattedDate(range.getStartDate()) + "}-{"
+				+ getFormattedDate(range.getEndDate()) + "} ";
+		try {
+			LOG.debug(spath + " query this point");
+
+			NodeIterator nodes = getTemplate().query(sb.toString()).getNodes();
+			LOG.debug(spath + "reached this point {" + count + "}");
+			while (nodes.hasNext()) {
+				try {
+					Node node = nodes.nextNode();
+					// System.err.println("will delete node " +
+					// node.getIdentifier());
+
+					if (exportToLog) {
+						LOG_RUN_HISTORY_FILE.info(node.toString());
+					}
+
+					node.remove();
+
+					entitiesCache.remove(node.getIdentifier());
+					count++;
+					if (count % 100 == 0) {
+						LOG.debug(spath + "count = " + count);
+						getTemplate().save();
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			getTemplate().save();
+			LOG.debug(spath + "after save {" + count + "}");
+		} catch (RepositoryException e) {
+			throw convertJcrAccessException(e);
+		}
+
+		return count;
+	}
+
+	public List<RunReportHistory> getRunHistory() {
+		Entity[] entities;
 		try {
 			entities = getEntitiesByClassName(StorageConstants.REPORTS_ROOT, RunReportHistory.class.getName());
 		} catch (NotFoundException e) {
 			// never happening
 			throw new RuntimeException(e);
 		}
-        List<RunReportHistory> list = new ArrayList<RunReportHistory>(entities.length);
-        for (Entity entity : entities) {
-            list.add((RunReportHistory) entity);
-        }
+		List<RunReportHistory> list = new ArrayList<RunReportHistory>(entities.length);
+		for (Entity entity : entities) {
+			list.add((RunReportHistory) entity);
+		}
 
-        return list;
-    }        
+		return list;
+	}
 
-    // TODO remove
-    public SchedulerJob[] getSchedulerJobs() throws Exception {
-        Entity[] entities = getEntitiesByClassName(StorageConstants.SCHEDULER_ROOT, SchedulerJob.class.getName());
-        SchedulerJob[] schedulerJobs = new SchedulerJob[entities.length];
-        System.arraycopy(entities, 0, schedulerJobs, 0, entities.length);
+	// TODO remove
+	public SchedulerJob[] getSchedulerJobs() throws Exception {
+		Entity[] entities = getEntitiesByClassName(StorageConstants.SCHEDULER_ROOT, SchedulerJob.class.getName());
+		SchedulerJob[] schedulerJobs = new SchedulerJob[entities.length];
+		System.arraycopy(entities, 0, schedulerJobs, 0, entities.length);
 
-        return schedulerJobs;
-    }
+		return schedulerJobs;
+	}
 
-    public String addOrModifyEntity(Entity entity) {
-    	String id = null;
-    	
+	public String addOrModifyEntity(Entity entity) {
+		String id = null;
+
 		String path = entity.getPath();
 		if (entityExists(path)) {
 			modifyEntity(entity);
@@ -947,92 +1020,88 @@ public class JcrStorageDao extends AbstractJcrDao implements StorageDao, Initial
 				// never happening
 			}
 		}
-		
+
 		entitiesCache.put(id, entity);
-		
+
 		return id;
-    }
-    
-    public String getEntityPath(String id) throws NotFoundException {
-    	if (entitiesCache.hasElement(id)) {
-    		Entity entity = (Entity) entitiesCache.get(id);
-    		return entity.getPath(); // TODO make a review for add entity in cache (look at PATH property)
-    	}
-    	
-    	try {
+	}
+
+	public String getEntityPath(String id) throws NotFoundException {
+		if (entitiesCache.hasElement(id)) {
+			Entity entity = (Entity) entitiesCache.get(id);
+			return entity.getPath(); // TODO make a review for add entity in
+										// cache (look at PATH property)
+		}
+
+		try {
 			Node node = checkId(id);
 			if (!isEntityNode(node)) {
 				// TODO may be throw an exception
 				return null;
 			}
-			
+
 			return node.getPath();
 		} catch (RepositoryException e) {
-            throw convertJcrAccessException(e);
-        }
-    }
-    
-	public int countEntityChildrenById(String id) throws NotFoundException {
-        Node node = checkId(id);
-        try {
-            if (!node.hasNodes()) {
-                return 0;
-            }
-            
-            NodeIterator nodes = node.getNodes();
-            // TODO it's OK ?
-            return (int) nodes.getSize();
-            /*
-            int count = 0;
-            while (nodes.hasNext()) {
-            	Node nextNode = nodes.nextNode();
-            	if (isEntityNode(nextNode)) {;
-            		count++;
-            	}
-            }
-            
-            return count;
-            */
-        } catch (RepositoryException e) {
-            throw convertJcrAccessException(e);
-        }
+			throw convertJcrAccessException(e);
+		}
 	}
 
-    public Cache getEntitiesCache() {
+	public int countEntityChildrenById(String id) throws NotFoundException {
+		Node node = checkId(id);
+		try {
+			if (!node.hasNodes()) {
+				return 0;
+			}
+
+			NodeIterator nodes = node.getNodes();
+			// TODO it's OK ?
+			return (int) nodes.getSize();
+			/*
+			 * int count = 0; while (nodes.hasNext()) { Node nextNode =
+			 * nodes.nextNode(); if (isEntityNode(nextNode)) {; count++; } }
+			 * 
+			 * return count;
+			 */
+		} catch (RepositoryException e) {
+			throw convertJcrAccessException(e);
+		}
+	}
+
+	public Cache getEntitiesCache() {
 		return entitiesCache;
 	}
 
 	private Entity getEntity(Node node) {
-        if (!isEntityNode(node)) {
-        	String path;
+		if (!isEntityNode(node)) {
+			String path;
 			try {
 				path = node.getPath();
 			} catch (RepositoryException e) {
 				throw convertJcrAccessException(e);
 			}
-        	logger.warn("Node with path " + path + " is not an entity node");
-        	
-            return null;
-        }
+			logger.warn("Node with path " + path + " is not an entity node");
 
-        // TODO
-        String id = null;
-        try {
-        	id = node.getIdentifier();
-        } catch (RepositoryException e) {
-        	throw convertJcrAccessException(e);
-        }
-    	if (entitiesCache.hasElement(id)) {
-    		//System.out.println("+++ getEntity(Node)");
-    		return (Entity) entitiesCache.get(id);
-    	}
+			return null;
+		}
 
-        Entity entity = getJcrom().fromNode(Entity.class, node);
-        entitiesCache.put(id, entity);
-        
-        return entity;
-    }		
-	
+		// TODO
+		String id = null;
+		try {
+			id = node.getIdentifier();
+		} catch (RepositoryException e) {
+			throw convertJcrAccessException(e);
+		}
+		if (entitiesCache.hasElement(id)) {
+			// System.out.println("+++ getEntity(Node)");
+			return (Entity) entitiesCache.get(id);
+		}
+
+		Entity entity = getJcrom().fromNode(Entity.class, node);
+		entitiesCache.put(id, entity);
+
+		return entity;
+	}
+
 	private void clearChildrenCache(String entityId) {
 		Entity[] children = new Entity[0];
 		try {
@@ -1045,18 +1114,18 @@ public class JcrStorageDao extends AbstractJcrDao implements StorageDao, Initial
 			clearChildrenCache(entity.getId());
 		}
 	}
-	
+
 	public void setDefaultProperty(String path, String defaultValue) {
-		Node node = getNode(path);		
+		Node node = getNode(path);
 		try {
 			node.setProperty("default", defaultValue);
-			getTemplate().save();			
+			getTemplate().save();
 		} catch (RepositoryException e) {
 			throw convertJcrAccessException(e);
 		}
 	}
-	
-	public String getDefaultProperty(String path) throws NotFoundException {			
+
+	public String getDefaultProperty(String path) throws NotFoundException {
 		try {
 			Node node = getNode(path);
 			return node.getProperty("default").getValue().getString();
@@ -1066,25 +1135,25 @@ public class JcrStorageDao extends AbstractJcrDao implements StorageDao, Initial
 			throw convertJcrAccessException(e);
 		}
 	}
-	
+
 	public byte[] getLogoImage() {
 		try {
-			Settings settings = (Settings)getEntity(StorageConstants.SETTINGS_ROOT);
+			Settings settings = (Settings) getEntity(StorageConstants.SETTINGS_ROOT);
 			return settings.getLogo().getDataProvider().getBytes();
-		} catch (NotFoundException e) {		
+		} catch (NotFoundException e) {
 			e.printStackTrace();
 			return new byte[0];
 		}
 	}
-	
+
 	public void personalizeSettings(String fileName, byte[] content, String theme, String language) {
-		try {			
-			Settings settings = (Settings)getEntity(StorageConstants.SETTINGS_ROOT);
+		try {
+			Settings settings = (Settings) getEntity(StorageConstants.SETTINGS_ROOT);
 			if (fileName != null) {
 				JcrFile logo = new JcrFile();
 				logo.setName(fileName);
 				logo.setLastModified(Calendar.getInstance());
-				logo.setPath(StorageUtil.createPath(settings.getPath(),	logo.getName()));
+				logo.setPath(StorageUtil.createPath(settings.getPath(), logo.getName()));
 				logo.setMimeType("image/png");
 				logo.setDataProvider(new JcrDataProviderImpl(content));
 				settings.setLogo(logo);
@@ -1098,34 +1167,34 @@ public class JcrStorageDao extends AbstractJcrDao implements StorageDao, Initial
 			// should never happen
 			ex.printStackTrace();
 		}
-		
+
 	}
-	
+
 	public void personalizeTheme(String theme) {
-		try {			
-			Settings settings = (Settings)getEntity(StorageConstants.SETTINGS_ROOT);			
-			settings.setColorTheme(theme);			
+		try {
+			Settings settings = (Settings) getEntity(StorageConstants.SETTINGS_ROOT);
+			settings.setColorTheme(theme);
 			modifyEntity(settings);
 			// disable cache
 			entitiesCache.remove(settings.getId());
 		} catch (NotFoundException ex) {
 			// should never happen
 			ex.printStackTrace();
-		}		
+		}
 	}
-	
+
 	public Settings getSettings() {
 		try {
-			return (Settings)getEntity(StorageConstants.SETTINGS_ROOT);
+			return (Settings) getEntity(StorageConstants.SETTINGS_ROOT);
 		} catch (NotFoundException e) {
 			// should never happen
-			e.printStackTrace();			
+			e.printStackTrace();
 			return new Settings();
 		}
 	}
-	
-	public String getDashboardId(String widgetId) throws NotFoundException  {		
-		Node node = getNodeById(widgetId);		
+
+	public String getDashboardId(String widgetId) throws NotFoundException {
+		Node node = getNodeById(widgetId);
 		try {
 			Node parentNode = node.getParent().getParent();
 			return parentNode.getIdentifier();
@@ -1134,4 +1203,127 @@ public class JcrStorageDao extends AbstractJcrDao implements StorageDao, Initial
 		}
 	}
 
+	private void experimentalShrinkDerbyDatabase() throws Exception {
+		String home = null;
+		try {
+			WorkspaceImpl workspace = (org.apache.jackrabbit.core.WorkspaceImpl) getSession().getWorkspace();
+			// String[] workspaceNames =
+			// workspace.getAccessibleWorkspaceNames();
+			// for (String str : workspaceNames) {
+			// System.err.println("str -> " + str);
+			// }
+			WorkspaceConfig wc = workspace.getConfig();
+			home = wc.getHomeDir();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// 1 - trebuie sa luam driverul functie de persistencemanager, workspace
+		// manager
+		// 2 - trebuie sa gasesc calea unde e baza pt derby
+		// 3 - calea care e numele default and stuff
+
+		// 4 - apel de procedura care distruge stuff
+		// trebuie sa iau toata 4 tabelele alea si sa dau pe fiecare. (select *
+		// from sys.systables) si apoi apel de aia de compress one by one
+
+		String sql_getTables = "select s.*, (select ss.schemaname from sys.sysschemas ss where ss.schemaid=s.schemaid) as schemaname from sys.systables s  "
+				+ " where s.tablename not like 'SYS%' "
+				+ " and s.schemaid in (select ss.schemaid from sys.sysschemas ss "
+				+ " where ss.schemaname not like 'SYS%' " + " and ss.schemaname not like 'NULL%'"
+				+ " and ss.schemaname not like 'SQL%' )";
+		Connection con = null;
+		Statement stm = null;
+		ResultSet rs = null;
+		try {
+			con = getDerbyConnection(home);
+			stm = con.createStatement();
+			rs = stm.executeQuery(sql_getTables);
+
+			List<Pair<String, String>> lst = new ArrayList<Pair<String, String>>();
+
+			while (rs.next()) {
+				lst.add(new Pair<String, String>(rs.getString("SCHEMANAME"), rs.getString("TABLENAME")));
+			}
+
+			for (Pair<String, String> p : lst) {
+				try {
+					LOG.debug("executing for " + p.getFirst() + "." + p.getSecond());
+					CallableStatement cs = con.prepareCall("CALL SYSCS_UTIL.SYSCS_COMPRESS_TABLE(?, ?, ?)");
+					cs.setString(1, p.getFirst()/* "US" */);
+					cs.setString(2, p.getSecond()/* "CUSTOMER" */);
+					cs.setShort(3, (short) 1);
+					cs.execute();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				stm.close();
+			} catch (Exception e2) {
+			}
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				con.close();
+			} catch (Exception e2) {
+			}
+		}
+
+	}
+
+	/** Uses DriverManager. */
+	private Connection getDerbyConnection(String wkpDir) {
+		// See your driver documentation for the proper format of this string :
+		wkpDir = wkpDir.replaceAll("\\\\", "/");
+		System.err.println(wkpDir);
+		String DB_CONN_STRING = "jdbc:derby:" + wkpDir // "d:/workspace/workspace-next-work/nextreports-server/data/workspaces/default"
+				+ "/db;create=false";
+		// Provided by your driver documentation. In this case, a MySql driver
+		// is used :
+
+		String DRIVER_CLASS_NAME = "org.apache.derby.jdbc.EmbeddedDriver";
+		String USER_NAME = null;
+		String PASSWORD = null;
+
+		Connection result = null;
+		try {
+			Class.forName(DRIVER_CLASS_NAME).newInstance();
+		} catch (Exception ex) {
+			LOG.debug("Check classpath. Cannot load db driver: " + DRIVER_CLASS_NAME);
+		}
+
+		try {
+			result = DriverManager.getConnection(DB_CONN_STRING, USER_NAME, PASSWORD);
+		} catch (SQLException e) {
+			LOG.debug("Driver loaded, but cannot connect to db: " + DB_CONN_STRING);
+		}
+		return result;
+	}
+
+	public void shrinkDataFolder() {
+		try {
+			GarbageCollector gc;
+			SessionImpl si = (SessionImpl) getTemplate().getSessionFactory().getSession();
+			gc = si.createDataStoreGarbageCollector();
+			LOG.debug("GC before mark");
+			gc.mark();
+			LOG.debug("GC before sweep");
+			gc.sweep();
+			LOG.debug("GC before stopScan");
+			gc.stopScan();
+			LOG.debug("GC before rest");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			experimentalShrinkDerbyDatabase();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

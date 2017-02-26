@@ -73,260 +73,278 @@ import ro.nextreports.server.web.schedule.ActiveSchedulerJobDataProvider;
 public class MonitorPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@SpringBean
-    private ReportService reportService;
+	private ReportService reportService;
 
-    @SpringBean
-    private SchedulerService schedulerService;
-    
-    @SpringBean
-    private StorageService storageService;
-    
-    @SpringBean
-    private Scheduler scheduler;
+	@SpringBean
+	private SchedulerService schedulerService;
 
-    private DataTable<ReportJobInfo, String> jobsTable;
-    private DataTable<SchedulerJob, String> schedulerJobsTable;
-    private DataTable<RunReportHistory, String> runHistoryTable;
+	@SpringBean
+	private StorageService storageService;
 
-    public MonitorPanel(String id) {
-        super(id);
+	@SpringBean
+	private Scheduler scheduler;
 
-        jobsTable = createJobsTable(new ReportJobInfoDataProvider());
-        jobsTable.setOutputMarkupId(true);
-        add(jobsTable);
+	private DataTable<ReportJobInfo, String> jobsTable;
+	private DataTable<SchedulerJob, String> schedulerJobsTable;
+	private DataTable<RunReportHistory, String> runHistoryTable;
 
-        schedulerJobsTable = createSchedulerJobsTable(new ActiveSchedulerJobDataProvider());
-        schedulerJobsTable.setOutputMarkupId(true);
-        add(schedulerJobsTable);
+	public MonitorPanel(String id) {
+		super(id);
 
-        RunHistoryPanel runHistoryPanel = new RunHistoryPanel("runHistoryPanel", null);
-        runHistoryTable = runHistoryPanel.getRunHistoryTable();
-        runHistoryTable.setOutputMarkupId(true);
-        add(runHistoryPanel);
-        
-        Settings settings = storageService.getSettings();
+		jobsTable = createJobsTable(new ReportJobInfoDataProvider());
+		jobsTable.setOutputMarkupId(true);
+		add(jobsTable);
+
+		schedulerJobsTable = createSchedulerJobsTable(new ActiveSchedulerJobDataProvider());
+		schedulerJobsTable.setOutputMarkupId(true);
+		add(schedulerJobsTable);
+
+		RunHistoryPanel runHistoryPanel = new RunHistoryPanel("runHistoryPanel", null);
+		runHistoryTable = runHistoryPanel.getRunHistoryTable();
+		runHistoryTable.setOutputMarkupId(true);
+		add(runHistoryPanel);
+
+		Settings settings = storageService.getSettings();
 		int updateInterval = settings.getUpdateInterval();
-				        
-        if (updateInterval > 0) {
-        	jobsTable.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(updateInterval)));
-            schedulerJobsTable.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(updateInterval)));
-            runHistoryTable.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(updateInterval)));
-        }
-    }
 
-    protected DataTable<ReportJobInfo, String> createJobsTable(ReportJobInfoDataProvider dataProvider) {
-    	SortableDataProvider<ReportJobInfo, String> sortableDataProvider = new SortableDataAdapter<ReportJobInfo>(dataProvider);
-    	sortableDataProvider.setSort("startDate", SortOrder.ASCENDING);
-        return new BaseTable<ReportJobInfo>("jobsTable", createJobsTableColumns(), sortableDataProvider, Integer.MAX_VALUE);
-    }
+		if (updateInterval > 0) {
+			jobsTable.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(updateInterval)));
+			schedulerJobsTable.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(updateInterval)));
+			runHistoryTable.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(updateInterval)));
+		}
+	}
 
-    protected DataTable<SchedulerJob, String> createSchedulerJobsTable(ActiveSchedulerJobDataProvider dataProvider) {
-    	SortableDataProvider<SchedulerJob, String> sortableDataProvider = new SortableDataAdapter<SchedulerJob>(dataProvider);
-    	sortableDataProvider.setSort("nextRun", SortOrder.ASCENDING);
-        return new BaseTable<SchedulerJob>("schedulerJobsTable", createActiveSchedulerJobsTableColumns(), sortableDataProvider, Integer.MAX_VALUE);
-    }
+	protected DataTable<ReportJobInfo, String> createJobsTable(ReportJobInfoDataProvider dataProvider) {
+		SortableDataProvider<ReportJobInfo, String> sortableDataProvider = new SortableDataAdapter<ReportJobInfo>(
+				dataProvider);
+		sortableDataProvider.setSort("startDate", SortOrder.ASCENDING);
+		return new BaseTable<ReportJobInfo>("jobsTable", createJobsTableColumns(), sortableDataProvider,
+				Integer.MAX_VALUE);
+	}
 
-    protected List<IColumn<ReportJobInfo, String>> createJobsTableColumns() {
-        List<IColumn<ReportJobInfo, String>> columns = new ArrayList<IColumn<ReportJobInfo, String>>();
-        columns.add(new PropertyColumn<ReportJobInfo, String>(new Model<String>(getString("name")), "jobName", "jobName") {
-        	
+	protected DataTable<SchedulerJob, String> createSchedulerJobsTable(ActiveSchedulerJobDataProvider dataProvider) {
+		SortableDataProvider<SchedulerJob, String> sortableDataProvider = new SortableDataAdapter<SchedulerJob>(
+				dataProvider);
+		sortableDataProvider.setSort("nextRun", SortOrder.ASCENDING);
+		return new BaseTable<SchedulerJob>("schedulerJobsTable", createActiveSchedulerJobsTableColumns(),
+				sortableDataProvider, Integer.MAX_VALUE);
+	}
+
+	protected List<IColumn<ReportJobInfo, String>> createJobsTableColumns() {
+		List<IColumn<ReportJobInfo, String>> columns = new ArrayList<IColumn<ReportJobInfo, String>>();
+		columns.add(
+				new PropertyColumn<ReportJobInfo, String>(new Model<String>(getString("name")), "jobName", "jobName") {
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected IModel<?> createLabelModel(IModel<ReportJobInfo> reportJobInfoIModel) {
+						String basicName = reportJobInfoIModel.getObject().getBasicJobName();
+						return new Model<String>(basicName.substring(StorageConstants.REPORTS_ROOT.length()));
+					}
+
+				});
+
+		columns.add(new PropertyColumn<ReportJobInfo, String>(
+				new Model<String>(getString("DashboardNavigationPanel.owner")), "runner", "runner") {
+
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected IModel<?> createLabelModel(IModel<ReportJobInfo> reportJobInfoIModel) {
-                String basicName = reportJobInfoIModel.getObject().getBasicJobName();
-                return new Model<String>(basicName.substring(StorageConstants.REPORTS_ROOT.length()));
-            }
-            
-        });
+			public void populateItem(Item<ICellPopulator<ReportJobInfo>> item, String componentId,
+					IModel<ReportJobInfo> rowModel) {
+				super.populateItem(item, componentId, rowModel);
+				item.add(AttributeModifier.replace("width", "150px"));
+			}
 
-        columns.add(new PropertyColumn<ReportJobInfo, String>(new Model<String>(getString("DashboardNavigationPanel.owner")), "runner", "runner") {
-        	
-        	private static final long serialVersionUID = 1L;
-        	
-            @Override
-            public void populateItem(Item<ICellPopulator<ReportJobInfo>> item, String componentId, IModel<ReportJobInfo> rowModel) {
-                super.populateItem(item, componentId, rowModel);
-                item.add(AttributeModifier.replace("width", "150px"));
-            }
-            
-        });
-        
-        columns.add(new DateColumn<ReportJobInfo>(new Model<String>(getString("startDate")), "startDate", "startDate") {
-        	
-        	private static final long serialVersionUID = 1L;
-        	
-            @Override
-            public void populateItem(Item<ICellPopulator<ReportJobInfo>> item, String componentId, IModel<ReportJobInfo> rowModel) {
-                super.populateItem(item, componentId, rowModel);
-                item.add(AttributeModifier.replace("width", "120px"));
-            }
+		});
 
-        });
-        columns.add(new PropertyColumn<ReportJobInfo, String>(new Model<String>(getString("MonitorPanel.runTime")), "runTime", "runTime") {
+		columns.add(new DateColumn<ReportJobInfo>(new Model<String>(getString("startDate")), "startDate", "startDate") {
 
-        	private static final long serialVersionUID = 1L;
-        	
-            @Override
-            public void populateItem(Item<ICellPopulator<ReportJobInfo>> item, String componentId, IModel<ReportJobInfo> rowModel) {
-                super.populateItem(item, componentId, rowModel);
-                item.add(AttributeModifier.replace("width", "100px"));
-            }
+			private static final long serialVersionUID = 1L;
 
-            @Override
-            protected IModel<?> createLabelModel(IModel<ReportJobInfo> rowModel) {
-                int runTime = rowModel.getObject().getRunTime();
-                String text = "";
-                if (runTime > 0) {
-                    DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm:ss").withZone(DateTimeZone.UTC);
-                    text = formatter.print(runTime * 1000);
-                }
+			@Override
+			public void populateItem(Item<ICellPopulator<ReportJobInfo>> item, String componentId,
+					IModel<ReportJobInfo> rowModel) {
+				super.populateItem(item, componentId, rowModel);
+				item.add(AttributeModifier.replace("width", "120px"));
+			}
 
-                return new Model<String>(text);
-            }
+		});
+		columns.add(new PropertyColumn<ReportJobInfo, String>(new Model<String>(getString("MonitorPanel.runTime")),
+				"runTime", "runTime") {
 
-        });
+			private static final long serialVersionUID = 1L;
 
-        columns.add(new AbstractColumn<ReportJobInfo, String>(new Model<String>(getString("MonitorPanel.stop"))) {
+			@Override
+			public void populateItem(Item<ICellPopulator<ReportJobInfo>> item, String componentId,
+					IModel<ReportJobInfo> rowModel) {
+				super.populateItem(item, componentId, rowModel);
+				item.add(AttributeModifier.replace("width", "100px"));
+			}
 
-        	private static final long serialVersionUID = 1L;
-        	
-            public void populateItem(Item<ICellPopulator<ReportJobInfo>> item, String componentId,
-                                     final IModel<ReportJobInfo> rowModel) {
-                final String reportType = rowModel.getObject().getReportType();
-                final String runnerKey = rowModel.getObject().getRunnerKey();
+			@Override
+			protected IModel<?> createLabelModel(IModel<ReportJobInfo> rowModel) {
+				int runTime = rowModel.getObject().getRunTime();
+				String text = "";
+				if (runTime > 0) {
+					DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm:ss").withZone(DateTimeZone.UTC);
+					text = formatter.print(runTime * 1000);
+				}
 
-                item.add(new AbstractImageAjaxLinkPanel(componentId) {
+				return new Model<String>(text);
+			}
 
-                	private static final long serialVersionUID = 1L;
-                	
-                    @Override
-                    public String getDisplayString() {
-                        return "";
-                    }
+		});
 
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        reportService.stopExport(runnerKey, reportType);
-                        target.add(jobsTable);
-                        target.add(runHistoryTable);
-                    }
+		columns.add(new AbstractColumn<ReportJobInfo, String>(new Model<String>(getString("MonitorPanel.stop"))) {
 
-                    @Override
-                    public String getImageName() {
-                        return "images/stop.png";
-                    }
+			private static final long serialVersionUID = 1L;
 
-                    @Override
+			public void populateItem(Item<ICellPopulator<ReportJobInfo>> item, String componentId,
+					final IModel<ReportJobInfo> rowModel) {
+				final String reportType = rowModel.getObject().getReportType();
+				final String runnerKey = rowModel.getObject().getRunnerKey();
+
+				item.add(new AbstractImageAjaxLinkPanel(componentId) {
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public String getDisplayString() {
+						return "";
+					}
+
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						reportService.stopExport(runnerKey, reportType);
+						target.add(jobsTable);
+						target.add(runHistoryTable);
+					}
+
+					@Override
+					public String getImageName() {
+						return "images/stop.png";
+					}
+
+					@Override
 					protected Link getLink() {
 						Link link = super.getLink();
 						link.add(new ConfirmBehavior(new Model<String>(
-                                "Do you want to stop the execution?\\nBe aware that the cancelation process may take some time.")));
+								"Do you want to stop the execution?\\nBe aware that the cancelation process may take some time.")));
 						return link;
 					}
-                });
-            }
-
-        });
-        
-        return columns;
-    }
-
-    protected List<IColumn<SchedulerJob, String>> createActiveSchedulerJobsTableColumns() {
-        List<IColumn<SchedulerJob, String>> columns = new ArrayList<IColumn<SchedulerJob, String>>();
-        columns.add(new PropertyColumn<SchedulerJob, String>(new Model<String>(getString("name")), "name", "name") {            
-            @Override
-            protected IModel<String> createLabelModel(IModel<SchedulerJob> jobInfoIModel) {
-                return new Model<String>(jobInfoIModel.getObject().getName());
-            }
-        });
-
-        columns.add(new PropertyColumn<SchedulerJob, String>(new Model<String>(getString("type")), "time.type", "time.type") {
-            @Override
-			public void populateItem(Item<ICellPopulator<SchedulerJob>> item, String componentId, IModel<SchedulerJob> rowModel) {
-                SchedulerTime st = rowModel.getObject().getTime();
-                Label label = new Label(componentId, getString("JobPanel.type." + st.getType()));
-                label.add(new SimpleTooltipBehavior(SchedulerUtil.getTooltip(st)));
-    			item.add(label);
-			}
-        });
-        columns.add(new PropertyColumn<SchedulerJob, String>(new Model<String>(getString("Report")), "report.path", "report.path") {
-
-            @Override
-			public void populateItem(Item<ICellPopulator<SchedulerJob>> item, String componentId, IModel<SchedulerJob> rowModel) {
-                String path = rowModel.getObject().getReport().getPath();
-                String relativePath = StorageUtil.getPathWithoutRoot(path);
-                String name = StorageUtil.getName(relativePath);
-                Label label = new Label(componentId, name);
-                label.add(new SimpleTooltipBehavior(relativePath));
-    			item.add(label);
+				});
 			}
 
-        });
-        columns.add(new BooleanImagePropertyColumn<SchedulerJob>(new Model<String>(getString("MonitorPanel.running")), "isRunning", "isRunning") {
-        	@Override
-            public void populateItem(Item<ICellPopulator<SchedulerJob>> item, String componentId, IModel<SchedulerJob> rowModel) {
-                super.populateItem(item, componentId, rowModel);
-                item.add(AttributeModifier.replace("width", "80px"));
-            }
-        });
-        columns.add(new PropertyColumn<SchedulerJob, String>(new Model<String>(getString("MonitorPanel.runTime")), "runTime", "runTime") {
+		});
 
-        	private static final long serialVersionUID = 1L;
-        	
-            @Override
-            public void populateItem(Item<ICellPopulator<SchedulerJob>> item, String componentId, IModel<SchedulerJob> rowModel) {
-                super.populateItem(item, componentId, rowModel);
-                item.add(AttributeModifier.replace("width", "100px"));
-            }
+		return columns;
+	}
 
-            @Override
-            protected IModel<?> createLabelModel(IModel<SchedulerJob> rowModel) {
-                int runTime = rowModel.getObject().getRunTime();
-                String text = "";
-                if (runTime > 0) {
-                    DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm:ss").withZone(DateTimeZone.UTC);
-                    text = formatter.print(runTime * 1000);
-                }
+	protected List<IColumn<SchedulerJob, String>> createActiveSchedulerJobsTableColumns() {
+		List<IColumn<SchedulerJob, String>> columns = new ArrayList<IColumn<SchedulerJob, String>>();
+		columns.add(new PropertyColumn<SchedulerJob, String>(new Model<String>(getString("name")), "name", "name") {
+			@Override
+			protected IModel<String> createLabelModel(IModel<SchedulerJob> jobInfoIModel) {
+				return new Model<String>(jobInfoIModel.getObject().getName());
+			}
+		});
 
-                return new Model<String>(text);
-            }
+		columns.add(new PropertyColumn<SchedulerJob, String>(new Model<String>(getString("type")), "time.type",
+				"time.type") {
+			@Override
+			public void populateItem(Item<ICellPopulator<SchedulerJob>> item, String componentId,
+					IModel<SchedulerJob> rowModel) {
+				SchedulerTime st = rowModel.getObject().getTime();
+				Label label = new Label(componentId, getString("JobPanel.type." + st.getType()));
+				label.add(new SimpleTooltipBehavior(SchedulerUtil.getTooltip(st)));
+				item.add(label);
+			}
+		});
+		columns.add(new PropertyColumn<SchedulerJob, String>(new Model<String>(getString("Report")), "report.path",
+				"report.path") {
 
-        });
+			@Override
+			public void populateItem(Item<ICellPopulator<SchedulerJob>> item, String componentId,
+					IModel<SchedulerJob> rowModel) {
+				String path = rowModel.getObject().getReport().getPath();
+				String relativePath = StorageUtil.getPathWithoutRoot(path);
+				String name = StorageUtil.getName(relativePath);
+				Label label = new Label(componentId, name);
+				label.add(new SimpleTooltipBehavior(relativePath));
+				item.add(label);
+			}
 
-        columns.add(new NextRunDateColumn<SchedulerJob>());
-        
-        columns.add(new AbstractColumn<SchedulerJob, String>(new Model<String>(getString("MonitorPanel.runNow"))) {
+		});
+		columns.add(new BooleanImagePropertyColumn<SchedulerJob>(new Model<String>(getString("MonitorPanel.running")),
+				"isRunning", "isRunning") {
+			@Override
+			public void populateItem(Item<ICellPopulator<SchedulerJob>> item, String componentId,
+					IModel<SchedulerJob> rowModel) {
+				super.populateItem(item, componentId, rowModel);
+				item.add(AttributeModifier.replace("width", "80px"));
+			}
+		});
+		columns.add(new PropertyColumn<SchedulerJob, String>(new Model<String>(getString("MonitorPanel.runTime")),
+				"runTime", "runTime") {
 
-            public void populateItem(Item<ICellPopulator<SchedulerJob>> item, String componentId,
-                                     final IModel<SchedulerJob> rowModel) {
+			private static final long serialVersionUID = 1L;
 
-            	item.add(AttributeModifier.replace("width", "80px"));
-                item.add(new AbstractImageAjaxLinkPanel(componentId) {
+			@Override
+			public void populateItem(Item<ICellPopulator<SchedulerJob>> item, String componentId,
+					IModel<SchedulerJob> rowModel) {
+				super.populateItem(item, componentId, rowModel);
+				item.add(AttributeModifier.replace("width", "100px"));
+			}
 
-                    @Override
-                    public String getDisplayString() {
-                        return "";
-                    }
+			@Override
+			protected IModel<?> createLabelModel(IModel<SchedulerJob> rowModel) {
+				int runTime = rowModel.getObject().getRunTime();
+				String text = "";
+				if (runTime > 0) {
+					DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm:ss").withZone(DateTimeZone.UTC);
+					text = formatter.print(runTime * 1000);
+				}
 
-                    public boolean isVisible() {
-                        return !rowModel.getObject().isRunning();
-                    }
+				return new Model<String>(text);
+			}
 
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        JobDetail job = schedulerService.getJobDetail(rowModel.getObject());
-                        if (job != null) {                        	
-                            reportService.runMonitorReport(job);                                                                                   
-                        }
-                    }
+		});
 
-                    @Override
-                    public String getImageName() {                        
-                        return "images/run.gif";                        
-                    }
+		columns.add(new NextRunDateColumn<SchedulerJob>());
+
+		columns.add(new AbstractColumn<SchedulerJob, String>(new Model<String>(getString("MonitorPanel.runNow"))) {
+
+			public void populateItem(Item<ICellPopulator<SchedulerJob>> item, String componentId,
+					final IModel<SchedulerJob> rowModel) {
+
+				item.add(AttributeModifier.replace("width", "80px"));
+				item.add(new AbstractImageAjaxLinkPanel(componentId) {
+
+					@Override
+					public String getDisplayString() {
+						return "";
+					}
+
+					public boolean isVisible() {
+						return !rowModel.getObject().isRunning();
+					}
+
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						JobDetail job = schedulerService.getJobDetail(rowModel.getObject());
+						if (job != null) {
+							reportService.runMonitorReport(job);
+						}
+					}
+
+					@Override
+					public String getImageName() {
+						return "images/run.gif";
+					}
 
 					@Override
 					protected Link getLink() {
@@ -335,50 +353,48 @@ public class MonitorPanel extends Panel {
 						return link;
 					}
 
-                });
-            }
+				});
+			}
 
-        });
+		});
 
+		columns.add(new AbstractColumn<SchedulerJob, String>(new Model<String>(getString("MonitorPanel.stop"))) {
 
-        columns.add(new AbstractColumn<SchedulerJob, String>(new Model<String>(getString("MonitorPanel.stop"))) {
+			public void populateItem(Item<ICellPopulator<SchedulerJob>> item, String componentId,
+					final IModel<SchedulerJob> rowModel) {
 
-            public void populateItem(Item<ICellPopulator<SchedulerJob>> item, String componentId,
-                                     final IModel<SchedulerJob> rowModel) {
+				item.add(AttributeModifier.replace("width", "80px"));
+				item.add(new AbstractImageAjaxLinkPanel(componentId) {
 
+					@Override
+					public String getDisplayString() {
+						return "";
+					}
 
-            	item.add(AttributeModifier.replace("width", "80px"));
-                item.add(new AbstractImageAjaxLinkPanel(componentId) {
+					public boolean isVisible() {
+						return rowModel.getObject().isRunning();
+					}
 
-                    @Override
-                    public String getDisplayString() {
-                        return "";
-                    }
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						JobDetail job = schedulerService.getJobDetail(rowModel.getObject());
+						if (job != null) {
+							String reportType = (String) job.getJobDataMap().get(RunReportJob.REPORT_TYPE);
+							String runnerKey = (String) job.getJobDataMap().get(RunReportJob.RUNNER_KEY);
+							reportService.stopExport(runnerKey, reportType);
+							target.add(schedulerJobsTable);
+							target.add(runHistoryTable);
+						}
+					}
 
-                    public boolean isVisible() {
-                        return rowModel.getObject().isRunning();
-                    }
-
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        JobDetail job = schedulerService.getJobDetail(rowModel.getObject());
-                        if (job != null) {
-                            String reportType = (String) job.getJobDataMap().get(RunReportJob.REPORT_TYPE);
-                            String runnerKey = (String) job.getJobDataMap().get(RunReportJob.RUNNER_KEY);
-                            reportService.stopExport(runnerKey, reportType);
-                            target.add(schedulerJobsTable);
-                            target.add(runHistoryTable);
-                        }
-                    }
-
-                    @Override
-                    public String getImageName() {
-                        if (isEnabled()) {
-                            return "images/stop.png";
-                        } else {
-                            return "images/clear.gif";
-                        }
-                    }
+					@Override
+					public String getImageName() {
+						if (isEnabled()) {
+							return "images/stop.png";
+						} else {
+							return "images/clear.gif";
+						}
+					}
 
 					@Override
 					protected Link getLink() {
@@ -387,12 +403,12 @@ public class MonitorPanel extends Panel {
 						return link;
 					}
 
-                });
-            }
+				});
+			}
 
-        });
+		});
 
-        return columns;
-    }
+		return columns;
+	}
 
 }

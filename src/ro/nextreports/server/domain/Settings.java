@@ -265,6 +265,7 @@ public class Settings extends Entity {
             cleanHistory = new CleanHistorySettings();
             cleanHistory.setDaysToKeep(SettingsBean.DEFAULT_CLEAN_HISTORY_DAYS_TO_KEEP);
             cleanHistory.setCronExpression(SettingsBean.DEFAULT_CLEAN_HISTORY_CRON_EXPRESSION);
+            cleanHistory.setDaysToDelete(SettingsBean.DEFAULT_CLEAN_HISTORY_DAYS_TO_DELETE);
         }
 
         return cleanHistory;

@@ -17,6 +17,7 @@
 package ro.nextreports.server.web.core.settings;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -25,6 +26,7 @@ import org.quartz.impl.StdScheduler;
 import org.quartz.impl.triggers.CronTriggerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import ro.nextreports.server.domain.CleanHistorySettings;
 import ro.nextreports.server.domain.Settings;
 import ro.nextreports.server.service.StorageService;
@@ -38,13 +40,12 @@ public class CleanHistorySettingsPanel extends AbstractSettingsPanel {
 
 	private static final long serialVersionUID = 1L;
 
-    private static final Logger LOG = LoggerFactory.getLogger(CleanHistorySettingsPanel.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CleanHistorySettingsPanel.class);
 
 	private String oldCronExpression;
-    private Integer oldDaysToKeep;
 
-    @SpringBean
-    private StorageService storageService;
+	@SpringBean
+	private StorageService storageService;
 
 	public CleanHistorySettingsPanel(String id) {
 		super(id);
@@ -54,36 +55,43 @@ public class CleanHistorySettingsPanel extends AbstractSettingsPanel {
 	protected void addComponents(Form<Settings> form) {
 		final TextField<String> cronField = new TextField<String>("cleanHistory.cronExpression");
 		cronField.setRequired(true);
-	    form.add(cronField);
-	    ContextImage cronImage = new ContextImage("cronImage","images/information.png");        
-	    cronImage.add(new SimpleTooltipBehavior(getString("Settings.synchronizer.cronTooltip")));
-        form.add(cronImage);
-
-        System.out.println("settings = " + form.getModelObject());
-        final TextField<Integer> daysToKeepField = new TextField<Integer>("cleanHistory.daysToKeep");
-        form.add(daysToKeepField);
-
-        CleanHistorySettings settings = storageService.getSettings().getCleanHistory();
-        oldCronExpression = String.valueOf(settings.getCronExpression());
-        oldDaysToKeep = settings.getDaysToKeep();
+		form.add(cronField);
+		//
+		ContextImage cronImage = new ContextImage("cronImage", "images/information.png");
+		cronImage.add(new SimpleTooltipBehavior(getString("Settings.synchronizer.cronTooltip")));
+		form.add(cronImage);
+		//
+		System.out.println("settings = " + form.getModelObject());
+		final TextField<Integer> daysToKeepField = new TextField<Integer>("cleanHistory.daysToKeep");
+		form.add(daysToKeepField);
+		//
+		final TextField<Integer> daysToDeleteField = new TextField<Integer>("cleanHistory.daysToDelete");
+		form.add(daysToDeleteField);
+		//
+		final CheckBox checkBoxEnable = new CheckBox("cleanHistory.shrinkDataFolder");
+		form.add(checkBoxEnable);
+		//
+		CleanHistorySettings settings = storageService.getSettings().getCleanHistory();
+		oldCronExpression = String.valueOf(settings.getCronExpression());
 	}
-	
-	 protected void afterChange(Form<?> form, AjaxRequestTarget target) {
-         Settings settings = (Settings) form.getModelObject();
-         if (!oldCronExpression.equals(settings.getCleanHistory().getCronExpression())) {
-             // reschedule clean history
-             StdScheduler scheduler = (StdScheduler) NextServerApplication.get().getSpringBean("scheduler");
-             CronTriggerImpl cronTrigger = (CronTriggerImpl) NextServerApplication.get().getSpringBean("cleanHistoryTrigger");
-             try {
-                 cronTrigger.setCronExpression(settings.getCleanHistory().getCronExpression());
-                 scheduler.rescheduleJob(cronTrigger.getKey(), cronTrigger);
-             } catch (Exception e) {
-                 e.printStackTrace();
-                 LOG.error(e.getMessage(), e);
-             }
-         }
+
+	protected void afterChange(Form<?> form, AjaxRequestTarget target) {
+		Settings settings = (Settings) form.getModelObject();
+		if (!oldCronExpression.equals(settings.getCleanHistory().getCronExpression())) {
+			// reschedule clean history
+			StdScheduler scheduler = (StdScheduler) NextServerApplication.get().getSpringBean("scheduler");
+			CronTriggerImpl cronTrigger = (CronTriggerImpl) NextServerApplication.get()
+					.getSpringBean("cleanHistoryTrigger");
+			try {
+				cronTrigger.setCronExpression(settings.getCleanHistory().getCronExpression());
+				scheduler.rescheduleJob(cronTrigger.getKey(), cronTrigger);
+			} catch (Exception e) {
+				e.printStackTrace();
+				LOG.error(e.getMessage(), e);
+			}
+		}
 	}
-	
+
 	public void setStorageService(StorageService storageService) {
 		this.storageService = storageService;
 	}

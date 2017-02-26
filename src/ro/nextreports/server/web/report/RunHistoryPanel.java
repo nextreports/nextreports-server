@@ -330,45 +330,6 @@ public class RunHistoryPanel extends Panel {
 		};
 		form.add(deleteLink);
 
-		AjaxSubmitConfirmLink deleteByRangeLink = new AjaxSubmitConfirmLink("deleteRangeLink",
-				getString("deleteEntities")) {
-			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-
-				try {
-					DateRange range = null;
-					if (DAY_TYPE.equals(type)) {
-						tillTime = new Date();
-						range = new DateRange(DateUtil.floor(time), DateUtil.ceil(time));
-					} else {
-						if (DateUtil.after(time, tillTime)) {
-							error(getString("ActionContributor.RunHistory.rangeInvalid"));
-							target.add(feedbackPanel);
-							target.add(tillTimeField);
-							return;
-						}
-						range = new DateRange(DateUtil.floor(time), DateUtil.ceil(tillTime));
-					}
-					long deleted = reportService.deleteRunHistoryForRange(reportPath, range);
-
-					info(getString("ActionContributor.RunHistory.deleteByRangeDone") + " {" + deleted + "}");
-
-					target.add(this);
-					target.add(runHistoryTable);
-				} catch (Exception e) {
-					e.printStackTrace();
-					add(new AlertBehavior(e.getMessage()));
-					target.add(this);
-				}
-			}
-
-			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				target.add(form);
-			}
-
-		};
-		form.add(deleteByRangeLink);
-
 		WebMarkupContainer buttonsPanel = new WebMarkupContainer("buttonsPanel") {
 
 			@Override

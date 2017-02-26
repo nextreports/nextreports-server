@@ -14,34 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ro.nextreports.server.web.report;
+package ro.nextreports.server.web.maintenance;
 
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.Model;
 
-import ro.nextreports.server.domain.Report;
-import ro.nextreports.server.web.maintenance.DeleteHistoryPanel;
-
-public class ReportRunHistoryPanel extends Panel {
+/**
+ * @author daniel.avieritei
+ */
+public class MaintenancePanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
 
-	public ReportRunHistoryPanel(String id, final Report report) {
+	public MaintenancePanel(String id) {
 		super(id);
 
-		String text = "";
-		if (report != null) {
-			text = report.getName();
-		}
-		Label name = new Label("reportName", new Model<String>(text));
-		if (report == null) {
-			name.setVisible(false);
-		}
-		add(name);
-
-		add(new RunHistoryPanel("runHistoryPanel", report));
-		add(new DeleteHistoryPanel("deleteHistoryPanel", report));
+		DeleteHistoryPanel deleteHistoryPanel = new DeleteHistoryPanel("deleteHistoryPanel", null);
+		add(deleteHistoryPanel);
+		//
+		ShrinkDataFolderPanel shrinkDataPanel = new ShrinkDataFolderPanel("shrinkDataPanel", null);
+		add(shrinkDataPanel);
+		//
 	}
 
 }

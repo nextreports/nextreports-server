@@ -26,34 +26,57 @@ public class CleanHistorySettings extends EntityFragment {
 	private static final long serialVersionUID = 1L;
 
 	@JcrProperty
-    private Integer daysToKeep;
+	private Integer daysToKeep;
 
-    @JcrProperty
-    private String cronExpression;
+	@JcrProperty
+	private String cronExpression;
 
-    public CleanHistorySettings() {
+	@JcrProperty
+	private Integer daysToDelete;
+
+	@JcrProperty
+	private boolean shrinkDataFolder;
+
+	public CleanHistorySettings() {
 		super();
 	}
 
-    public Integer getDaysToKeep() {
-        return daysToKeep;
-    }
+	public Integer getDaysToKeep() {
+		return daysToKeep;
+	}
 
-    public void setDaysToKeep(Integer daysToKeep) {
-        this.daysToKeep = daysToKeep;
-    }
+	public void setDaysToKeep(Integer daysToKeep) {
+		this.daysToKeep = daysToKeep;
+	}
 
-    public String getCronExpression() {
-        return cronExpression;
-    }
+	public String getCronExpression() {
+		return cronExpression;
+	}
 
-    public void setCronExpression(String cronExpression) {
-        this.cronExpression = cronExpression;
-    }
+	public void setCronExpression(String cronExpression) {
+		this.cronExpression = cronExpression;
+	}
 
-    @Override
+	public Integer getDaysToDelete() {
+		return daysToDelete;
+	}
+
+	public void setDaysToDelete(Integer daysToDelete) {
+		this.daysToDelete = daysToDelete;
+	}
+
+	public boolean isShrinkDataFolder() {
+		return shrinkDataFolder;
+	}
+
+	public void setShrinkDataFolder(boolean shrinkDataFolder) {
+		this.shrinkDataFolder = shrinkDataFolder;
+	}
+
+	@Override
 	public String toString() {
-		return "CleanHistorySettings [daysToKeep=" + daysToKeep + ", cronExpression=" + cronExpression + "]";
-	}		
+		return "CleanHistorySettings [daysToKeep=" + daysToKeep + ", cronExpression=" + cronExpression
+				+ ", daysToDelete=" + daysToDelete + ", shrinkDataFolder=" + shrinkDataFolder + "]";
+	}
 
 }

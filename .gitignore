@@ -27,3 +27,6 @@ src/*.zip
 /bin/
 /data.big/
 /data.small/
+/data_clean/
+/data_small/
+/demo/

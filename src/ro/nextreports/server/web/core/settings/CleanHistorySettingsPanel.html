@@ -1,0 +1,49 @@
+<wicket:panel>
+	<div class="form-container form-container-dialog">
+		<form wicket:id="form">
+			<table class="form">
+				<tr>
+					<td class="td-label"><label><wicket:message
+								key="cleanHistory.cronExpression">Clean History Settings</wicket:message></label></td>
+					<td><input wicket:id="cleanHistory.cronExpression"
+						class="form-control input-xs" type="text" size="16"
+						name="cleanHistory.cronExpression"
+						style="margin-top: 5px !important; width: 180px !important" /> <img
+						wicket:id="cronImage" /></td>
+				</tr>
+				<tr>
+					<td class="td-label"><label><wicket:message
+								key="cleanHistory.daysToKeep">Days to keep</wicket:message></label></td>
+					<td><input wicket:id="cleanHistory.daysToKeep"
+						class="form-control input-xs" type="text" size="16"
+						name="cleanHistory.daysToKeep" style="margin-top: 5px !important;" />
+					</td>
+				</tr>
+				<tr>
+					<td class="td-label"><label><wicket:message
+								key="cleanHistory.daysToDelete">Days to delete backwards</wicket:message></label></td>
+					<td><input wicket:id="cleanHistory.daysToDelete"
+						class="form-control input-xs" type="text" size="16"
+						name="cleanHistory.daysToDelete"
+						style="margin-top: 5px !important;" /></td>
+				</tr>
+				<tr>
+					<td class="td-label"><label><wicket:message
+								key="cleanHistory.shrinkDataFolder">Shrink Data Folder automatically</wicket:message></label>
+					</td>
+					<td><label> <input
+							wicket:id="cleanHistory.shrinkDataFolder" class="nrs"
+							type="checkbox" name="cleanHistory.shrinkDataFolder" /> <span
+							class="lbl"></span>
+					</label></td>
+				</tr>
+			</table>
+			<hr class="hr-10">
+			<ul class="form-btns">
+				<li><input wicket:id="change" type="submit" name="change"
+					wicket:message="value:change" class="btn btn-primary btn-xs" /></li>
+			</ul>
+		</form>
+		<span wicket:id="feedback" class="feedbackPanelERROR" />
+	</div>
+</wicket:panel>

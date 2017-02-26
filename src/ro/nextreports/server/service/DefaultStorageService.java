@@ -50,258 +50,260 @@ import ro.nextreports.server.util.ServerUtil;
  */
 public class DefaultStorageService implements StorageService {
 
-    private StorageDao storageDao;
-    private SecurityDao securityDao;
-    private SearchConditionFactory searchCoditionFactory;
-    private Auditor auditor;
-    
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultStorageService.class);
+	private StorageDao storageDao;
+	private SecurityDao securityDao;
+	private SearchConditionFactory searchCoditionFactory;
+	private Auditor auditor;
 
-    @Required
-    public void setStorageDao(StorageDao storageDao) {
-        this.storageDao = storageDao;
-        searchCoditionFactory = new SearchConditionFactory(storageDao);
-    }
+	private static final Logger LOG = LoggerFactory.getLogger(DefaultStorageService.class);
 
-    @Required
-    public void setSecurityDao(SecurityDao securityDao) {
-        this.securityDao = securityDao;
-    }
+	@Required
+	public void setStorageDao(StorageDao storageDao) {
+		this.storageDao = storageDao;
+		searchCoditionFactory = new SearchConditionFactory(storageDao);
+	}
 
-    @Required
-    public void setAuditor(Auditor auditor) {
-        this.auditor = auditor;
-    }
+	@Required
+	public void setSecurityDao(SecurityDao securityDao) {
+		this.securityDao = securityDao;
+	}
 
-    @Transactional(readOnly = true)
+	@Required
+	public void setAuditor(Auditor auditor) {
+		this.auditor = auditor;
+	}
+
+	@Transactional(readOnly = true)
 	@Secured("AFTER_ACL_READ")
-    public Entity getEntity(String path) throws NotFoundException {
+	public Entity getEntity(String path) throws NotFoundException {
 		return storageDao.getEntity(path);
-    }
+	}
 
 	@Transactional(readOnly = true)
-    public Entity getEntityById(String id) throws NotFoundException {
+	public Entity getEntityById(String id) throws NotFoundException {
 		return storageDao.getEntityById(id);
-    }
+	}
 
 	@Transactional(readOnly = true)
 	@Secured("AFTER_ACL_COLLECTION_READ")
 	@Profile
-    public Entity[] getEntityChildren(String path) throws NotFoundException {
+	public Entity[] getEntityChildren(String path) throws NotFoundException {
 		return storageDao.getEntityChildren(path);
-    }
+	}
 
-    @Transactional(readOnly = true)
+	@Transactional(readOnly = true)
 	@Secured("AFTER_ACL_COLLECTION_READ")
-    public Entity[] getBaseEntityChildren(String path) throws NotFoundException {
-    	return storageDao.getBaseEntityChildren(path);
-    }
+	public Entity[] getBaseEntityChildren(String path) throws NotFoundException {
+		return storageDao.getBaseEntityChildren(path);
+	}
 
-    @Transactional(readOnly = true)
-	@Secured("AFTER_ACL_COLLECTION_READ")	
+	@Transactional(readOnly = true)
+	@Secured("AFTER_ACL_COLLECTION_READ")
 	@Profile
-    public Entity[] getEntityChildrenById(String id) throws NotFoundException {
-    	return storageDao.getEntityChildrenById(id);
-    }
+	public Entity[] getEntityChildrenById(String id) throws NotFoundException {
+		return storageDao.getEntityChildrenById(id);
+	}
 
-    // This method must be used only where there is no need for security (like users whichare seen only by administrators)
-    @Transactional(readOnly = true)		
+	// This method must be used only where there is no need for security (like
+	// users whichare seen only by administrators)
+	@Transactional(readOnly = true)
 	@Profile
 	public Entity[] getEntityChildrenById(String id, long firstResult, long maxResults) throws NotFoundException {
-    	return storageDao.getEntityChildrenById(id, firstResult, maxResults);
+		return storageDao.getEntityChildrenById(id, firstResult, maxResults);
 	}
-	
+
 	@Transactional(readOnly = true)
 	@Secured("AFTER_ACL_COLLECTION_READ")
 	@Profile
 	public Entity[] getEntitiesByClassName(String path, String className) throws NotFoundException {
 		return storageDao.getEntitiesByClassName(path, className);
-    }
-	
-	@Transactional(readOnly = true)	
+	}
+
+	@Transactional(readOnly = true)
 	@Profile
 	public Entity[] getEntitiesByClassNameWithoutSecurity(String path, String className) throws NotFoundException {
 		return storageDao.getEntitiesByClassName(path, className);
-    }
-
-    @Transactional
-    public String addEntity(Entity entity) throws DuplicationException {
-        String id = storageDao.addEntity(entity);
-        auditPath("Add entity", entity.getPath());
-        if (entity.allowPermissions()) {
-            try {
-				securityDao.grantUser(entity.getPath(), ServerUtil.getUsername(),
-				        PermissionUtil.getFullPermissions(), false);
-			} catch (NotFoundException e) {
-				// never happening
-				e.printStackTrace();
-			}
-        }
-        
-        return id;
-    }
-    
-    @Transactional
-    public String addEntity(Entity entity, boolean keepId) throws DuplicationException {
-    	String id = storageDao.addEntity(entity, keepId);
-        auditPath("Add entity", entity.getPath());
-        if (entity.allowPermissions()) {
-            try {
-				securityDao.grantUser(entity.getPath(), ServerUtil.getUsername(),
-				        PermissionUtil.getFullPermissions(), false);
-			} catch (NotFoundException e) {
-				// never happening
-				e.printStackTrace();
-			}
-        }
-        
-        return id;
-    }
+	}
 
 	@Transactional
-    public void modifyEntity(Entity entity) {
-        storageDao.modifyEntity(entity);
-        auditPath("Modify entity", entity.getPath());
-    }
-	
+	public String addEntity(Entity entity) throws DuplicationException {
+		String id = storageDao.addEntity(entity);
+		auditPath("Add entity", entity.getPath());
+		if (entity.allowPermissions()) {
+			try {
+				securityDao.grantUser(entity.getPath(), ServerUtil.getUsername(), PermissionUtil.getFullPermissions(),
+						false);
+			} catch (NotFoundException e) {
+				// never happening
+				e.printStackTrace();
+			}
+		}
+
+		return id;
+	}
+
+	@Transactional
+	public String addEntity(Entity entity, boolean keepId) throws DuplicationException {
+		String id = storageDao.addEntity(entity, keepId);
+		auditPath("Add entity", entity.getPath());
+		if (entity.allowPermissions()) {
+			try {
+				securityDao.grantUser(entity.getPath(), ServerUtil.getUsername(), PermissionUtil.getFullPermissions(),
+						false);
+			} catch (NotFoundException e) {
+				// never happening
+				e.printStackTrace();
+			}
+		}
+
+		return id;
+	}
+
+	@Transactional
+	public void modifyEntity(Entity entity) {
+		storageDao.modifyEntity(entity);
+		auditPath("Modify entity", entity.getPath());
+	}
+
 	@Transactional
 	public void modifyEntity(Entity entity, String excludeChildrenName) {
 		storageDao.modifyEntity(entity, excludeChildrenName);
-        auditPath("Modify entity", entity.getPath());
+		auditPath("Modify entity", entity.getPath());
 	}
-	
+
 	@Transactional
-    public void modifyEntities(List<Entity> entities) {
+	public void modifyEntities(List<Entity> entities) {
 		for (Entity entity : entities) {
 			storageDao.modifyEntity(entity);
 			auditPath("Modify entity", entity.getPath());
-		}	
-    }
+		}
+	}
 
 	@Transactional
-//	@Secured("ACL_DELETE")
-    public void removeEntity(String path) throws ReferenceException {
-        storageDao.removeEntity(path);
-        auditPath("Delete entity", path);
-    }
+	// @Secured("ACL_DELETE")
+	public void removeEntity(String path) throws ReferenceException {
+		storageDao.removeEntity(path);
+		auditPath("Delete entity", path);
+	}
 
 	@Transactional
-    public void removeEntityById(String id) throws NotFoundException {
-        String path = storageDao.getEntityPath(id);
-        storageDao.removeEntityById(id);
-        auditPath("Delete entity", path);
-    }
+	public void removeEntityById(String id) throws NotFoundException {
+		String path = storageDao.getEntityPath(id);
+		storageDao.removeEntityById(id);
+		auditPath("Delete entity", path);
+	}
 
-    @Transactional
-    public void removeEntitiesById(List<String> ids) throws NotFoundException {
-        for (String id : ids) {
-            String path = storageDao.getEntityPath(id);
-            storageDao.removeEntityById(id);
-            auditPath("Delete entity", path);
-        }
-    }
-    
-    @Transactional
-    public List<String> getReferences(List<String> ids)  {
-    	List<String> result = new ArrayList<String>();
-        for (String id : ids) {
-            List<String> refs = storageDao.getReferences(id);
-            result.addAll(refs);
-        }
-        return result;
-    }
+	@Transactional
+	public void removeEntitiesById(List<String> ids) throws NotFoundException {
+		for (String id : ids) {
+			String path = storageDao.getEntityPath(id);
+			storageDao.removeEntityById(id);
+			auditPath("Delete entity", path);
+		}
+	}
 
-    @Transactional
-    public void renameEntity(String path, String newName) throws NotFoundException, DuplicationException {
-        storageDao.renameEntity(path, newName);
-        auditRename(path, newName);
-    }
+	@Transactional
+	public List<String> getReferences(List<String> ids) {
+		List<String> result = new ArrayList<String>();
+		for (String id : ids) {
+			List<String> refs = storageDao.getReferences(id);
+			result.addAll(refs);
+		}
+		return result;
+	}
 
-    @Transactional
-    public void copyEntity(String sourcePath, String destPath) throws NotFoundException, DuplicationException {
-        storageDao.copyEntity(sourcePath, destPath);
-        auditCopyMove("Copy entity", sourcePath, destPath);
-    }
+	@Transactional
+	public void renameEntity(String path, String newName) throws NotFoundException, DuplicationException {
+		storageDao.renameEntity(path, newName);
+		auditRename(path, newName);
+	}
 
-    @Transactional
-    public void copyEntities(List<String> sourcePaths, String destPath) throws NotFoundException, DuplicationException {
-        for (String sourcePath :sourcePaths) {
-            storageDao.copyEntity(sourcePath, destPath);
-            auditCopyMove("Copy entity", sourcePath, destPath);
-        }
-    }
+	@Transactional
+	public void copyEntity(String sourcePath, String destPath) throws NotFoundException, DuplicationException {
+		storageDao.copyEntity(sourcePath, destPath);
+		auditCopyMove("Copy entity", sourcePath, destPath);
+	}
 
-    @Transactional
-    public void moveEntity(String sourcePath, String destPath) throws NotFoundException, DuplicationException {
-        storageDao.moveEntity(sourcePath, destPath);
-        auditCopyMove("Move entity", sourcePath, destPath);
-    }
+	@Transactional
+	public void copyEntities(List<String> sourcePaths, String destPath) throws NotFoundException, DuplicationException {
+		for (String sourcePath : sourcePaths) {
+			storageDao.copyEntity(sourcePath, destPath);
+			auditCopyMove("Copy entity", sourcePath, destPath);
+		}
+	}
 
-    @Transactional
-    public void moveEntities(List<String> sourcePaths, String destPath) throws NotFoundException, DuplicationException {
-        for (String sourcePath :sourcePaths) {
-            storageDao.moveEntity(sourcePath, destPath);
-            auditCopyMove("Move entity", sourcePath, destPath);
-        }
-    }
+	@Transactional
+	public void moveEntity(String sourcePath, String destPath) throws NotFoundException, DuplicationException {
+		storageDao.moveEntity(sourcePath, destPath);
+		auditCopyMove("Move entity", sourcePath, destPath);
+	}
 
-    @Transactional
-    public boolean isEntityReferenced(String path) throws NotFoundException {
-        return storageDao.isEntityReferenced(path);
-    }
+	@Transactional
+	public void moveEntities(List<String> sourcePaths, String destPath) throws NotFoundException, DuplicationException {
+		for (String sourcePath : sourcePaths) {
+			storageDao.moveEntity(sourcePath, destPath);
+			auditCopyMove("Move entity", sourcePath, destPath);
+		}
+	}
 
-    @Transactional
-    public boolean entityExists(String path) {
-    	return storageDao.entityExists(path);
-    }
-    
-	@Transactional(readOnly = true)
-    public VersionInfo[] getVersionInfos(String id) throws NotFoundException {
-        return storageDao.getVersionInfos(id);
-    }
+	@Transactional
+	public boolean isEntityReferenced(String path) throws NotFoundException {
+		return storageDao.isEntityReferenced(path);
+	}
+
+	@Transactional
+	public boolean entityExists(String path) {
+		return storageDao.entityExists(path);
+	}
 
 	@Transactional(readOnly = true)
-    public Entity getVersion(String id, String versionName) throws NotFoundException {
-        return storageDao.getVersion(id, versionName);
-    }
+	public VersionInfo[] getVersionInfos(String id) throws NotFoundException {
+		return storageDao.getVersionInfos(id);
+	}
 
-    @Transactional
-    public void restoreVersion(String path, String versionName) throws NotFoundException {
-        storageDao.restoreVersion(path, versionName);
-        auditRestore(path, versionName);
-    }
+	@Transactional(readOnly = true)
+	public Entity getVersion(String id, String versionName) throws NotFoundException {
+		return storageDao.getVersion(id, versionName);
+	}
 
-    @Transactional(readOnly = true)
+	@Transactional
+	public void restoreVersion(String path, String versionName) throws NotFoundException {
+		storageDao.restoreVersion(path, versionName);
+		auditRestore(path, versionName);
+	}
+
+	@Transactional(readOnly = true)
 	@Secured("AFTER_ACL_COLLECTION_READ")
-    public Entity[] search(List<SearchEntry> searchEntries, String searchKey) {
-        SearchManager.addSearch(searchKey);
-        try {
-            List<Entity> entities = new ArrayList<Entity>();
-            if (searchEntries.size() > 0) {
-                String fromPath = searchEntries.get(0).getFromPath();
-                try {
+	public Entity[] search(List<SearchEntry> searchEntries, String searchKey) {
+		SearchManager.addSearch(searchKey);
+		try {
+			List<Entity> entities = new ArrayList<Entity>();
+			if (searchEntries.size() > 0) {
+				String fromPath = searchEntries.get(0).getFromPath();
+				try {
 					search(entities, fromPath, searchEntries, searchKey);
 				} catch (NotFoundException e) {
 					// TODO
 					e.printStackTrace();
 				}
-            }
-            
-            return entities.toArray(new Entity[entities.size()]);
-        } finally {
-            SearchManager.removeSearch(searchKey);
-        }
-    }
+			}
 
-    public void stopSearch(String searchKey) {
-        SearchManager.stopSearch(searchKey);
-    }
+			return entities.toArray(new Entity[entities.size()]);
+		} finally {
+			SearchManager.removeSearch(searchKey);
+		}
+	}
 
-    @Transactional
+	public void stopSearch(String searchKey) {
+		SearchManager.stopSearch(searchKey);
+	}
+
+	@Transactional
 	public String addOrModifyEntity(Entity entity) {
-//		return storageDao.addOrModifyEntity(entity); // no permissions support
-    	String id = null;
-    	
+		// return storageDao.addOrModifyEntity(entity); // no permissions
+		// support
+		String id = null;
+
 		String path = entity.getPath();
 		if (entityExists(path)) {
 			modifyEntity(entity);
@@ -313,125 +315,131 @@ public class DefaultStorageService implements StorageService {
 				// never happening
 			}
 		}
-		
+
 		return id;
 	}
 
-    @Transactional(readOnly = true)
-    public String getEntityPath(String id) throws NotFoundException {
-    	return storageDao.getEntityPath(id);
-    }
-    
-    // This method must be used only where there is no need for security (like users whichare seen only by administrators)
-    @Transactional(readOnly = true)
-    @Profile
-    public int countEntityChildrenById(String id) throws NotFoundException {
-    	return storageDao.countEntityChildrenById(id);
-    }
-    
-    private void search(List<Entity> entities, String fromPath, List<SearchEntry> searchEntries, String searchKey) throws NotFoundException {
-        if (SearchManager.wasStopped(searchKey)) {
-            return;
-        }
+	@Transactional(readOnly = true)
+	public String getEntityPath(String id) throws NotFoundException {
+		return storageDao.getEntityPath(id);
+	}
 
-        Entity[] children = getBaseEntityChildren(fromPath);
-        if (children.length == 0) {
-            return;
-        }
+	// This method must be used only where there is no need for security (like
+	// users whichare seen only by administrators)
+	@Transactional(readOnly = true)
+	@Profile
+	public int countEntityChildrenById(String id) throws NotFoundException {
+		return storageDao.countEntityChildrenById(id);
+	}
 
-        for (Entity child : children) {
-            searchChild(entities, child.getPath(), searchEntries);
-            search(entities, child.getPath(), searchEntries, searchKey);
-        }
-    }
+	private void search(List<Entity> entities, String fromPath, List<SearchEntry> searchEntries, String searchKey)
+			throws NotFoundException {
+		if (SearchManager.wasStopped(searchKey)) {
+			return;
+		}
 
-    private void searchChild(List<Entity> entities, String fromPath, List<SearchEntry> searchEntries) throws NotFoundException {
-        Entity entity = getEntity(fromPath);
-        boolean isTrue = true;
-        for (SearchEntry se : searchEntries) {
-            SearchCondition sc = searchCoditionFactory.getSearchCondition(se);
-            int result = sc.getStatus(this, entity);
-            //System.out.println("    @@@@ name="  +  entity.getPath() + " getStatus="+result);
-            if ((result == SearchCondition.FALSE) || (result == SearchCondition.INVALID)) {
-                isTrue = false;
-                break;
-            }
-        }
+		Entity[] children = getBaseEntityChildren(fromPath);
+		if (children.length == 0) {
+			return;
+		}
 
-        if (isTrue) {
-            entities.add(entity);
-        }
-    }
+		for (Entity child : children) {
+			searchChild(entities, child.getPath(), searchEntries);
+			search(entities, child.getPath(), searchEntries, searchKey);
+		}
+	}
 
-    // Audit methods 
-    private void auditPath(String action, String path) {
-        AuditEvent auditEvent = new AuditEvent(action);
-        auditEvent.getContext().put("PATH", path);
-        auditor.logEvent(auditEvent);
-    }
+	private void searchChild(List<Entity> entities, String fromPath, List<SearchEntry> searchEntries)
+			throws NotFoundException {
+		Entity entity = getEntity(fromPath);
+		boolean isTrue = true;
+		for (SearchEntry se : searchEntries) {
+			SearchCondition sc = searchCoditionFactory.getSearchCondition(se);
+			int result = sc.getStatus(this, entity);
+			// System.out.println(" @@@@ name=" + entity.getPath() + "
+			// getStatus="+result);
+			if ((result == SearchCondition.FALSE) || (result == SearchCondition.INVALID)) {
+				isTrue = false;
+				break;
+			}
+		}
 
-    private void auditCopyMove(String action, String sourcePath, String destPath) {
-        AuditEvent auditEvent = new AuditEvent(action);
-        auditEvent.getContext().put("SOURCE_PATH", sourcePath);
-        auditEvent.getContext().put("DEST_PATH", destPath);
-        auditor.logEvent(auditEvent);
-    }
+		if (isTrue) {
+			entities.add(entity);
+		}
+	}
 
-    private void auditRename(String path, String newName) {
-        AuditEvent auditEvent = new AuditEvent("Rename entity");
-        auditEvent.getContext().put("PATH", path);
-        auditEvent.getContext().put("NEW_NAME", newName);
-        auditor.logEvent(auditEvent);
-    }
+	// Audit methods
+	private void auditPath(String action, String path) {
+		AuditEvent auditEvent = new AuditEvent(action);
+		auditEvent.getContext().put("PATH", path);
+		auditor.logEvent(auditEvent);
+	}
 
-    private void auditRestore(String path, String versionName) {
-        AuditEvent auditEvent = new AuditEvent("Restore entity");
-        auditEvent.getContext().put("PATH", path);
-        auditEvent.getContext().put("VERSION_NAME", versionName);
-        auditor.logEvent(auditEvent);
-    }
-    
-    public void clearEntityCache(String id) {
-    	storageDao.getEntitiesCache().remove(id);
-    }
-    
-    public void  clearCache() {
-    	storageDao.getEntitiesCache().clear();
-    }
-        
-    @Transactional
-    public void setDefaultProperty(String path, String defaultValue) {
-    	storageDao.setDefaultProperty(path, defaultValue);
-    }
-    
-    @Transactional(readOnly = true)
-    public String getDefaultProperty(String path) throws NotFoundException {
-    	return storageDao.getDefaultProperty(path);
-    }
-    
-    @Transactional(readOnly = true)
-    public byte[] getLogoImage() {
-    	return storageDao.getLogoImage();
-    }
-    
-    @Transactional
-    public void personalizeSettings(String fileName, byte[] content, String theme, String language) {
-    	storageDao.personalizeSettings(fileName, content, theme, language);
-    }
-    
-    @Transactional
-    public void personalizeTheme(String theme) {
-    	storageDao.personalizeTheme(theme);
-    }
-    
-    // Settings are modified only by administrator
-    // We must not use @Secured("AFTER_ACL_COLLECTION_READ") because in some util classes like 
-    // ConnectionUtil we do not have the Authentication object and we will get an exception:
-    // 'An Authentication object was not found in the SecurityContext'
-    @Transactional(readOnly = true)
-	public Settings getSettings() {		
+	private void auditCopyMove(String action, String sourcePath, String destPath) {
+		AuditEvent auditEvent = new AuditEvent(action);
+		auditEvent.getContext().put("SOURCE_PATH", sourcePath);
+		auditEvent.getContext().put("DEST_PATH", destPath);
+		auditor.logEvent(auditEvent);
+	}
+
+	private void auditRename(String path, String newName) {
+		AuditEvent auditEvent = new AuditEvent("Rename entity");
+		auditEvent.getContext().put("PATH", path);
+		auditEvent.getContext().put("NEW_NAME", newName);
+		auditor.logEvent(auditEvent);
+	}
+
+	private void auditRestore(String path, String versionName) {
+		AuditEvent auditEvent = new AuditEvent("Restore entity");
+		auditEvent.getContext().put("PATH", path);
+		auditEvent.getContext().put("VERSION_NAME", versionName);
+		auditor.logEvent(auditEvent);
+	}
+
+	public void clearEntityCache(String id) {
+		storageDao.getEntitiesCache().remove(id);
+	}
+
+	public void clearCache() {
+		storageDao.getEntitiesCache().clear();
+	}
+
+	@Transactional
+	public void setDefaultProperty(String path, String defaultValue) {
+		storageDao.setDefaultProperty(path, defaultValue);
+	}
+
+	@Transactional(readOnly = true)
+	public String getDefaultProperty(String path) throws NotFoundException {
+		return storageDao.getDefaultProperty(path);
+	}
+
+	@Transactional(readOnly = true)
+	public byte[] getLogoImage() {
+		return storageDao.getLogoImage();
+	}
+
+	@Transactional
+	public void personalizeSettings(String fileName, byte[] content, String theme, String language) {
+		storageDao.personalizeSettings(fileName, content, theme, language);
+	}
+
+	@Transactional
+	public void personalizeTheme(String theme) {
+		storageDao.personalizeTheme(theme);
+	}
+
+	// Settings are modified only by administrator
+	// We must not use @Secured("AFTER_ACL_COLLECTION_READ") because in some
+	// util classes like
+	// ConnectionUtil we do not have the Authentication object and we will get
+	// an exception:
+	// 'An Authentication object was not found in the SecurityContext'
+	@Transactional(readOnly = true)
+	public Settings getSettings() {
 		try {
-			return (Settings)getEntity(StorageConstants.SETTINGS_ROOT);
+			return (Settings) getEntity(StorageConstants.SETTINGS_ROOT);
 		} catch (NotFoundException e) {
 			// should never happen
 			e.printStackTrace();
@@ -439,33 +447,37 @@ public class DefaultStorageService implements StorageService {
 			return new Settings();
 		}
 	}
-    
-    @Transactional(readOnly = true)
-    public String getDashboardId(String widgetId) throws NotFoundException {
-    	return storageDao.getDashboardId(widgetId);
-    }
-    
-    @Transactional
-    public void createFolders(String path) throws DuplicationException {
-    	if (path.startsWith(StorageConstants.PATH_SEPARATOR)) {
-    		path = path.substring(1);
-    	}
-    	String[] nodes = path.split(StorageConstants.PATH_SEPARATOR);
-    	path = "";
-    	for (String node : nodes) {
-    		path = path + StorageConstants.PATH_SEPARATOR + node;    		
-    		if (!storageDao.nodeExists(path)) {    			
-    			Folder entity = new Folder();
-    			entity.setName(node);
-    			entity.setPath(path);
-    			addEntity(entity);
-    		}
-    	}
-    }
-    
-    @Transactional
-    public void clearUserWidgetData(String widgetId) {		
-		storageDao.clearUserWidgetData(widgetId);			
-    }
 
+	@Transactional(readOnly = true)
+	public String getDashboardId(String widgetId) throws NotFoundException {
+		return storageDao.getDashboardId(widgetId);
+	}
+
+	@Transactional
+	public void createFolders(String path) throws DuplicationException {
+		if (path.startsWith(StorageConstants.PATH_SEPARATOR)) {
+			path = path.substring(1);
+		}
+		String[] nodes = path.split(StorageConstants.PATH_SEPARATOR);
+		path = "";
+		for (String node : nodes) {
+			path = path + StorageConstants.PATH_SEPARATOR + node;
+			if (!storageDao.nodeExists(path)) {
+				Folder entity = new Folder();
+				entity.setName(node);
+				entity.setPath(path);
+				addEntity(entity);
+			}
+		}
+	}
+
+	@Transactional
+	public void clearUserWidgetData(String widgetId) {
+		storageDao.clearUserWidgetData(widgetId);
+	}
+
+	@Transactional
+	public void shrinkDataFolder() {
+		storageDao.shrinkDataFolder();
+	}
 }

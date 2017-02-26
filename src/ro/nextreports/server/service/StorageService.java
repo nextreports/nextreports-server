@@ -118,4 +118,5 @@ public interface StorageService {
     
     public List<String> getReferences(List<String> ids);
     
+    public void shrinkDataFolder();    
 }
