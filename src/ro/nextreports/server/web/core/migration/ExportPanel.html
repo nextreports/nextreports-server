@@ -1,40 +1,41 @@
-<wicket:panel>	
+<wicket:panel>
 	<div class="form-container">
 		<form wicket:id="exportForm">
-            <table>                                
-                <tr>              
-                	<td class="td-label">
-                		<strong><wicket:message key="Settings.migration.export.entities">Entities</wicket:message><em>*</em></strong>
-                	</td>
-                	<td>
-                        <input wicket:id="addElement" type="submit" value="+" class="btn btn-primary btn-xs"/>
-                        <input wicket:id="removeElement" type="submit" value="-" class="btn btn-primary btn-xs"/>
-                    </td>
-                </tr>  
-                <tr>
-                 	<td class="td-label"></td>
-                    <td>                        
-                        <select wicket:id="listChoice" class="entityList"/>
-                    </td>
-                </tr>  
-                <tr>
-                    <td class="td-label">
-                        <label><strong><wicket:message key="Settings.migration.export.path">Export path</wicket:message><em>*</em></strong></label>
-                    </td>
-                    <td>
-                        <input wicket:id="exportPath" type="text" name="exportPath"  style="height: 20px; width: 380px;"/>
-                    </td>
-                </tr>                                     
-                <tr>                   
-                    <td>
-                        <ul class="form-btns">                           
-                            <li><input wicket:id="export" type="submit" name="export" wicket:message="value:export" class="btn btn-primary btn-xs"/>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
-            </table>            
-        </form>
-        <span wicket:id="feedback" class="feedbackPanelERROR"/>
-  </div>  
-</wicket:panel>	
+			<table>
+				<tr>
+					<td class="td-label"><strong><wicket:message
+								key="Settings.migration.export.entities">Entities</wicket:message><em>*</em></strong>
+					</td>
+					<td><input wicket:id="addElement" type="submit" value="+"
+						class="btn btn-primary btn-xs" /> <input
+						wicket:id="removeElement" type="submit" value="-"
+						class="btn btn-primary btn-xs" /></td>
+				</tr>
+				<tr>
+					<td class="td-label"></td>
+					<td><select wicket:id="listChoice" class="entityList" /></td>
+				</tr>
+				<tr>
+					<td class="td-label"><label><strong><wicket:message
+									key="Settings.migration.export.path">Export path</wicket:message><em>*</em></strong></label>
+					</td>
+					<td><input wicket:id="exportPath" type="text"
+						name="exportPath" style="height: 20px; width: 380px;" /></td>
+				</tr>
+				<tr>
+					<td>
+						<ul class="form-btns">
+							<li><input wicket:id="export" type="submit" name="export"
+								wicket:message="value:export" class="btn btn-primary btn-xs" />
+							</li>
+							<li><input wicket:id="exportAll" type="submit"
+								name="exportAll" wicket:message="value:exportAll"
+								class="btn btn-primary btn-xs" /></li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<span wicket:id="feedback" class="feedbackPanelERROR" />
+	</div>
+</wicket:panel>

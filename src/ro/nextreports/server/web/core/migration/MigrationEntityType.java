@@ -21,7 +21,8 @@ public enum MigrationEntityType {
 	DATASOURCE("Datasource"),
 	REPORT("Report"),
 	CHART("Chart"),
-    DASHBOARD("Dashboard");
+    DASHBOARD("Dashboard"),
+    SCHEDULE("Schedule");
     
     private final String name;
 

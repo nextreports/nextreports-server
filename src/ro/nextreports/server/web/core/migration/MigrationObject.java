@@ -23,17 +23,27 @@ import java.util.List;
 import ro.nextreports.server.domain.Chart;
 import ro.nextreports.server.domain.DashboardState;
 import ro.nextreports.server.domain.DataSource;
+import ro.nextreports.server.domain.Group;
 import ro.nextreports.server.domain.Report;
-
+import ro.nextreports.server.domain.SchedulerJob;
+import ro.nextreports.server.domain.Settings;
+import ro.nextreports.server.domain.User;
+import ro.nextreports.server.domain.UserWidgetParameters;
 
 public class MigrationObject implements Serializable {
-	
+
 	private List<DataSource> dataSources = new ArrayList<DataSource>();
 	private List<Report> reports = new ArrayList<Report>();
 	private List<Chart> charts = new ArrayList<Chart>();
-	private List<DashboardState> dashboards = new ArrayList<DashboardState>(); 
+	private List<DashboardState> dashboards = new ArrayList<DashboardState>();
+	private List<SchedulerJob> schedulers = new ArrayList<SchedulerJob>();
+
+	private List<User> users = new ArrayList<User>();
+	private List<Group> groups = new ArrayList<Group>();
+	private Settings settings = new Settings();
+	private List<UserWidgetParameters> userWidgetParameters = new ArrayList<UserWidgetParameters>();
 	
-	public MigrationObject() {		
+	public MigrationObject() {
 	}
 
 	public List<DataSource> getDataSources() {
@@ -66,6 +76,46 @@ public class MigrationObject implements Serializable {
 
 	public void setDashboards(List<DashboardState> dashboards) {
 		this.dashboards = dashboards;
-	}			
-		
+	}
+
+	public List<SchedulerJob> getSchedulers() {
+		return schedulers;
+	}
+
+	public void setSchedulers(List<SchedulerJob> schedulers) {
+		this.schedulers = schedulers;
+	}
+
+	public List<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<User> users) {
+		this.users = users;
+	}
+
+	public List<Group> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(List<Group> groups) {
+		this.groups = groups;
+	}
+
+	public Settings getSettings() {
+		return settings;
+	}
+
+	public void setSettings(Settings settings) {
+		this.settings = settings;
+	}
+
+	public List<UserWidgetParameters> getUserWidgetParameters() {
+		return userWidgetParameters;
+	}
+
+	public void setUserWidgetParameters(List<UserWidgetParameters> userWidgetParameters) {
+		this.userWidgetParameters = userWidgetParameters;
+	}
+
 }

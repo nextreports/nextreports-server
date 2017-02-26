@@ -180,6 +180,8 @@ public class AddEntityPanel extends FormContentPanel {
 			rootPath = StorageConstants.REPORTS_ROOT;
 		} else if (MigrationEntityType.DATASOURCE.equals(type)) {
 			rootPath = StorageConstants.DATASOURCES_ROOT;
+		} else if (MigrationEntityType.SCHEDULE.equals(type)) {
+			rootPath = StorageConstants.SCHEDULER_ROOT;
 		} else {
 			rootPath = StorageConstants.DASHBOARDS_ROOT;
 		}
