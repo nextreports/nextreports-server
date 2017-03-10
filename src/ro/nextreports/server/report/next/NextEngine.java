@@ -118,6 +118,16 @@ public class NextEngine extends ReportEngineAdapter {
     public boolean supportETL() {
     	return true;
     }
+    
+    @Override
+    public boolean supportJSONSimpleOutput(){
+    	return true;
+    }
+    
+    @Override
+    public boolean supportJSONFullOutput(){
+    	return true;
+    }
    
     public StorageService getStorageService() {
 		return storageService;
@@ -336,6 +346,16 @@ public class NextEngine extends ReportEngineAdapter {
         return ReportUtil.getStaticImages(nextReport);
     }
 
-	
+    @Override
+    public byte[] exportReportToJSonSimple(ExportContext exportContext)
+            throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException {
+        return exportReport(exportContext, ReportRunner.JSON_SIMPLE_FORMAT);
+    }
+    
+    @Override
+    public byte[] exportReportToJSonFull(ExportContext exportContext)
+            throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException {
+        return exportReport(exportContext, ReportRunner.JSON_FULL_FORMAT);
+    }
 
 }

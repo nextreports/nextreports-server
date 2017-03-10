@@ -162,6 +162,12 @@ public class DefaultReportService implements ReportService {
 		if (reportEngine.supportETL()) {
 			supportedOutputs.add(ReportConstants.ETL_FORMAT);
 		}
+		if (reportEngine.supportJSONSimpleOutput()) {
+			supportedOutputs.add(ReportConstants.JSON_SIMPLE_FORMAT);
+		}
+		if (reportEngine.supportJSONFullOutput()) {
+			supportedOutputs.add(ReportConstants.JSON_FULL_FORMAT);
+		}
 
 		return supportedOutputs;
 	}
@@ -231,6 +237,10 @@ public class DefaultReportService implements ReportService {
 			} else if (ReportConstants.ETL_FORMAT.equals(outputType)) {
 				engine.exportReportToEtl(exportContext);
 				result = null;
+			} else if (ReportConstants.JSON_SIMPLE_FORMAT.equals(outputType)) {
+				result = engine.exportReportToJSonSimple(exportContext);
+			} else if (ReportConstants.JSON_FULL_FORMAT.equals(outputType)) {
+				result = engine.exportReportToJSonFull(exportContext);
 			}
 
 			// parameters values may be computed at runtime so put them in
@@ -368,6 +378,10 @@ public class DefaultReportService implements ReportService {
 			return "html";
 		} else if (ReportConstants.XML_FORMAT.equals(format)) {
 			return "xml";
+		} else if (ReportConstants.JSON_SIMPLE_FORMAT.equals(format)) {
+			return "json";
+		} else if (ReportConstants.JSON_FULL_FORMAT.equals(format)) {
+			return "json";
 		} else {
 			return "rep";
 		}

@@ -41,6 +41,12 @@ public class ReportConstants {
     public static final String XML_FORMAT = "XML";
     public static final String TXT_FORMAT = "TXT";
     public static final String ETL_FORMAT = "ETL";
+    
+	/** JSON RESULTS display output format */
+	public static final String JSON_SIMPLE_FORMAT = "JSON_SIMPLE";
+	/** JSON display output format */
+	public static final String JSON_FULL_FORMAT = "JSON";
+	
     /**
      * Next Report Type
      */

@@ -72,6 +72,14 @@ public abstract class ReportEngineAdapter implements ReportEngine {
     public boolean supportETL() {
     	return false;
     }
+    
+    public boolean supportJSONSimpleOutput(){
+    	return false;
+    }
+    
+    public boolean supportJSONFullOutput(){
+    	return false;
+    }
 
     public byte[] exportReportToPdf(ExportContext exportContext)
             throws FormatNotSupportedException, ReportEngineException, NoDataFoundException, InterruptedException {
@@ -128,6 +136,18 @@ public abstract class ReportEngineAdapter implements ReportEngine {
 	public void exportReportToEtl(ExportContext exportContext) throws FormatNotSupportedException, ReportEngineException,
 			NoDataFoundException, InterruptedException {	
     	throw new FormatNotSupportedException("Format ETL not supported");	
+	}
+    
+    @Override
+	public byte[] exportReportToJSonSimple(ExportContext exportContext) throws FormatNotSupportedException, ReportEngineException,
+			NoDataFoundException, InterruptedException {	
+    	throw new FormatNotSupportedException("Format Json Simple not supported");	
+	}
+    
+    @Override
+	public byte[] exportReportToJSonFull(ExportContext exportContext) throws FormatNotSupportedException, ReportEngineException,
+			NoDataFoundException, InterruptedException {	
+    	throw new FormatNotSupportedException("Format Json Full not supported");	
 	}
 
     public void stopExport(String key) {
