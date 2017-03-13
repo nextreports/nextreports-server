@@ -18,9 +18,13 @@ package ro.nextreports.server.api.client;
 
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author Decebal Suiu
  */
+
+@XmlRootElement
 public class RunReportMetaData {
 
     public static final String PDF_FORMAT = "PDF";
